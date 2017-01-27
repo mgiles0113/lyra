@@ -38,7 +38,7 @@ loginForm.submit(function(e) {
     e.preventDefault();
 
     var method = 'POST',
-        url = 'https://cs467-lyra-development-mgiles0113.c9users.io/lyraAPI/apiController.php',
+        url = apiUrl,
         parameters = {
             action : 'login',
             username : loginUsername.val(),

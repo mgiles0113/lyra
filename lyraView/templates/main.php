@@ -43,6 +43,7 @@
     <script src="../lyra/js/gameState.js"></script>
     <script src="../lyra/js/player.js"></script>
     <script src="../lyra/js/comm.js"></script>
+    <script src="lyraView/js/ENV_PARAMETERS.js"></script>
     <script src="lyraView/js/main.js"></script>
 </body>
 </html>
