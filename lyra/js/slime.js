@@ -17,7 +17,8 @@ class Slime {
         this.age = 0;
         this.slimesprite = game.add.sprite(this.xPos, this.yPos, 'greenCircle');
         this.slimesprite.animations.add(this.animation, [0, 1, 2, 3, 4, 5], this.speed, true );
-        game.physics.enable(this.slimesprite);
+        game.physics.arcade.enable(this.slimesprite);
+        this.slimesprite.immovable = true; this.slimesprite.body.immovable = true; this.slimesprite.body.moves = false;
     }
 
 

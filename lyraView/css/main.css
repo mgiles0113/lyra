@@ -1,0 +1,46 @@
+body {
+    background-image: url("../assets/images/lyra_prototype_texture_1.png");
+    background-repeat: repeat;
+}
+
+label {
+    color: white;
+}
+
+#primary-card {
+    background: black;
+    width: 1200px;
+    height: 800px;
+    margin: 100px auto;
+    border-radius: 5px;
+}
+
+#menu-title {
+    font-size: 8em;
+    color: white;
+}
+
+#login-title {
+    font-size: 3em;
+    color: white;
+}
+
+#form-card {
+    margin-top: 75px;
+    padding: 25px 25px 50px 25px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid white;
+}
+
+#form-card button {
+    width: 100%;
+    margin: 50px auto -10px;
+    min-height: 65px;
+    display: block;
+}
+
+#form-card label {
+    font-size: 2em;
+    
+}

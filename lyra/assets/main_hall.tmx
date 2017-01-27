@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="36" height="16" tilewidth="32" tileheight="32" nextobjectid="34">
+ <tileset firstgid="1" name="scifitiles-sheet" tilewidth="32" tileheight="32" tilecount="84" columns="14">
+  <image source="scifitiles-sheet.png" trans="ff00ff" width="448" height="192"/>
+ </tileset>
+ <layer name="bgLayer" width="36" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,69,70,0,0,0,0,0,0,0,0,0,0,0,0,69,70,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,69,21,21,70,0,0,0,0,0,0,0,0,0,0,69,21,21,70,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,69,21,21,21,21,70,0,0,0,0,0,0,0,0,69,21,21,21,21,70,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,69,21,21,21,21,21,21,70,0,0,0,0,0,0,69,21,21,21,21,21,21,70,0,0,0,0,0,0,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,0,
+0,0,0,0,0,0,0,83,21,21,21,21,21,21,84,0,0,0,0,0,0,83,21,21,21,21,21,21,84,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,83,21,21,21,21,84,0,0,0,0,0,0,0,0,83,21,21,21,21,84,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,83,21,21,84,0,0,0,0,0,0,0,0,0,0,83,21,21,84,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,83,84,0,0,0,0,0,0,0,0,0,0,0,0,83,84,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="containerLayer" width="36" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="objects">
+  <object id="1" name="westDoor" gid="43" x="12.5834" y="286.917" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="westDoor"/>
+   </properties>
+  </object>
+  <object id="2" name="westDoor" gid="43" x="12.75" y="253.75" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="westDoor"/>
+   </properties>
+  </object>
+  <object id="3" name="westStart" x="57.5" y="231.5" width="49" height="49">
+   <properties>
+    <property name="type" value="westStart"/>
+   </properties>
+  </object>
+  <object id="4" name="northeastDoor" gid="43" x="543.417" y="173" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northDoor"/>
+   </properties>
+  </object>
+  <object id="5" name="northDoor" gid="43" x="574.917" y="173.5" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northDoor"/>
+   </properties>
+  </object>
+  <object id="7" name="northStart" x="548.833" y="184.833" width="49" height="49">
+   <properties>
+    <property name="type" value="northStart"/>
+   </properties>
+  </object>
+  <object id="8" name="eastDoor" gid="43" x="1110.92" y="255.167" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="eastDoor"/>
+   </properties>
+  </object>
+  <object id="9" name="eastDoor" gid="43" x="1110.42" y="286.167" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="eastDoor"/>
+   </properties>
+  </object>
+  <object id="10" name="eastStart" x="1048.17" y="228.833" width="49" height="49">
+   <properties>
+    <property name="type" value="eastStart"/>
+   </properties>
+  </object>
+  <object id="11" name="southwestDoor" gid="43" x="546.667" y="370.833" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southeastDoor"/>
+   </properties>
+  </object>
+  <object id="12" name="southDoor" gid="43" x="578.667" y="370.833" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southDoor"/>
+   </properties>
+  </object>
+  <object id="13" name="southStart" x="549.5" y="280.167" width="49" height="49">
+   <properties>
+    <property name="type" value="southStart"/>
+   </properties>
+  </object>
+  <object id="14" name="northwestDoor" gid="43" x="127.083" y="174.25" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northwestDoor"/>
+   </properties>
+  </object>
+  <object id="15" name="northwestDoor" gid="43" x="95.5833" y="173.75" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northwestDoor"/>
+   </properties>
+  </object>
+  <object id="16" name="northStart" x="100.833" y="186.167" width="49" height="49">
+   <properties>
+    <property name="type" value="northwestStart"/>
+   </properties>
+  </object>
+  <object id="17" name="northeastDoor" x="997.666" y="184.083" width="49" height="49">
+   <properties>
+    <property name="type" value="northeastDoor"/>
+   </properties>
+  </object>
+  <object id="18" name="northeastDoor" gid="43" x="1023.75" y="171.75" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northeastDoor"/>
+   </properties>
+  </object>
+  <object id="19" name="northeastDoor" gid="43" x="992.25" y="172.25" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="horiDoor"/>
+    <property name="type" value="northeastDoor"/>
+   </properties>
+  </object>
+  <object id="20" name="southDoor" gid="43" x="1026.67" y="375.333" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southDoor"/>
+   </properties>
+  </object>
+  <object id="21" name="southStart" x="997.5" y="284.667" width="49" height="49">
+   <properties>
+    <property name="type" value="southStart"/>
+   </properties>
+  </object>
+  <object id="22" name="southDoor" gid="43" x="994.667" y="375.333" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southDoor"/>
+   </properties>
+  </object>
+  <object id="23" name="southwestDoor" gid="43" x="127.333" y="376.666" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southwestDoor"/>
+   </properties>
+  </object>
+  <object id="24" name="southwestDoor" x="98.1663" y="286" width="49" height="49">
+   <properties>
+    <property name="type" value="southwestDoor"/>
+   </properties>
+  </object>
+  <object id="25" name="southwestDoor" gid="43" x="95.3333" y="376.666" width="32" height="32">
+   <properties>
+    <property name="closed" type="bool" value="true"/>
+    <property name="sprite" value="vertDoor"/>
+    <property name="type" value="southwestDoor"/>
+   </properties>
+  </object>
+  <object id="26" name="wall" x="95.3333" y="160.667">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 -62,0 -62.6667,60"/>
+  </object>
+  <object id="27" name="wall" x="32" y="282.667">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 0,68 61.3333,68.6667"/>
+  </object>
+  <object id="28" name="wall" x="157.333" y="157.333">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 64,0 194,-124.667 322.667,0.666667 385.333,0.666667"/>
+  </object>
+  <object id="29" name="wall" x="159.333" y="351.333">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 66.6667,1.33333 191.333,124.667 317.333,0.666667 387.333,-0.666667"/>
+  </object>
+  <object id="30" name="wall" x="607.333" y="159.333">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 64,0 192.667,-126.667 318,-0.666667 384.667,0"/>
+  </object>
+  <object id="31" name="wall" x="609.333" y="350">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 62,0 190,127.333 316.667,0 383.333,0"/>
+  </object>
+  <object id="32" name="wall" x="1056" y="161.333">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 64,-0.666667 64,59.3333"/>
+  </object>
+  <object id="33" name="wall" x="1058" y="352.667">
+   <properties>
+    <property name="type" value="wall"/>
+   </properties>
+   <polyline points="0,0 60.6667,0.666667 62.6667,-70.6667"/>
+  </object>
+ </objectgroup>
+</map>

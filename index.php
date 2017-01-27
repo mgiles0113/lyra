@@ -1,9 +1,4 @@
 <?php
-session_start();
+$game_title = "Lyra Escape";
 
-if (!isset($_SESSION['authenticated'])) { 
-    header("Location: /lyra/login.php");
-    die();
-} else {
-    header("Location: /lyra/home.php");
-}
+require('lyraView/templates/main.php');

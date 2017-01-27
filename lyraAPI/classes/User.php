@@ -71,29 +71,36 @@ class User {
         require('DatabaseConnection.php');
         $db = new DatabaseConnection();
         $mysqli = $db->connect();
-        
+
         /* create a prepared statement */
         if ($stmt = $mysqli->prepare("SELECT * FROM User WHERE username=?")) {
         
             /* bind parameters for markers */
             $stmt->bind_param("s", $this->username);
+
+            $id = -1;
+            $username = '';
             $password = '';
+            
             /* execute query */
             $stmt->execute();
             
             /* bind result variables */
-            $stmt->bind_result($this->id, $this->username, $password);
-    
+            $stmt->bind_result($id, $username, $password);
+            $queryResult = $stmt->fetch();
+            
+            
             /* fetch value */
-            if (!$stmt->fetch()) {
-                $stmt->close();
-                die('no user found with the specified username');
+            if (!$queryResult) {
+                return 1002;
+            } else if($this->password != $password) {
+                return 1003;
+            } else {
+                $this->id = $id;
+                $this->username = $username;
+                $this->password = $password;
+                return 1000;
             }
-            if($this->password != $password) {
-                $stmt->close();
-                die('password is not valid');
-            }
-            /* close statement */
             $stmt->close();
         }
     }

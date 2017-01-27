@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
+    <!--script src="vendor/phaser-2.6.2/src/Phaser.js"></script-->
 </head>
 <body>
     <div class="container">
@@ -21,9 +22,10 @@
     <script src="js/utility.js"></script>
     <script src="js/map.js"></script>
     <script src="js/slime.js"></script>
-    <script src="js/preload.js"></script>
-    <script src="js/lyra.js"></script>
+    <script src="js/preloadState.js"></script>
+    <script src="js/gameState.js"></script>
     <script src="js/player.js"></script>
-    <script src="js/game.js"></script>
+    <script src="js/comm.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

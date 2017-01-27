@@ -4,3 +4,4 @@ example/*
 php_errors.log
 phaser-2.6.2.zip
 lyra/vendor/*
+SYSTEM_PARAMETERS.php
