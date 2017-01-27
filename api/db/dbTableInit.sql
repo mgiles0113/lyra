@@ -6,3 +6,12 @@ CREATE TABLE `User` (
     PRIMARY KEY (id),
     UNIQUE (username)
 ) ENGINE=InnoDB;
+
+CREATE TABLE `SavedGame` (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    userID int(11) NOT NULL,
+    gameFileName varchar(64) NOT NULL,
+    FOREIGN KEY (userID) REFERENCES User (id),
+    PRIMARY KEY (id),
+    UNIQUE (userID, gameFileName)
+) ENGINE=InnoDB;
