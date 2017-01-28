@@ -68,6 +68,9 @@ class Lyra {
         //this.game.scale.scaleMode = "50%";
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+        //Create comm window.
+        this.comm = new Comm(this.game);
+
         // create players
         // [TODO] make this an array of players
         this.players[0] = new Player(this.game, 260, 600, true);
@@ -108,6 +111,10 @@ class Lyra {
                 }
             }
         }
+        
+        //Comm. Window--> Switch btw players.
+        this.comm.switchPlayer(this.players);
+
 
         // update player
         for (var j=0; j < this.players.length; j++)
