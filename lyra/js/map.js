@@ -4,9 +4,10 @@ class Map {
                 this.map = game.add.tilemap('map');
                 
                 this.imageTagList = []
+                this.tileSetImages = []
                 for (var i=0; i<imageTagList.length; i++) {
                         this.imageTagList[i] = imageTagList[i];
-                        this.map.addTilesetImage(this.imageTagList[i]);
+                        this.tileSetImages[imageTagList[i]] = this.map.addTilesetImage(this.imageTagList[i]);
                 }
                 // this.map.addTilesetImage('grayTiles');
                 // this.map.addTilesetImage('greenCircle'); 

@@ -40,6 +40,7 @@ class Lyra {
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
+        this.game.world.scaleMode = 
         // there are other ways to do this, sets a background color for the game          
         this.game.stage.backgroundColor = '#555';
         
@@ -57,11 +58,16 @@ class Lyra {
             this.mapLayer[i].debugSettings.forceFullRedraw = true;
         }
         
+        // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
+        // this.mapLayer[this.mapLayer.length - 1].debugSettings.forceFullRedraw = true;
+        
         // add collision for walls
         console.log("setting up collision");
         console.log(this.mapLayerRef[this.mapLayerRef.length-1]);
         this.map.map.setCollisionBetween(1, 10000, true, this.mapLayer[(this.mapLayer.length-1)]);
-        
+        //this.game.scale.scaleMode = "50%";
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
         // create players
         // [TODO] make this an array of players
         this.players[0] = new Player(this.game, 260, 600, true);
@@ -73,6 +79,7 @@ class Lyra {
         // try out creating a slime group, currently not used
         this.slimeGroup = this.game.add.group();
         this.slimeGroup.enableBody = true;
+ 
     }
 
     update() {
@@ -85,8 +92,8 @@ class Lyra {
             else {  
                 this.slimeArr[this.slimeCounter] = this.slimeArr[this.slimeCounter-1].replicateSlime(this.slimeCounter, this.game);
             }
-            console.log("created slime #: " + this.slimeCounter);
-            console.log(this.slimeArr[this.slimeCounter]);
+            // console.log("created slime #: " + this.slimeCounter);
+            // console.log(this.slimeArr[this.slimeCounter]);
             this.slimeCounter += 1;
         }
         // update all slime objects
@@ -115,7 +122,8 @@ class Lyra {
         { 
             this.players[i].sprite.bringToTop();
             if (this.players[i].isSelected) {
-                this.game.camera.follow(this.players[i].sprite);
+                this.game.camera.follow(this.players[i].sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+//                        console.log(this.game.camera);
             }
             this.game.debug.body(this.players[i]);
         }

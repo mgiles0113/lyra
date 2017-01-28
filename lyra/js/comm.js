@@ -15,38 +15,32 @@ class Comm {
             //
         }
         
-        switchPlayer(current_player){
+        switchPlayer(players){
             //Update Current Player to Player1
             this.p1_button.events.onInputDown.add(function(){
-                if(current_player != 1){
-                    current_player = 1;
-                    
+                if(players[0].isSelected == false){
+                    players[0].togglePlayer();
+                    players[1].togglePlayer();
+
                 }
-                
-                return current_player;
                 
             });
             
             //Update Current Player to Player2
             this.p2_button.events.onInputDown.add(function(){
-                if(current_player != 2){
-                    current_player = 2;
+                if(players[1].isSelected == false){
+                    players[0].togglePlayer();
+                    players[1].togglePlayer();
+                    
                 }
-
-                return current_player;
                 
             });
             
             
             //Update Current Player to Player3
-            this.p3_button.events.onInputDown.add(function(){
-                if(current_player != 3){
-                    current_player = 3;
-                }
-                
-                return current_player;
-                
-            });
+            //this.p3_button.events.onInputDown.add(function(){
+
+            //});
             
         }
 }

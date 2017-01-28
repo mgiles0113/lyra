@@ -28,11 +28,21 @@ class Player {
         if (this.isSelected) {
         
             // have the camera follow the player
-            game.camera.follow(this.sprite);
+            game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+            console.log(game.camera);
+            game.camera.focusOn(this.sprite);
         }
     
     }
- 
+    
+    togglePlayer(){
+        if(this.isSelected == false){
+            this.isSelected = true;
+            
+        }else{
+            this.isSelected = false;
+        }
+    }
     
     updatePlayer (game, cursors, walls) {
         // update player
