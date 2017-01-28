@@ -79,6 +79,9 @@ class Lyra {
  
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        
+        //setup getting mouse input
+        game.input.mouse.capture = true;
 
         // try out creating a slime group, currently not used
         this.slimeGroup = this.game.add.group();

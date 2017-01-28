@@ -66,10 +66,18 @@ class Player {
             this.sprite.body.velocity.y = 0;
             this.sprite.body.angularVelocity = 0;
         
+        
+			if(game.input.mousePointer.leftButton.isDown){
+				// 
+				//this.sprite.x = game.input.mousePointer.x;
+				//this.sprite.y = game.input.mousePointer.y;
+				console.log("It's working!!!");
+			}
+        
             if (cursors.left.isDown)
             {
                 this.sprite.body.velocity.x = -700;
-                 this.sprite.frame = 0;
+                this.sprite.frame = 0;
             }
             else if (cursors.right.isDown)
             {
