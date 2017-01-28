@@ -9,8 +9,13 @@ class Comm {
             //[TODO] 2.Link to players
             //Create player icons.
             this.p1_button = game.add.button(150,1300,'p1_icon');
+            this.p1_button.fixedToCamera = true;
+            
             this.p2_button = game.add.button(300,1300,'p2_icon');
+            this.p2_button.fixedToCamera = true;
+            
             this.p3_button = game.add.button(450,1300,'p3_icon');
+            this.p3_button.fixedToCamera = true;
         
             //
         }

@@ -8,7 +8,7 @@ class Lyra {
         this.mapRef = mapRef;
 
         this.game = new Phaser.Game(mapwidth, mapheight, Phaser.AUTO, 'phaser-example', {preload: this.preload, create: this.create, update: this.update, render: this.render });
-
+      
     }
 
     preload() {

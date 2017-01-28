@@ -35,18 +35,17 @@ class Player {
             console.log("overlap with slime");
         });
 
-
-
         // [TODO] doesn't seem to work
         if (this.isSelected) {
         
             // have the camera follow the player
             game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
-            console.log(game.camera);
-            game.camera.focusOn(this.sprite);
+            //console.log(game.camera);
+            //game.camera.focusOn(this.sprite);
         }
     
     }
+    
     
     togglePlayer(){
         if(this.isSelected == false){
@@ -69,21 +68,22 @@ class Player {
         
             if (cursors.left.isDown)
             {
-                //this.sprite.body.angularVelocity = -200;
                 this.sprite.body.velocity.x = -700;
+                 this.sprite.frame = 0;
             }
             else if (cursors.right.isDown)
             {
-                //this.sprite.body.angularVelocity = 200;
                 this.sprite.body.velocity.x = 700;
+                 this.sprite.frame = 1;
             }
             else if(cursors.up.isDown)
             {
-                //game.physics.arcade.velocityFromAngle(this.sprite.angle, 300, this.sprite.body.velocity);
                 this.sprite.body.velocity.y = -700;
+                 this.sprite.frame = 2;
             }
             else if(cursors.down.isDown){
                 this.sprite.body.velocity.y = 700;
+                 this.sprite.frame = 3;
             }
 
         }
@@ -93,7 +93,6 @@ class Player {
 }
 
 Player.preloadPlayer = function (game) {
-        //game.load.image('phaser', 'assets/sprites/arrow.png');
         game.load.spritesheet('red_player', 'assets/sprites/player_1.png', 60, 60, 4);
         game.load.spritesheet('green_player', 'assets/sprites/player_2.png', 60, 60, 4);
         game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 60, 60, 4);
