@@ -17,6 +17,9 @@ class Player {
         this.sprite.frame = 1;
         this.sprite.anchor.set(0.5);
        
+       //Custom Params for Player.
+       this.sprite.customParams.inventory = [];
+       this.sprite.customParams.state = "waiting";
     
         game.physics.arcade.enable(this.sprite);
     
