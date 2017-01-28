@@ -20,8 +20,14 @@ class Comm {
             this.p1_button.events.onInputDown.add(function(){
                 if(players[0].isSelected == false){
                     players[0].togglePlayer();
-                    players[1].togglePlayer();
+                    
+                    if(players[1].isSelected == true){ 
+                        players[1].togglePlayer();
 
+                    }else if( players[2].isSelected == true){
+                        players[2].togglePlayer();
+                    }
+                    
                 }
                 
             });
@@ -29,18 +35,34 @@ class Comm {
             //Update Current Player to Player2
             this.p2_button.events.onInputDown.add(function(){
                 if(players[1].isSelected == false){
-                    players[0].togglePlayer();
                     players[1].togglePlayer();
+                    
+                    if(players[0].isSelected == true){ 
+                        players[0].togglePlayer();
+
+                    }else if( players[2].isSelected == true){
+                        players[2].togglePlayer();
+                    }
                     
                 }
                 
             });
             
-            
             //Update Current Player to Player3
-            //this.p3_button.events.onInputDown.add(function(){
+            this.p3_button.events.onInputDown.add(function(){
+                if(players[2].isSelected == false){
+                    players[2].togglePlayer();
+                    
+                }
+                
+                    if(players[0].isSelected == true){ 
+                        players[0].togglePlayer();
 
-            //});
+                    }else if( players[1].isSelected == true){
+                        players[1].togglePlayer();
+                    }
+                    
+            });
             
         }
 }

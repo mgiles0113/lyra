@@ -1,9 +1,22 @@
 class Player {
-    constructor (game, x, y, selected) {
+    constructor (game, x, y, selected, player) {
         this.isSelected = selected;
-        // create player(s) - should move to Player class
-        this.sprite = game.add.sprite(x, y, 'phaser');
+       
+        // create player(s) 
+        if( player == 1){
+        	this.sprite = game.add.sprite(x, y, 'red_player');
+        	
+        }else if(player == 2){
+        	this.sprite = game.add.sprite(x,y, 'green_player');
+        	
+        }else{
+        	this.sprite = game.add.sprite(x,y, 'blue_player');
+        	
+        }
+        
+        this.sprite.frame = 1;
         this.sprite.anchor.set(0.5);
+       
     
         game.physics.arcade.enable(this.sprite);
     
@@ -80,5 +93,9 @@ class Player {
 }
 
 Player.preloadPlayer = function (game) {
-        game.load.image('phaser', 'assets/sprites/arrow.png');
+        //game.load.image('phaser', 'assets/sprites/arrow.png');
+        game.load.spritesheet('red_player', 'assets/sprites/player_1.png', 60, 60, 4);
+        game.load.spritesheet('green_player', 'assets/sprites/player_2.png', 60, 60, 4);
+        game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 60, 60, 4);
+        
 }

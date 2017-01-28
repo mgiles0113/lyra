@@ -8,7 +8,7 @@ class Lyra {
         this.mapRef = mapRef;
 
         this.game = new Phaser.Game(mapwidth, mapheight, Phaser.AUTO, 'phaser-example', {preload: this.preload, create: this.create, update: this.update, render: this.render });
-        
+
     }
 
     preload() {
@@ -73,8 +73,9 @@ class Lyra {
 
         // create players
         // [TODO] make this an array of players
-        this.players[0] = new Player(this.game, 260, 600, true);
-        this.players[1] = new Player(this.game, 360, 800, false);
+        this.players[0] = new Player(this.game, 260, 600, true, 1);
+        this.players[1] = new Player(this.game, 360, 800, false, 2);
+        this.players[2] = new Player(this.game, 450, 500, false, 3);
  
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
