@@ -18,6 +18,7 @@ class Player {
         this.sprite.anchor.set(0.5);
        
        //Custom Params for Player.
+       this.sprite.customParams = [];
        this.sprite.customParams.inventory = [];
        this.sprite.customParams.state = "waiting";
     
@@ -39,13 +40,13 @@ class Player {
         });
 
         // [TODO] doesn't seem to work
-        if (this.isSelected) {
+        //if (this.isSelected) {
         
             // have the camera follow the player
-            game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+        //    game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
             //console.log(game.camera);
             //game.camera.focusOn(this.sprite);
-        }
+        //}
     
     }
     
