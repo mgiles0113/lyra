@@ -39,15 +39,6 @@ class Player {
             console.log("overlap with slime");
         });
 
-        // [TODO] doesn't seem to work
-        //if (this.isSelected) {
-        
-            // have the camera follow the player
-        //    game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
-            //console.log(game.camera);
-            //game.camera.focusOn(this.sprite);
-        //}
-    
     }
     
     
@@ -100,6 +91,12 @@ class Player {
 
         }
     }
+    
+    cameraFollow(game) {
+    	// second parameter creates a 'deadzone' - Moving inside this Rectangle will not cause the camera to move
+        game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+    }
+    
     
     
 }

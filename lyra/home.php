@@ -26,6 +26,8 @@
     <script src="js/gameState.js"></script>
     <script src="js/player.js"></script>
     <script src="js/comm.js"></script>
+    <script src="js/mapInit.js"></script>
+    <script src="js/lyra.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
