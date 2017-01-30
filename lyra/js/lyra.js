@@ -1,29 +1,29 @@
 class Lyra extends Phaser.State {
-        defineState() {
-            this.someproperty = 1;
+        defineState(mapRefData, playerRefData, gamewidth, gameheight) {
+            this.mapRef = mapRefData.mapRef;
+            this.imageTagList = mapRefData.imageTagList;
+            this.imageRefList = mapRefData.imageRefList;
+            this.mapLayerRef = mapRefData.mapLayerRef;
+            this.mapwidth = mapRefData.mapwidth;
+            this.mapheight = mapRefData.mapheight;
+            this.slimeCounter = 0;
+            this.slimeArr = [];
+            this.players = [];
+            this.mapLayer = [];
+            this.gamewidth = gamewidth;
+            this.gameheight = gameheight;
+            this.numPlayers = playerRefData.numPlayers;
+            this.playerData = [];
+            // copy over the players data
+            for (var i = 0; i< this.numPlayers; i++) {
+                this.playerData[i] = playerRefData.players[i];
+            }
         }
  
        preload() {
-        // [TODO] how to get this data passed in from the startGame!
-        this.mapRef = 'assets/tilemaps/maps/grayRoom.json';
-        this.imageTagList = ['grayTiles', 'background'];
-        this.imageRefList = ['assets/grayTiles.png', 'assets/backgroundGray.png'];
-        this.mapLayerRef = ['layer2', 'layer1'];
- 
-        this.mapRef = 'assets/tilemaps/maps/reference_map.json';
-        this.imageTagList = ['scifitiles-sheet', 'meta_tiles'];
-        this.imageRefList = ['assets/scifitiles-sheet.png', 'assets/meta_tiles.png'];
-        // [TODO] build this list off the json map file? ordered by display order, for now walls are last
-        this.mapLayerRef = ['escape_pods', 'halls', 'dock', 'workshop', 'engine_room', 'rec_room', 'crew_quarters', 'cafeteria', 'med_bay', 'command_center', 'doors', 'walls']
-
         // create tilemap and load assets
         Map.loadMap(this.game, this.mapRef, this.imageTagList, this.imageRefList);
-        
         preloadLyra(this.game);
-        this.slimeCounter = 0;
-        this.slimeArr = [];
-        this.players = [];
-        this.mapLayer = [];
     }
 
 
@@ -80,9 +80,11 @@ class Lyra extends Phaser.State {
 
         // create players
         // [TODO] make this an array of players
-        this.players[0] = new Player(this.game, 260, 600, true, 1);
-        this.players[1] = new Player(this.game, 360, 800, false, 2);
-        this.players[2] = new Player(this.game, 450, 500, false, 3);
+        for (var i = 0; i< this.numPlayers; i++) {
+            this.players[i] = new Player(this.game, this.playerData[i].x, this.playerData[i].y, this.playerData[i].isSelected, this.playerData[i].image);
+        }
+        // this.players[1] = new Player(this.game, 360, 800, false, 2);
+        // this.players[2] = new Player(this.game, 450, 500, false, 3);
  
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();

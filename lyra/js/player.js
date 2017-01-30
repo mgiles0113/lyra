@@ -3,6 +3,7 @@ class Player {
         this.isSelected = selected;
        
         // create player(s) 
+        // [TODO] consider passing the labels and images used in preload as playerInit data
         if( player == 1){
         	this.sprite = game.add.sprite(x, y, 'red_player');
         	
