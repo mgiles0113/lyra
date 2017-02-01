@@ -1,6 +1,8 @@
 body {
     background-image: url("../assets/images/lyra_prototype_texture_1.png");
     background-repeat: repeat;
+    padding: 0px;
+    margin: 0px;
 }
 
 label {

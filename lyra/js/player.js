@@ -12,7 +12,6 @@ class Player {
         	
         }else{
         	this.sprite = game.add.sprite(x,y, 'blue_player');
-        	
         }
         
         this.sprite.frame = 1;
@@ -21,11 +20,16 @@ class Player {
        //Custom Params for Player.
        this.sprite.customParams = [];
        this.sprite.customParams.inventory = [];
+       
        this.sprite.customParams.state = "waiting";
+       
+       //Init Dest Coords as Sprite's Spawn Coord.
+       this.sprite.dest_x = null;
+       this.sprite.dest_y = null;
     
         game.physics.arcade.enable(this.sprite);
     
-        this.sprite.body.setSize(16, 16, 8, 8);
+        this.sprite.body.setSize(32,32);
     
         //  We'll set a lower max angular velocity here to keep it from going totally nuts
         this.sprite.body.maxAngular = 500;
@@ -56,18 +60,27 @@ class Player {
         // update player
         // [TODO] move to player object
         game.physics.arcade.collide(this.sprite, walls);
+        
         if (this.isSelected) {
         
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
             this.sprite.body.angularVelocity = 0;
-        
-        
+            
+        	//Grab Dest. Coords From Ptr
 			if(game.input.mousePointer.leftButton.isDown){
-				// 
-				//this.sprite.x = game.input.mousePointer.x;
-				//this.sprite.y = game.input.mousePointer.y;
-				console.log("It's working!!!");
+				
+				//Grab Dest Coords
+				this.sprite.dest_x = game.input.mousePointer.x;
+				this.sprite.dest_y = game.input.mousePointer.y;
+
+			}
+			
+			//Bring Player to Dest. 
+			if( (this.sprite.body.x != this.sprite.dest_x) || (this.sprite.body.y != this.sprite.dest_y) ){
+				//Move Sprite to Dest Coords
+				//game.physics.arcade.moveToXY(this.sprite, this.sprite.dest_x, this.sprite.dest_y, 1000);
+				
 			}
         
             if (cursors.left.isDown)
@@ -103,8 +116,8 @@ class Player {
 }
 
 Player.preloadPlayer = function (game) {
-        game.load.spritesheet('red_player', 'assets/sprites/player_1.png', 60, 60, 4);
-        game.load.spritesheet('green_player', 'assets/sprites/player_2.png', 60, 60, 4);
-        game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 60, 60, 4);
+        game.load.spritesheet('red_player', 'assets/sprites/player_1.png', 32, 32, 4);
+        game.load.spritesheet('green_player', 'assets/sprites/player_2.png', 32, 32, 4);
+        game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 32, 32, 4);
         
 }

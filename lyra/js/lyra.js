@@ -1,26 +1,26 @@
 class Lyra extends Phaser.State {
-        defineState(mapRefData, playerRefData, gamewidth, gameheight) {
-            this.mapRef = mapRefData.mapRef;
-            this.imageTagList = mapRefData.imageTagList;
-            this.imageRefList = mapRefData.imageRefList;
-            this.mapLayerRef = mapRefData.mapLayerRef;
-            this.mapwidth = mapRefData.mapwidth;
-            this.mapheight = mapRefData.mapheight;
-            this.slimeCounter = 0;
-            this.slimeArr = [];
-            this.players = [];
-            this.mapLayer = [];
-            this.gamewidth = gamewidth;
-            this.gameheight = gameheight;
-            this.numPlayers = playerRefData.numPlayers;
-            this.playerData = [];
-            // copy over the players data
-            for (var i = 0; i< this.numPlayers; i++) {
-                this.playerData[i] = playerRefData.players[i];
-            }
+    defineState(mapRefData, playerRefData, gamewidth, gameheight) {
+        this.mapRef = mapRefData.mapRef;
+        this.imageTagList = mapRefData.imageTagList;
+        this.imageRefList = mapRefData.imageRefList;
+        this.mapLayerRef = mapRefData.mapLayerRef;
+        this.mapwidth = mapRefData.mapwidth;
+        this.mapheight = mapRefData.mapheight;
+        this.slimeCounter = 0;
+        this.slimeArr = [];
+        this.players = [];
+        this.mapLayer = [];
+        this.gamewidth = gamewidth;
+        this.gameheight = gameheight;
+        this.numPlayers = playerRefData.numPlayers;
+        this.playerData = [];
+        // copy over the players data
+        for (var i = 0; i< this.numPlayers; i++) {
+            this.playerData[i] = playerRefData.players[i];
         }
+    }
  
-       preload() {
+    preload() {
         // create tilemap and load assets
         Map.loadMap(this.game, this.mapRef, this.imageTagList, this.imageRefList);
         preloadLyra(this.game);
@@ -79,13 +79,10 @@ class Lyra extends Phaser.State {
         this.comm = new Comm(this.game);
 
         // create players
-        // [TODO] make this an array of players
         for (var i = 0; i< this.numPlayers; i++) {
             this.players[i] = new Player(this.game, this.playerData[i].x, this.playerData[i].y, this.playerData[i].isSelected, this.playerData[i].image);
         }
-        // this.players[1] = new Player(this.game, 360, 800, false, 2);
-        // this.players[2] = new Player(this.game, 450, 500, false, 3);
- 
+
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
@@ -93,39 +90,25 @@ class Lyra extends Phaser.State {
         this.game.input.mouse.capture = true;
 
         // try out creating a slime group, currently not used
-        this.slimeGroup = this.game.add.group();
-        this.slimeGroup.enableBody = true;
- 
+        this.slimeManager = new SlimeManager(10, this.game);
+
     }
 
     update() {
-        // create slime spore and start slime growing(?enlarge the image of the slime?)
+        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate
-        /*
-        if (this.slimeCounter < 100) {
-            if (this.slimeCounter == 0) { 
-                this.slimeArr[0] = new Slime(0, this.game);
-            }
-            else {  
-                this.slimeArr[this.slimeCounter] = this.slimeArr[this.slimeCounter-1].replicateSlime(this.slimeCounter, this.game);
-            }
-            // console.log("created slime #: " + this.slimeCounter);
-            // console.log(this.slimeArr[this.slimeCounter]);
-            this.slimeCounter += 1;
-        }
-        // update all slime objects
-        // [TODO] call a function in Slime class to update based on age
+        this.slimeManager.updateSlimeArr(this.game);
+
         // [TODO] make slime items into a group
-        for (var i=0; i<this.slimeCounter; i++) {
-            this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
+        for (var i=0; i<this.slimeManager.slimeCounter; i++) {
+            // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
             for (var j=0; j < this.players.length; j++)
             { 
-                if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeArr[i].slimesprite)) {
-                    this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeArr[i].slimesprite);
+                if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite)) {
+                    this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
                 }
             }
-        }
-        */
+        }*/
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
 
