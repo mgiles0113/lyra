@@ -20,6 +20,7 @@ class Player {
        //Custom Params for Player.
        this.sprite.customParams = [];
        this.sprite.customParams.inventory = [];
+       this.sprite.customParams.inv_space = 4;
        
        this.sprite.customParams.status = "waiting";
        
@@ -57,8 +58,7 @@ class Player {
     }
     
     updatePlayer (game, cursors, walls) {
-        // update player
-        // [TODO] move to player object
+        // Move player object
         game.physics.arcade.collide(this.sprite, walls);
         
         if (this.isSelected) {
@@ -85,7 +85,6 @@ class Player {
 					this.sprite.customParams.status = "waiting";
 					console.log("I'm here.");
 				}
-				
 				
 			}
         
@@ -116,8 +115,6 @@ class Player {
     	// second parameter creates a 'deadzone' - Moving inside this Rectangle will not cause the camera to move
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
-    
-    
     
 }
 
