@@ -3,8 +3,8 @@
 <head>
     <title><?php echo $game_title . " | "; ?>Login</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="lyraView/css/main.css" />
-    <script src="lyraView/js/library/phaser.js"></script>
+    <link rel="stylesheet" type="text/css" href="view/css/main.css" />
+    <script src="js/library/phaser.js"></script>
 </head>
 <body>
     <div class="container">
@@ -38,10 +38,10 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="lyraView/js/game/states/Boot.js"></script>
-	<script src="lyraView/js/game/states/Preload.js"></script>
-	<script src="lyraView/js/game/states/MainMenu.js"></script>
-    <script src="lyraView/js/ENV_PARAMETERS.js"></script>
-    <script src="lyraView/js/main.js"></script>
+    <script src="js/game/states/Boot.js"></script>
+	<script src="js/game/states/Preload.js"></script>
+	<script src="js/game/states/MainMenu.js"></script>
+    <script src="js/ENVIRONMENT.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

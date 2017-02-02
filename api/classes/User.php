@@ -81,14 +81,14 @@ class User {
             $id = -1;
             $username = '';
             $password = '';
+            $salt = '';
             
-            /* execute query */
+		/* execute query */
             $stmt->execute();
             
             /* bind result variables */
-            $stmt->bind_result($id, $username, $password);
+            $stmt->bind_result($id, $username, $password, $salt);
             $queryResult = $stmt->fetch();
-            
             
             /* fetch value */
             if (!$queryResult) {
