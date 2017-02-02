@@ -6,7 +6,7 @@ $jsonResponseBody = array(
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['action'] == 'login') {
-	login();
+	    login();
     }
 }
 
@@ -18,6 +18,7 @@ function login() {
     $user->setUsername($_POST['username']);
     $user->setPassword($_POST['password']);
     $authStatus = $user->authenticated();
+
     switch ($authStatus) {
         case 1000:
             echo '{ "error" : "none" }';
@@ -29,7 +30,6 @@ function login() {
             echo '{ "error" : "invalid login" }';
             break;
         default:
-        
     }
     //$_SESSION['authenticated'] = $user->getId();
 }
