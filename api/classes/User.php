@@ -71,7 +71,7 @@ class User {
         require('DatabaseConnection.php');
         $db = new DatabaseConnection();
         $mysqli = $db->connect();
-
+        echo 'hi from auth';
         /* create a prepared statement */
         if ($stmt = $mysqli->prepare("SELECT * FROM User WHERE username=?")) {
         
@@ -81,14 +81,14 @@ class User {
             $id = -1;
             $username = '';
             $password = '';
+            $salt = '';
             
-            /* execute query */
+		/* execute query */
             $stmt->execute();
             
             /* bind result variables */
-            $stmt->bind_result($id, $username, $password);
+            $stmt->bind_result($id, $username, $password, $salt);
             $queryResult = $stmt->fetch();
-            
             
             /* fetch value */
             if (!$queryResult) {

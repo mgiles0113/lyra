@@ -1,0 +1,30 @@
+Lyra.Preload = function() {
+	this.ready = false;
+};
+
+Lyra.Preload.prototype = {
+	preload: function() {
+		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
+	
+		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+		this.splash.anchor.setTo(0.5);
+		
+		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
+		this.preloadBar.anchor.setTo(0.5, 0.5);
+		
+		this.load.audio('menuMusic', 'assets/audio/darkmatter.mp3');
+		
+		this.load.onLoadComplete.add(this.onLoadComplete, this);
+	},
+	create: function() {
+		this.preloadBar.cropEnabled = false;
+	},
+	update: function() {
+		if (this.cache.isSoundDecoded('menuMusic') && this.ready === true) {
+			this.state.start('MainMenu');
+		}
+	},
+	onLoadComplete: function() {
+		this.ready = true;
+	}
+}

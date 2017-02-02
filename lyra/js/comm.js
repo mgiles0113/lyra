@@ -9,43 +9,64 @@ class Comm {
             //[TODO] 2.Link to players
             //Create player icons.
             this.p1_button = game.add.button(150,1300,'p1_icon');
+            this.p1_button.fixedToCamera = true;
+            
             this.p2_button = game.add.button(300,1300,'p2_icon');
+            this.p2_button.fixedToCamera = true;
+            
             this.p3_button = game.add.button(450,1300,'p3_icon');
+            this.p3_button.fixedToCamera = true;
         
             //
         }
         
-        switchPlayer(current_player){
+        switchPlayer(players){
             //Update Current Player to Player1
             this.p1_button.events.onInputDown.add(function(){
-                if(current_player != 1){
-                    current_player = 1;
+                if(players[0].isSelected == false){
+                    players[0].togglePlayer();
+                    
+                    if(players[1].isSelected == true){ 
+                        players[1].togglePlayer();
+
+                    }else if( players[2].isSelected == true){
+                        players[2].togglePlayer();
+                    }
                     
                 }
-                
-                return current_player;
                 
             });
             
             //Update Current Player to Player2
             this.p2_button.events.onInputDown.add(function(){
-                if(current_player != 2){
-                    current_player = 2;
-                }
+                if(players[1].isSelected == false){
+                    players[1].togglePlayer();
+                    
+                    if(players[0].isSelected == true){ 
+                        players[0].togglePlayer();
 
-                return current_player;
+                    }else if( players[2].isSelected == true){
+                        players[2].togglePlayer();
+                    }
+                    
+                }
                 
             });
             
-            
             //Update Current Player to Player3
             this.p3_button.events.onInputDown.add(function(){
-                if(current_player != 3){
-                    current_player = 3;
+                if(players[2].isSelected == false){
+                    players[2].togglePlayer();
+                    
                 }
                 
-                return current_player;
-                
+                    if(players[0].isSelected == true){ 
+                        players[0].togglePlayer();
+
+                    }else if( players[1].isSelected == true){
+                        players[1].togglePlayer();
+                    }
+                    
             });
             
         }
