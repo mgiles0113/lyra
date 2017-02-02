@@ -12,6 +12,10 @@ function loadHomePage() {
     primaryCard.html("");
     document.title = gameTitle + " | Main Menu";
     game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, 'primary-card');
+    game.state.add('Boot', Lyra.Boot);
+    game.state.add('Preload', Lyra.Preload);
+    game.state.add('MainMenu', Lyra.MainMenu);
+    game.state.start('Boot');
 }
 
 

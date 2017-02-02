@@ -90,14 +90,14 @@ class Lyra extends Phaser.State {
         this.game.input.mouse.capture = true;
 
         // try out creating a slime group, currently not used
-        this.slimeManager = new SlimeManager(10, this.game);
+        this.slimeManager = new SlimeManager(1000, this.game);
 
     }
 
     update() {
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
-        // [TODO] ... for now limited to 100 slime objects, fix AI for replicate
-        this.slimeManager.updateSlimeArr(this.game);
+        // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
+        this.slimeManager.updateSlimeArr(this.game, this.mapLayer[this.mapLayer.length-1]);
 
         // [TODO] make slime items into a group
         for (var i=0; i<this.slimeManager.slimeCounter; i++) {
@@ -108,7 +108,7 @@ class Lyra extends Phaser.State {
                     this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
                 }
             }
-        }*/
+        }
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
 

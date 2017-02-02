@@ -23,12 +23,12 @@
     <script src="js/map.js"></script>
     <script src="js/slime.js"></script>
     <script src="js/preloadState.js"></script>
+    <script src="js/lyra.js"></script>
     <script src="js/gameState.js"></script>
     <script src="js/player.js"></script>
     <script src="js/comm.js"></script>
     <script src="js/mapInit.js"></script>
     <script src="js/playerInit.js"></script>
-    <script src="js/lyra.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
