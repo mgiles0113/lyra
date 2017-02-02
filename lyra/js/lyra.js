@@ -100,7 +100,7 @@ class Lyra extends Phaser.State {
         this.slimeManager.updateSlimeArr(this.game, this.mapLayer[this.mapLayer.length-1]);
 
         // [TODO] make slime items into a group
-        for (var i=0; i<this.slimeManager.slimeCounter; i++) {
+        or (var i=0; i<this.slimeManager.slimeCounter; i++) {
             // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
             for (var j=0; j < this.players.length; j++)
             { 
@@ -109,6 +109,7 @@ class Lyra extends Phaser.State {
                 }
             }
         }
+        
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
 

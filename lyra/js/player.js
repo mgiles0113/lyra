@@ -21,11 +21,11 @@ class Player {
        this.sprite.customParams = [];
        this.sprite.customParams.inventory = [];
        
-       this.sprite.customParams.state = "waiting";
+       this.sprite.customParams.status = "waiting";
        
        //Init Dest Coords as Sprite's Spawn Coord.
-       this.sprite.dest_x = null;
-       this.sprite.dest_y = null;
+       this.sprite.customParams.dest_x = null;
+       this.sprite.customParams.dest_y = null;
     
         game.physics.arcade.enable(this.sprite);
     
@@ -65,21 +65,27 @@ class Player {
         
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
-            this.sprite.body.angularVelocity = 0;
             
         	//Grab Dest. Coords From Ptr
 			if(game.input.mousePointer.leftButton.isDown){
 				
 				//Grab Dest Coords
-				this.sprite.dest_x = game.input.mousePointer.x;
-				this.sprite.dest_y = game.input.mousePointer.y;
+				this.sprite.customParams.dest_x = game.input.mousePointer.x;
+				this.sprite.customParams.dest_y = game.input.mousePointer.y;
+				
+				//Change status
+				this.sprite.customParams.status = "walking";
 
 			}
 			
-			//Bring Player to Dest. 
-			if( (this.sprite.body.x != this.sprite.dest_x) || (this.sprite.body.y != this.sprite.dest_y) ){
-				//Move Sprite to Dest Coords
-				//game.physics.arcade.moveToXY(this.sprite, this.sprite.dest_x, this.sprite.dest_y, 1000);
+			if( (this.sprite.customParams.status == "walking") ){
+				game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 700);
+				
+				if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
+					this.sprite.customParams.status = "waiting";
+					console.log("I'm here.");
+				}
+				
 				
 			}
         
