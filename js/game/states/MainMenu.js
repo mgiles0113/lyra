@@ -2,13 +2,18 @@ Lyra.MainMenu = function() {
     this.menuTextFill = '#fff';
     this.menuTextSize = 40;
     this.menuTextVerticalSpace = 50;
+    this.userPreference = {
+        sound : true
+    };
 };
 
 Lyra.MainMenu.prototype = {
 	create: function() {
 		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
 		this.menuMusic = this.game.add.audio('menuMusic');
-		this.menuMusic.play('', 0, 0.5, true, true);
+	    if (this.userPreference.sound) {
+	        this.menuMusic.play('', 0, 0.5, true, true);
+	    }
 
 
         this.newGameText = this.game.add.text(
@@ -57,6 +62,9 @@ Lyra.MainMenu.prototype = {
 	},
 	newGame: function() {
 	    console.log('new game clicked');
+	    if (this.menuMusic.isPlaying) {
+	        this.menuMusic.stop();
+	    }
 	    this.game.mapData = EASY_MAP;
 	    this.game.playerData = PLAYER_DATA;
         this.state.start('LyraGame');
