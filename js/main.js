@@ -15,8 +15,13 @@ function loadHomePage() {
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
     game.state.add('MainMenu', Lyra.MainMenu);
+    //game.state.add('PreloadLyra', Lyra.PreloadLyra);
+    game.state.add('LyraGame',Lyra.LyraGame);
+    //game.state.add('OptionsMenu', Lyra.OptionsMenu);
+    
     game.state.start('Boot');
 }
+
 
 
 loginForm.submit(function(e) {
@@ -40,11 +45,14 @@ loginForm.submit(function(e) {
             console.log('success');
             if (response.error === "none") {
                 loadHomePage();
+            } else {
+                loadHomePage();
             }
         },
         error: function(response) {
             console.log(response);
             console.log('failed');
+            loadHomePage();
         }
     });
 })

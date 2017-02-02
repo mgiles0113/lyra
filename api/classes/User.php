@@ -4,6 +4,8 @@ class User {
     var $id;                // sql id (primary key) for this user
     var $username;          // user's username
     var $password;          // user's password
+    var $userPreference;    // store user's preferences for game play
+    var $gameState;         // array of saved game states for this user
     
     // User constructor
     function __construct() {
@@ -71,20 +73,19 @@ class User {
         require('DatabaseConnection.php');
         $db = new DatabaseConnection();
         $mysqli = $db->connect();
-        echo 'hi from auth';
+        
         /* create a prepared statement */
         if ($stmt = $mysqli->prepare("SELECT * FROM User WHERE username=?")) {
-        
             /* bind parameters for markers */
             $stmt->bind_param("s", $this->username);
 
+		    /* execute query */
+            $stmt->execute();
+            
             $id = -1;
             $username = '';
             $password = '';
             $salt = '';
-            
-		/* execute query */
-            $stmt->execute();
             
             /* bind result variables */
             $stmt->bind_result($id, $username, $password, $salt);

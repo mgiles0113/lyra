@@ -15,7 +15,7 @@ class DatabaseConnection {
         $this->password = $sys_password;
         $this->database = $sys_database;
         $this->dbport = $sys_dbport;
-        
+
 	$this->mysqli = new mysqli(
             $this->servername,
             $this->username,
@@ -23,7 +23,7 @@ class DatabaseConnection {
             $this->database,
             $this->dbport
         );
-		
+
 	if ($this->mysqli->connect_errno) {
 		echo "Failed to connect to MySQL: (" . $this->mysqli->connect_errno . ") " . $this->mysqli->connect_error;
 	}

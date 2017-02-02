@@ -12,4 +12,5 @@ if ($authenticationRequired && !$_SESSION['authenticated']) {
     require('view/templates/login.php');
 } else {
     // load main menu
+    
 }

@@ -31,5 +31,6 @@ function login() {
             break;
         default:
     }
+
     //$_SESSION['authenticated'] = $user->getId();
 }

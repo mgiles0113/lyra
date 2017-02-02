@@ -39,8 +39,17 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="js/game/states/Boot.js"></script>
+    <script src="js/game/lyra/mapInit.js"></script>
+    <script src="js/game/lyra/map.js"></script>
+    <script src="js/game/lyra/utility.js"></script>
+    <script src="js/game/lyra/slime.js"></script>
+    <script src="js/game/lyra/player.js"></script>
+    <script src="js/game/lyra/comm.js"></script>
+    <script src="js/game/lyra/playerInit.js"></script>
 	<script src="js/game/states/Preload.js"></script>
+	<!--script src="js/game/states/PreloadLyra.js"></script-->
 	<script src="js/game/states/MainMenu.js"></script>
+	<script src="js/game/states/Game.js"></script>
     <script src="js/ENVIRONMENT.js"></script>
     <script src="js/main.js"></script>
 </body>

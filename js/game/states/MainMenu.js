@@ -57,6 +57,9 @@ Lyra.MainMenu.prototype = {
 	},
 	newGame: function() {
 	    console.log('new game clicked');
+	    this.game.mapData = EASY_MAP;
+	    this.game.playerData = PLAYER_DATA;
+        this.state.start('LyraGame');
 	},
 	loadGameMenu: function() {
 	    console.log('load game clicked');
