@@ -141,12 +141,19 @@ class SlimeManager {
                     this.slimeArr[i].phase += 1;
                     this.slimeArr[i].animation = "p" + this.slimeArr[i].phase;
                 }
-        }; 
+        };
+        
         // for now replicate to limit
         if (this.slimeCounter < this.limit) {
             for (var i=0; i<10; i++) {
-                var rndNum = getRandomInt(0, this.slimeArr.length-1);
-                if (this.slimeArr[rndNum].phase == 9 ) {
+                var rndNum = i;
+                if (rndNum > this.slimeArr.length-1) {
+                    rndNum = this.slimeArr.length-1;
+                }
+                if (this.slimeArr.length > 10) {
+                   rndNum = getRandomInt(0, this.slimeArr.length-1); 
+                }
+                if ((this.slimeArr[rndNum].phase == 9 ) && (!this.slimeArr[rndNum].isMobile)) {
                     this.slimeArr[this.slimeCounter] = this.slimeArr[rndNum].replicateSlime(this.slimeCounter, game);
                     console.log("created slime #: " + this.slimeCounter);
                     console.log(this.slimeArr[this.slimeCounter]);
