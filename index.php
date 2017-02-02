@@ -9,7 +9,7 @@ $authenticationRequired = 1;
 
 if ($authenticationRequired && !$_SESSION['authenticated']) {
     // require login screen
-    require('lyraView/templates/main.php');
+    require('view/templates/login.php');
 } else {
     // load main menu
 }
