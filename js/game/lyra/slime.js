@@ -32,7 +32,7 @@ class Slime {
         this.idx = indexNum;
         this.age = 0;
         this.animation = 'p0';
-        this.speed = 1;
+        this.speed = getRandomInt(1, 2);
         this.phaseLife = getRandomInt(10, 100);
         this.phase = 0;
         this.numChildren = 0;
@@ -58,10 +58,12 @@ class Slime {
         game.physics.arcade.enable(this.slimesprite);
         this.slimesprite.body.setSize(32,32);
         this.slimesprite.body.setCircle(20);
+        this.slimesprite.anchor.set(0.5);
     }
     
     immobilize() {
          this.slimesprite.immovable = true; this.slimesprite.body.immovable = true; this.slimesprite.body.moves = false;
+         this.slimesprite.body.setCircle(4);
          this.isMobile = false;
     }
     
@@ -72,9 +74,26 @@ class Slime {
     }
     
     updateTrajectory() {
-        this.slimesprite.body.velocity.x = 15 + getRandomInt(50, 150) * getRandomInt(-1, 1);
-        this.slimesprite.body.velocity.y = 15 + getRandomInt(50, 150) * getRandomInt(-1, 1);
-        this.slimesprite.body.angularVelocity = 5 + getRandomInt(50, 100) * getRandomInt(-1, 1);
+        var a = getRandomInt(10, 25);
+        var b = getRandomInt(10, 25);
+        var c = getRandomInt(10, 25);
+        // console.log(a , b, c);
+        if  (getRandomInt(1, 2) == 2 ) {
+            this.slimesprite.body.velocity.x = a;
+        }
+        else
+            this.slimesprite.body.velocity.x = -a;
+            
+        if  (getRandomInt(1, 2) == 2 ) {
+            this.slimesprite.body.velocity.y = b;
+        }
+        else
+            this.slimesprite.body.velocity.y = -b;
+        if  (getRandomInt(1, 2) == 2 ) {
+            this.slimesprite.body.angularVelocity = c;
+        }
+        else
+            this.slimesprite.body.angularVelocity = -c;
     }
     
     
@@ -90,28 +109,6 @@ class Slime {
         return (slimeObj);
     }
 
-    // generateNewSlimePosition(width, height) {
-    //     var validPos = true;
-    //     var pos = new Array(2);
-    //     while (validPos) {
-    //         if (getRandomInt(0, 2) > 1)
-    //             pos[0] = getRandomInt(this.xPos+20, this.xPos+50);
-    //         else
-    //             pos[0] = getRandomInt(this.xPos-50, this.xPos-20);
-
-    //         if (getRandomInt(0, 2) > 1)
-    //             pos[1] = getRandomInt(this.yPos+20, this.yPos+50);
-    //         else
-    //             pos[1] = getRandomInt(this.yPos-50, this.yPos-20);
-            
-    //         if (pos[0] > 80 && pos[0] < width - 80 && pos[1] > 80 && pos[1] < height - 80) {
-    //             validPos = false;
-    //             break;
-    //         }
-    //     }
-    //     return pos;
-    // }
-    
 }
 
 Slime.preloadSlime = function(game) {
@@ -136,7 +133,7 @@ class SlimeManager {
             if (this.slimeArr[i].isMobile) {game.physics.arcade.collide(this.slimeArr[i].slimesprite, walls);}
             this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation)
                 this.slimeArr[i].age +=1;
-                if ((this.slimeArr[i].age % 30 == 0) && this.slimeArr[i].phase >=0 && this.slimeArr[i].phase < 9) {
+                if ((this.slimeArr[i].age % this.slimeArr[i].phaseLife == 0) && this.slimeArr[i].phase >=0 && this.slimeArr[i].phase < 9) {
                     this.slimeArr[i].phase += 1;
                     this.slimeArr[i].animation = "p" + this.slimeArr[i].phase;
                 }
@@ -154,27 +151,37 @@ class SlimeManager {
                 }
                 if ((this.slimeArr[rndNum].phase == 9 ) && (!this.slimeArr[rndNum].isMobile)) {
                     this.slimeArr[this.slimeCounter] = this.slimeArr[rndNum].replicateSlime(this.slimeCounter, game);
-                    console.log("created slime #: " + this.slimeCounter);
-                    console.log(this.slimeArr[this.slimeCounter]);
+                    // console.log("created slime #: " + this.slimeCounter);
+                    // console.log(this.slimeArr[this.slimeCounter]);
                     this.slimeCounter += 1;
                 }
             }
         }
                     
         // check for overlap - iterates through the whole slimeArr^2
-        for (var k=0; k < this.slimeArr.length - 1; k++) {
+        for (var k=this.slimeArr.length - 1; k>=0 ; k--) {
             var overlapTest = true;
-            for (var j=k+1; j<this.slimeArr.length - 1; j++) {
-                if (j != k) {  // don't test against itself
+            for (var j=0; j<this.slimeArr.length - 1; j++) {
+                // if (this.slimeArr[k].isMobile && !this.slimeArr[j].isMobile) {
+                //     if (game.physics.arcade.collide(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
+                //         overlapTest = false;
+                //         if (this.slimeArr[k].isMobile && this.slimeArr[k].age % 20 == 0) {
+                //             this.slimeArr[k].updateTrajectory(); 
+                //         }
+                //     }
+                // }
+                if ((j != k) && (this.slimeArr[k].isMobile && this.slimeArr[k].age % 20 == 0)) {  // don't test against itself
                     if (game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
                         overlapTest = false;
-                        if (this.slimeArr[k].isMobile && this.slimeArr[k].age % 20 == 0) {this.slimeArr[k].updateTrajectory()};
+                        this.slimeArr[k].updateTrajectory(); 
+                            //console.log("trajectory update")
                     }
                 }
             }
-            if (overlapTest) {
-                this.slimeArr[k].immobilize();
-            }
+            // if (overlapTest && this.slimeArr[k].phase == 9 && this.slimeArr[k].isMobile)  {
+            //     this.slimeArr[k].immobilize();
+            //     console.log("immobilized: " + this.slimeArr[k].idx + " pos: " + this.slimeArr[k].slimesprite.body.position);
+            // }
         }
 
     }

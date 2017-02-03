@@ -57,7 +57,14 @@ Lyra.LyraGame.prototype = {
         console.log("setting up collision");
         console.log(this.game.mapData.mapLayerRef[this.game.mapData.mapLayerRef.length-1]);
         // set the second parameter to > gid number in tile map for the tiles we want to collide
-        this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)]);
+        //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
+        //this.map.map.setCollisionByExclusion([],true,this.mapLayer[(this.mapLayer.length-1)], false);
+        
+        
+        // put a tile on the map
+        // @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
+        // this is just an experiment to show that we can place tiles!
+        this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
         
         // set world boundaries to size of the current map.   This allows sprites to be followed by the camera
@@ -88,7 +95,7 @@ Lyra.LyraGame.prototype = {
         this.game.input.mouse.capture = true;
 
         // try out creating a slime group, currently not used
-        this.slimeManager = new SlimeManager(10, this.game);
+        this.slimeManager = new SlimeManager(100, this.game);
 	},
 	update: function() {
 		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
