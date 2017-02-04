@@ -71,9 +71,17 @@ class Player {
 			if( (this.sprite.customParams.status == "walking") ){
 				game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 700);
 				
+				//Stop Sprite when they reach dest
 				if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
 					this.sprite.customParams.status = "waiting";
 					console.log("I'm here.");
+				}
+				
+				//Stop Sprite at Collision with Wall
+				if( (this.sprite.body.checkCollision.any) ){
+				    this.sprite.customParams.status = "waiting";
+					console.log("I'm stopping.");
+				    
 				}
 				
 			}

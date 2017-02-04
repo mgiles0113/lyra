@@ -119,7 +119,7 @@ Lyra.LyraGame.prototype = {
 	update: function() {
 		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-        
+        /*
         this.slimeManager.updateSlimeArr(this.game, this.mapLayer[this.mapLayer.length-1]);
 
         // [TODO] make slime items into a group
@@ -131,7 +131,7 @@ Lyra.LyraGame.prototype = {
                     this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
                 }
             }
-        }
+        }*/
         
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
