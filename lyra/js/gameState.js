@@ -14,7 +14,7 @@ class LyraState {
 
         //this.game = new Phaser.Game(mapwidth, mapheight, Phaser.AUTO, 'phaser-example', {preload: this.preload, create: this.create, update: this.update, render: this.render });
         //this.game = new Phaser.Game(mapwidth, mapheight, Phaser.CANVAS, 'phaser-example', {preload: this.preload, create: this.create, update: this.update, render: this.render });
-        this.game = new Phaser.Game(gamewidth, gameheight, Phaser.AUTO, 'phaser-example', this.lyra);
+        this.game = new Phaser.Game(gamewidth, gameheight, Phaser.CANVAS, 'phaser-example', this.lyra);
     }
 
 }

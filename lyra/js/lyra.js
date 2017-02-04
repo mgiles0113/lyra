@@ -24,6 +24,9 @@ class Lyra extends Phaser.State {
         // create tilemap and load assets
         Map.loadMap(this.game, this.mapRef, this.imageTagList, this.imageRefList);
         preloadLyra(this.game);
+       
+        //load assets for players
+        //Player.loadPlayer(this.game, this.numPlayers, this.playerData);
     }
 
 
@@ -47,7 +50,7 @@ class Lyra extends Phaser.State {
         this.map.addMap(this.game, this.imageTagList);
 
         for (var i=0; i<this.mapLayerRef.length; i++) {
-            this.mapLayer[i] = this.map.map.createLayer(this.mapLayerRef[i]);
+            this.mapLayer[i] = this.map.map.createLayer(this.mapLayerRef[i]);a
             //this.mapLayer[i].resizeWorld(200,200);
             this.mapLayer[i].debugSettings.forceFullRedraw = true;
         }
@@ -95,7 +98,6 @@ class Lyra extends Phaser.State {
     }
 
     update() {
-        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
         
         this.slimeManager.updateSlimeArr(this.game, this.mapLayer[this.mapLayer.length-1]);
@@ -113,7 +115,6 @@ class Lyra extends Phaser.State {
         
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
-
 
         // update player
         for (var j=0; j < this.players.length; j++)

@@ -83,7 +83,6 @@ class Player {
 				
 				if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
 					this.sprite.customParams.status = "waiting";
-					console.log("I'm here.");
 				}
 				
 			}
@@ -124,3 +123,12 @@ Player.preloadPlayer = function (game) {
         game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 32, 32, 4);
         
 }
+
+/*
+Player.loadPlayer = function(game, numPlayers, playerData){
+	for(var i=0; i<numPlayers; i++){
+			game.load.spritesheet(playerData.players[i].name, playerData.players[i].imgRef, playerData.height, playerData.width, playerData.frames);
+		
+	}
+}*/
+
