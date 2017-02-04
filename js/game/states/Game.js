@@ -5,14 +5,14 @@ Lyra.LyraGame = function() {
 Lyra.LyraGame.prototype = {
 	preload: function() {
 	    if (this.game.newGame) {
-        	this.slimeCounter = 0;
-            this.slimeArr = [];
-            this.players = [];
-            this.mapLayer = [];
-            this.playerData = [];
-            this.items = [];
-            this.roomArr = [];
-            this.doorArr = [];
+            this.slimeArr = []; // list of slime objects
+            this.players = [];  // list of players created on map
+            this.mapLayer = [];  // layers of map tilesets
+            this.items = [];  // list of items created on map
+            this.roomArr = [];  // approx center of rooms on map
+            this.doorArr = [];  // locations of doors on the map
+            this.doors = []; // list of doors 
+            this.suppresantArr = [];  // locations on the map where suppresant can be placed
             this.ready = false;
         }
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
@@ -69,7 +69,7 @@ Lyra.LyraGame.prototype = {
         // put a tile on the map
         // @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
         // this is just an experiment to show that we can place tiles!
-        this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
+        //this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
         
         for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
@@ -78,6 +78,15 @@ Lyra.LyraGame.prototype = {
         
         for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
             this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];
+            this.doors[i] = new Door();
+            this.doors[i].addDoor(this.game, this.map.map.objects["doors"][i].name, this.doorArr[this.map.map.objects["doors"][i].name].x, this.doorArr[this.map.map.objects["doors"][i].name].y);
+        }
+        
+        for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
+            this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
+            //Create suppressant items
+            this.items[i] = new Items();
+            this.items[i].addItem(this.game,"suppresant", this.suppresantArr[this.map.map.objects["suppressant"][i].name].x+16, this.suppresantArr[this.map.map.objects["suppressant"][i].name].y+16);
         }
         
         //var cc = this.map.map.objects["rooms"];
@@ -97,10 +106,6 @@ Lyra.LyraGame.prototype = {
 
         //Create comm window.
         this.comm = new Comm(this.game);
-        
-        //Create items
-        this.items = new Items();
-        this.items.addItem(this.game);
 
         //Create players
         for (var i = 0; i< this.game.playerData.numPlayers; i++) {

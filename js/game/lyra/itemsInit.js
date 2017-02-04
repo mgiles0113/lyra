@@ -24,7 +24,7 @@ var SUPPRESANT = {
 }
 
 var WRENCH = {
-    itemREf: 'assets/sprites/items/wrench.png',
+    itemRef: 'assets/sprites/items/wrench.png',
     name: 'wrench'
 
 }

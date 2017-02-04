@@ -58,7 +58,7 @@ class Slime {
         game.physics.arcade.enable(this.slimesprite);
         this.slimesprite.body.setSize(32,32);
         this.slimesprite.body.setCircle(20); // radius of collision body
-        this.slimesprite.anchor.set(0.5); // center collision over image
+        this.slimesprite.anchor.set(0.5, 0.5); // center collision over image
     }
     
     immobilize() {

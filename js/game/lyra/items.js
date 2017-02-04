@@ -1,8 +1,13 @@
 class Items {
-    addItem (game) {
+    addItem (game, name, x, y) {
     //Test to see if it works.
-    //this.sprite = game.add.sprite(500, 500, game.itemData.items[0].name);
-                
+        this.sprite = game.add.sprite(x, y, name);
+        this.name = name;
+        game.physics.arcade.enable(this.sprite);
+        this.sprite.body.setSize(32,32);
+        this.sprite.body.setCircle(20); // radius of collision body
+        this.sprite.anchor.set(0.5, 0.5); // center collision over image
+
     }
 }
 
