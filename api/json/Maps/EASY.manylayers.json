@@ -9,7 +9,16 @@
         "assets/lyraImages/meta_tiles.png"
     ],
     "mapLayerRef" : [
-        "floors",
+        "escape_pods",
+        "halls",
+        "dock",
+        "workshop",
+        "engine_room",
+        "rec_room",
+        "crew_quarters",
+        "cafeteria",
+        "med_bay",
+        "command_center",
         "doors",
         "walls"
     ],
