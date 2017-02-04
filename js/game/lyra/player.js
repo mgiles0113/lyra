@@ -107,7 +107,6 @@ class Player {
                 this.sprite.body.velocity.y = 700;
                  this.sprite.frame = 3;
             }
-
         }
     }
     

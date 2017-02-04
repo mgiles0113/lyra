@@ -1,14 +1,19 @@
 Lyra.LyraGame = function() {
-	this.slimeCounter = 0;
-    this.slimeArr = [];
-    this.players = [];
-    this.mapLayer = [];
-    this.playerData = [];
-    this.ready = false;
+
 };
 
 Lyra.LyraGame.prototype = {
 	preload: function() {
+	    if (this.game.newGame) {
+        	this.slimeCounter = 0;
+            this.slimeArr = [];
+            this.players = [];
+            this.mapLayer = [];
+            this.playerData = [];
+            this.roomArr = [];
+            this.doorArr = [];
+            this.ready = false;
+        }
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 
@@ -58,7 +63,7 @@ Lyra.LyraGame.prototype = {
         console.log(this.game.mapData.mapLayerRef[this.game.mapData.mapLayerRef.length-1]);
         // set the second parameter to > gid number in tile map for the tiles we want to collide
         //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
-        //this.map.map.setCollisionByExclusion([],true,this.mapLayer[(this.mapLayer.length-1)], false);
+        this.map.map.setCollisionByExclusion([],true,this.mapLayer[(this.mapLayer.length-1)], false);
         
         
         // put a tile on the map
@@ -66,6 +71,16 @@ Lyra.LyraGame.prototype = {
         // this is just an experiment to show that we can place tiles!
         this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
+        
+        for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
+            this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
+        }
+        
+        for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
+            this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];
+        }
+        
+        //var cc = this.map.map.objects["rooms"];
         
         // set world boundaries to size of the current map.   This allows sprites to be followed by the camera
         // viewable area is the size of the game
@@ -95,7 +110,7 @@ Lyra.LyraGame.prototype = {
         this.game.input.mouse.capture = true;
 
         // try out creating a slime group, currently not used
-        this.slimeManager = new SlimeManager(100, this.game);
+        this.slimeManager = new SlimeManager(1000, this.game);
 	},
 	update: function() {
 		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
