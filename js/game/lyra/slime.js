@@ -132,7 +132,7 @@ class SlimeManager {
         for (var i=0; i< this.slimeArr.length; i++) {
             if (this.slimeArr[i].isMobile) {game.physics.arcade.collide(this.slimeArr[i].slimesprite, walls);}
             //if (this.slimeArr[i].isMobile) {
-            game.physics.arcade.collide(this.slimeArr[i].slimesprite, walls);
+            //game.physics.arcade.collide(this.slimeArr[i].slimesprite, walls);
             this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
             this.slimeArr[i].age +=1;
             // mature the slime
