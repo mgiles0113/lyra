@@ -30,12 +30,5 @@ Map.loadMap = function (game, mapRef, imageTagList, imageRefList) {
         for (var i=0; i<imageTagList.length; i++) {
                 game.load.image(imageTagList[i], imageRefList[i]);
         }
-
-        // // map assets
-        // game.load.image('grayTiles', 'assets/grayTiles.png');
         
-        // // load a background image
-        // game.load.image('background', 'assets/backgroundGray.png');
-        
-
 }

@@ -46,6 +46,8 @@
     <script src="js/game/lyra/player.js"></script>
     <script src="js/game/lyra/comm.js"></script>
     <script src="js/game/lyra/playerInit.js"></script>
+    <script src="js/game/lyra/items.js"></script>
+    <script src="js/game/lyra/itemsInit.js"></script>
 	<script src="js/game/states/Preload.js"></script>
 	<!--script src="js/game/states/PreloadLyra.js"></script-->
 	<script src="js/game/states/MainMenu.js"></script>

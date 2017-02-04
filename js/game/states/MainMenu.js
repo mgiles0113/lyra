@@ -1,9 +1,9 @@
 Lyra.MainMenu = function() {
-    // this.menuTextStyle = {
-    //     "fillColor" : "#fff",
-    //     "size" : "40",
-    //     "verticalSpace" : "50",
-    // };
+    this.menuTextStyle = {
+        "fillColor" : "#fff",
+        "size" : "40",
+        "verticalSpace" : "50",
+    };
 
     this.menuTextFill = '#fff';
     this.menuTextSize = 40;
@@ -13,36 +13,36 @@ Lyra.MainMenu = function() {
         "sound" : "true"
     };
 
-    // this.mainMenuItems = {
-    //     "newGame" : {
-    //         "displayName" : "New Game"
-    //     },
-    //     "loadGame" : {
-    //         "displayName" : "Load Game"
-    //     },
-    //     "options" : {
-    //         "displayName" : "Options"
-    //     }
-    // };
-    // this.newGameMenuItems = {
-    //     "easyMap" : {
-    //         "displayName" : "Easy Map"
-    //     },
-    //     "hardMap" : {
-    //         "displayName" : "Hard Map"
-    //     }
-    // };
-    // this.loadGameMenuItems = {
-    //     "loadGameMenuItemsCount" : "0"
-    // };
-    // this.optionsMenuItems = {
-    //     "music" : {
-    //         "displayName" : "Music"
-    //     },
-    //     "language" : {
-    //         "displayName" : "Language"
-    //     }
-    // };
+    this.mainMenuItems = {
+        "newGame" : {
+            "displayName" : "New Game"
+        },
+        "loadGame" : {
+            "displayName" : "Load Game"
+        },
+        "options" : {
+            "displayName" : "Options"
+        }
+    };
+    this.newGameMenuItems = {
+        "easyMap" : {
+            "displayName" : "Easy Map"
+        },
+        "hardMap" : {
+            "displayName" : "Hard Map"
+        }
+    };
+    this.loadGameMenuItems = {
+        "loadGameMenuItemsCount" : "0"
+    };
+    this.optionsMenuItems = {
+        "music" : {
+            "displayName" : "Music"
+        },
+        "language" : {
+            "displayName" : "Language"
+        }
+    };
 };
 
 Lyra.MainMenu.prototype = {
@@ -180,6 +180,7 @@ Lyra.MainMenu.prototype = {
 	    console.log(mapData);
 	    this.game.mapData = JSON.parse(mapData);
 	    this.game.playerData = PLAYER_DATA;
+	    this.game.itemData = ITEMS_DATA;
 	    this.game.newGame = true;
         this.state.start('LyraGame');
 	}

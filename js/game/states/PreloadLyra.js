@@ -22,6 +22,9 @@ Lyra.PreloadLyra.prototype = {
         //comm window assets
         Comm.preloadComm(this.game);
         
+        //item assets
+        Items.preloadItems(this.game);
+        
 	},
 	create: function() {
 		this.preloadBar.cropEnabled = false;

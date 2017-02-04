@@ -10,6 +10,7 @@ Lyra.LyraGame.prototype = {
             this.players = [];
             this.mapLayer = [];
             this.playerData = [];
+            this.items = [];
             this.roomArr = [];
             this.doorArr = [];
             this.ready = false;
@@ -29,6 +30,9 @@ Lyra.LyraGame.prototype = {
         
         //comm window assets
         Comm.preloadComm(this.game);
+        
+        //items assets
+        Items.preloadItems(this.game);
 
    		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},
@@ -40,10 +44,6 @@ Lyra.LyraGame.prototype = {
         this.game.world.scaleMode = 
         // there are other ways to do this, sets a background color for the game          
         this.game.stage.backgroundColor = '#555';
-        
-        // // add background image
-        // this was to show another way to put in the background, assumes preload of 'background' tag
-        //this.game.add.sprite(0, 0, 'background');
 
         // // create the map
         this.map = new Map();
@@ -97,8 +97,12 @@ Lyra.LyraGame.prototype = {
 
         //Create comm window.
         this.comm = new Comm(this.game);
+        
+        //Create items
+        this.items = new Items();
+        this.items.addItem(this.game);
 
-        // create players
+        //Create players
         for (var i = 0; i< this.game.playerData.numPlayers; i++) {
             this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].image);
         }

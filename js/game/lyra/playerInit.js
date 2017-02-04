@@ -23,7 +23,6 @@ var PLAYER3 = {
 
 var PLAYER_DATA = {
     numPlayers: 3,
-    //player: [{260, 600, true, 1}, {360, 800, false, 2}, { 450, 500, false, 3}],
     players: [PLAYER1, PLAYER2, PLAYER3],
 }
 
