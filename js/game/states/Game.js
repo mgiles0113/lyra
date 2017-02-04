@@ -104,7 +104,7 @@ Lyra.LyraGame.prototype = {
 
         //Create players
         for (var i = 0; i< this.game.playerData.numPlayers; i++) {
-            this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].image);
+            this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].name);
         }
 
         // setup getting keyboard input

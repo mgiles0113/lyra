@@ -3,30 +3,20 @@ class Player {
         this.isSelected = selected;
        
         // create player(s) 
-        // [TODO] consider passing the labels and images used in preload as playerInit data
-        if( player == 1){
-        	this.sprite = game.add.sprite(x, y, 'red_player');
-        	
-        }else if(player == 2){
-        	this.sprite = game.add.sprite(x,y, 'green_player');
-        	
-        }else{
-        	this.sprite = game.add.sprite(x,y, 'blue_player');
-        }
-        
+        this.sprite = game.add.sprite(x,y,player);
         this.sprite.frame = 1;
         this.sprite.anchor.set(0.5);
        
-       //Custom Params for Player.
-       this.sprite.customParams = [];
-       this.sprite.customParams.inventory = [];
-       this.sprite.customParams.inv_space = 4;
+        //Custom Params for Player.
+        this.sprite.customParams = [];
+        this.sprite.customParams.inventory = [];
+        this.sprite.customParams.inv_space = 4;
        
-       this.sprite.customParams.status = "waiting";
+        this.sprite.customParams.status = "waiting";
        
-       //Init Dest Coords as Sprite's Spawn Coord.
-       this.sprite.customParams.dest_x = null;
-       this.sprite.customParams.dest_y = null;
+        //Init Dest Coords as Sprite's Spawn Coord.
+        this.sprite.customParams.dest_x = null;
+        this.sprite.customParams.dest_y = null;
     
         game.physics.arcade.enable(this.sprite);
     
@@ -118,8 +108,12 @@ class Player {
 }
 
 Player.preloadPlayer = function (game) {
-        game.load.spritesheet('red_player', 'assets/sprites/player_1.png', 32, 32, 4);
-        game.load.spritesheet('green_player', 'assets/sprites/player_2.png', 32, 32, 4);
-        game.load.spritesheet('blue_player', 'assets/sprites/player_3.png', 32, 32, 4);
+    
+    //Load the items needed.
+    //1st-> Player Name/Key
+    //2nd-> URL to asset
+    for (var i=0; i<game.playerData.numPlayers; i++) {
+        game.load.spritesheet(game.playerData.players[i].name, game.playerData.players[i].playerRef, game.playerData.height, game.playerData.width, game.playerData.frames);
+    }
         
 }

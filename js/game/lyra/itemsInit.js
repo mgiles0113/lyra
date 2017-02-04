@@ -1,31 +1,32 @@
 
 var CIRCUIT = {
-    name: 'circuit',
-    itemRef:'assets/sprites/items/circuit.png'
-
+    itemRef:'assets/sprites/items/circuit.png',
+    name: 'circuit'
+    
 }
 
 var FUEL_TANK = {
-    name: 'fuel tank',
-    itemRef:'assets/sprites/items/fuel_tank.png'
+    itemRef:'assets/sprites/items/fuel_tank.png',
+    name: 'fuel tank'
 
 }
 
 var FUSE = {
+    itemRef: 'assets/sprites/items/fuse.png',
     name: 'fuse',
-    itemRef: 'assets/sprites/items/fuse.png'
 
 }
 
 var SUPPRESANT = {
+    itemRef: 'assets/sprites/items/suppresant.png',
     name: 'suppresant',
-    itemRef: 'assets/sprites/items/suppresant.png'
     
 }
 
 var WRENCH = {
-    name: 'wrench',
-    itemREf: 'assets/sprites/items/wrench.png'
+    itemREf: 'assets/sprites/items/wrench.png',
+    name: 'wrench'
+
 }
 
 var ITEMS_DATA = {
