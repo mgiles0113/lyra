@@ -50,21 +50,29 @@ Lyra.LyraGame.prototype = {
         this.map.addMap(this.game, this.game.mapData.imageTagList);
 
         for (var i=0; i<this.game.mapData.mapLayerRef.length; i++) {
-            this.mapLayer[i] = this.map.map.createLayer(this.game.mapData.mapLayerRef[i]);
+            this.mapLayer[this.game.mapData.mapLayerRef[i]] = this.map.map.createLayer(this.game.mapData.mapLayerRef[i]);
             //this.mapLayer[i].resizeWorld(200,200);
-            this.mapLayer[i].debugSettings.forceFullRedraw = true;
+            this.mapLayer[this.game.mapData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
         
         // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
         // this.mapLayer[this.mapLayer.length - 1].debugSettings.forceFullRedraw = true;
+        
         
         // add collision for walls
         console.log("setting up collision");
         console.log(this.game.mapData.mapLayerRef[this.game.mapData.mapLayerRef.length-1]);
         // set the second parameter to > gid number in tile map for the tiles we want to collide
         //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
-        this.map.map.setCollisionByExclusion([],true,this.mapLayer[(this.mapLayer.length-1)], false);
         
+        
+        //In Player Fn --> Detecting Collision everywhere, but Colliding correctly
+        //this.map.setCollisionBetween(1, 100000, true, 'blockedLayer');
+        this.map.map.setCollisionByExclusion([],true,this.mapLayer['walls']);
+        //this.map.map.setCollision([21],false, this.mapLayer['floors']);
+        
+        //Set up Collision for Doors
+        //this.map.map.setCollisionByExclusion([0], true, this.mapLayer['doors']);
         
         // put a tile on the map
         // @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
@@ -124,7 +132,7 @@ Lyra.LyraGame.prototype = {
 	update: function() {
 		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-        this.slimeManager.updateSlimeArr(this.game, this.mapLayer[this.mapLayer.length-1]);
+        //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
 
         /*  comment out checking for slime overlap with players
         // [TODO] make slime items into a group
@@ -140,12 +148,15 @@ Lyra.LyraGame.prototype = {
         
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
+        
+        //Comm.Window --> Update Player Inventory;
+        this.comm.displayInventory(this.game);
 
 
         // update player
         for (var j=0; j < this.players.length; j++)
         { 
-            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer[this.mapLayer.length-1]);
+            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.mapLayer['doors']);
         }
 	},
     render: function() {

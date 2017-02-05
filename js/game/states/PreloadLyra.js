@@ -23,7 +23,7 @@ Lyra.PreloadLyra.prototype = {
         Comm.preloadComm(this.game);
         
         //item assets
-        Items.preloadItems(this.game);
+        Items.preloadItems(this.game)
         
 	},
 	create: function() {

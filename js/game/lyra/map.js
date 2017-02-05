@@ -9,8 +9,6 @@ class Map {
                         this.imageTagList[i] = imageTagList[i];
                         this.tileSetImages[imageTagList[i]] = this.map.addTilesetImage(this.imageTagList[i]);
                 }
-                // this.map.addTilesetImage('grayTiles');
-                // this.map.addTilesetImage('greenCircle'); 
                 
         }
         

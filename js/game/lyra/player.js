@@ -9,8 +9,8 @@ class Player {
        
         //Custom Params for Player.
         this.sprite.customParams = [];
-        this.sprite.customParams.inventory = [];
-        this.sprite.customParams.inv_space = 4;
+        this.sprite.customParams.inventory = ['fuse', 'circuit'];
+        this.sprite.customParams.inv_num = 2;
        
         this.sprite.customParams.status = "waiting";
        
@@ -37,6 +37,14 @@ class Player {
 
     }
     
+    validDest(game,destCoords){
+        //Grab the coords.
+        this.sprite.customParams.dest_x = game.input.mousePointer.x;
+		this.sprite.customParams.dest_y = game.input.mousePointer.y;
+		
+        //Check that is on a floor tile/floor layer
+        
+    }
     
     togglePlayer(){
         if(this.isSelected == false){
@@ -47,16 +55,49 @@ class Player {
         }
     }
     
-    updatePlayer (game, cursors, walls) {
+    //Return inventory
+    getInventory(slot){
+        if( slot < this.sprite.customParams.inv_num ){
+            return this.sprite.customParams.inventory[slot];
+        
+        }else{
+       
+            return 'empty';
+            
+        }
+    }
+    
+    //Only reacts if it's hitting something.
+    collideWall(sprite, walls){
+        console.log("I'm hitting something.");
+    }
+    
+    ontheFloor(sprite, floors){
+        console.log("I'm on the dance floor.");
+    }
+    
+    lockedOut(sprite,doors){
+        console.log("I can't get in!");
+    }
+    
+    updatePlayer (game, cursors, walls, floors, doors) {
+        
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
+        
+        //Restrict Pt & Click to floor tiles
+        game.physics.arcade.overlap(this.sprite, floors);
+        //game.physics.arcade.collide(this.sprite, doors, this.lockedOut(this.sprite,doors));
         
         if (this.isSelected) {
         
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
             
+            //Disabling Point and Click
+            /*
         	//Grab Dest. Coords From Ptr
+        	//Check if the coordinates are valid
 			if(game.input.mousePointer.leftButton.isDown){
 				
 				//Grab Dest Coords
@@ -69,7 +110,7 @@ class Player {
 			}
 			
 			if( (this.sprite.customParams.status == "walking") ){
-				game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 700);
+				game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 300);
 				
 				//Stop Sprite when they reach dest
 				if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
@@ -78,31 +119,31 @@ class Player {
 				}
 				
 				//Stop Sprite at Collision with Wall
-				if( (this.sprite.body.checkCollision.any) ){
+				if( (this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left) ){
 				    this.sprite.customParams.status = "waiting";
 					console.log("I'm stopping.");
 				    
 				}
 				
-			}
+			}*/
         
             if (cursors.left.isDown)
             {
-                this.sprite.body.velocity.x = -700;
+                this.sprite.body.velocity.x = -300;
                 this.sprite.frame = 0;
             }
             else if (cursors.right.isDown)
             {
-                this.sprite.body.velocity.x = 700;
+                this.sprite.body.velocity.x = 300;
                  this.sprite.frame = 1;
             }
             else if(cursors.up.isDown)
             {
-                this.sprite.body.velocity.y = -700;
+                this.sprite.body.velocity.y = -300;
                  this.sprite.frame = 2;
             }
             else if(cursors.down.isDown){
-                this.sprite.body.velocity.y = 700;
+                this.sprite.body.velocity.y = 300;
                  this.sprite.frame = 3;
             }
         }
@@ -117,9 +158,7 @@ class Player {
 
 Player.preloadPlayer = function (game) {
     
-    //Load the items needed.
-    //1st-> Player Name/Key
-    //2nd-> URL to asset
+    //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
     for (var i=0; i<game.playerData.numPlayers; i++) {
         game.load.spritesheet(game.playerData.players[i].name, game.playerData.players[i].playerRef, game.playerData.height, game.playerData.width, game.playerData.frames);
     }
