@@ -86,8 +86,8 @@ Lyra.LyraGame.prototype = {
         
         for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
             this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];
-            this.doors[i] = new Door();
-            this.doors[i].addDoor(this.game, this.map.map.objects["doors"][i].name, this.doorArr[this.map.map.objects["doors"][i].name].x, this.doorArr[this.map.map.objects["doors"][i].name].y);
+            this.doors[this.map.map.objects["doors"][i].name] = new Door();
+            this.doors[this.map.map.objects["doors"][i].name].addDoor(this.game, this.map.map.objects["doors"][i].name, this.doorArr[this.map.map.objects["doors"][i].name].x, this.doorArr[this.map.map.objects["doors"][i].name].y);
         }
         
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
