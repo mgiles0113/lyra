@@ -27,8 +27,12 @@ label {
     color: white;
 }
 
+#language-selection {
+    width: 100%;
+}
+
 #form-card {
-    margin-top: 75px;
+    margin-top: 25px;
     padding: 25px 25px 50px 25px;
     border-radius: 5px;
     text-align: center;
@@ -36,8 +40,12 @@ label {
 }
 
 #form-card button {
+    margin: 25px auto -10px;
     width: 100%;
-    margin: 50px auto -10px;
+}
+
+#submit-button {
+    
     min-height: 65px;
     display: block;
 }

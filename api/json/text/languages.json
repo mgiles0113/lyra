@@ -1,9 +1,31 @@
-{"language" : ["English", "Pirate", "Español"],
+{
+    "language" : ["English", "Pirate", "Español"],
     "languageCodes" : ["ENG", "PRT", "ESP"],
-    "login" : {"ENG" : "Login", "PRT": "Login, Arrrgghh!", "ESP" : "Iniciar juego"},
-    "identifyYourself" : {"ENG": "Identify Yourself", "PRT": "Who be ye?", "ESP" : "Identifícate"},
-    "username" : {"ENG" : "Username", "PRT": "Arrrrr! What is ye name?", "ESP": "Nombre de usuario"},
-    "password" : {"ENG" : "Password", "PRT": "Arrrr! What be the code?", "ESP": "Contraseña"},
+    "identifyYourself" : {
+        "ENG" : "Identify Yourself",
+        "PRT" : "Who be ye?",
+        "ESP" : "Identifícate"
+    },
+    "username" : {
+        "ENG" : "Username",
+        "PRT" : "Arrrrr! What is ye name?",
+        "ESP" : "Nombre de usuario"
+    },
+    "password" : {
+        "ENG" : "Password",
+        "PRT" : "Arrrr! What be the code?",
+        "ESP" : "Contraseña"
+    },
+    "submit" : {
+        "ENG" : "Enter",
+        "PRT" : "Board ye Vessel!",
+        "ESP" : "Entrar"
+    },
+    "login" : {
+        "ENG" : "Login",
+        "PRT" : "Login",
+        "ESP" : "Iniciar Sesión"
+    },
     "mainmenu" : {"ENG" : "Main Menu", "PRT": "Ships Manifest", "ESP": "Menú principal"},
     "newgame" : {"ENG" : "New Game", "PRT": "First voyage", "ESP": "Nuevo juego"},
     "loadgame" : {"ENG" : "Load Game", "PRT": "Underway", "ESP": "Cargar juego"},

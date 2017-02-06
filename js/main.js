@@ -1,33 +1,49 @@
-(function(){
 var gameTitle = "Lyra Escape";
 var primaryCard = $("#primary-card");
 var loginForm = $("#login-form");
+var loginTitle = $("#login-title");
 var loginUsername = $("#login-username");
+var loginUsernameLabel = $("#login-username-label");
 var loginPassword = $("#login-password");
+var loginPasswordLabel = $("#login-password-label");
+var languageSelection = $("#language-selection");
+var submitButton = $("#submit-button");
+
 var gameWidth = 1200;
 var gameHeight = 800;
-var game;
+var languageChoice = "ENG";
+var jsonLanguage;
 
-function loadHomePage() {
-    primaryCard.html("");
-    document.title = gameTitle + " | Main Menu";
-    game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card');
+loadLanguageFile();
+
+function populateLoginPage(languageText) {
+    jsonLanguage = JSON.parse(languageText);
+    languageSelection.html('');
+    for (var i = 0; i < jsonLanguage.language.length; i++) {
+        languageSelection.append("<option value='" + jsonLanguage.languageCodes[i] + "'>" + jsonLanguage.language[i] + "</option");
+    }
+    languageSelection.prop('disabled', false);
     
-    // change this to a language parameter retrieved from the database
-    // current choices are "ENG", "PRT", "ESP"
-    game.languageChoice = "PRT";
-    
-    loadLanguageFile();
+    languageSelection.change(function() {
+        languageChoice = languageSelection.val();
+        loginTitle.html(jsonLanguage.identifyYourself[languageChoice]);
+        loginUsernameLabel.html(jsonLanguage.username[languageChoice]);
+        loginPasswordLabel.html(jsonLanguage.password[languageChoice]);
+        submitButton.html(jsonLanguage.submit[languageChoice]);
+        document.title = gameTitle + " | " + jsonLanguage.login[languageChoice];
+    });
 }
 
-function loadStates(languageText) {
-    game.languageText = JSON.parse(languageText);
+function loadGame() {
+    primaryCard.html('');
+    document.title = gameTitle + " | " + jsonLanguage.mainmenu[languageChoice];
+    var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card');
+    game.languageChoice = languageChoice;
+    game.languageText = jsonLanguage;
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
     game.state.add('MainMenu', Lyra.MainMenu);
-    //game.state.add('PreloadLyra', Lyra.PreloadLyra);
     game.state.add('LyraGame',Lyra.LyraGame);
-    //game.state.add('OptionsMenu', Lyra.OptionsMenu);
     game.state.start('Boot');
 }
 
@@ -42,17 +58,12 @@ function loadLanguageFile(game) {
         },
         dataType: 'json',
         success: function(response) {
-            console.log(response);
-            loadStates(response);
+            populateLoginPage(response);
         },
         error: function(response) {
-            console.log(response);
-            
         }
     });
 }
-
-
 
 loginForm.submit(function(e) {
     e.preventDefault();
@@ -70,21 +81,20 @@ loginForm.submit(function(e) {
         type: method,
         data: parameters,
         dataType: 'json',
+        context: this,
         success: function(response) {
             console.log(response);
             console.log('success');
             if (response.error === "none") {
-                loadHomePage();
+                loadGame();
             } else {
-                loadHomePage();
+                loadGame();
             }
         },
         error: function(response) {
             console.log(response);
             console.log('failed');
-            loadHomePage();
+            loadGame();
         }
     });
 })
-
-})();

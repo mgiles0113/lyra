@@ -1,9 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
-// template variables
-$game_title = "Lyra Escape";
-
 // development options
 $authenticationRequired = 1;
 

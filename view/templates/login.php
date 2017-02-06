@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $game_title . " | "; ?>Login</title>
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <title>Lyra Escape | Login</title>
+    <link rel="stylesheet" type="text/css" href="view/library/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="view/css/main.css" />
     <script src="js/library/phaser.js"></script>
+    <script src="js/library/jquery-3.1.1.min.js"></script>
+    <script src="js/library/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -12,7 +14,7 @@
             <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
-                    <h1 class="text-center" id="menu-title"><?php echo $game_title; ?> </h1>
+                    <h1 class="text-center" id="menu-title">Lyra Escape</h1>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -23,21 +25,23 @@
                     <hr>
                     <form id="login-form">
                         <div class="form-group">
-                            <label for="login-username">Username</label>
+                            <label for="login-username" id="login-username-label">Username</label>
                             <input type="text" class="form-control" id="login-username" name="login-username" placeholder="username">
                         </div>
                         <div class="form-group">
-                            <label for="login-password">Password</label>
+                            <label for="login-password" id="login-password-label">Password</label>
                             <input type="password" class="form-control" id="login-password" name="login-password" placeholder="password">
                         </div>
-                        <button type="submit" class="btn">Submit</button>
+                        <select class="form-control" id="language-selection" disabled>
+                            <option>English</option>
+                        </select>
+                        <button type="submit" id="submit-button" class="btn">Submit</button>
                     </form>
                 </div>
                 <div class="col-md-3"></div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="js/game/states/Boot.js"></script>
     <script src="js/game/lyra/mapInit.js"></script>
     <script src="js/game/lyra/map.js"></script>
