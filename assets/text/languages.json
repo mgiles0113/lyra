@@ -1,0 +1,87 @@
+{
+    "language" : ["English", "Pirate", "Español"],
+    "languageCodes" : ["ENG", "PRT", "ESP"],
+    "login" : {"ENG" : "Login", "PRT": "Login, Arrrgghh!", "ESP" : "Iniciar juego"},
+    "identifyYourself" : {"ENG": "Identify Yourself", "PRT": "Who be ye?", "ESP" : "Identifícate"},
+    "username" : {"ENG" : "Username", "PRT": "Arrrrr! What is ye name?", "ESP": "Nombre de usuario"},
+    "password" : {"ENG" : "Password", "PRT": "Arrrr! What be the code?", "ESP": "Contraseña"},
+    "mainmenu" : {"ENG" : "Main Menu", "PRT": "Ships Manifest", "ESP": "Menú principal"},
+    "newgame" : {"ENG" : "New Game", "PRT": "First voyage", "ESP": "Nuevo juego"},
+    "loadgame" : {"ENG" : "Load Game", "PRT": "Underway", "ESP": "Cargar juego"},
+    "options" : {"ENG" : "Options", "PRT": "Choose, matey!", "ESP": "Opciones"},
+    "easymap" : {"ENG" : "Easy Map", "PRT": "Lily livered", "ESP": "Mapa facil"},
+    "hardmap" : {"ENG" : "Hard Map", "PRT": "Old salt", "ESP": "Mapa duro"},
+    "music" : {"ENG" : "Music", "PRT": "Yo ho ho", "ESP": "Musica"},
+    "save" : {"ENG" : "Save", "PRT": "Stow it!", "ESP": "Guardar"},
+    
+    "intro0" : {"ENG" : "There are those of us who wish to explore.  The Crew of Lyra has traveled to the Lyra constellation and recovered a golden lyre.  The peoples of earth believe the sound of the lyre will bring peace and harmony across the world.", 
+            "PRT": "Yarr! Thar be those of us who wish to explore. Thee Crew of Lyra has voyaged to thee Lyra constellation and recovered a golden lyre. Thee peoples of earth believe thee sound of thee lyre will bring peace and harmony across thee world."
+            "ESP": "Hay quienes desean explorar. El Equipo de Lyra ha viajado a la constelación de Lyra y ha recuperado una lira de oro. Los pueblos de la tierra creen que el sonido de la lira traerá paz y armonía en todo el mundo." },
+    
+    "intro1" : {"ENG": "Pirates have overtaken the ship on it's return voyage.  The lyre is safely hidden onboard but asteroids have disabled the ship.", 
+        "PRT": "Shiver me timbers! Pirates have overtaken thee galleon on it's return voyage. Thee lyre is safely hidden onboard but asteroids have disabled thee galleon.", 
+        "ESP": "Los piratas han sobrepasado la nave en su viaje de regreso. La lira está escondida a bordo, pero los asteroides han desactivado la nave."},  
+    
+    "intro2" : {"ENG": "The crew is in sleep pods and unaware of the situation.  Escape pods must be repaired from equipment located in containers onboard.", 
+        "PRT": "Ahoy! Thee crew is in sleep pods and unaware of thee situation. Escape pods must be repaired from equipment located in containers onboard.", 
+        "ESP": "La tripulación está en vainas del sueño y no está enterada de la situación. Las vainas de escape deben ser reparadas de los equipos ubicados en contenedores a bordo."},
+    
+    "intro3" : {"ENG" : "Pirates want the lyre to melt down for gold bullion.  They are boarding the ship at the docking bay. ", 
+        "PRT": "Shiver me timbers! Pirates want thee lyre to melt down for swag bullion. They be boarding thee galleon at thee docking bay.", 
+        "ESP": "Los piratas quieren que la lira se derrita por los lingotes de oro. Están abordando el barco en la bahía de atraque."},
+    
+    "intro4" : {"ENG" : "Sticky slime has been released onboard.  Contact will cause crew to become immobilized. Slime suppressant cans are located throughout the ship. Spray on slime to neutralize it.", 
+        "PRT": "Well shave me belly with a rusty razor! Sticky slime has been released onboard. Contact will cause ye mateys to become immobilized. Slime suppressant cans be stowed throughout thee galleon. Spray on slime to swab it.", 
+        "ESP": "Sticky limo ha sido lanzado a bordo. El contacto causará que la tripulación se inmovilice. Las latas supresoras de limo se encuentran en todo el buque. Rocíe el limo para neutralizarlo."},
+    
+    "intro5" : {"ENG" : "Escape with the lyre and the crew to save the Lyra mission!", 
+        "PRT": "Ahoy ye lubber! Escape with thee lyre and thee crew to save thee Lyra mission!", 
+        "ESP": "¡Escape con la lira y la tripulación para salvar la misión de Lyra!"},
+    
+    "text1" : {"ENG" : "Commander, commander! Wake up crew and proceed to escape pods immediately, oxygen levels are falling!", 
+            "PRT": "Ahoy Captain, captain! Wake the mates and abandon ship! We be in grave danger ya lubber!", 
+            "ESP": "¡Comandante, comandante! ¡Despierta el equipo y procede a escapar de las vainas inmediatamente, los niveles de oxígeno están cayendo!"},
+    
+    "text2" : {"ENG" : "The ship has taken heavy damage from asteroids and pirates.  Slime spore detected.", 
+            "PRT": "Fool! Thee galleon has taken heavy damage from asteroids and pirates. Slime spore detected.", 
+            "ESP": "La nave ha recibido grandes daños de asteroides y piratas. Se detectó una espora de limo."},
+    
+    "text3" : {"ENG" : "Find equipment to repair escape pods in containers onboard the ship.  Use suppressant to stop the slime.", 
+            "PRT": "Undertake repairs of the galleon. Ye be needin pieces and parts stowed in the ships holds.  Use suppressant to stop the slime, fool!", 
+            "ESP": "Encontrar equipos para reparar las vainas de escape en contenedores a bordo del buque. Utilice un supresor para detener el limo."},
+    
+    "text4" : {"ENG" : "Watch out for pirates!  Pirates carry stun guns that will knock you out.", 
+            "PRT": "Watch ou' fer shipmates! Shipmates carry stun cannons that will knock ye ou'.", 
+            "ESP": "Cuidado con los piratas! Los piratas llevan armas de aturdimiento que te golpearán hacia fuera."},
+    
+    "text5" : {"ENG" : "The ships precious cargo, the golden lyre is hidden on board.  Save it along with the crew to complete your mission!", 
+            "PRT": "Arrr! Thee ships precious cargo, thee golden lyre is hidden on board. Save it along with thee crew to complete yer mission!", 
+            "ESP": "Los buques de carga preciosa, la lira de oro se oculta a bordo. ¡Guárdelo junto con la tripulación para completar su misión!"},
+    
+    "oxygenfalling" : {"ENG" : "Oxygen levels are falling! Five minutes remain.", 
+        "PRT": "Yarr! Oxygen levels be critical. Five minutes remain.",
+        "ESP": "¡Los niveles de oxígeno están cayendo! Quedan cinco minutos."},
+    
+    "oxygencritical" : {"ENG" : "Oxygen levels are critical!  One minute remains.", 
+            "PRT": "Yarr! Oxygen levels be critical. One minute remains.", 
+            "ESP": "¡Los niveles de oxígeno están cayendo! Queda uno minuto."},
+    
+    "victory" : {"ENG" : "Victory!", "PRT": "Shiver me timbers! Victory!", "ESP": "Victoria"},
+    
+    "totalfailure" : {"ENG" : "Mission Failure!", 
+        "PRT": "Lubbers!  Mission failed!", 
+        "ESP": "Fracaso de la misión."},
+    
+    "partialfaillyre" : {"ENG" : "Mission Failure! Lyre is lost!", 
+        "PRT": "Alas! Mission Failure! Lyre be lost!", 
+        "ESP": "¡Fracaso de misión! ¡Lyre se ha perdido!"},
+    
+    "partialfailcrew" : {"ENG" : "Mission Failure! Crew are lost!", 
+        "PRT": "Sail ho! Mission Failure! Crew be lost!", 
+        "ESP": "¡Fracaso de misión! ¡La tripulación está perdida!"},
+        
+    "template" : {"ENG" : "English", 
+        "PRT": "Pirate", 
+        "ESP": "Spanish"},
+    
+}

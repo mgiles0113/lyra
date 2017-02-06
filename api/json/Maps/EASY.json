@@ -14,5 +14,9 @@
         "walls"
     ],
     "mapwidth" : "2048",
-    "mapheight" : "1472"
+    "mapheight" : "1472",
+    "slimelimit": 100,
+    "playerCount": 3,
+    "banditCount": 3,
+    "roomCount": 6
 }

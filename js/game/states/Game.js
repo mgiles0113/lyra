@@ -132,19 +132,19 @@ Lyra.LyraGame.prototype = {
 	update: function() {
 		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-        //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
+       //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
 
-        /*  comment out checking for slime overlap with players
+        /*  comment out checking for slime overlap with players */
         // [TODO] make slime items into a group
-        for (var i=0; i<this.slimeManager.slimeCounter; i++) {
-            // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
-            for (var j=0; j < this.players.length; j++)
-            { 
-                if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite)) {
-                    this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
-                }
-            }
-        }*/
+        // for (var i=0; i<this.slimeManager.slimeCounter; i++) {
+        //     // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
+        //     for (var j=0; j < this.players.length; j++)
+        //     { 
+        //         if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite)) {
+        //             this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
+        //         }
+        //     }
+        // } 
         
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
