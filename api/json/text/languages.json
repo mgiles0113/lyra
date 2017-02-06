@@ -1,5 +1,4 @@
-{
-    "language" : ["English", "Pirate", "Español"],
+{"language" : ["English", "Pirate", "Español"],
     "languageCodes" : ["ENG", "PRT", "ESP"],
     "login" : {"ENG" : "Login", "PRT": "Login, Arrrgghh!", "ESP" : "Iniciar juego"},
     "identifyYourself" : {"ENG": "Identify Yourself", "PRT": "Who be ye?", "ESP" : "Identifícate"},
@@ -15,9 +14,8 @@
     "save" : {"ENG" : "Save", "PRT": "Stow it!", "ESP": "Guardar"},
     
     "intro0" : {"ENG" : "There are those of us who wish to explore.  The Crew of Lyra has traveled to the Lyra constellation and recovered a golden lyre.  The peoples of earth believe the sound of the lyre will bring peace and harmony across the world.", 
-            "PRT": "Yarr! Thar be those of us who wish to explore. Thee Crew of Lyra has voyaged to thee Lyra constellation and recovered a golden lyre. Thee peoples of earth believe thee sound of thee lyre will bring peace and harmony across thee world."
+            "PRT": "Yarr! Thar be those of us who wish to explore. Thee Crew of Lyra has voyaged to thee Lyra constellation and recovered a golden lyre. Thee peoples of earth believe thee sound of thee lyre will bring peace and harmony across thee world.",
             "ESP": "Hay quienes desean explorar. El Equipo de Lyra ha viajado a la constelación de Lyra y ha recuperado una lira de oro. Los pueblos de la tierra creen que el sonido de la lira traerá paz y armonía en todo el mundo." },
-    
     "intro1" : {"ENG": "Pirates have overtaken the ship on it's return voyage.  The lyre is safely hidden onboard but asteroids have disabled the ship.", 
         "PRT": "Shiver me timbers! Pirates have overtaken thee galleon on it's return voyage. Thee lyre is safely hidden onboard but asteroids have disabled thee galleon.", 
         "ESP": "Los piratas han sobrepasado la nave en su viaje de regreso. La lira está escondida a bordo, pero los asteroides han desactivado la nave."},  
@@ -82,6 +80,5 @@
         
     "template" : {"ENG" : "English", 
         "PRT": "Pirate", 
-        "ESP": "Spanish"},
-    
+        "ESP":  "Español"}
 }

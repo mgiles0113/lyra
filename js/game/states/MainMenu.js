@@ -13,39 +13,44 @@ Lyra.MainMenu = function() {
         "sound" : "true"
     };
 
-    this.mainMenuItems = {
-        "newGame" : {
-            "displayName" : "New Game"
-        },
-        "loadGame" : {
-            "displayName" : "Load Game"
-        },
-        "options" : {
-            "displayName" : "Options"
-        }
-    };
-    this.newGameMenuItems = {
-        "easyMap" : {
-            "displayName" : "Easy Map"
-        },
-        "hardMap" : {
-            "displayName" : "Hard Map"
-        }
-    };
     this.loadGameMenuItems = {
         "loadGameMenuItemsCount" : "0"
     };
-    this.optionsMenuItems = {
-        "music" : {
-            "displayName" : "Music"
-        },
-        "language" : {
-            "displayName" : "Language"
-        }
-    };
+
 };
 
 Lyra.MainMenu.prototype = {
+    preload: function() {
+        // not sure that these variables are actually used
+        this.mainMenuItems = {
+            "newGame" : {
+                "displayName" : this.game.languageText.newgame[this.game.languageChoice]
+            },
+            "loadGame" : {
+                "displayName" : this.game.languageText.loadgame[this.game.languageChoice]
+            },
+            "options" : {
+                "displayName" : this.game.languageText.options[this.game.languageChoice]
+            }
+        };
+        this.newGameMenuItems = {
+            "easyMap" : {
+                "displayName" : this.game.languageText.easymap[this.game.languageChoice]
+            },
+            "hardMap" : {
+                "displayName" : this.game.languageText.hardmap[this.game.languageChoice]
+            }
+        };
+        this.optionsMenuItems = {
+            "music" : {
+                "displayName" : this.game.languageText.music[this.game.languageChoice]
+            },
+            "language" : {
+                "displayName" : this.game.languageText.language[this.game.languageChoice]
+            }
+        };
+    },
+    
 	create: function() {
 		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
 		this.menuMusic = this.game.add.audio('menuMusic');
@@ -57,7 +62,7 @@ Lyra.MainMenu.prototype = {
         this.newGameText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY - 100,
-                            'New Game',
+                            this.game.languageText.newgame[this.game.languageChoice],
                             'newGame'
                         );
         this.newGameText.inputEnabled = true;
@@ -70,7 +75,7 @@ Lyra.MainMenu.prototype = {
         this.loadGameText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY - 25,
-                            'Load Game',
+                            this.game.languageText.loadgame[this.game.languageChoice],
                             'loadGame'
                         );
         this.loadGameText.inputEnabled = true;
@@ -81,7 +86,7 @@ Lyra.MainMenu.prototype = {
         this.optionsText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY + 50,
-                            'Options',
+                            this.game.languageText.options[this.game.languageChoice],
                             'options'
                         );
         this.optionsText.inputEnabled = true;
@@ -102,7 +107,7 @@ Lyra.MainMenu.prototype = {
             this.easyMapText = this.game.add.text(
                                 this.game.world.centerX + 250,
                                 this.game.world.centerY - 125,
-                                'Easy Map',
+                                this.game.languageText.easymap[this.game.languageChoice],
                                 'easyMap'
                             );
             this.easyMapText.inputEnabled = true;
@@ -114,7 +119,7 @@ Lyra.MainMenu.prototype = {
             this.hardMapText = this.game.add.text(
                                 this.game.world.centerX + 250,
                                 this.game.world.centerY - 75,
-                                'Large Map',
+                                this.game.languageText.hardmap[this.game.languageChoice],
                                 'largeMap'
                             );
             this.hardMapText.inputEnabled = true;

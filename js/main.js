@@ -12,14 +12,44 @@ function loadHomePage() {
     primaryCard.html("");
     document.title = gameTitle + " | Main Menu";
     game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card');
+    
+    // change this to a language parameter retrieved from the database
+    // current choices are "ENG", "PRT", "ESP"
+    game.languageChoice = "PRT";
+    
+    loadLanguageFile();
+}
+
+function loadStates(languageText) {
+    game.languageText = JSON.parse(languageText);
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
     game.state.add('MainMenu', Lyra.MainMenu);
     //game.state.add('PreloadLyra', Lyra.PreloadLyra);
     game.state.add('LyraGame',Lyra.LyraGame);
     //game.state.add('OptionsMenu', Lyra.OptionsMenu);
-    
     game.state.start('Boot');
+}
+
+function loadLanguageFile(game) {
+    $.ajax({
+        url: apiUrl,
+        type: 'GET',
+        context: this,
+        data: { 
+            "entity" : "language",
+            "language" : "language"
+        },
+        dataType: 'json',
+        success: function(response) {
+            console.log(response);
+            loadStates(response);
+        },
+        error: function(response) {
+            console.log(response);
+            
+        }
+    });
 }
 
 
