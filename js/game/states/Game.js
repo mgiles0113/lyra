@@ -86,8 +86,6 @@ Lyra.LyraGame.prototype = {
             this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
         }
         
-        console.log(this.roomArr["cc"]);
-        
         for (var i = 0; i< this.game.gameData.crew.length; i++) {
             var xpos = this.game.gameData.characters[this.game.gameData.crew[i]].x;
             var ypos = this.game.gameData.characters[this.game.gameData.crew[i]].y;
@@ -99,7 +97,12 @@ Lyra.LyraGame.prototype = {
             }
             //Create players
             this.players[i] = new Player(this.game, xpos, ypos, i);
+            
         }
+        console.log("going to save the players");
+        console.log(this.players[0]);
+        var tp = new TestPost();
+        tp.send(JSON.stringify(this.game.gameData));
         
         for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
             this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];

@@ -11,6 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	    login();
     } else if ($_POST['entity'] == 'userPreference') {
         saveUserPreferences($_POST['data']);
+    } else if ($_POST['entity'] == 'testPost') {
+        $gameSave = fopen("gameSave.json", "w");
+        fwrite($gameSave, json_encode($_POST['data']));
+        echo '{ "error" : ' . $_POST['data'] . ' }';
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['entity'] == 'map') {

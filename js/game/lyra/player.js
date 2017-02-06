@@ -4,7 +4,7 @@ class Player {
        
         // create player(s) 
         this.sprite = game.add.sprite(x,y,game.gameData.characters[game.gameData.crew[idx]].name);
-        this.sprite.frame = 1;
+        this.sprite.frame = game.gameData.characters[game.gameData.crew[idx]].frame;
         this.sprite.anchor.set(0.5);
        
         //Custom Params for Player.
@@ -20,13 +20,17 @@ class Player {
     
         game.physics.arcade.enable(this.sprite);
     
-        this.sprite.body.setSize(32,32);
+        this.sprite.body.setSize(game.gameData.characters[game.gameData.crew[idx]].width,game.gameData.characters[game.gameData.crew[idx]].height);
     
         //  We'll set a lower max angular velocity here to keep it from going totally nuts
         this.sprite.body.maxAngular = 500;
     
         //  Apply a drag otherwise the sprite will just spin and never slow down
-        this.sprite.body.angularDrag = 50;
+        this.sprite.body.angularDrag = game.gameData.characters[game.gameData.crew[idx]].angulardrag;
+        
+        
+        this.sprite.body.velocity.x =  game.gameData.characters[game.gameData.crew[idx]].velocityx;
+        this.sprite.body.velocity.y = game.gameData.characters[game.gameData.crew[idx]].velocityy;
         
         // set up signal callback function when the overlap occurs between sprite and slime
         this.stuckInSlimeSignal = new Phaser.Signal();
@@ -160,7 +164,12 @@ class Player {
         game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
         game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
         game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
-        //this.sprite.body.position.x
+        game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x;
+        game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y;
+        game.gameData.characters[game.gameData.crew[idx]].velocityx = this.sprite.body.velocity.x;
+        game.gameData.characters[game.gameData.crew[idx]].velocityy = this.sprite.body.velocity.y;
+        game.gameData.characters[game.gameData.crew[idx]].frame = this.sprite.frame;
+        game.gameData.characters[game.gameData.crew[idx]].angularDrag =this.sprite.body.angularDrag;
     }
     
 }
