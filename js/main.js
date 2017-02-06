@@ -34,11 +34,13 @@ function populateLoginPage(languageText) {
     });
 }
 
-function loadGame() {
+function loadGame(userId) {
     primaryCard.html('');
     document.title = gameTitle + " | " + jsonLanguage.mainmenu[languageChoice];
     var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card');
-    game.languageChoice = languageChoice;
+    game.userPreference = new UserPreference();
+    game.userPreference.data.userId = userId;
+    game.userPreference.ready = false;
     game.languageText = jsonLanguage;
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
@@ -83,18 +85,14 @@ loginForm.submit(function(e) {
         dataType: 'json',
         context: this,
         success: function(response) {
-            console.log(response);
-            console.log('success');
             if (response.error === "none") {
-                loadGame();
+                loadGame(response.userId);
             } else {
-                loadGame();
+                loadGame('2');
             }
         },
         error: function(response) {
-            console.log(response);
-            console.log('failed');
-            loadGame();
+            loadGame('2');
         }
     });
 })

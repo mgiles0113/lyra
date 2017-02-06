@@ -4,7 +4,6 @@ class User {
     var $id;                // sql id (primary key) for this user
     var $username;          // user's username
     var $password;          // user's password
-    var $userPreference;    // store user's preferences for game play
     var $gameState;         // array of saved game states for this user
     
     // User constructor
@@ -12,7 +11,7 @@ class User {
         // initialize the id to -1 to indicate not associated with db record
         $this->id = -1;
     }
-    
+
     /**************************************************************************
      * ACCESSOR METHODS
      *************************************************************************/
@@ -28,6 +27,7 @@ class User {
     function getPassword() {
         return $this->password;
     }
+
     /**************************************************************************
      * MUTATOR METHODS
      *************************************************************************/
@@ -46,7 +46,6 @@ class User {
     
     // save the user to the database or update if the user exists
     function saveToDb() {
-        require('DatabaseConnection.php');
         $db = new DatabaseConnection();
         $mysqli = $db->connect();
         
@@ -65,12 +64,15 @@ class User {
         }
         
         $stmt->close();
+        
+        $userPreferencesFile = fopen($mysqli->insert_id . ".json", "w");
+        fwrite($userPreferencesFile, "{}");
+
     }
     // check to see if username and password match database
     // return id of user if successful
     // return -1 if unsuccessful
     function authenticated() {
-        require('DatabaseConnection.php');
         $db = new DatabaseConnection();
         $mysqli = $db->connect();
         

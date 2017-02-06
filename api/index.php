@@ -1,4 +1,6 @@
 <?php
+require('classes/User.php');
+require('classes/DatabaseConnection.php');
 
 $jsonResponseBody = array(
     "error" => ""
@@ -7,12 +9,16 @@ $jsonResponseBody = array(
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['action'] == 'login') {
 	    login();
+    } else if ($_POST['entity'] == 'userPreference') {
+        saveUserPreferences($_POST['data']);
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['entity'] == 'map') {
         getMap($_GET['mapSelection']);
     } else if ($_GET['entity'] == 'language') {
-        getLanguage();        
+        getLanguage();
+    } else if ($_GET['entity'] == 'userPreference') {
+        getUserPreference($_GET['userId']);
     }
 }
 
@@ -26,11 +32,18 @@ function getLanguage() {
     echo json_encode($languageData);
 }
 
+function getUserPreference($userId) {
+    $fileContents = file_get_contents('json/UserPreferences/' . $userId . '.json');
+    echo json_encode($fileContents);
+}
 
+function saveUserPreferences($preferences) {
+    $preferencesFile = fopen("json/UserPreferences/" . $preferences["userId"] . ".json", "w");
+    fwrite($preferencesFile, json_encode($preferences));
+}
 
 function login() {
     session_start();
-    require('classes/User.php');
 
     $user = new User();
     $user->setUsername($_POST['username']);
@@ -39,7 +52,7 @@ function login() {
 
     switch ($authStatus) {
         case 1000:
-            echo '{ "error" : "none" }';
+            echo '{ "error" : "none", "userId" : "' . $user->getId() . '"}';
             break;
         case 1002:
             echo '{ "error" : "invalid login" }';

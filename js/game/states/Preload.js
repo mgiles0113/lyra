@@ -15,10 +15,6 @@ Lyra.Preload.prototype = {
 		this.load.audio('menuMusic', 'assets/audio/darkmatter.mp3');
 		
 		this.load.onLoadComplete.add(this.onLoadComplete, this);
-		
-		
-
-		
 	},
 	create: function() {
 		this.preloadBar.cropEnabled = false;

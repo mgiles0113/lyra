@@ -7,6 +7,12 @@ CREATE TABLE `User` (
     UNIQUE (username)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `UserPreference` (
+    userId int(11) NOT NULL,
+    filename varchar(50) NOT NULL,
+    PRIMARY KEY (userId, filename)
+) ENGINE=InnoDB;
+
 CREATE TABLE `SavedGame` (
     id int(11) NOT NULL AUTO_INCREMENT,
     userID int(11) NOT NULL,

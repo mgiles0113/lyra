@@ -13,17 +13,19 @@ Lyra.LyraGame.prototype = {
             this.doorArr = [];  // locations of doors on the map
             this.doors = []; // list of doors 
             this.suppresantArr = [];  // locations on the map where suppresant can be placed
-            this.ready = false;
+
         }
+        this.ready = false;
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 
 		// moved to PreloadLyra
-		Map.loadMap(this.game, this.game.mapData.mapRef, this.game.mapData.imageTagList, this.game.mapData.imageRefList);
+		Map.loadMap(this.game, this.game.gameData.mapRef, this.game.gameData.imageTagList, this.game.gameData.imageRefList);
 		
 		// added as example preload game specific data
         // player assets
         Player.preloadPlayer(this.game);
+
         
         //slime assets
         Slime.preloadSlime(this.game);
@@ -47,12 +49,12 @@ Lyra.LyraGame.prototype = {
 
         // // create the map
         this.map = new Map();
-        this.map.addMap(this.game, this.game.mapData.imageTagList);
+        this.map.addMap(this.game, this.game.gameData.imageTagList);
 
-        for (var i=0; i<this.game.mapData.mapLayerRef.length; i++) {
-            this.mapLayer[this.game.mapData.mapLayerRef[i]] = this.map.map.createLayer(this.game.mapData.mapLayerRef[i]);
+        for (var i=0; i<this.game.gameData.mapLayerRef.length; i++) {
+            this.mapLayer[this.game.gameData.mapLayerRef[i]] = this.map.map.createLayer(this.game.gameData.mapLayerRef[i]);
             //this.mapLayer[i].resizeWorld(200,200);
-            this.mapLayer[this.game.mapData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
+            this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
         
         // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
@@ -61,7 +63,7 @@ Lyra.LyraGame.prototype = {
         
         // add collision for walls
         console.log("setting up collision");
-        console.log(this.game.mapData.mapLayerRef[this.game.mapData.mapLayerRef.length-1]);
+        console.log(this.game.gameData.mapLayerRef[this.game.gameData.mapLayerRef.length-1]);
         // set the second parameter to > gid number in tile map for the tiles we want to collide
         //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
         
@@ -82,6 +84,21 @@ Lyra.LyraGame.prototype = {
         
         for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
             this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
+        }
+        
+        console.log(this.roomArr["cc"]);
+        
+        for (var i = 0; i< this.game.gameData.crew.length; i++) {
+            var xpos = this.game.gameData.characters[this.game.gameData.crew[i]].x;
+            var ypos = this.game.gameData.characters[this.game.gameData.crew[i]].y;
+            if (xpos == null) {
+                xpos = this.roomArr["cc"].x + i*50;
+            }
+            if (ypos == null) {
+                ypos = this.roomArr["cc"].y + i*50;
+            }
+            //Create players
+            this.players[i] = new Player(this.game, xpos, ypos, i);
         }
         
         for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
@@ -115,10 +132,10 @@ Lyra.LyraGame.prototype = {
         //Create comm window.
         this.comm = new Comm(this.game);
 
-        //Create players
-        for (var i = 0; i< this.game.playerData.numPlayers; i++) {
-            this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].name);
-        }
+        // //Create players
+        // for (var i = 0; i< this.game.playerData.numPlayers; i++) {
+        //     this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].name);
+        // }
 
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();

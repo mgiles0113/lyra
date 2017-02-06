@@ -30,9 +30,12 @@ Lyra.Boot.prototype = {
 			this.scale.pageAlighHorizontally = true;
 			this.scale.setScreenSize(true);
 		}
-
-		// by this point the preloader assets have loaded to the cache, 
-		// So now let's start the real preloader going
-		this.state.start('Preload');
+		this.game.userPreference.load();
+	},
+	update: function() {
+		if (this.game.userPreference.ready == true) {
+			console.log(this.game.userPreference.data.sound);
+			this.state.start('Preload');
+		}
 	}
 };

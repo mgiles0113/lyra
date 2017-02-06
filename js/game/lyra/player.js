@@ -1,22 +1,22 @@
 class Player {
-    constructor (game, x, y, selected, player) {
-        this.isSelected = selected;
+    constructor (game, x, y, idx) {
+        this.isSelected = game.gameData.characters[game.gameData.crew[idx]].isSelected;
        
         // create player(s) 
-        this.sprite = game.add.sprite(x,y,player);
+        this.sprite = game.add.sprite(x,y,game.gameData.characters[game.gameData.crew[idx]].name);
         this.sprite.frame = 1;
         this.sprite.anchor.set(0.5);
        
         //Custom Params for Player.
         this.sprite.customParams = [];
-        this.sprite.customParams.inventory = ['fuse', 'circuit'];
-        this.sprite.customParams.inv_num = 2;
+        this.sprite.customParams.inventory = game.gameData.characters[game.gameData.crew[idx]].inventory; //['fuse', 'circuit'];
+        this.sprite.customParams.inv_num = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
        
-        this.sprite.customParams.status = "waiting";
+        this.sprite.customParams.status =  game.gameData.characters[game.gameData.crew[idx]].status;
        
         //Init Dest Coords as Sprite's Spawn Coord.
-        this.sprite.customParams.dest_x = null;
-        this.sprite.customParams.dest_y = null;
+        this.sprite.customParams.dest_x = game.gameData.characters[game.gameData.crew[idx]].dest_x;
+        this.sprite.customParams.dest_y = game.gameData.characters[game.gameData.crew[idx]].dest_y;
     
         game.physics.arcade.enable(this.sprite);
     
@@ -154,13 +154,30 @@ class Player {
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
     
+    savePlayerData(game, idx) {
+        game.gameData.characters[game.gameData.crew[idx]].isSelected = this.isSelected;
+        game.gameData.characters[game.gameData.crew[idx]].inventory = this.sprite.customParams.inventory;
+        game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
+        game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
+        game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
+        //this.sprite.body.position.x
+    }
+    
 }
 
-Player.preloadPlayer = function (game) {
+// Player.preloadDefaultPlayer = function (game) {
     
-    //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
-    for (var i=0; i<game.playerData.numPlayers; i++) {
-        game.load.spritesheet(game.playerData.players[i].name, game.playerData.players[i].playerRef, game.playerData.height, game.playerData.width, game.playerData.frames);
-    }
+//     //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
+//     for (var i=0; i<game.playerData.players.length; i++) {
+//         game.load.spritesheet(game.playerData.players[i].name, game.playerData.players[i].playerRef, game.playerData.height, game.playerData.width, game.playerData.frames);
+//     }
         
+// }
+
+
+Player.preloadPlayer = function (game) {
+    //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
+    for (var i=0; i<game.gameData.crew.length; i++) {
+        game.load.spritesheet(game.gameData.characters[game.gameData.crew[i]].name, game.gameData.characters[game.gameData.crew[i]].playerRef, game.gameData.characters[game.gameData.crew[i]].height, game.gameData.characters[game.gameData.crew[i]].width, game.gameData.characters[game.gameData.crew[i]].frames);
+    }        
 }

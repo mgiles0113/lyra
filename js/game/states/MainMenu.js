@@ -9,60 +9,26 @@ Lyra.MainMenu = function() {
     this.menuTextSize = 40;
     this.menuTextVerticalSpace = 50;
 
-    this.userPreference = {
-        "sound" : "true"
-    };
-
     this.loadGameMenuItems = {
         "loadGameMenuItemsCount" : "0"
     };
-
 };
 
 Lyra.MainMenu.prototype = {
-    preload: function() {
-        // not sure that these variables are actually used
-        this.mainMenuItems = {
-            "newGame" : {
-                "displayName" : this.game.languageText.newgame[this.game.languageChoice]
-            },
-            "loadGame" : {
-                "displayName" : this.game.languageText.loadgame[this.game.languageChoice]
-            },
-            "options" : {
-                "displayName" : this.game.languageText.options[this.game.languageChoice]
-            }
-        };
-        this.newGameMenuItems = {
-            "easyMap" : {
-                "displayName" : this.game.languageText.easymap[this.game.languageChoice]
-            },
-            "hardMap" : {
-                "displayName" : this.game.languageText.hardmap[this.game.languageChoice]
-            }
-        };
-        this.optionsMenuItems = {
-            "music" : {
-                "displayName" : this.game.languageText.music[this.game.languageChoice]
-            },
-            "language" : {
-                "displayName" : this.game.languageText.language[this.game.languageChoice]
-            }
-        };
-    },
+    preload: function() {},
     
 	create: function() {
 		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
 		this.menuMusic = this.game.add.audio('menuMusic');
-		
-	    if (this.userPreference.sound) {
+        
+	    if (this.game.userPreference.data.sound === "true") {
 	        this.menuMusic.play('', 0, 0.5, true, true);
 	    }
 
         this.newGameText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY - 100,
-                            this.game.languageText.newgame[this.game.languageChoice],
+                            this.game.languageText.newgame[this.game.userPreference.data.languageChoice],
                             'newGame'
                         );
         this.newGameText.inputEnabled = true;
@@ -75,18 +41,18 @@ Lyra.MainMenu.prototype = {
         this.loadGameText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY - 25,
-                            this.game.languageText.loadgame[this.game.languageChoice],
+                            this.game.languageText.loadgame[this.game.userPreference.data.languageChoice],
                             'loadGame'
                         );
         this.loadGameText.inputEnabled = true;
         this.loadGameText.fontSize = this.menuTextSize;
         this.loadGameText.fill = this.menuTextFill;
         this.loadGameText.events.onInputDown.add(this.loadGameMenu, this);
-        
+        console.log(this.game.userPreference.data.languageChoice);
         this.optionsText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY + 50,
-                            this.game.languageText.options[this.game.languageChoice],
+                            this.game.languageText.options[this.game.userPreference.data.languageChoice],
                             'options'
                         );
         this.optionsText.inputEnabled = true;
@@ -107,7 +73,7 @@ Lyra.MainMenu.prototype = {
             this.easyMapText = this.game.add.text(
                                 this.game.world.centerX + 250,
                                 this.game.world.centerY - 125,
-                                this.game.languageText.easymap[this.game.languageChoice],
+                                this.game.languageText.easymap[this.game.userPreference.data.languageChoice],
                                 'easyMap'
                             );
             this.easyMapText.inputEnabled = true;
@@ -119,7 +85,7 @@ Lyra.MainMenu.prototype = {
             this.hardMapText = this.game.add.text(
                                 this.game.world.centerX + 250,
                                 this.game.world.centerY - 75,
-                                this.game.languageText.hardmap[this.game.languageChoice],
+                                this.game.languageText.hardmap[this.game.userPreference.data.languageChoice],
                                 'largeMap'
                             );
             this.hardMapText.inputEnabled = true;
@@ -183,7 +149,7 @@ Lyra.MainMenu.prototype = {
 	        this.menuMusic.stop();
 	    }
 	    console.log(mapData);
-	    this.game.mapData = JSON.parse(mapData);
+	    this.game.gameData = JSON.parse(mapData);
 	    this.game.playerData = PLAYER_DATA;
 	    this.game.itemData = ITEMS_DATA;
 	    this.game.newGame = true;
