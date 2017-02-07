@@ -136,7 +136,7 @@
                 }
     ],
     "crew" : [0, 1, 2],
-    "slimeTemplate" : [
+    "slimetemplate" : [
         {"slimelabel": "greenCircle1",
              "imageref" :  "assets/lyraImages/greenCircle1.png",
              "height": 32,
@@ -193,5 +193,5 @@
                 [29]
     ],
     "slimearray": [],
-    "slimemotionlimit" : 50
+    "slimemotionlimit" : 10
 }

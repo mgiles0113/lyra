@@ -28,37 +28,30 @@ var slimeLabels = ['greenCircle1', 'greenCircle2', 'greenCircle3', 'greenCircle4
 class Slime {
 
     
-    constructor (indexNum, game, x, y) {
-        this.idx = indexNum;
-        this.age = 0;
-        this.animation = 'p0';
-        this.speed = 1; //getRandomInt(1,2);
-        this.phaseLife = getRandomInt(50, 200);
-        this.phase = 0;
-        this.numChildren = 0;
-        this.isSuppressed = false;
-        this.isMobile = true;
+    constructor (game, x, y, slimeData) {
+        this.idx = slimeData.idx;
+        this.age = slimeData.age;
+        this.animation = slimeData.animation;
+        this.speed = slimeData.speed; //getRandomInt(1,2);
+        this.phaseLife = slimeData.phaselife;
+        this.phase = slimeData.phase;
+        this.numChildren = slimeData.numchildren;
+        this.isSuppressed = slimeData.isSuppressed;
+        this.isMobile = slimeData.isMobile;
     
-        if (indexNum == 0) {
-            this.xPos =  game.world.width/2;
-            this.yPos =  game.world.height/2;
-        }
-        else {
-            this.xPos = x;
-            this.yPos = y;
-        }
-        
-        this.slimeLabel = slimeLabels[getRandomInt(0, 3)];
-        this.age = 0;
+        this.xPos = x;
+        this.yPos = y;
+        this.template = slimeData.template;
+        this.slimeLabel = slimeData.slimelabel;
         
         this.slimesprite = game.add.sprite(this.xPos, this.yPos, this.slimeLabel);
         for (var i = 0; i < SLIME_ANIMATION.length; i++) {
-            this.slimesprite.animations.add('p'+i, SLIME_ANIMATION[i], this.speed, true );
+            this.slimesprite.animations.add('p'+i, game.gameData.slimeanimations[i], this.speed, true );
         }
         game.physics.arcade.enable(this.slimesprite);
-        this.slimesprite.body.setSize(32,32);
-        this.slimesprite.body.setCircle(20); // radius of collision body
-        this.slimesprite.anchor.set(0.5, 0.5); // center collision over image
+        this.slimesprite.body.setSize(game.gameData.slimetemplate[this.template].width,game.gameData.slimetemplate[this.template].height);
+        this.slimesprite.body.setCircle(game.gameData.slimetemplate[this.template].radius); // radius of collision body
+        this.slimesprite.anchor.set(game.gameData.slimetemplate[this.template].anchor[0], game.gameData.slimetemplate[this.template].anchor[1]); // center collision over image
     }
     
     immobilize() {
@@ -103,30 +96,83 @@ class Slime {
 
 
     replicateSlime (indexNum, game) {
-        var slimeObj  = new Slime(indexNum, game, this.slimesprite.body.position.x, this.slimesprite.body.position.y);
+        var slimeObj  = new Slime(game, this.slimesprite.body.position.x, this.slimesprite.body.position.y,  Slime.rawData(indexNum, game));
         this.updateTrajectory();
         this.numChildren +=1;
         slimeObj.slimesprite.animations.play(slimeObj.animation);
         return (slimeObj);
     }
+    
+    saveSlime (offsetX, offsetY) {
+        var slimeData = {
+            idx : this.idx,
+            template : this.template,
+            age : this.age,
+            animation : this.animation,
+            speed : this.speed,
+            phaselife : this.phaseLife,
+            phase : this.phase,
+            numchildren : this.numChildren,
+            isSuppressed : this.isSuppressed,
+            isMobile : this.isMobile,
+            x : this.slimesprite.body.position.x + offsetX,
+            y : this.slimesprite.body.position.y + offsetY,
+            slimelabel : this.slimeLabel,
+            velocityx : this.slimesprite.body.velocity.x,
+            velocityy : this.slimesprite.body.velocity.y,
+            angularvelocity : this.slimesprite.body.angularVelocity
+        }
+        return (slimeData);
+    }
 
 }
 
 Slime.preloadSlime = function(game) {
-        game.load.spritesheet('greenCircle1', 'assets/lyraImages/greenCircle1.png', 32, 32, 30, 0, 0);
-        game.load.spritesheet('greenCircle2', 'assets/lyraImages/greenCircle2.png', 32, 32, 30, 0, 0);
-        game.load.spritesheet('greenCircle3', 'assets/lyraImages/greenCircle3.png', 32, 32, 30, 0, 0);
-        game.load.spritesheet('greenCircle4', 'assets/lyraImages/greenCircle4.png', 32, 32, 30, 0, 0);
+        for (var i = 0; i< game.gameData.slimetemplate.length; i++) {
+            game.load.spritesheet(game.gameData.slimetemplate[i].slimelabel, game.gameData.slimetemplate[i].imageref, game.gameData.slimetemplate[i].width, game.gameData.slimetemplate[i].height, game.gameData.slimetemplate[i].frames, 0, 0);
+        }
     }
     
+Slime.rawData = function(idx, game) {
+    var chooseTemplate = getRandomInt(0, 3);
+    var slimeData = {
+            idx : idx,
+            template : chooseTemplate,
+            age : 0,
+            animation : 'p0',
+            speed : 1, //getRandomInt(1,2);,
+            phaselife : getRandomInt(50, 200),
+            phase : 0,
+            numchildren : 0,
+            isSuppressed : false,
+            isMobile : true,
+            slimelabel : game.gameData.slimetemplate[chooseTemplate].slimelabel,
+            velocityx : 0,
+            velocityy : 0,
+            angularvelocity : 0
+    }
+    return (slimeData)
+}
+    
 class SlimeManager {
-    constructor (limit, game) {
-        this.limit = limit;
-        this.slimeArr=[];
-        this.slimeArr[0] = new Slime(0, game);
-        this.slimeArr[0].immobilize();
-        this.slimeCounter = 1;
-        this.slimeArr[0].slimesprite.animations.play(this.slimeArr[0].animation);
+    // limit will be the number of slime in motion, currently the total number
+    // x, y are the starting position of the initial spore
+    constructor (game, x, y) {
+        this.limit = game.gameData.slimemotionlimit;
+        if (game.gameData.slimearray.length < 1) {
+            this.slimeArr=[];
+            this.slimeArr[0] = new Slime(game, x, y, Slime.rawData(0, game));
+            this.slimeArr[0].immobilize();
+            //this.slimeCounter = 1;
+            this.slimeArr[0].slimesprite.animations.play(this.slimeArr[0].animation);
+        }
+        else {
+            // load existing slime into array
+            this.slimeArr=[];
+            for (var i = 0; i < game.gameData.slimearray.length ; i++) {
+                this.slimeArr[i] = new Slime(game, game.gameData.slimearray[i].x, game.gameData.slimearray[i].y, game.gameData.slimearray[i]);
+            }
+        }
     } 
     
     updateSlimeArr (game, walls) {
@@ -143,7 +189,7 @@ class SlimeManager {
         };
         
         // for now replicate to limit
-        if (this.slimeCounter < this.limit) {
+        if (this.slimeArr.length < this.limit) {
             for (var i=0; i<1; i++) {
                 var rndNum = i;
                 if (rndNum > this.slimeArr.length-1) {
@@ -154,10 +200,10 @@ class SlimeManager {
                 }
                 // slow down replication by requiring slime in phase 9, that is no longer mobile and only allow 20% of time
                 if ((this.slimeArr[rndNum].phase == 9 ) && (this.slimeArr[rndNum].age % 5 == 0) && (!this.slimeArr[rndNum].isMobile)) {
-                    this.slimeArr[this.slimeCounter] = this.slimeArr[rndNum].replicateSlime(this.slimeCounter, game);
+                    this.slimeArr[this.slimeArr.length] = this.slimeArr[rndNum].replicateSlime(this.slimeArr.length, game);
                     // console.log("created slime #: " + this.slimeCounter);
                     // console.log(this.slimeArr[this.slimeCounter]);
-                    this.slimeCounter += 1;
+                    //this.slimeCounter += 1;
                 }
             }
         }
@@ -194,7 +240,16 @@ class SlimeManager {
 
             }
         }
-
+    }
+    
+    saveSlimeManager (game) {
+        var savedSlime = [];
+        for (var i = 0; i < this.slimeArr.length; i++) {
+            var offsetX = game.gameData.slimetemplate[this.slimeArr[i].template].width*game.gameData.slimetemplate[this.slimeArr[i].template].anchor[0];
+            var offsetY = game.gameData.slimetemplate[this.slimeArr[i].template].height*game.gameData.slimetemplate[this.slimeArr[i].template].anchor[1];
+            savedSlime[i] = this.slimeArr[i].saveSlime (offsetX, offsetY); 
+        }
+        game.gameData.slimearray = savedSlime;
     }
 }
 
