@@ -100,14 +100,40 @@ Lyra.MainMenu.prototype = {
 	    this.newGameText.fill = "#555559";
         this.optionsText.fill = "#555559";
         
-        if(this.easyMapText) {
-            this.easyMapText.destroy(true);
-            this.easyMapText = '';
+        if (!this.easyMapText) {
+            this.easyMapText = this.game.add.text(
+                                this.game.world.centerX + 250,
+                                this.game.world.centerY - 125,
+                                this.game.languageText.easymap[this.game.userPreference.data.languageChoice],
+                                'easyMap'
+                            );
+            this.easyMapText.inputEnabled = true;
+            this.easyMapText.fontSize = this.menuTextSize - 15;
+            this.easyMapText.fill = this.menuTextFill;
+            this.easyMapText.events.onInputDown.add(function() { this.restoreGameData(); }, this);
         }
-        if(this.hardMapText) {
-            this.hardMapText.destroy(true);
-            this.hardMapText = '';
+        if (!this.hardMapText) {
+            this.hardMapText = this.game.add.text(
+                                this.game.world.centerX + 250,
+                                this.game.world.centerY - 75,
+                                this.game.languageText.hardmap[this.game.userPreference.data.languageChoice],
+                                'largeMap'
+                            );
+            this.hardMapText.inputEnabled = true;
+            this.hardMapText.fontSize = this.menuTextSize - 15;
+            this.hardMapText.fill = this.menuTextFill;
+            this.hardMapText.events.onInputDown.add(function() { this.restoreGameData(); }, this);
         }
+        
+        
+        // if(this.easyMapText) {
+        //     this.easyMapText.destroy(true);
+        //     this.easyMapText = '';
+        // }
+        // if(this.hardMapText) {
+        //     this.hardMapText.destroy(true);
+        //     this.hardMapText = '';
+        // }
 	},
 	optionsMenu: function() {
 	    console.log('options clicked');
@@ -137,6 +163,26 @@ Lyra.MainMenu.prototype = {
             dataType: 'json',
             success: function(response) {
                 this.launchGame(response);
+            },
+            error: function(response) {
+                console.log(response);
+                
+            }
+        });
+    },
+	restoreGameData: function() {
+        console.log('restore game data selected');
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            context: this,
+            data: { 
+                "entity" : "restore",
+                "gameSelected" : "gameSave"
+            },
+            dataType: 'json',
+            success: function(response) {
+                this.launchGame(JSON.parse(response));
             },
             error: function(response) {
                 console.log(response);

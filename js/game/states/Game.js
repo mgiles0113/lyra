@@ -62,8 +62,6 @@ Lyra.LyraGame.prototype = {
         
         
         // add collision for walls
-        console.log("setting up collision");
-        console.log(this.game.gameData.mapLayerRef[this.game.gameData.mapLayerRef.length-1]);
         // set the second parameter to > gid number in tile map for the tiles we want to collide
         //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
         
@@ -99,10 +97,6 @@ Lyra.LyraGame.prototype = {
             this.players[i] = new Player(this.game, xpos, ypos, i);
             
         }
-        console.log("going to save the players");
-        console.log(this.players[0]);
-        var tp = new TestPost();
-        tp.send(JSON.stringify(this.game.gameData));
         
         for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
             this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];
@@ -145,12 +139,17 @@ Lyra.LyraGame.prototype = {
         
         //setup getting mouse input
         this.game.input.mouse.capture = true;
+        
+        // setup control of the "s" key
+        this.escKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        this.escKey.onDown.add(this.saveGame, this);
 
-        // try out creating a slime group, currently not used
+        // generate slime manager to control the slime
         this.slimeManager = new SlimeManager(500, this.game);
 	},
 	update: function() {
-		        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
+	    
+        /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
        //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
 
@@ -165,7 +164,7 @@ Lyra.LyraGame.prototype = {
         //         }
         //     }
         // } 
-        
+
         //Comm. Window--> Switch btw players.
         this.comm.switchPlayer(this.players);
         
@@ -196,5 +195,20 @@ Lyra.LyraGame.prototype = {
     },
    	onLoadComplete: function() {
 		this.ready = true;
+	},
+	saveGame: function() {
+	    console.log("Z pressed");
+	    
+	    this.game.pause;
+	    console.log("going to save the gameData");
+	    
+	    for (var i=0; i < this.players.length; i++) {
+	        this.players[i].savePlayerData(this.game, i);
+	    }
+	    
+        var tp = new TestPost();
+        tp.send(JSON.stringify(this.game.gameData));
+	    this.game.resume;
+	    
 	}
 }

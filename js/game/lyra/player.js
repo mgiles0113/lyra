@@ -164,8 +164,8 @@ class Player {
         game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
         game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
         game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
-        game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x;
-        game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y;
+        game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x + game.gameData.characters[game.gameData.crew[idx]].width/2;
+        game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y + game.gameData.characters[game.gameData.crew[idx]].height/2;
         game.gameData.characters[game.gameData.crew[idx]].velocityx = this.sprite.body.velocity.x;
         game.gameData.characters[game.gameData.crew[idx]].velocityy = this.sprite.body.velocity.y;
         game.gameData.characters[game.gameData.crew[idx]].frame = this.sprite.frame;

@@ -23,11 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         getLanguage();
     } else if ($_GET['entity'] == 'userPreference') {
         getUserPreference($_GET['userId']);
+    } else if ($_GET['entity'] == 'restore') {
+        getGameData($_GET['gameSelected']);
     }
 }
 
 function getMap($mapSelection) {
     $mapData = file_get_contents('json/Maps/' . $mapSelection . '.json');
+    echo json_encode($mapData);
+}
+
+function getGameData($gameSelected) {
+    $mapData = file_get_contents($gameSelected . '.json');
     echo json_encode($mapData);
 }
 

@@ -135,5 +135,63 @@
                  "inventory": ["wrench"]
                 }
     ],
-    "crew" : [0, 1, 2]
+    "crew" : [0, 1, 2],
+    "slimeTemplate" : [
+        {"slimelabel": "greenCircle1",
+             "imageref" :  "assets/lyraImages/greenCircle1.png",
+             "height": 32,
+             "width": 32,
+             "frames": 30,
+             "radius": 20,
+             "anchor": [0.5, 0.5]
+            },
+        {"slimelabel": "greenCircle2",
+             "imageref" :  "assets/lyraImages/greenCircle2.png",
+             "height": 32,
+             "width": 32,
+             "frames": 30,
+             "radius": 20,
+             "anchor": [0.5, 0.5]
+            },
+        {"slimelabel": "greenCircle3",
+             "imageref" :  "assets/lyraImages/greenCircle3.png",
+             "height": 32,
+             "width": 32,
+             "frames": 30,
+             "radius": 20,
+             "anchor": [0.5, 0.5]
+            },
+        {"slimelabel": "greenCircle4",
+             "imageref" :  "assets/lyraImages/greenCircle4.png",
+             "height": 32,
+             "width": 32,
+             "frames": 30,
+             "radius": 20,
+             "anchor": [0.5, 0.5]
+            }
+    ],
+    "slimeanimations" : [
+                [0,1,10,11],
+                [1,2,11,12],
+                [2,3,12,13],
+                [3,4,13,14],
+                [4,5,13,14],
+                [5,6,15,16],
+                [6,7,16,17],
+                [7,8,17,18],
+                [8,9,18,19],
+                [9, 19],
+                [20],
+                [21],
+                [22],
+                [23],
+                [24],
+                [25],
+                [26],
+                [27],
+                [28],
+                [29]
+    ],
+    "slimearray": [],
+    "slimemotionlimit" : 50
 }

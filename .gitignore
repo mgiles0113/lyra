@@ -6,3 +6,4 @@ phaser-2.6.2.zip
 lyra/vendor/*
 js/ENVIRONMENT.js
 api/SYSTEM_PARAMETERS.php
+api/gameSave.json
