@@ -43,7 +43,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <a href="?page=createUser">
+                    <a href="?page=addUser">
                         <button type="button" id="create-user-link" class="btn">Need An Account?</button>
                     </a>
                 </div>

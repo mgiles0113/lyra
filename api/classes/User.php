@@ -52,6 +52,35 @@ class User {
     function setLanguageChoice($languageChoice) {
         
     }
+    // returns 1 if the provided username is found in the database, 0 otherwise
+    function exists() {
+        $db = new DatabaseConnection();
+        $mysqli = $db->connect();
+        
+        /* create a prepared statement */
+        if ($stmt = $mysqli->prepare("SELECT * FROM User WHERE username=?")) {
+            /* bind parameters for markers */
+            $stmt->bind_param("s", $this->username);
+
+		    /* execute query */
+            $stmt->execute();
+            
+            $id = -1;
+            $username = '';
+            $password = '';
+            $salt = '';
+            
+            /* bind result variables */
+            $stmt->bind_result($id, $username, $password, $salt);
+            if ($stmt->fetch()) {
+                return 1;
+            } else {
+                return 0;
+            }
+            
+            $stmt->close();
+        }
+    }
     
     // save the user to the database or update if the user exists
     function saveToDb() {
@@ -74,7 +103,7 @@ class User {
         
         $stmt->close();
         
-        $userPreferencesFile = fopen($mysqli->insert_id . ".json", "w");
+        $userPreferencesFile = fopen("json/UserPreferences/" . $mysqli->insert_id . ".json", "w");
         fwrite($userPreferencesFile, '{ "userId" : "' . $this->userId . '", "sound" : "true", "languageChoice" : "' . $this->languageChoice . '" }');
     }
     // check to see if username and password match database

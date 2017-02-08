@@ -4,8 +4,8 @@ header('Access-Control-Allow-Origin: *');
 // development options
 $authenticationRequired = 1;
 
-if ($_GET['page'] == "createUser") {
-    require('view/templates/createUser.php');
+if ($_GET['page'] == "addUser") {
+    require('view/templates/addUser.php');
 } else if ($authenticationRequired && !$_SESSION['authenticated']) {
     // require login screen
     require('view/templates/login.php');

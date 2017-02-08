@@ -42,6 +42,6 @@
         </div>
     </div>
     <script src="js/ENVIRONMENT.js"></script>
-    <script src="js/createUser.js"></script>
+    <script src="js/addUser.js"></script>
 </body>
 </html>

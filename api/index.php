@@ -7,8 +7,8 @@ $jsonResponseBody = array(
 );
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['entity'] == 'createUser') {
-        createUser($_POST['username'], $_POST['password'], $_POST['languageChoice']);
+    if ($_POST['entity'] == 'addUser') {
+        addUser($_POST['username'], $_POST['password'], $_POST['languageChoice']);
     } else if ($_POST['action'] == 'login') {
 	    login();
     } else if ($_POST['entity'] == 'userPreference') {
@@ -52,7 +52,7 @@ function login() {
     }
 }
 
-function createUser($username, $password, $languageChoice) {
+function addUser($username, $password, $languageChoice) {
     $user = new User();
     $user->setUsername($username);
     $user->setPassword($password);
@@ -60,6 +60,7 @@ function createUser($username, $password, $languageChoice) {
     if ($user->exists()) {
         echo '{ "error" : "username already exists" }';
     } else {
+        echo '{ "error" : "none" }';
         $user->saveToDb();
     }
 }
