@@ -1,6 +1,11 @@
 {
     "language" : ["English", "Pirate", "Español"],
     "languageCodes" : ["ENG", "PRT", "ESP"],
+    "createAccount" : {
+        "ENG" : "Create Account",
+        "PRT" : "Make yer Mark!",
+        "ESP" : "Crear Una Cuenta"
+    },
     "identifyYourself" : {
         "ENG" : "Identify Yourself",
         "PRT" : "Who be ye?",

@@ -19,13 +19,13 @@ function populateLanguageText(languageText) {
         languageSelection.append("<option value='" + jsonLanguage.languageCodes[i] + "'>" + jsonLanguage.language[i] + "</option");
     }
     languageSelection.prop('disabled', false);
-    
+
     languageSelection.change(function() {
         languageChoice = languageSelection.val();
-        loginTitle.html(jsonLanguage.identifyYourself[languageChoice]);
-        loginUsernameLabel.html(jsonLanguage.username[languageChoice]);
-        loginPasswordLabel.html(jsonLanguage.password[languageChoice]);
-        submitButton.html(jsonLanguage.submit[languageChoice]);
+        createUserTitle.html(jsonLanguage.createAccount[languageChoice]);
+        createUsernameLabel.html(jsonLanguage.username[languageChoice]);
+        createPasswordLabel.html(jsonLanguage.password[languageChoice]);
+        createUserButton.html(jsonLanguage.submit[languageChoice]);
     });
 }
 
@@ -56,7 +56,7 @@ createUserForm.submit(function(e) {
             entity: 'createUser',
             username : createUsername.val(),
             password : createPassword.val(),
-            languageChoice : ''
+            languageChoice : languageSelection.val()
         };
 
     $.ajax({

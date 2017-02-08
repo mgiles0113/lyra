@@ -39,12 +39,12 @@ label {
     border: 1px solid white;
 }
 
-#form-card button, #create-user-button {
+#form-card button, #create-user-button, #create-user-link {
     margin: 25px auto -10px;
     width: 100%;
 }
 
-#submit-button, #create-user-button {
+#submit-button, #create-user-button, #create-user-link {
     min-height: 65px;
     display: block;
 }
