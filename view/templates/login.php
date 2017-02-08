@@ -40,6 +40,15 @@
                 </div>
                 <div class="col-md-3"></div>
             </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <a href="?page=createUser">
+                        <button type="button" id="create-user-link" class="btn">Need An Account?</button>
+                    </a>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
         </div>
     </div>
     <script src="js/game/states/Boot.js"></script>

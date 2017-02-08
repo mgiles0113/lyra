@@ -7,7 +7,9 @@ $jsonResponseBody = array(
 );
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['action'] == 'login') {
+    if ($_POST['entity'] == 'createUser') {
+        createUser($_POST['username'], $_POST['password'], $_POST['languageChoice']);
+    } else if ($_POST['action'] == 'login') {
 	    login();
     } else if ($_POST['entity'] == 'userPreference') {
         saveUserPreferences($_POST['data']);
@@ -25,6 +27,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         getUserPreference($_GET['userId']);
     } else if ($_GET['entity'] == 'restore') {
         getGameData($_GET['gameSelected']);
+    }
+}
+
+function login() {
+    session_start();
+
+    $user = new User();
+    $user->setUsername($_POST['username']);
+    $user->setPassword($_POST['password']);
+    $authStatus = $user->authenticated();
+
+    switch ($authStatus) {
+        case 1000:
+            echo '{ "error" : "none", "userId" : "' . $user->getId() . '"}';
+            break;
+        case 1002:
+            echo '{ "error" : "invalid login" }';
+            break;
+        case 1003:
+            echo '{ "error" : "invalid login" }';
+            break;
+        default:
+    }
+}
+
+function createUser($username, $password, $languageChoice) {
+    $user = new User();
+    $user->setUsername($username);
+    $user->setPassword($password);
+    $user->setLanguageChoice($languageChoice);
+    if ($user->exists()) {
+        echo '{ "error" : "username already exists" }';
+    } else {
+        $user->saveToDb();
     }
 }
 
@@ -51,28 +87,4 @@ function getUserPreference($userId) {
 function saveUserPreferences($preferences) {
     $preferencesFile = fopen("json/UserPreferences/" . $preferences["userId"] . ".json", "w");
     fwrite($preferencesFile, json_encode($preferences));
-}
-
-function login() {
-    session_start();
-
-    $user = new User();
-    $user->setUsername($_POST['username']);
-    $user->setPassword($_POST['password']);
-    $authStatus = $user->authenticated();
-
-    switch ($authStatus) {
-        case 1000:
-            echo '{ "error" : "none", "userId" : "' . $user->getId() . '"}';
-            break;
-        case 1002:
-            echo '{ "error" : "invalid login" }';
-            break;
-        case 1003:
-            echo '{ "error" : "invalid login" }';
-            break;
-        default:
-    }
-
-    //$_SESSION['authenticated'] = $user->getId();
 }

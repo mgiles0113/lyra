@@ -22,7 +22,7 @@ label {
     color: white;
 }
 
-#login-title {
+#login-title, #create-user-title {
     font-size: 3em;
     color: white;
 }
@@ -39,18 +39,28 @@ label {
     border: 1px solid white;
 }
 
-#form-card button {
+#form-card button, #create-user-button {
     margin: 25px auto -10px;
     width: 100%;
 }
 
-#submit-button {
-    
+#submit-button, #create-user-button {
     min-height: 65px;
     display: block;
 }
 
+a {
+    color: inherit;
+}
+
+a: visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 #form-card label {
     font-size: 2em;
-    
 }

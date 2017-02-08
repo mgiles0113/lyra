@@ -4,6 +4,7 @@ class User {
     var $id;                // sql id (primary key) for this user
     var $username;          // user's username
     var $password;          // user's password
+    var $languageChoice;    // user's language choice (stored in json only)
     var $gameState;         // array of saved game states for this user
     
     // User constructor
@@ -27,6 +28,10 @@ class User {
     function getPassword() {
         return $this->password;
     }
+    // return the user's language choice
+    function getLanguageChoice() {
+        return $this->languageChoice;
+    }
 
     /**************************************************************************
      * MUTATOR METHODS
@@ -42,6 +47,10 @@ class User {
     // set the user's password
     function setPassword($password) {
         $this->password = $password;
+    }
+    // set the user's language choice
+    function setLanguageChoice($languageChoice) {
+        
     }
     
     // save the user to the database or update if the user exists
@@ -66,8 +75,7 @@ class User {
         $stmt->close();
         
         $userPreferencesFile = fopen($mysqli->insert_id . ".json", "w");
-        fwrite($userPreferencesFile, "{}");
-
+        fwrite($userPreferencesFile, '{ "userId" : "' . $this->userId . '", "sound" : "true", "languageChoice" : "' . $this->languageChoice . '" }');
     }
     // check to see if username and password match database
     // return id of user if successful
