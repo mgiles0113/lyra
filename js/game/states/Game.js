@@ -22,6 +22,8 @@ Lyra.LyraGame.prototype = {
 		// moved to PreloadLyra
 		Map.loadMap(this.game, this.game.gameData.mapRef, this.game.gameData.imageTagList, this.game.gameData.imageRefList);
 		
+		Door.preloadDoorImages(this.game);
+		
 		// added as example preload game specific data
         // player assets
         Player.preloadPlayer(this.game);
