@@ -193,5 +193,36 @@
                 [29]
     ],
     "slimearray": [],
-    "slimemotionlimit" : 10
+    "slimemotionlimit" : 10,
+    "doors": [
+        {
+        "imageTagList" : "dooropen",
+        "imageRefList" : "assets/lyraImages/dooropen.png",
+        "width" : 64,
+        "height" : 64,
+        "frames" : 1 
+        },
+        {        
+        "imageTagList" : "doorclosed",
+        "imageRefList" : "assets/lyraImages/doorclosed.png",
+        "width" : 64,
+        "height" : 64,
+        "frames" : 1 
+        },
+        {
+        "imageTagList" : "dooropenhighlighted",
+        "imageRefList" : "assets/lyraImages/dooropenhighlighted.png",
+        "width" : 64,
+        "height" : 64,
+        "frames" : 1 
+        },
+        {        
+        "imageTagList" : "doorclosedhighlighted",
+        "imageRefList" : "assets/lyraImages/doorclosedhighlighted.png",
+        "width" : 64,
+        "height" : 64,
+        "frames" : 1 
+        }
+    ],
+    "doorsArr": []
 }
