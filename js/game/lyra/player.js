@@ -38,7 +38,7 @@ class Player {
             // [TODO] refer to function in player object?
             console.log("overlap with slime");
         });
-
+        
     }
     
     validDest(game,destCoords){
@@ -84,14 +84,23 @@ class Player {
         console.log("I can't get in!");
     }
     
-    updatePlayer (game, cursors, walls, floors, doors) {
+    updatePlayer (game, cursors, walls, floors, doorManager) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
         
         //Restrict Pt & Click to floor tiles
         game.physics.arcade.overlap(this.sprite, floors);
-        //game.physics.arcade.collide(this.sprite, doors, this.lockedOut(this.sprite,doors));
+        
+        for(var i=0; i<doorManager.doors.length; i++) {
+            if (((doorManager.doors[i].state == "doorclosed") || (doorManager.doors[i].state == "doorclosedhighlighted")) 
+                    &&  game.physics.arcade.collide(this.sprite, doorManager.doors[i].sprite)) {
+                this.sprite.body.velocity.x = 0;
+                this.sprite.body.velocity.y = 0;
+                this.lockedOut(this.sprite,doorManager.doors[i].sprite);
+            }
+        }
+        
         
         if (this.isSelected) {
         
