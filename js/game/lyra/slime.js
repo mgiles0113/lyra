@@ -52,6 +52,7 @@ class Slime {
         this.slimesprite.body.setSize(game.gameData.slimetemplate[this.template].width,game.gameData.slimetemplate[this.template].height);
         this.slimesprite.body.setCircle(game.gameData.slimetemplate[this.template].radius); // radius of collision body
         this.slimesprite.anchor.set(game.gameData.slimetemplate[this.template].anchor[0], game.gameData.slimetemplate[this.template].anchor[1]); // center collision over image
+        this.slimesprite.body.bounce(1);
     }
     
     immobilize() {

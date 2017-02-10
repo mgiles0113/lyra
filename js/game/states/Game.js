@@ -126,11 +126,6 @@ Lyra.LyraGame.prototype = {
         //Create comm window.
         this.comm = new Comm(this.game);
 
-        // //Create players
-        // for (var i = 0; i< this.game.playerData.numPlayers; i++) {
-        //     this.players[i] = new Player(this.game, this.game.playerData.players[i].x, this.game.playerData.players[i].y, this.game.playerData.players[i].isSelected, this.game.playerData.players[i].name);
-        // }
-
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
         
@@ -184,7 +179,7 @@ Lyra.LyraGame.prototype = {
         // update player
         for (var j=0; j < this.players.length; j++)
         { 
-            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.mapLayer['doors']);
+            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], doorManager);
         }
 	},
     render: function() {
@@ -226,8 +221,6 @@ Lyra.LyraGame.prototype = {
 	},
     actionRequest: function() {
 		console.log("E pressed");
-		if (this.actionManager.actionArr.length > 0) {
-		    this.actionManager.updateAction(this.game);
-		}
+		    this.actionManager.updateAction(this.game, this.players, this.doorManager);
 	},
 }

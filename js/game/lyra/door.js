@@ -4,7 +4,8 @@ class Door {
         this.x = doorData.x;
         this.y = doorData.y;
         this.name = doorData.name;
-        this.doorstate = game.gameData.doors[doorData.doorstate].imageTagList;
+        this.playerHighlight = doorData.playerHighlight;
+        this.doorstate = doorData.doorstate;
         this.sprite = game.add.sprite(this.x, this.y, game.gameData.doors.imageTagList);
         this.sprite.animations.add(game.gameData.doors["dooropen"].imageTagList, game.gameData.doors["dooropen"].animation, 5, true)
         this.sprite.animations.add(game.gameData.doors["doorclosed"].imageTagList, game.gameData.doors["doorclosed"].animation, 5, true)
@@ -14,40 +15,81 @@ class Door {
         // this.sprite.loadTexture(game.gameData.doors.imageTagList,0, true);
         game.physics.arcade.enable(this.sprite);
         this.sprite.body.setSize(game.gameData.doors[doorData.doorstate].width, game.gameData.doors[doorData.doorstate].height);
-        //this.sprite.animations.play(this.state);
+        this.sprite.animations.play(this.doorstate);
+        this.sprite.immovable = true; this.sprite.body.immovable = true; this.sprite.body.moves = false;
+    }
+
+    findPlayerHighlight(playerid) {
+        for (var i = 0; i < this.playerHighlight.length; i++) {
+            if (playerid == this.playerHighlight[i]) {
+                return i;
+            }
+        }
+        return -1;
     }
     
     // create a new sprite based on door state
-    openDoor (game) {
-        this.doorstate = game.gameData.doors["dooropen"].imageTagList;
-        //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
-        // this.sprite.loadTexture(game.gameData.doors.imageTagList,0, true);
-        // this.sprite.onTextureUpdate;
-        this.sprite.animations.play(this.doorstate);
+    openDoor (game, playerid) {
+        var playerIdx = this.findPlayerHighlight(playerid);
+        if (playerIdx >= 0) {
+            // player that removed the highlight removed from list
+            this.playerHighlight.splice(playerIdx, 1);
+        }
+        if (this.playerHighlight.length < 1) {  // only open the door if no one is highlighting
+            this.doorstate = game.gameData.doors["dooropen"].imageTagList;
+            //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
+            // this.sprite.loadTexture(game.gameData.doors.imageTagList,0, true);
+            // this.sprite.onTextureUpdate;
+            this.sprite.animations.play(this.doorstate);
+            // console.log("doorstate: " + this.doorstate );
+        }    
     }
 
-    closedDoor (game) {
-        this.doorstate = game.gameData.doors["doorclosed"].imageTagList;
-        //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
-        // this.sprite.loadTexture(game.gameData.doors.imageTagList,2, true);
-        // game.debug.body(this.sprite);
-        this.sprite.animations.play(this.doorstate);
+    closedDoor (game, playerid) {
+        var playerIdx = this.findPlayerHighlight(playerid);
+        if (playerIdx >= 0) {
+            // player that removed the highlight removed from list
+            this.playerHighlight.splice(playerIdx, 1);
+        }
+        if (this.playerHighlight.length < 1) {  // only close the door if no one is highlighting
+            this.doorstate = game.gameData.doors["doorclosed"].imageTagList;
+            //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
+            // this.sprite.loadTexture(game.gameData.doors.imageTagList,2, true);
+            // game.debug.body(this.sprite);
+            this.sprite.animations.play(this.doorstate);
+            // console.log("doorstate: " + this.doorstate );
+        }
+        
     }
     
-    openDoorHighlighted (game) {
+    openDoorHighlighted (game, playerid) {
         this.doorstate = game.gameData.doors["dooropenhighlighted"].imageTagList;
         //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
         // this.sprite.loadTexture(game.gameData.doors.imageTagList,1, true);
         // game.debug.body(this.sprite);
         this.sprite.animations.play(this.doorstate);
+        // console.log("doorstate: " + this.doorstate );
+        
+        var playerIdx = this.findPlayerHighlight(playerid);
+        // player that caused the highlight added to the highlight list
+        if (playerIdx < 0) {
+            this.playerHighlight.push(playerid);
+        }
     }   
 
-    closedDoorHighlighted (game) {
+    closedDoorHighlighted (game, playerid) {
         this.doorstate = game.gameData.doors["doorclosedhighlighted"].imageTagList;
         //this.sprite.frame = game.gameData.doors[this.doorstate].frame;
         // this.sprite.loadTexture(game.gameData.doors.imageTagList,3, true);
         // game.debug.body(this.sprite);
         this.sprite.animations.play(this.doorstate);
+        // console.log("doorstate: " + this.doorstate );
+        // player that caused the highlight added to the highlight list
+        
+        var playerIdx = this.findPlayerHighlight(playerid);
+        if (playerIdx < 0) {
+            this.playerHighlight.push(playerid);
+        }
     }
 
     saveDoor () {
@@ -57,6 +99,7 @@ class Door {
             doorstate: this.doorstate,
             x : this.sprite.body.position.x,
             y : this.sprite.body.position.y,
+            playerHighlight : this.playerHighlight
         }
         return (doorData);
     }
@@ -79,7 +122,8 @@ Door.rawData = function(idx, x, y, name, doorstate) {
             x: x,
             y: y,
             name: name,
-            doorstate: doorstate
+            doorstate: doorstate,
+            playerHighlight: new Array()
     }
     return (rawDoorData)
 }
@@ -96,7 +140,6 @@ class DoorManager {
                 var doorData = Door.rawData(i,  doorLocArr[i].x, doorLocArr[i].y, doorLocArr[i].name, game.gameData.doors["dooropen"].imageTagList);
                 //console.log(doorData);
                 this.doors[i].addDoor(game, doorData);
-                this.doors[i].sprite.animations.play(this.doors[i].state);
             }
         }
         else {
@@ -104,9 +147,7 @@ class DoorManager {
             this.doors = [];
             for (var i = 0; i < game.gameData.doorarray.length ; i++) {
                 this.doors[game.gameData.doorarray[i].idx] = new Door();
-                var doorData = Door.rawData(i,  game.gameData.doorarray[i].x, game.gameData.doorarray[i].y, game.gameData.doorarray[i].name,  game.gameData.doorarray[i].state);
-                this.doors[game.gameData.doorarray[i].idx].addDoor(game, doorData);
-                this.doors[i].sprite.animations.play(this.doors[i].state);
+                this.doors[game.gameData.doorarray[i].idx].addDoor(game, game.gameData.doorarray[i]);
             }
         }
     }
@@ -115,25 +156,32 @@ class DoorManager {
     checkPlayerOverlap (game, players) {
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.doors.length; j++) {
-                if (game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)) {
-                    switch (this.doors[j].doorstate) {
-                        case "dooropen":
-                            this.doors[j].openDoorHighlighted(game);
-                            break;
-                        case "doorclosed":
-                            this.doors[j].doorclosedhighlighted(game);
-                            break;
-                    }   
+                if ((this.doors[j].findPlayerHighlight(i) < 0) && (game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
+                {  // this player is currently not causing the highlight
+                        // console.log("overlap true: player: " + i + " door: " + this.doors[j].name);
+                        switch (this.doors[j].doorstate) {
+                            case "dooropen":
+                                this.doors[j].openDoorHighlighted(game, i);
+                                break;
+                            case "doorclosed":
+                                this.doors[j].closedDoorHighlighted(game, i);
+                                break;
+                            default:
+                                break;
+                        } 
                 }
-                else {
-                    switch (this.doors[j].doorstate) {
-                        case "dooropenhighlighted":
-                            this.doors[j].openDoor(game);
-                            break;
-                        case "doorclosedhighlighted" :
-                            this.doors[j].closedDoor(game);
-                            break;
-                    }
+                else if ((this.doors[j].findPlayerHighlight(i) >= 0) && (!game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
+                {
+                        switch (this.doors[j].doorstate) {
+                            case "dooropenhighlighted":
+                                this.doors[j].openDoor(game, i);
+                                break;
+                            case "doorclosedhighlighted" :
+                                this.doors[j].closedDoor(game, i);
+                                break;
+                            default:
+                                break;
+                        }
                 }
             }
         }
