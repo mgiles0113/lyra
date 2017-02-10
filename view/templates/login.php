@@ -10,44 +10,49 @@
 </head>
 <body>
     <div class="container">
-        <div id="primary-card">
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                    <h1 class="text-center" id="menu-title">Lyra Escape</h1>
+        <div class="interface">
+            <div id="primary-card">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <h1 class="text-center" id="menu-title">Lyra Escape</h1>
+                    </div>
+                    <div class="col-md-2"></div>
                 </div>
-                <div class="col-md-2"></div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6" id="form-card">
+                        <h3 class="text-center" id="login-title">Identify Yourself</h3>
+                        <hr>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <label for="login-username" id="login-username-label">Username</label>
+                                <input type="text" class="form-control" id="login-username" name="login-username" placeholder="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password" id="login-password-label">Password</label>
+                                <input type="password" class="form-control" id="login-password" name="login-password" placeholder="password">
+                            </div>
+                            <select class="form-control" id="language-selection" disabled>
+                                <option>English</option>
+                            </select>
+                            <button type="submit" id="submit-button" class="btn">Submit</button>
+                        </form>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <a href="?page=addUser">
+                            <button type="button" id="create-user-link" class="btn">Need An Account?</button>
+                        </a>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" id="form-card">
-                    <h3 class="text-center" id="login-title">Identify Yourself</h3>
-                    <hr>
-                    <form id="login-form">
-                        <div class="form-group">
-                            <label for="login-username" id="login-username-label">Username</label>
-                            <input type="text" class="form-control" id="login-username" name="login-username" placeholder="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password" id="login-password-label">Password</label>
-                            <input type="password" class="form-control" id="login-password" name="login-password" placeholder="password">
-                        </div>
-                        <select class="form-control" id="language-selection" disabled>
-                            <option>English</option>
-                        </select>
-                        <button type="submit" id="submit-button" class="btn">Submit</button>
-                    </form>
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <a href="?page=addUser">
-                        <button type="button" id="create-user-link" class="btn">Need An Account?</button>
-                    </a>
-                </div>
-                <div class="col-md-3"></div>
+            <div id="communicator-card">
+                
             </div>
         </div>
     </div>

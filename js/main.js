@@ -9,8 +9,8 @@ var loginPasswordLabel = $("#login-password-label");
 var languageSelection = $("#language-selection");
 var submitButton = $("#submit-button");
 
-var gameWidth = 1200;
-var gameHeight = 800;
+var gameWidth = 1184;
+var gameHeight = 672;
 var languageChoice = "ENG";
 var jsonLanguage;
 

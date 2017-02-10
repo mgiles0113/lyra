@@ -9,6 +9,15 @@ class Items {
         this.sprite.anchor.set(0.5, 0.5); // center collision over image
 
     }
+    
+    //Add Item to Comm Window
+    addtoComm(game, name, x, y){
+        if( name != 'empty')
+        var commItem = game.add.button(x, y, name);
+        commItem.fixedToCamera = true;
+        return commItem;
+        }
+        
 }
 
 //Loads the item resources
@@ -20,7 +29,6 @@ Items.preloadItems = function (game) {
         game.load.image(game.itemData.items[i].name, game.itemData.items[i].itemRef);
     }
 }
-
 
 //Method to add Item to Container/Inventory
 /*Items.addItemCon = function(game){

@@ -10,7 +10,7 @@ class Player {
         //Custom Params for Player.
         this.sprite.customParams = [];
         this.sprite.customParams.inventory = game.gameData.characters[game.gameData.crew[idx]].inventory; //['fuse', 'circuit'];
-        this.sprite.customParams.inv_num = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
+        this.sprite.customParams.inv_size = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
        
         this.sprite.customParams.status =  game.gameData.characters[game.gameData.crew[idx]].status;
        
@@ -61,11 +61,10 @@ class Player {
     
     //Return inventory
     getInventory(slot){
-        if( slot < this.sprite.customParams.inv_num ){
+        if( slot < this.sprite.customParams.inv_size ){
             return this.sprite.customParams.inventory[slot];
         
         }else{
-       
             return 'empty';
             
         }

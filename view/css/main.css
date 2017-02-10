@@ -9,13 +9,22 @@ label {
     color: white;
 }
 
-#primary-card {
+#primary-card, #communicator-card {
     background: black;
-    width: 1200px;
-    height: 800px;
-    margin: 100px auto;
-    border-radius: 5px;
+    width: 1184px;
 }
+
+#primary-card {
+    height: 672px;
+    margin: 100px auto 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+#communicator-card {
+    height: 128px;
+    border-radius: 0px 0px 5px 5px;
+}
+
 
 #menu-title {
     font-size: 8em;

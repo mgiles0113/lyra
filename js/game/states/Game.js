@@ -9,9 +9,11 @@ Lyra.LyraGame.prototype = {
             this.players = [];  // list of players created on map
             this.mapLayer = [];  // layers of map tilesets
             this.items = [];  // list of items created on map
+            this.ingameItems = []; //all ingame items used
             this.roomArr = [];  // approx center of rooms on map
             this.suppresantArr = [];  // locations on the map where suppresant can be placed
         }
+        
         this.ready = false;
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
@@ -25,7 +27,6 @@ Lyra.LyraGame.prototype = {
         // player assets
         Player.preloadPlayer(this.game);
 
-        
         //slime assets
         Slime.preloadSlime(this.game);
         
@@ -125,6 +126,9 @@ Lyra.LyraGame.prototype = {
 
         //Create comm window.
         this.comm = new Comm(this.game);
+        
+        //Create all in game items.
+        this.ingameItems = new Items();
 
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -167,11 +171,11 @@ Lyra.LyraGame.prototype = {
         //     }
         // } 
 
-        //Comm. Window--> Switch btw players.
-        this.comm.switchPlayer(this.players);
+        //Comm. Window--> Switch btw players
+        this.comm.switchPlayer(this.players, this.game);
         
-        //Comm.Window --> Update Player Inventory;
-        this.comm.displayInventory(this.game);
+        //Update Comm Window Inventory
+        this.comm.displayInventory(this.players[0], this.game, this.ingameItems);
 
         // check for overlap with doors
         this.doorManager.checkPlayerOverlap (this.game, this.players)
