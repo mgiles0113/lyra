@@ -39,7 +39,7 @@ Lyra.LyraGame.prototype = {
    		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},
 	create: function() {
-		this.preloadBar.cropEnabled = false;    
+		this.preloadBar.cropEnabled = false;
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
@@ -124,6 +124,7 @@ Lyra.LyraGame.prototype = {
         // the display is scaled to fit the full size of the defined canvas
         //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+        
         //Create comm window.
         this.comm = new Comm(this.game);
         
@@ -144,6 +145,31 @@ Lyra.LyraGame.prototype = {
         this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
         this.actionKey.onDown.add(this.actionRequest, this);
 
+        // setup action on object "w" key
+        this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+        this.upKey.onDown.add(this.upRequest, this);
+        this.upKey.onUp.add(this.upStopRequest, this);
+
+
+        // setup action on object "a" key
+        this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        this.leftKey.onDown.add(this.leftRequest, this);
+        this.leftKey.onUp.add(this.leftStopRequest, this);
+
+
+        // setup action on object "s" key
+        this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+        this.downKey.onDown.add(this.downRequest, this);
+        this.downKey.onUp.add(this.downStopRequest, this);
+
+
+        // setup action on object "d" key
+        this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+        this.rightKey.onDown.add(this.rightRequest, this);
+        this.rightKey.onUp.add(this.rightStopRequest, this);
+
+
+
         // generate slime manager to control the slime
         var slimespore = getRandomInt(1, 7);
         if (slimespore == 7) {
@@ -157,7 +183,7 @@ Lyra.LyraGame.prototype = {
 	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-       //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
+       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
 
         /*  comment out checking for slime overlap with players */
         // [TODO] make slime items into a group
@@ -224,7 +250,113 @@ Lyra.LyraGame.prototype = {
 	    
 	},
     actionRequest: function() {
-		console.log("E pressed");
-		    this.actionManager.updateAction(this.game, this.players, this.doorManager);
-	},
+        // find the selected player
+        console.log("ready to take action from keyboard: E");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.actionManager.updateAction(this.game, playerIdx, this.doorManager);
+    },
+
+    upRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: W");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].goUp(this.game);
+    },
+    
+    downRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: S");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].goDown(this.game);
+    },
+    
+    leftRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: A");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].goLeft(this.game);
+    },
+    
+    rightRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: D");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].goRight(this.game);
+    },
+
+    upStopRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: W");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].stopUp(this.game);
+    },
+    
+    downStopRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: S");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].stopDown(this.game);
+    },
+    
+    leftStopRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: A");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].stopLeft(this.game);
+    },
+    
+    rightStopRequest: function() {
+        // find the selected player
+        console.log("ready to take action from keyboard: D");
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        this.players[playerIdx].stopRight(this.game);
+    },
+
+
+
 }

@@ -4,7 +4,6 @@ Lyra.Preload = function() {
 
 Lyra.Preload.prototype = {
 	preload: function() {
-		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
 	
 		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
 		this.splash.anchor.setTo(0.5);

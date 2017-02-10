@@ -238,5 +238,55 @@
             "animation" : [2, 3]
             }
         },
-    "doorarray": []
+    "doorarray": [],
+    "items" : {
+        "CIRCUIT": {
+            "itemRef":"assets/sprites/items/circuit.png",
+            "name": "circuit"
+        },
+        "FUEL_TANK": {
+            "itemRef":"assets/sprites/items/fuel_tank.png",
+            "name": "fuel tank"
+        },
+        "FUSE": {
+            "itemRef":"assets/sprites/items/fuse.png",
+            "name": "fuse"
+        },
+        "SUPPRESANT": {
+            "itemRef":"assets/sprites/items/suppresant.png",
+            "name": "suppresant"
+        },
+        "WRENCH": {
+            "itemRef":"assets/sprites/items/wrench.png",
+            "name": "wrench"
+        }
+    },
+    "itemsarray" : [],
+    "containers" : {
+        "SMALLBOXOPEN" : {
+            "itemRef":"assets/sprites/smallbox.png",
+            "name": "small box open",
+            "width" : 32,
+            "height" : 32
+        },
+        "LARGEBOXOPEN" : {
+            "itemRef":"assets/sprites/items/largebox.png",
+            "name": "large box open",
+            "width" : 64,
+            "height" : 32
+        },
+        "CONTAINEROPEN" : {
+            "itemRef":"assets/sprites/smallbox.png",
+            "name": "container open",
+            "width" : 32,
+            "height" : 32
+        },
+        "CONTAINERCLOSED" : {
+            "itemRef":"assets/sprites/smallbox.png",
+            "name": "container closed",
+            "width" : 32,
+            "height" : 32
+        }
+    },
+    "containersarray" : []
 }

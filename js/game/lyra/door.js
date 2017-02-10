@@ -92,6 +92,22 @@ class Door {
         }
     }
 
+
+    switchDoorState (game) {
+            // this player is causing the highlight
+        switch (this.doorstate) {
+            case game.gameData.doors["dooropenhighlighted"].imageTagList : 
+                this.doorstate = game.gameData.doors["doorclosedhighlighted"].imageTagList;
+                break;
+            case game.gameData.doors["doorclosedhighlighted"].imageTagList:
+                this.doorstate = game.gameData.doors["dooropenhighlighted"].imageTagList;
+                break;
+            }
+        this.sprite.animations.play(this.doorstate);
+    }   
+
+
+
     saveDoor () {
         var doorData = {
             idx : this.idx,

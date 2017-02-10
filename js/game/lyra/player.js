@@ -38,7 +38,8 @@ class Player {
             // [TODO] refer to function in player object?
             console.log("overlap with slime");
         });
-        
+        this.sprite.body.bounce.x = 0.2;
+        this.sprite.body.bounce.y = 0.2;
     }
     
     validDest(game,destCoords){
@@ -89,22 +90,21 @@ class Player {
         game.physics.arcade.collide(this.sprite, walls);
         
         //Restrict Pt & Click to floor tiles
-        game.physics.arcade.overlap(this.sprite, floors);
+        //game.physics.arcade.overlap(this.sprite, floors);
         
         for(var i=0; i<doorManager.doors.length; i++) {
             if (((doorManager.doors[i].state == "doorclosed") || (doorManager.doors[i].state == "doorclosedhighlighted")) 
                     &&  game.physics.arcade.collide(this.sprite, doorManager.doors[i].sprite)) {
-                this.sprite.body.velocity.x = 0;
-                this.sprite.body.velocity.y = 0;
-                this.lockedOut(this.sprite,doorManager.doors[i].sprite);
+                 this.lockedOut(this.sprite,doorManager.doors[i].sprite);
             }
         }
         
         
-        if (this.isSelected) {
+        // moved to wasd keys
+        //if (this.isSelected) {
         
-            this.sprite.body.velocity.x = 0;
-            this.sprite.body.velocity.y = 0;
+            // this.sprite.body.velocity.x = 0;
+            // this.sprite.body.velocity.y = 0;
             
             //Disabling Point and Click
             /*
@@ -139,27 +139,60 @@ class Player {
 				
 			}*/
         
-            if (cursors.left.isDown)
-            {
-                this.sprite.body.velocity.x = -300;
-                this.sprite.frame = 0;
-            }
-            else if (cursors.right.isDown)
-            {
-                this.sprite.body.velocity.x = 300;
-                 this.sprite.frame = 1;
-            }
-            else if(cursors.up.isDown)
-            {
-                this.sprite.body.velocity.y = -300;
-                 this.sprite.frame = 2;
-            }
-            else if(cursors.down.isDown){
-                this.sprite.body.velocity.y = 300;
-                 this.sprite.frame = 3;
-            }
-        }
+            // if (cursors.left.isDown)
+            // {
+            //     this.sprite.body.velocity.x = -300;
+            //     this.sprite.frame = 0;
+            // }
+            // else if (cursors.right.isDown)
+            // {
+            //     this.sprite.body.velocity.x = 300;
+            //      this.sprite.frame = 1;
+            // }
+            // else if(cursors.up.isDown)
+            // {
+            //     this.sprite.body.velocity.y = -300;
+            //      this.sprite.frame = 2;
+            // }
+            // else if(cursors.down.isDown){
+            //     this.sprite.body.velocity.y = 300;
+            //      this.sprite.frame = 3;
+            // }
+        //}
     }
+    
+    goUp(game) {
+        this.sprite.body.velocity.y = -300;
+        this.sprite.frame = 2;
+    }
+    
+    goRight(game) {
+        this.sprite.body.velocity.x = 300;
+        this.sprite.frame = 1;
+    }
+    goLeft(game) {
+        this.sprite.body.velocity.x = -300;
+        this.sprite.frame = 0;
+    }
+    goDown(game) {
+        this.sprite.body.velocity.y = 300;
+        this.sprite.frame = 3;
+    }
+   
+    stopUp(game) {
+        this.sprite.body.velocity.y = 0;
+    }
+    
+    stopRight(game) {
+        this.sprite.body.velocity.x = 0;
+    }
+    stopLeft(game) {
+        this.sprite.body.velocity.x = 0;
+    }
+    stopDown(game) {
+        this.sprite.body.velocity.y = 0;
+    }
+    
     
     cameraFollow(game) {
     	// second parameter creates a 'deadzone' - Moving inside this Rectangle will not cause the camera to move

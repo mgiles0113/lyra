@@ -2,7 +2,10 @@ class Comm {
         constructor (game) {
             //Create Comm. Window
             //[TODO] Fix it to bottom. Determine size.
-            
+
+            this.commCard = $("#communicator-card");
+            this.commCard.css("background-color", "black");
+
             //Create player icons.
             this.p1_button = game.add.button(150,650,'p1_icon');
             this.p1_button.fixedToCamera = true;
@@ -12,7 +15,7 @@ class Comm {
             
             this.p3_button = game.add.button(450,650,'p3_icon');
             this.p3_button.fixedToCamera = true;
-            
+
             //Create item slots.
             this.items = [];
             this.items[0] = game.add.sprite(600, 650, 'empty');
@@ -26,8 +29,6 @@ class Comm {
             
             this.items[3] = game.add.sprite(960, 650, 'empty');
             this.items[3].fixedToCamera = true;
-            
-            
         }
         
         //Add Item Icon to Display 

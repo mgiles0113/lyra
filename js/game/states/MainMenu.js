@@ -16,7 +16,6 @@ Lyra.MainMenu.prototype = {
     preload: function() {},
     
 	create: function() {
-		this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background')
 		this.menuMusic = this.game.add.audio('menuMusic');
         
 	    if (this.game.userPreference.data.sound === "true") {

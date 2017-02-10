@@ -2,21 +2,16 @@ class ActionManager {
     constructor () {
         this.actionArr = [];
     }
-    updateAction(game, players, doorManager) {
+    updateAction(game, playerid, doorManager) {
         console.log("wouldn't it be great if this did something?")
-        for (var i =0; i<players.length; i++) {
-            if (players[i].isSelected) {
-                for (var j=0; j<doorManager.doors.length; j++) {
-                    switch (doorManager.doors[j].doorstate) {
-                        case "dooropenhighlighted" :
-                            console.log("closing player: " + i + " door: " + doorManager.doors[j].name);
-                            doorManager.doors[j].closedDoorHighlighted(game, i);
-                            return;
-                        case "doorclosedhighlighted" :
-                            console.log("opening player: " + i + " door: " + doorManager.doors[j].name);
-                            doorManager.doors[j].openDoorHighlighted(game, i);
-                            return;
-                    }
+
+        for (var j=0; j<doorManager.doors.length; j++) {
+            if (doorManager.doors[j].doorstate == game.gameData.doors["dooropenhighlighted"].imageTagList  ||
+                doorManager.doors[j].doorstate == game.gameData.doors["doorclosedhighlighted"].imageTagList) {
+                var playerIdx = doorManager.doors[j].findPlayerHighlight(playerid);
+                // player that caused the highlight for this door
+                if (playerIdx >= 0) {
+                    doorManager.doors[j].switchDoorState(game);
                 }
             }
         }

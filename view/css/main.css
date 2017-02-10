@@ -9,30 +9,27 @@ label {
     color: white;
 }
 
-#primary-card, #communicator-card {
-    background: black;
+#interface {
+    background: url('/assets/images/space.jpeg');
+    background-size: cover;
+    margin: 50px auto;
+    display: block;
     width: 1184px;
+    height: 800px;
 }
 
 #primary-card {
     height: 672px;
-    margin: 100px auto 0px;
     border-radius: 5px 5px 0px 0px;
 }
 
-#communicator-card {
-    height: 128px;
-    border-radius: 0px 0px 5px 5px;
-}
-
-
 #menu-title {
-    font-size: 8em;
+    font-size: 6em;
     color: white;
 }
 
 #login-title, #add-user-title {
-    font-size: 3em;
+    font-size: 2em;
     color: white;
 }
 
@@ -41,21 +38,22 @@ label {
 }
 
 #form-card {
-    margin-top: 25px;
-    padding: 25px 25px 50px 25px;
-    border-radius: 5px;
+    margin: 25px auto;
+    padding: 25px;
+    border-radius: 3px;
     text-align: center;
+    width: 480px;
     border: 1px solid white;
 }
 
-#form-card button, #add-user-button, #create-user-link {
-    margin: 25px auto -10px;
-    width: 100%;
+#form-card input, #form-card select, #submit-button, #create-user-link {
+    width: 75%;
+    margin: auto;
 }
 
 #submit-button, #add-user-button, #create-user-link {
-    min-height: 65px;
-    display: block;
+    margin-top: 25px;
+    height: 35px;
 }
 
 a {
@@ -65,11 +63,49 @@ a {
 a: visited {
     text-decoration: none;
 }
+
 a:hover {
     text-decoration: none;
     color: inherit;
 }
 
 #form-card label {
-    font-size: 2em;
+    font-size: 1.5em;
+}
+
+#communicator-card {
+    height: 128px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.communicator-submenu {
+    height: 128px;
+    display: inline-block;
+    float: left;
+}
+
+#player-selection {
+    width: 384px;
+    background-color: aqua;
+}
+
+#inventory {
+    width: 480px;
+    background-color: tomato;
+}
+
+#timer {
+    width: 320px;
+    background-color: pink;
+}
+
+#comm-players {
+    padding: 0px;
+}
+
+#comm-players li {
+    display: inline-block;
+    height: 100%;
+    width: 128px;
+    float: left;
 }

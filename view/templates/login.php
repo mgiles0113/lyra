@@ -9,49 +9,49 @@
     <script src="js/library/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="interface">
-            <div id="primary-card">
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <h1 class="text-center" id="menu-title">Lyra Escape</h1>
+    <div id="interface">
+        <div id="primary-card">
+            <h2 class="text-center" id="menu-title">Lyra Escape</h1>
+            <div id="form-card">
+                <h4 class="text-center" id="login-title">Identify Yourself</h3>
+                <hr>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username" id="login-username-label">Username</label>
+                        <input type="text" class="form-control" id="login-username" name="login-username" placeholder="username">
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6" id="form-card">
-                        <h3 class="text-center" id="login-title">Identify Yourself</h3>
-                        <hr>
-                        <form id="login-form">
-                            <div class="form-group">
-                                <label for="login-username" id="login-username-label">Username</label>
-                                <input type="text" class="form-control" id="login-username" name="login-username" placeholder="username">
-                            </div>
-                            <div class="form-group">
-                                <label for="login-password" id="login-password-label">Password</label>
-                                <input type="password" class="form-control" id="login-password" name="login-password" placeholder="password">
-                            </div>
-                            <select class="form-control" id="language-selection" disabled>
-                                <option>English</option>
-                            </select>
-                            <button type="submit" id="submit-button" class="btn">Submit</button>
-                        </form>
+                    <div class="form-group">
+                        <label for="login-password" id="login-password-label">Password</label>
+                        <input type="password" class="form-control" id="login-password" name="login-password" placeholder="password">
                     </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                        <a href="?page=addUser">
-                            <button type="button" id="create-user-link" class="btn">Need An Account?</button>
-                        </a>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
+                    <select class="form-control" id="language-selection" disabled>
+                        <option>English</option>
+                    </select>
+                    <button type="submit" id="submit-button" class="btn">Submit</button>
+                    <hr>
+                    <a href="?page=addUser">
+                        <button type="button" id="create-user-link" class="btn">Need An Account?</button>
+                    </a>
+                </form>
             </div>
-            <div id="communicator-card">
+        </div>
+        <div id="communicator-card">
+            <div class="communicator-submenu" id="player-selection">
+                <ul id="comm-players">
+                    <li>Player 1</li>
+                    <li>Player 2</li>
+                    <li>Player 3</li>
+                </ul>
+            </div>
+            <div class="communicator-submenu" id="inventory">
+                <ul id="comm-inventory">
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 4</li>
+                </ul>
+            </div>
+            <div class="communicator-submenu" id="timer">
                 
             </div>
         </div>
@@ -68,6 +68,7 @@
     <script src="js/game/lyra/itemsInit.js"></script>
     <script src="js/game/lyra/door.js"></script>
     <script src="js/game/lyra/actionManager.js"></script>
+    <script src="js/game/lyra/container.js"></script>
     <script src="js/game/lyra/userPreference.js"></script>
     <script src="js/game/lyra/testPost.js"></script>
 	<script src="js/game/states/Preload.js"></script>

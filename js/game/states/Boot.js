@@ -7,11 +7,9 @@ Lyra.Boot = function() {};
 Lyra.Boot.prototype = {
 	preload: function() {
 		this.load.image('logo', 'assets/images/lyraFakeLogo.png');
-		this.load.image('background', 'assets/images/space.jpeg');
 		this.load.image('preloadBar', 'assets/images/preloadBar.png');
 	},
 	create: function() {
-		this.game.stage.backgroundColor = '#fff';
 		// Unless you specifically know your game needs to support multi-touch, set this to 1
 		this.input.maxPointers = 1;
 

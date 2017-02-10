@@ -50,7 +50,7 @@ class Lyra extends Phaser.State {
         this.map.addMap(this.game, this.imageTagList);
 
         for (var i=0; i<this.mapLayerRef.length; i++) {
-            this.mapLayer[i] = this.map.map.createLayer(this.mapLayerRef[i]);a
+            this.mapLayer[i] = this.map.map.createLayer(this.mapLayerRef[i]);
             //this.mapLayer[i].resizeWorld(200,200);
             this.mapLayer[i].debugSettings.forceFullRedraw = true;
         }

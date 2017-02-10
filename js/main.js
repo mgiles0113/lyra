@@ -37,7 +37,7 @@ function populateLoginPage(languageText) {
 function loadGame(userId) {
     primaryCard.html('');
     document.title = gameTitle + " | " + jsonLanguage.mainmenu[languageChoice];
-    var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card');
+    var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card', null, true);
     game.userPreference = new UserPreference();
     game.userPreference.data.userId = userId;
     game.userPreference.ready = false;

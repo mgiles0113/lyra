@@ -16,7 +16,7 @@ class Items {
         var commItem = game.add.button(x, y, name);
         commItem.fixedToCamera = true;
         return commItem;
-        }
+    }
         
 }
 
@@ -29,6 +29,14 @@ Items.preloadItems = function (game) {
         game.load.image(game.itemData.items[i].name, game.itemData.items[i].itemRef);
     }
 }
+
+class ItemsManager {
+    constructor() {
+        this.itemsArr = [];
+        
+    }
+}
+
 
 //Method to add Item to Container/Inventory
 /*Items.addItemCon = function(game){
