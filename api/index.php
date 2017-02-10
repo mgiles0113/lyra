@@ -7,26 +7,43 @@ $jsonResponseBody = array(
 );
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['entity'] == 'addUser') {
-        addUser($_POST['username'], $_POST['password'], $_POST['languageChoice']);
-    } else if ($_POST['action'] == 'login') {
-	    login();
-    } else if ($_POST['entity'] == 'userPreference') {
-        saveUserPreferences($_POST['data']);
-    } else if ($_POST['entity'] == 'testPost') {
-        $gameSave = fopen("gameSave.json", "w");
-        fwrite($gameSave, json_encode($_POST['data']));
-        echo '{ "error" : ' . $_POST['data'] . ' }';
+    
+    switch ($_POST['entity']) {
+        case 'addUser':
+            addUser($_POST['username'], $_POST['password'], $_POST['languageChoice']);
+            break;
+        case 'userPreference':
+            saveUserPreferences($_POST['data']);
+            break;
+        case 'testPost':
+            $gameSave = fopen("gameSave.json", "w");
+            fwrite($gameSave, json_encode($_POST['data']));
+            echo '{ "error" : ' . $_POST['data'] . ' }';
+            break;
+    }
+    if ($_POST['action'] == 'login') {
+        login();
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if ($_GET['entity'] == 'map') {
-        getMap($_GET['mapSelection']);
-    } else if ($_GET['entity'] == 'language') {
-        getLanguage();
-    } else if ($_GET['entity'] == 'userPreference') {
-        getUserPreference($_GET['userId']);
-    } else if ($_GET['entity'] == 'restore') {
-        getGameData($_GET['gameSelected']);
+    switch ($_GET['entity']) {
+        case 'map':
+            getMap($_GET['mapSelection']);
+            break;
+        case 'language':
+            getLanguage();
+            break;
+        case 'userPreference':
+            getUserPreference($_GET['userId']);
+            break;
+        case 'gameData':
+            if ($_GET['action'] == 'list') {
+                getGameData('list', 'none', $_GET['userId']);
+            } else if ($_GET['action'] == 'game') {
+                getGameData('game', $_GET['gameSelected'], 'none');
+            }
+            break;
+        default:
+            
     }
 }
 
@@ -70,9 +87,13 @@ function getMap($mapSelection) {
     echo json_encode($mapData);
 }
 
-function getGameData($gameSelected) {
-    $mapData = file_get_contents($gameSelected . '.json');
-    echo json_encode($mapData);
+function getGameData($type, $gameFile, $userId) {
+    if ($type == 'game') {
+        $mapData = file_get_contents($gameFile . '.json');
+        echo json_encode($mapData);
+    } else if ($type == 'list') {
+        echo $userId;
+    }
 }
 
 function getLanguage() {
@@ -88,4 +109,5 @@ function getUserPreference($userId) {
 function saveUserPreferences($preferences) {
     $preferencesFile = fopen("json/UserPreferences/" . $preferences["userId"] . ".json", "w");
     fwrite($preferencesFile, json_encode($preferences));
+    echo json_encode('{ "error" : "none" }');
 }

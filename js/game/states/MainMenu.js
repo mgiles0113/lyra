@@ -9,9 +9,7 @@ Lyra.MainMenu = function() {
     this.menuTextSize = 40;
     this.menuTextVerticalSpace = 50;
 
-    this.loadGameMenuItems = {
-        "loadGameMenuItemsCount" : "0"
-    };
+    this.savedGames = [];
 };
 
 Lyra.MainMenu.prototype = {
@@ -48,7 +46,7 @@ Lyra.MainMenu.prototype = {
         this.loadGameText.fontSize = this.menuTextSize;
         this.loadGameText.fill = this.menuTextFill;
         this.loadGameText.events.onInputDown.add(this.loadGameMenu, this);
-        console.log(this.game.userPreference.data.languageChoice);
+
         this.optionsText = this.game.add.text(
                             this.game.world.centerX,
                             this.game.world.centerY + 50,
@@ -100,40 +98,51 @@ Lyra.MainMenu.prototype = {
 	    this.newGameText.fill = "#555559";
         this.optionsText.fill = "#555559";
         
-        if (!this.easyMapText) {
-            this.easyMapText = this.game.add.text(
-                                this.game.world.centerX + 250,
-                                this.game.world.centerY - 125,
-                                this.game.languageText.easymap[this.game.userPreference.data.languageChoice],
-                                'easyMap'
-                            );
-            this.easyMapText.inputEnabled = true;
-            this.easyMapText.fontSize = this.menuTextSize - 15;
-            this.easyMapText.fill = this.menuTextFill;
-            this.easyMapText.events.onInputDown.add(function() { this.restoreGameData(); }, this);
+        if(this.easyMapText) {
+            this.easyMapText.destroy(true);
+            this.easyMapText = '';
         }
-        if (!this.hardMapText) {
-            this.hardMapText = this.game.add.text(
-                                this.game.world.centerX + 250,
-                                this.game.world.centerY - 75,
-                                this.game.languageText.hardmap[this.game.userPreference.data.languageChoice],
-                                'largeMap'
-                            );
-            this.hardMapText.inputEnabled = true;
-            this.hardMapText.fontSize = this.menuTextSize - 15;
-            this.hardMapText.fill = this.menuTextFill;
-            this.hardMapText.events.onInputDown.add(function() { this.restoreGameData(); }, this);
+        if(this.hardMapText) {
+            this.hardMapText.destroy(true);
+            this.hardMapText = '';
         }
         
-        
-        // if(this.easyMapText) {
-        //     this.easyMapText.destroy(true);
-        //     this.easyMapText = '';
-        // }
-        // if(this.hardMapText) {
-        //     this.hardMapText.destroy(true);
-        //     this.hardMapText = '';
-        // }
+        this.getSavedGameList();
+	},
+	populateSavedGameList : function() {
+	    console.log('populating');
+	    if (!this.gameSaveText) {
+            this.gameSaveText = this.game.add.text(
+                                this.game.world.centerX + 250,
+                                this.game.world.centerY - 25,
+                                'gameSave',
+                                'gameSave'
+                            );
+            this.gameSaveText.inputEnabled = true;
+            this.gameSaveText.fontSize = this.menuTextSize - 15;
+            this.gameSaveText.fill = this.menuTextFill;
+            this.gameSaveText.events.onInputDown.add(function() { this.restoreGameData('gameSave'); }, this);
+        }
+	},
+	getSavedGameList : function() {
+	    $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            context: this,
+            data: { 
+                "entity" : "gameData",
+                "action" : "list",
+                "userId" : this.game.userPreference.data.userId
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                this.populateSavedGameList(JSON.parse(response));
+            },
+            error: function(response) {
+                console.log('fail');
+            }
+        });
 	},
 	optionsMenu: function() {
 	    console.log('options clicked');
@@ -170,27 +179,30 @@ Lyra.MainMenu.prototype = {
             }
         });
     },
-	restoreGameData: function() {
+	restoreGameData: function(gameSaveFile) {
         console.log('restore game data selected');
         $.ajax({
             url: apiUrl,
             type: 'GET',
             context: this,
             data: { 
-                "entity" : "restore",
-                "gameSelected" : "gameSave"
+                "entity" : "gameData",
+                "action" : "game",
+                "gameSelected" : gameSaveFile
             },
             dataType: 'json',
             success: function(response) {
+                console.log('it worked');
                 this.launchGame(JSON.parse(response));
             },
             error: function(response) {
+                console.log('fail');
                 console.log(response);
-                
             }
         });
     },
 	launchGame: function(mapData) {
+	    console.log('launching game');
 	    if (this.menuMusic.isPlaying) {
 	        this.menuMusic.stop();
 	    }

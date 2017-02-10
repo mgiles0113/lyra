@@ -1,11 +1,11 @@
-var createUserForm = $("#create-user-form");
-var createUserTitle = $("#create-user-title");
-var createUsername = $("#create-username");
-var createUsernameLabel = $("#create-username-label");
-var createPassword = $("#create-password");
-var createPasswordLabel = $("#create-password-label");
+var addUserForm = $("#add-user-form");
+var addUserTitle = $("#add-user-title");
+var addUsername = $("#add-username");
+var addUsernameLabel = $("#add-username-label");
+var addPassword = $("#add-password");
+var addPasswordLabel = $("#add-password-label");
 var languageSelection = $("#language-selection");
-var createUserButton = $("#create-user-button");
+var addUserButton = $("#add-user-button");
 
 var jsonLanguage;
 var languageChoice;
@@ -22,10 +22,10 @@ function populateLanguageText(languageText) {
 
     languageSelection.change(function() {
         languageChoice = languageSelection.val();
-        createUserTitle.html(jsonLanguage.createAccount[languageChoice]);
-        createUsernameLabel.html(jsonLanguage.username[languageChoice]);
-        createPasswordLabel.html(jsonLanguage.password[languageChoice]);
-        createUserButton.html(jsonLanguage.submit[languageChoice]);
+        addUserTitle.html(jsonLanguage.createAccount[languageChoice]);
+        addUsernameLabel.html(jsonLanguage.username[languageChoice]);
+        addPasswordLabel.html(jsonLanguage.password[languageChoice]);
+        addUserButton.html(jsonLanguage.submit[languageChoice]);
     });
 }
 
@@ -47,15 +47,15 @@ function loadLanguageFile(game) {
     });
 }
 
-createUserForm.submit(function(e) {
+addUserForm.submit(function(e) {
     e.preventDefault();
-
+    console.log('submitting');
     var method = 'POST',
         url = apiUrl,
         parameters = {
-            entity: 'createUser',
-            username : createUsername.val(),
-            password : createPassword.val(),
+            entity: 'addUser',
+            username : addUsername.val(),
+            password : addPassword.val(),
             languageChoice : languageSelection.val()
         };
 

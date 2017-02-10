@@ -7,3 +7,4 @@ lyra/vendor/*
 js/ENVIRONMENT.js
 api/SYSTEM_PARAMETERS.php
 api/gameSave.json
+api/json/UserPreferences/*

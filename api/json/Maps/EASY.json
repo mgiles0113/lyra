@@ -194,35 +194,49 @@
     ],
     "slimearray": [],
     "slimemotionlimit" : 10,
-    "doors": [
-        {
-        "imageTagList" : "dooropen",
-        "imageRefList" : "assets/lyraImages/dooropen.png",
+    "doors": {
+        "imageTagList" : "doorimages",
+        "imageRefList" : "assets/lyraImages/doorimages.png",
         "width" : 64,
         "height" : 64,
-        "frames" : 1 
+        "frames" : 4,
+        "dooropen" :
+            {
+            "imageTagList" : "dooropen",
+            "imageRefList" : "assets/lyraImages/dooropen.png",
+            "width" : 64,
+            "height" : 64,
+            "frame" : 0 ,
+            "animation" : [0]
+            },
+
+        "doorclosed" :
+            {        
+            "imageTagList" : "doorclosed",
+            "imageRefList" : "assets/lyraImages/doorclosed.png",
+            "width" : 64,
+            "height" : 64,
+            "frame" : 2 ,
+            "animation" : [2]
+            },
+        "dooropenhighlighted" :
+            {
+            "imageTagList" : "dooropenhighlighted",
+            "imageRefList" : "assets/lyraImages/dooropenhighlighted.png",
+            "width" : 64,
+            "height" : 64,
+            "frame" : 1 ,
+            "animation" : [0, 1]
+            },
+        "doorclosedhighlighted" :
+            {        
+            "imageTagList" : "doorclosedhighlighted",
+            "imageRefList" : "assets/lyraImages/doorclosedhighlighted.png",
+            "width" : 64,
+            "height" : 64,
+            "frame" : 3 ,
+            "animation" : [2, 3]
+            }
         },
-        {        
-        "imageTagList" : "doorclosed",
-        "imageRefList" : "assets/lyraImages/doorclosed.png",
-        "width" : 64,
-        "height" : 64,
-        "frames" : 1 
-        },
-        {
-        "imageTagList" : "dooropenhighlighted",
-        "imageRefList" : "assets/lyraImages/dooropenhighlighted.png",
-        "width" : 64,
-        "height" : 64,
-        "frames" : 1 
-        },
-        {        
-        "imageTagList" : "doorclosedhighlighted",
-        "imageRefList" : "assets/lyraImages/doorclosedhighlighted.png",
-        "width" : 64,
-        "height" : 64,
-        "frames" : 1 
-        }
-    ],
-    "doorsArr": []
+    "doorarray": []
 }

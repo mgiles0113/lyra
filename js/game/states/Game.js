@@ -10,10 +10,7 @@ Lyra.LyraGame.prototype = {
             this.mapLayer = [];  // layers of map tilesets
             this.items = [];  // list of items created on map
             this.roomArr = [];  // approx center of rooms on map
-            this.doorArr = [];  // locations of doors on the map
-            this.doors = []; // list of doors 
             this.suppresantArr = [];  // locations on the map where suppresant can be placed
-
         }
         this.ready = false;
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
@@ -89,6 +86,7 @@ Lyra.LyraGame.prototype = {
         for (var i = 0; i< this.game.gameData.crew.length; i++) {
             var xpos = this.game.gameData.characters[this.game.gameData.crew[i]].x;
             var ypos = this.game.gameData.characters[this.game.gameData.crew[i]].y;
+            //[TODO] place holder to put players slightly offset on game in cc
             if (xpos == null) {
                 xpos = this.roomArr["cc"].x + i*50;
             }
@@ -100,11 +98,7 @@ Lyra.LyraGame.prototype = {
             
         }
         
-        for (var i = 0; i<this.map.map.objects["doors"].length; i++ ) {
-            this.doorArr[this.map.map.objects["doors"][i].name] = this.map.map.objects["doors"][i];
-            this.doors[this.map.map.objects["doors"][i].name] = new Door();
-            this.doors[this.map.map.objects["doors"][i].name].addDoor(this.game, this.map.map.objects["doors"][i].name, this.doorArr[this.map.map.objects["doors"][i].name].x, this.doorArr[this.map.map.objects["doors"][i].name].y);
-        }
+        this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
         
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
             this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
@@ -142,9 +136,9 @@ Lyra.LyraGame.prototype = {
         //setup getting mouse input
         this.game.input.mouse.capture = true;
         
-        // setup control of the "s" key
-        this.escKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
-        this.escKey.onDown.add(this.saveGame, this);
+        // setup control of the "z" key
+        this.saveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+        this.saveKey.onDown.add(this.saveGame, this);
 
         // generate slime manager to control the slime
         var slimespore = getRandomInt(1, 7);
@@ -179,6 +173,8 @@ Lyra.LyraGame.prototype = {
         //Comm.Window --> Update Player Inventory;
         this.comm.displayInventory(this.game);
 
+        // check for overlap with doors
+        this.doorManager.checkPlayerOverlap (this.game, this.players)
 
         // update player
         for (var j=0; j < this.players.length; j++)
@@ -215,6 +211,8 @@ Lyra.LyraGame.prototype = {
 	    }
 	    
 	    this.slimeManager.saveSlimeManager(this.game);
+	    
+	    this.doorManager.saveDoorManager(this.game);
 	    
         var tp = new TestPost();
         tp.send(JSON.stringify(this.game.gameData));
