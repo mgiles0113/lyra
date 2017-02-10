@@ -99,6 +99,7 @@ Lyra.LyraGame.prototype = {
         }
         
         this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
+        this.actionManager = new ActionManager();
         
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
             this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
@@ -139,6 +140,10 @@ Lyra.LyraGame.prototype = {
         // setup control of the "z" key
         this.saveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         this.saveKey.onDown.add(this.saveGame, this);
+        
+        // setup action on object "e" key
+        this.actionKey = this.game.input.keyboard.addKey(Phaser.Keyboard.E);
+        this.actionKey.onDown.add(this.actionRequest, this);
 
         // generate slime manager to control the slime
         var slimespore = getRandomInt(1, 7);
@@ -218,5 +223,11 @@ Lyra.LyraGame.prototype = {
         tp.send(JSON.stringify(this.game.gameData));
 	    this.game.resume;
 	    
-	}
+	},
+    actionRequest: function() {
+		console.log("E pressed");
+		if (this.actionManager.actionArr.length > 0) {
+		    this.actionManager.updateAction(this.game);
+		}
+	},
 }

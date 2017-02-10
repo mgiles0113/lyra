@@ -62,6 +62,7 @@
     <script src="js/game/lyra/items.js"></script>
     <script src="js/game/lyra/itemsInit.js"></script>
     <script src="js/game/lyra/door.js"></script>
+    <script src="js/game/lyra/actionManager.js"></script>
     <script src="js/game/lyra/userPreference.js"></script>
     <script src="js/game/lyra/testPost.js"></script>
 	<script src="js/game/states/Preload.js"></script>
