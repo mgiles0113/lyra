@@ -35,24 +35,28 @@
                 </form>
             </div>
         </div>
-        <div id="communicator-card">
+        <div id="communicator-card" style="visibility: hidden">
             <div class="communicator-submenu" id="player-selection">
+                <h4>Player Control</h4>
                 <ul id="comm-players">
-                    <li>Player 1</li>
-                    <li>Player 2</li>
-                    <li>Player 3</li>
+                    <li id="p1"></li>
+                    <li id="p2"></li>
+                    <li id="p3"></li>
                 </ul>
             </div>
             <div class="communicator-submenu" id="inventory">
+                <h4>Inventory</h4>
                 <ul id="comm-inventory">
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
+                    <li id="item1"></li>
+                    <li id="item2"></li>
+                    <li id="item3"></li>
+                    <li id="item4"></li>
                 </ul>
             </div>
             <div class="communicator-submenu" id="timer">
-                
+                <h4>Oxygen</h4>
+                <p>4:56</p>
+                <img src="assets/images/timerBar.png">
             </div>
         </div>
     </div>

@@ -8,37 +8,25 @@
     <script src="js/library/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div id="interface">
         <div id="primary-card">
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                    <h1 class="text-center" id="menu-title">Lyra Escape</h1>
+            <h2 class="text-center" id="menu-title">Lyra Escape</h2>
+            <form id="add-user-form">
+                <h3 class="text-center" id="add-user-title">Create Account</h3>
+                <hr>
+                <div class="form-group">
+                    <label for="add-username" id="add-username-label">Username</label>
+                    <input type="text" class="form-control" id="add-username" name="add-username" placeholder="username">
                 </div>
-                <div class="col-md-2"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" id="form-card">
-                    <h3 class="text-center" id="add-user-title">Create Account</h3>
-                    <hr>
-                    <form id="add-user-form">
-                        <div class="form-group">
-                            <label for="add-username" id="add-username-label">Username</label>
-                            <input type="text" class="form-control" id="add-username" name="add-username" placeholder="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="add-password" id="add-password-label">Password</label>
-                            <input type="password" class="form-control" id="add-password" name="add-password" placeholder="password">
-                        </div>
-                        <select class="form-control" id="language-selection" disabled>
-                            <option>English</option>
-                        </select>
-                        <button type="submit" id="add-user-button" class="btn">Add Now</button>
-                    </form>
+                <div class="form-group">
+                    <label for="add-password" id="add-password-label">Password</label>
+                    <input type="password" class="form-control" id="add-password" name="add-password" placeholder="password">
                 </div>
-                <div class="col-md-3"></div>
-            </div>
+                <select class="form-control" id="language-selection" disabled>
+                    <option>English</option>
+                </select>
+                <button type="submit" id="add-user-button" class="btn">Add Now</button>
+            </form>
         </div>
     </div>
     <script src="js/ENVIRONMENT.js"></script>

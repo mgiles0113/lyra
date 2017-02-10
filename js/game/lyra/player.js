@@ -38,8 +38,8 @@ class Player {
             // [TODO] refer to function in player object?
             console.log("overlap with slime");
         });
-        this.sprite.body.bounce.x = 0.2;
-        this.sprite.body.bounce.y = 0.2;
+        // this.sprite.body.bounce.x = 0.2;
+        // this.sprite.body.bounce.y = 0.2;
     }
     
     validDest(game,destCoords){

@@ -31,6 +31,11 @@
         "PRT" : "Login",
         "ESP" : "Iniciar Sesión"
     },
+    "story" : {
+        "ENG" : "Story",
+        "PRT" : "Lyra's Tale",
+        "ESP" : "Historia"
+    },
     "mainmenu" : {"ENG" : "Main Menu", "PRT": "Ships Manifest", "ESP": "Menú principal"},
     "newgame" : {"ENG" : "New Game", "PRT": "First voyage", "ESP": "Nuevo juego"},
     "loadgame" : {"ENG" : "Load Game", "PRT": "Underway", "ESP": "Cargar juego"},

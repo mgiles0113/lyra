@@ -193,7 +193,7 @@
                 [29]
     ],
     "slimearray": [],
-    "slimemotionlimit" : 10,
+    "slimemotionlimit" : 100,
     "doors": {
         "imageTagList" : "doorimages",
         "imageRefList" : "assets/lyraImages/doorimages.png",

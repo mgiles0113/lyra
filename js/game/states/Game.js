@@ -34,7 +34,7 @@ Lyra.LyraGame.prototype = {
         Comm.preloadComm(this.game);
         
         //items assets
-        Items.preloadItems(this.game);
+        Items.ItemImages(this.game);
 
    		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},
@@ -43,7 +43,10 @@ Lyra.LyraGame.prototype = {
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-        this.game.world.scaleMode = 
+        //Create comm window.
+        this.comm = new Comm(this.game);
+
+        //this.game.world.scaleMode = 
         // there are other ways to do this, sets a background color for the game          
         this.game.stage.backgroundColor = '#555';
 
@@ -123,10 +126,6 @@ Lyra.LyraGame.prototype = {
         // when the game dimensions (mapwidth, mapheigt) are set to some smaller dimension than the map
         // the display is scaled to fit the full size of the defined canvas
         //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-        
-        //Create comm window.
-        this.comm = new Comm(this.game);
         
         //Create all in game items.
         this.ingameItems = new Items();

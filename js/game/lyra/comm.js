@@ -4,31 +4,23 @@ class Comm {
             //[TODO] Fix it to bottom. Determine size.
 
             this.commCard = $("#communicator-card");
+            this.commCard.css("visibility", "visible");
             this.commCard.css("background-color", "black");
 
-            //Create player icons.
-            this.p1_button = game.add.button(150,650,'p1_icon');
-            this.p1_button.fixedToCamera = true;
-            
-            this.p2_button = game.add.button(300,650,'p2_icon');
-            this.p2_button.fixedToCamera = true;
-            
-            this.p3_button = game.add.button(450,650,'p3_icon');
-            this.p3_button.fixedToCamera = true;
+            // create player icons
+            this.playerButtons = {
+                p1 : $("#p1"),
+                p2 : $("#p2"),
+                p3 : $("#p3")
+            };
 
-            //Create item slots.
-            this.items = [];
-            this.items[0] = game.add.sprite(600, 650, 'empty');
-            this.items[0].fixedToCamera = true;
-            
-            this.items[1] = game.add.sprite(720, 650, 'empty');
-            this.items[1].fixedToCamera = true;
-            
-            this.items[2] = game.add.sprite(840, 650, 'empty');
-            this.items[2].fixedToCamera = true;
-            
-            this.items[3] = game.add.sprite(960, 650, 'empty');
-            this.items[3].fixedToCamera = true;
+            // create item slots
+            this.itemButtons = {
+                item1 : $("#item1"),
+                item2 : $("#item2"),
+                item3 : $("#item3"),
+                item4 : $("#item4")
+            };
         }
         
         //Add Item Icon to Display 
@@ -62,7 +54,7 @@ class Comm {
         
         switchPlayer(players, game){
             //Update Current Player to Player1
-            this.p1_button.events.onInputDown.add(function(){
+            this.playerButtons.p1.click(function(){
                 if(players[0].isSelected == false){
                     players[0].togglePlayer();
                     
@@ -78,7 +70,7 @@ class Comm {
             });
             
             //Update Current Player to Player2
-            this.p2_button.events.onInputDown.add(function(){
+            this.playerButtons.p2.click(function(){
                 if(players[1].isSelected == false){
                     players[1].togglePlayer();
                     
@@ -94,7 +86,7 @@ class Comm {
             });
             
             //Update Current Player to Player3
-            this.p3_button.events.onInputDown.add(function(){
+            this.playerButtons.p3.click(function(){
                 if(players[2].isSelected == false){
                     players[2].togglePlayer();
                     
