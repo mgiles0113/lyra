@@ -179,7 +179,9 @@ class DoorManager {
     checkPlayerOverlap (game, players) {
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.doors.length; j++) {
-                if (this.doors[j].doorstate == game.gameData.doors["doorclosed"].imageTagList || game.gameData.doors["doorclosedhighlighted"].imageTagList)
+                if (this.doors[j].doorstate == game.gameData.doors["doorclosed"].imageTagList || this.doors[j].doorstate == game.gameData.doors["doorclosedhighlighted"].imageTagList) {
+                     this.doors[j].sprite.body.setSize(game.gameData.doors[this.doors[j].doorstate].width + 10, game.gameData.doors[this.doors[j].doorstate].height + 10);
+                }
                 if ((this.doors[j].findPlayerHighlight(i) < 0) && (game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
                 {  // this player is currently not causing the highlight
                         // console.log("overlap true: player: " + i + " door: " + this.doors[j].name);
@@ -207,6 +209,7 @@ class DoorManager {
                                 break;
                         }
                 }
+                this.doors[j].sprite.body.setSize(game.gameData.doors[this.doors[j].doorstate].width, game.gameData.doors[this.doors[j].doorstate].height);
             }
         }
     }
