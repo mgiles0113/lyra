@@ -262,31 +262,56 @@
         }
     },
     "itemsarray" : [],
+    "containernames" : ["smallbox","largebox", "transparent"],
     "containers" : {
-        "SMALLBOXOPEN" : {
+        "smallbox" : {
+            "imageTag" : "smallbox",
             "itemRef":"assets/sprites/smallbox.png",
-            "name": "small box open",
+            "frames" : 4,
+            "name": "smallbox",
             "width" : 32,
-            "height" : 32
+            "height" : 32,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 1,
+            "containerstate" : "closed",
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : true
         },
-        "LARGEBOXOPEN" : {
-            "itemRef":"assets/sprites/items/largebox.png",
-            "name": "large box open",
+        "largebox" : {
+            "imageTag" : "largebox",
+            "itemRef":"assets/sprites/largebox.png",
+            "frames" : 4,
+            "name": "largebox",
             "width" : 64,
-            "height" : 32
+            "height" : 32,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 2,
+            "containerstate" : "closed",
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : true
         },
-        "CONTAINEROPEN" : {
-            "itemRef":"assets/sprites/smallbox.png",
-            "name": "container open",
+        "transparent" : {
+            "imageTag" : "transparent",
+            "itemRef":"assets/sprites/transparent.png",
+            "frames" : 4,
+            "name": "transparent",
             "width" : 32,
-            "height" : 32
-        },
-        "CONTAINERCLOSED" : {
-            "itemRef":"assets/sprites/smallbox.png",
-            "name": "container closed",
-            "width" : 32,
-            "height" : 32
+            "height" : 32,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 1,
+            "containerstate" : "open",
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : true
         }
-    },
+        },
     "containersarray" : []
 }

@@ -8,55 +8,105 @@ class Container {
         this.itemslist = containerData.itemslist;
         this.playerHighlight = containerData.playerHighlight;
         this.containerstate = containerData.containerstate;
-        this.visible = containerData.visible;
-        if (this.visible) {
-            this.sprite = game.add.sprite(this.x, this.y, containerData.containerTag);
-            
+        this.sprite = game.add.sprite(this.x, this.y, containerData.containerTag);
+        for (var i=0; i<containerData.animationsTags.length; i++) {
+            this.sprite.animations.add(game.gameData.containers[this.containerstate].animationTags[i],game.gameData.containers[this.containerstate].animationArr[i],5,true);
         }
-//        else if ()
+        game.physics.arcade.enable(this.sprite);
+        this.sprite.body.setSize(game.gameData.containers[this.containerstate].width, game.gameData.containers[this.containerstate].height);
+        this.sprite.animations.play(containerData.containerstate);
+        this.sprite.immovable = containerData.immovable; this.sprite.body.immovable = containerData.immovablebody; this.sprite.body.moves = containerData.moves;
+        this.sprite.body.checkCollision.any = containerData.checkCollision;
+    }
+    
+    findPlayerHighlight(playerid) {
+        for (var i = 0; i < this.playerHighlight.length; i++) {
+            if (playerid == this.playerHighlight[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    
+    saveContainer () {
+        var containerData = {
+            idx : this.idx,
+            name: this.name,
+            itemscapacity : this.itemscapacity,
+            itemslist : this.itemslist,
+            containerstate : this.containerstate,
+            x : this.sprite.body.position.x,
+            y : this.sprite.body.position.y,
+            playerHighlight : this.playerHighlight,
+            immovable : this.sprite.immovable,
+            immovablebody : this.sprite.immovablebody,
+            moves : this.sprite.body.moves,
+            checkCollision : this.sprite.body.checkCollision.any
+        }
+        return containerData;
+    }
+    
+    
+}
+
+Container.rawData = function(game, idx, x, y, name, itemslist) {
+    var rawContainerData = {
+        idx : idx,
+        x : x,
+        y : y,
+        name : name,
+        itemscapacity : game.gameData.containers[name].itemscapacity,
+        itemslist : itemslist,
+        containerstate : game.gameData.containers[name].containerstate,
+        playerHighlight : [],
+        immovable : game.gameData.containers[name].immovable,
+        immovablebody : game.gameData.containers[name].immovablebody,
+        moves : game.gameData.containers[name].moves,
+        checkCollision : game.gameData.containers[name].checkCollision
+    }       
+    return rawContainerData;
+}
+
+Container.preloadContainerImages = function(game) {
+    for (var i=0; i< game.gameData.containernames.length; i++) {
+        var name = game.gameData.containernames[i];
+        game.load.spritesheet(game.gameData.containers[name].imageTag, game.gameData.containers[name].itemRef, game.gameData.containers[name].width,game.gameData.containers[name].height, game.gameData.containers[name].frames, 0,0);
+    }
+}
+
+class ContainerManager {
+    // containerLocType has to be an array of objects containing the locations of container and it's type/name and list of items
+    constructor (game, containerLocType) {
+        this.containers = [];
+        if  (game.gameData.containerarray.length < 1) {
+            for (var i = 0; i < containerLocType.length; i++) {
+                this.containers[i] = new Container();
+                var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist);
+                this.containers[i].addContainer(game, containerData);
+            }
+        }
+        else {
+            // load existing containers into array
+            for (var i = 0; i < game.gameData.containerarray.length ; i++) {
+                this.doors[game.gameData.containerarray[i].idx] = new Container();
+                this.doors[game.gameData.containerarray[i].idx].addContainer(game, game.gameData.containerarray[i]);
+            }
+        }
+    }
+    
+    saveContainerManager (game) {
+        var savedContainers = [];
+        for (var i = 0; i < this.containers.length; i++) {
+            savedContainers[i] = this.containers[i].saveContainer(); 
+        }
+        game.gameData.containerarray = savedContainers;
     }
     
     
     
 }
 
-class ContainerManager {
-    
-    
-}
-
-
-// class Door {
-//     addDoor (game, doorData) {
-//         this.idx = doorData.idx;
-//         this.x = doorData.x;
-//         this.y = doorData.y;
-//         this.name = doorData.name;
-//         this.playerHighlight = doorData.playerHighlight;
-//         this.doorstate = doorData.doorstate;
-//         this.sprite = game.add.sprite(this.x, this.y, game.gameData.doors.imageTagList);
-//         this.sprite.animations.add(game.gameData.doors["dooropen"].imageTagList, game.gameData.doors["dooropen"].animation, 5, true)
-//         this.sprite.animations.add(game.gameData.doors["doorclosed"].imageTagList, game.gameData.doors["doorclosed"].animation, 5, true)
-//         this.sprite.animations.add(game.gameData.doors["dooropenhighlighted"].imageTagList, game.gameData.doors["dooropenhighlighted"].animation, 5, true)
-//         this.sprite.animations.add(game.gameData.doors["doorclosedhighlighted"].imageTagList, game.gameData.doors["doorclosedhighlighted"].animation, 5, true)
-//         //this.sprite.frame = game.gameData.doors[this.state].frame;
-//         // this.sprite.loadTexture(game.gameData.doors.imageTagList,0, true);
-//         game.physics.arcade.enable(this.sprite);
-//         this.sprite.body.setSize(game.gameData.doors[doorData.doorstate].width, game.gameData.doors[doorData.doorstate].height);
-//         this.sprite.animations.play(this.doorstate);
-//         this.sprite.immovable = true; this.sprite.body.immovable = true; this.sprite.body.moves = false;
-//         this.sprite.body.checkCollision.any = false;
-//     }
-
-//     findPlayerHighlight(playerid) {
-//         for (var i = 0; i < this.playerHighlight.length; i++) {
-//             if (playerid == this.playerHighlight[i]) {
-//                 return i;
-//             }
-//         }
-//         return -1;
-//     }
-    
 //     // create a new sprite based on door state
 //     openDoor (game, playerid) {
 //         var playerIdx = this.findPlayerHighlight(playerid);
@@ -143,66 +193,10 @@ class ContainerManager {
 
 
 
-//     saveDoor () {
-//         var doorData = {
-//             idx : this.idx,
-//             name: this.name,
-//             doorstate: this.doorstate,
-//             x : this.sprite.body.position.x,
-//             y : this.sprite.body.position.y,
-//             playerHighlight : this.playerHighlight
-//         }
-//         return (doorData);
-//     }
-// }
 
 
-// Door.preloadDoorImages = function(game) {
-//     // load all the specified door images
-//     game.load.spritesheet(game.gameData.doors.imageTagList,game.gameData.doors.imageRefList, game.gameData.doors.width, game.gameData.doors.height, game.gameData.doors.frames,0,0);
-
-//     // game.load.image(game.gameData.doors["dooropen"].imageTagList,game.gameData.doors["dooropen"].imageRefList);
-//     // game.load.image(game.gameData.doors["doorclosed"].imageTagList,game.gameData.doors["doorclosed"].imageRefList);
-//     // game.load.image(game.gameData.doors["dooropenhighlighted"].imageTagList,game.gameData.doors["dooropenhighlighted"].imageRefList);
-//     // game.load.image(game.gameData.doors["doorclosedhighlighted"].imageTagList,game.gameData.doors["doorclosedhighlighted"].imageRefList);
-// }
-
-// Door.rawData = function(idx, x, y, name, doorstate) {
-//     var rawDoorData = {
-//             idx : idx,
-//             x: x,
-//             y: y,
-//             name: name,
-//             doorstate: doorstate,
-//             playerHighlight: new Array()
-//     }
-//     return (rawDoorData)
-// }
 
 
-// class DoorManager {
-
-//     constructor (game, doorLocArr) {
-//         if (game.gameData.doorarray.length < 1) {
-//             this.doors = [];
-//             for (var i = 0; i<doorLocArr.length; i++ ) {
-//                 //console.log(doorLocArr[i]);
-//                 this.doors[i] = new Door();
-//                 var doorData = Door.rawData(i,  doorLocArr[i].x, doorLocArr[i].y, doorLocArr[i].name, game.gameData.doors["dooropen"].imageTagList);
-//                 //console.log(doorData);
-//                 this.doors[i].addDoor(game, doorData);
-//             }
-//         }
-//         else {
-//             // load existing doors into array
-//             this.doors = [];
-//             for (var i = 0; i < game.gameData.doorarray.length ; i++) {
-//                 this.doors[game.gameData.doorarray[i].idx] = new Door();
-//                 this.doors[game.gameData.doorarray[i].idx].addDoor(game, game.gameData.doorarray[i]);
-//             }
-//         }
-//     }
-    
 //     // switch door states if overlap with the player
 //     checkPlayerOverlap (game, players) {
 //         for (var i=0; i < players.length; i++) {
@@ -242,12 +236,3 @@ class ContainerManager {
 //         }
 //     }
     
-//     saveDoorManager (game) {
-//         var savedDoors = [];
-//         for (var i = 0; i < this.doors.length; i++) {
-//             savedDoors[i] = this.doors[i].saveDoor(); 
-//         }
-//         game.gameData.doorarray = savedDoors;
-//     }
-    
-// }
