@@ -17,6 +17,7 @@ class Door {
         this.sprite.body.setSize(game.gameData.doors[doorData.doorstate].width, game.gameData.doors[doorData.doorstate].height);
         this.sprite.animations.play(this.doorstate);
         this.sprite.immovable = true; this.sprite.body.immovable = true; this.sprite.body.moves = false;
+        this.sprite.body.checkCollision.any = false;
     }
 
     findPlayerHighlight(playerid) {
@@ -42,6 +43,7 @@ class Door {
             // this.sprite.onTextureUpdate;
             this.sprite.animations.play(this.doorstate);
             // console.log("doorstate: " + this.doorstate );
+            this.sprite.body.checkCollision.any = false;
         }    
     }
 
@@ -58,6 +60,7 @@ class Door {
             // game.debug.body(this.sprite);
             this.sprite.animations.play(this.doorstate);
             // console.log("doorstate: " + this.doorstate );
+            this.sprite.body.checkCollision.any = true;
         }
         
     }
@@ -68,6 +71,7 @@ class Door {
         // this.sprite.loadTexture(game.gameData.doors.imageTagList,1, true);
         // game.debug.body(this.sprite);
         this.sprite.animations.play(this.doorstate);
+        this.sprite.body.checkCollision.any = false;
         // console.log("doorstate: " + this.doorstate );
         
         var playerIdx = this.findPlayerHighlight(playerid);
@@ -83,6 +87,7 @@ class Door {
         // this.sprite.loadTexture(game.gameData.doors.imageTagList,3, true);
         // game.debug.body(this.sprite);
         this.sprite.animations.play(this.doorstate);
+        this.sprite.body.checkCollision.any = true;
         // console.log("doorstate: " + this.doorstate );
         // player that caused the highlight added to the highlight list
         
@@ -98,9 +103,11 @@ class Door {
         switch (this.doorstate) {
             case game.gameData.doors["dooropenhighlighted"].imageTagList : 
                 this.doorstate = game.gameData.doors["doorclosedhighlighted"].imageTagList;
+                this.sprite.body.checkCollision.any = true;
                 break;
             case game.gameData.doors["doorclosedhighlighted"].imageTagList:
                 this.doorstate = game.gameData.doors["dooropenhighlighted"].imageTagList;
+                this.sprite.body.checkCollision.any = false;
                 break;
             }
         this.sprite.animations.play(this.doorstate);
@@ -172,6 +179,7 @@ class DoorManager {
     checkPlayerOverlap (game, players) {
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.doors.length; j++) {
+                if (this.doors[j].doorstate == game.gameData.doors["doorclosed"].imageTagList || game.gameData.doors["doorclosedhighlighted"].imageTagList)
                 if ((this.doors[j].findPlayerHighlight(i) < 0) && (game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
                 {  // this player is currently not causing the highlight
                         // console.log("overlap true: player: " + i + " door: " + this.doors[j].name);

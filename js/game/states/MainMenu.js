@@ -23,8 +23,8 @@ Lyra.MainMenu.prototype = {
 	    }
 
         this.newGameText = this.game.add.text(
-                            this.game.world.centerX - 150,
-                            this.game.world.centerY - 100,
+                            this.game.world.centerX - 350,
+                            this.game.world.centerY - 300,
                             this.game.languageText.newgame[this.game.userPreference.data.languageChoice],
                             'newGame'
                         );
@@ -34,8 +34,8 @@ Lyra.MainMenu.prototype = {
         this.newGameText.events.onInputDown.add(this.newGame, this);
         
         this.loadGameText = this.game.add.text(
-                            this.game.world.centerX - 150,
-                            this.game.world.centerY - 25,
+                            this.game.world.centerX - 350,
+                            this.game.world.centerY - 225,
                             this.game.languageText.loadgame[this.game.userPreference.data.languageChoice],
                             'loadGame'
                         );
@@ -45,8 +45,8 @@ Lyra.MainMenu.prototype = {
         this.loadGameText.events.onInputDown.add(this.loadGameMenu, this);
 
         this.optionsText = this.game.add.text(
-                            this.game.world.centerX - 150,
-                            this.game.world.centerY + 50,
+                            this.game.world.centerX - 350,
+                            this.game.world.centerY - 150,
                             this.game.languageText.options[this.game.userPreference.data.languageChoice],
                             'options'
                         );
@@ -56,8 +56,8 @@ Lyra.MainMenu.prototype = {
         this.optionsText.events.onInputDown.add(this.optionsMenu, this);
         
         this.storyText = this.game.add.text(
-                            this.game.world.centerX - 150,
-                            this.game.world.centerY + 125,
+                            this.game.world.centerX - 350,
+                            this.game.world.centerY - 75,
                             this.game.languageText.story[this.game.userPreference.data.languageChoice],
                             'story'
                         );
@@ -119,8 +119,8 @@ Lyra.MainMenu.prototype = {
         }
         if (!this.easyMapText) {
             this.easyMapText = this.game.add.text(
-                                this.game.world.centerX + 100,
-                                this.game.world.centerY - 125,
+                                this.game.world.centerX - 100,
+                                this.game.world.centerY - 325,
                                 this.game.languageText.easymap[this.game.userPreference.data.languageChoice],
                                 'easyMap'
                             );
@@ -131,8 +131,8 @@ Lyra.MainMenu.prototype = {
         }
         if (!this.hardMapText) {
             this.hardMapText = this.game.add.text(
-                                this.game.world.centerX + 100,
-                                this.game.world.centerY - 75,
+                                this.game.world.centerX - 100,
+                                this.game.world.centerY - 275,
                                 this.game.languageText.hardmap[this.game.userPreference.data.languageChoice],
                                 'largeMap'
                             );
@@ -160,8 +160,8 @@ Lyra.MainMenu.prototype = {
         
         if (!this.gameSaveLoadText) {
             this.gameSaveLoadText = this.game.add.text(
-                                this.game.world.centerX + 100,
-                                this.game.world.centerY - 25,
+                                this.game.world.centerX - 100,
+                                this.game.world.centerY - 225,
                                 'Loading...',
                                 'gameSaveLoad'
                             );
@@ -175,8 +175,8 @@ Lyra.MainMenu.prototype = {
 	    console.log('populating');
 	    if (!this.gameSaveText) {
             this.gameSaveText = this.game.add.text(
-                                this.game.world.centerX + 100,
-                                this.game.world.centerY - 25,
+                                this.game.world.centerX - 100,
+                                this.game.world.centerY - 225,
                                 'gameSave',
                                 'gameSave'
                             );

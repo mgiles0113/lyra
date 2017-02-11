@@ -136,6 +136,30 @@ Lyra.LyraGame.prototype = {
         //setup getting mouse input
         this.game.input.mouse.capture = true;
         
+        // options overlay container
+        
+        this.optionsOverlay = $("<div id='optionsOverlay'></div>");
+        this.optionsOverlay.css("width", "100vw");
+        this.optionsOverlay.css("height", "100vh");
+        this.optionsOverlay.css("backgroundColor", "rgba(0, 0, 0, 0.5)");
+        this.optionsOverlay.css("position", "absolute");
+        this.optionsOverlay.css("top", "0px");
+        this.optionsOverlay.css("visibility", "hidden");
+        $("body").append(this.optionsOverlay);
+        
+        this.overlayVisible = 0;
+        $(document).keyup(function(e) {
+            if (e.keyCode == 27) { // escape key maps to keycode `27`
+                if (this.overlayVisible === 0) {
+                    $("#optionsOverlay").css("visibility", "visible");
+                    this.overlayVisible = 1;
+                } else {
+                    $("#optionsOverlay").css("visibility", "hidden");
+                    this.overlayVisible = 0;
+                }
+            }
+        });
+        
         // setup control of the "z" key
         this.saveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
         this.saveKey.onDown.add(this.saveGame, this);

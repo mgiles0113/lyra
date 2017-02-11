@@ -93,8 +93,8 @@ class Player {
         //game.physics.arcade.overlap(this.sprite, floors);
         
         for(var i=0; i<doorManager.doors.length; i++) {
-            if (((doorManager.doors[i].state == "doorclosed") || (doorManager.doors[i].state == "doorclosedhighlighted")) 
-                    &&  game.physics.arcade.collide(this.sprite, doorManager.doors[i].sprite)) {
+            if (((doorManager.doors[i].doorstate == "doorclosed") || (doorManager.doors[i].doorstate == "doorclosedhighlighted")) 
+                    &&  game.physics.arcade.collide(doorManager.doors[i].sprite, this.sprite)) {
                  this.lockedOut(this.sprite,doorManager.doors[i].sprite);
             }
         }

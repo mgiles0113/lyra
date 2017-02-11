@@ -7,6 +7,7 @@ class Items {
         this.sprite.body.setSize(32,32);
         this.sprite.body.setCircle(20); // radius of collision body
         this.sprite.anchor.set(0.5, 0.5); // center collision over image
+        this.sprite.scale.setTo(0.5, 0.5)
 
     }
     
@@ -55,11 +56,10 @@ Items.rawData = function(idx, x, y, name, doorstate) {
 
 class ItemsManager {
 
-    constructor (game, doorLocArr) {
+    constructor (game, itemLocArr) {
         this.items = [];
-        if (game.gameData.doorarray.length < 1) {
-            for (var i = 0; i<doorLocArr.length; i++ ) {
-                //console.log(doorLocArr[i]);
+        if (game.gameData.itemsarray.length < 1) {
+            for (var i = 0; i<itemLocArr.length; i++ ) {
                 this.doors[i] = new Door();
                 var doorData = Door.rawData(i,  doorLocArr[i].x, doorLocArr[i].y, doorLocArr[i].name, game.gameData.doors["dooropen"].imageTagList);
                 //console.log(doorData);

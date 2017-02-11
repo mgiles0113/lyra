@@ -1,6 +1,6 @@
 body {
-    background-image: url("/assets/images/lyra_prototype_texture_1.png");
-    background-repeat: repeat;
+    background-image: url("/assets/images/space.jpeg");
+    background-size: cover;
     padding: 0px;
     margin: 0px;
 }
@@ -10,9 +10,7 @@ label {
 }
 
 #interface {
-    background: url('/assets/images/space.jpeg');
-    background-size: cover;
-    margin: 50px auto;
+    margin: 150px auto;
     display: block;
     width: 1184px;
     height: 800px;
@@ -44,6 +42,7 @@ label {
     text-align: center;
     width: 480px;
     border: 1px solid white;
+    background: rgba(0,0,0,.6);
 }
 
 #form-card input,
