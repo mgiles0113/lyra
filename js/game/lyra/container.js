@@ -40,6 +40,33 @@ class Container {
         return false;
     }
     
+    //add item to the item list
+    addItemToList(game, name) {
+        if (this.itemslist.length < this.itemscapacity) {
+            this.itemslist.push(name);
+            // fix container display
+            this.setupContainerImage(game);
+        }
+        else {
+            //[TODO] raise a signal that says this item can't be added
+            console.log("the " + this.name +" container is full");
+        }
+    }
+    
+    // remove item from the list
+    removeItemFromList(game, name) {
+        for (var i=0; i< this.itemslist.length; i++) {
+            if (this.name == name) {
+                this.hideAllItems();
+                this.itemslist.splice(i, 1);
+                this.showAllItems(game);
+                return (true);
+            }
+        }
+        return false;
+    }
+    
+
     showItem(game, x, y, name, scalefactor) {
         this.itemSprites[name] = game.add.sprite(x, y, name);
         this.itemSprites[name].anchor.set(0.5, 0.5);
@@ -52,12 +79,13 @@ class Container {
         this.itemSprites[name].destroy();
     }
     
+    //[TODO fix positioning the sprites based on how many in the container]
     showAllItems(game) {
         for (var i=0; i<this.itemslist.length; i++) {
-            if (this.itemSprites[this.itemslist[i]] == undefined) {
-                this.showItem(game, this.sprite.body.position.x + 16, this.sprite.body.position.y + 16, this.itemslist[i], 0.5);
-            }         
-            this.itemSprites[this.itemslist[i]].bringToTop();
+            if (this.itemSprites[this.itemslist[i]]) {
+                this.hideItem(this.itemslist[i]);
+            }    
+            this.showItem(game, this.sprite.body.position.x + 16, this.sprite.body.position.y + 16, this.itemslist[i], 0.5);
         }
     }
     
@@ -221,6 +249,8 @@ class ContainerManager {
     // containerLocType has to be an array of objects containing the locations of container and it's type/name and list of items
     constructor (game, containerLocType) {
         this.containers = [];
+        this.containerCount = 0;
+        // keep track of largest container index for creating and deleting.
         if  (game.gameData.containerarray.length < 1) {
             for (var i = 0; i < containerLocType.length; i++) {
                 this.containers[i] = new Container();
@@ -228,14 +258,40 @@ class ContainerManager {
                 this.containers[i].addContainer(game, containerData);
                 this.containers[i].setupContainerImage(game);
             }
+            this.containerCount = this.containers.length;
         }
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.containerarray.length ; i++) {
-                this.containers[game.gameData.containerarray[i].idx] = new Container();
-                this.containers[game.gameData.containerarray[i].idx].addContainer(game, game.gameData.containerarray[i]);
+                this.containers[i] = new Container();
+                this.containers[i].addContainer(game, game.gameData.containerarray[i]);
                 this.containers[i].setupContainerImage(game);
+                if (this.containers[i].idx >= this.containerCount) {
+                    this.containerCount = this.containers[i].idx + 1;  // count of containers that were created is at least this big
+                }
             }
+        }
+    }
+    
+    
+    // use this to drop an item on the map
+    addNewContainer(game, containerLocType) {
+        for (var i = 0; i < containerLocType.length; i++) {
+            this.containers[this.containers.length] = new Container();
+                var containerData = Container.rawData(game, this.containerCount, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist);
+                this.containers[this.containers.length].addContainer(game, containerData);
+                this.containers[this.containers.length].setupContainerImage(game);
+                this.containerCount += 1;
+        }
+    }
+    
+    // use this if loose item is picked up off the map into player inventory
+    removeContainer(containerId) {
+        // for now only allow removing containers that are transparent
+        if (this.containers[containerId].name == "transparent") {
+            this.containers[containerId].sprite.hideAllItems();
+            this.containers[containerId].sprite.destroy();
+            this.containers.splice(containerId, 1);
         }
     }
     
