@@ -2,16 +2,16 @@ class ActionManager {
     constructor () {
         this.actionArr = [];
     }
-    updateAction(game, playerid, doorManager) {
+    updateAction(game, playerid, containerManager) {
         console.log("wouldn't it be great if this did something?")
 
-        for (var j=0; j<doorManager.doors.length; j++) {
-            if (doorManager.doors[j].doorstate == game.gameData.doors["dooropenhighlighted"].imageTagList  ||
-                doorManager.doors[j].doorstate == game.gameData.doors["doorclosedhighlighted"].imageTagList) {
-                var playerIdx = doorManager.doors[j].findPlayerHighlight(playerid);
-                // player that caused the highlight for this door
+        for (var j=0; j<containerManager.containers.length; j++) {
+            if (containerManager.containers[j].containerstate == "openhighlight"  ||
+                containerManager.containers[j].containerstate == "closedhighlight") {
+                var playerIdx = containerManager.containers[j].findPlayerHighlight(playerid);
+                // player that caused the highlight for this container
                 if (playerIdx >= 0) {
-                    doorManager.doors[j].switchDoorState(game);
+                    containerManager.containers[j].switchContainerState(game);
                 }
             }
         }

@@ -84,7 +84,7 @@ class Player {
         console.log("I can't get in!");
     }
     
-    updatePlayer (game, cursors, walls, floors, doorManager) {
+    updatePlayer (game, cursors, walls, floors, containerManager) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
@@ -92,10 +92,10 @@ class Player {
         //Restrict Pt & Click to floor tiles
         //game.physics.arcade.overlap(this.sprite, floors);
         
-        for(var i=0; i<doorManager.doors.length; i++) {
-            if (((doorManager.doors[i].doorstate == "doorclosed") || (doorManager.doors[i].doorstate == "doorclosedhighlighted")) 
-                    &&  game.physics.arcade.collide(doorManager.doors[i].sprite, this.sprite)) {
-                 this.lockedOut(this.sprite,doorManager.doors[i].sprite);
+        for(var i=0; i<containerManager.containers.length; i++) {
+            if ((containerManager.containers[i].sprite.body.checkCollision.any == true) 
+                    &&  (game.physics.arcade.collide(containerManager.containers[i].sprite, this.sprite))) {
+                 this.lockedOut(this.sprite,containerManager.containers[i].sprite);
             }
         }
         

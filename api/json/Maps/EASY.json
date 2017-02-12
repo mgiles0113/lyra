@@ -262,7 +262,7 @@
         }
     },
     "itemsarray" : [],
-    "containernames" : ["smallbox","largebox", "transparent"],
+    "containernames" : ["smallbox","largebox", "transparent", "doors"],
     "containers" : {
         "smallbox" : {
             "imageTag" : "smallbox",
@@ -272,13 +272,15 @@
             "width" : 32,
             "height" : 32,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
             "itemscapacity" : 1,
             "containerstate" : "closed",
+            "stateIdx" : 2,
             "immovable" : true,
             "immovablebody" : true,
             "moves" : false,
-            "checkCollision" : true
+            "checkCollision" : [true, true, true, true]
         },
         "largebox" : {
             "imageTag" : "largebox",
@@ -288,13 +290,15 @@
             "width" : 64,
             "height" : 32,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
             "itemscapacity" : 2,
             "containerstate" : "closed",
+            "stateIdx" : 2,
             "immovable" : true,
             "immovablebody" : true,
             "moves" : false,
-            "checkCollision" : true
+            "checkCollision" : [true, true, true, true]
         },
         "transparent" : {
             "imageTag" : "transparent",
@@ -303,15 +307,35 @@
             "name": "transparent",
             "width" : 32,
             "height" : 32,
-            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
-            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "animationTags" : ["open", "openhighlight", "open", "openhighlight"],
+            "textureArr" : [0, 1, 0, 1],
+            "animationArr" : [[0],[0,1],[0],[0, 1]],
             "itemscapacity" : 1,
             "containerstate" : "open",
+            "stateIdx" : 0,
             "immovable" : true,
             "immovablebody" : true,
             "moves" : false,
-            "checkCollision" : true
+            "checkCollision" : [false, false, false, false]
+        },
+        "doors" : {
+            "imageTag" : "doors",
+            "itemRef": "assets/lyraImages/doorimages.png",
+            "frames" : 4,
+            "name": "doors",
+            "width" : 64,
+            "height" : 64,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "textureArr" : [0, 1, 2, 3],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 0,
+            "containerstate" : "open",
+            "stateIdx" : 0,
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : [false, false, true, true]
         }
         },
-    "containersarray" : []
+    "containerarray" : []
 }

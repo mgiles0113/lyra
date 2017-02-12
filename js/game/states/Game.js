@@ -5,13 +5,14 @@ Lyra.LyraGame = function() {
 Lyra.LyraGame.prototype = {
 	preload: function() {
 	    if (this.game.newGame) {
-            this.slimeArr = []; // list of slime objects
+            //this.slimeArr = []; // list of slime objects
             this.players = [];  // list of players created on map
             this.mapLayer = [];  // layers of map tilesets
-            this.items = [];  // list of items created on map
+            //this.items = [];  // list of items created on map
             this.ingameItems = []; //all ingame items used
             this.roomArr = [];  // approx center of rooms on map
-            this.suppresantArr = [];  // locations on the map where suppresant can be placed
+            this.containerLocType = [];
+            //this.suppresantArr = [];  // locations on the map where suppresant can be placed
         }
         
         this.ready = false;
@@ -21,7 +22,7 @@ Lyra.LyraGame.prototype = {
 		// moved to PreloadLyra
 		Map.loadMap(this.game, this.game.gameData.mapRef, this.game.gameData.imageTagList, this.game.gameData.imageRefList);
 		
-		Door.preloadDoorImages(this.game);
+		//Door.preloadDoorImages(this.game);
 		Container.preloadContainerImages(this.game);
 		
 		// added as example preload game specific data
@@ -86,7 +87,18 @@ Lyra.LyraGame.prototype = {
         
         for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
             this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
+            //[TODO] for now put a container in each room
+            // this is replaced by distributing containers throughout rooms
+            if (!( (this.map.map.objects["rooms"][i].name == "cc" )
+                    || (this.map.map.objects["rooms"][i].name == "p1")
+                    || (this.map.map.objects["rooms"][i].name == "p2")
+                    || (this.map.map.objects["rooms"][i].name == "p3")
+                    || (this.map.map.objects["rooms"][i].name == "p4")
+                      )) {
+                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: ["fuse"]};
+            }
         }
+        
         
         for (var i = 0; i< this.game.gameData.crew.length; i++) {
             var xpos = this.game.gameData.characters[this.game.gameData.crew[i]].x;
@@ -103,15 +115,24 @@ Lyra.LyraGame.prototype = {
             
         }
         
-        this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
+        //this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
         this.actionManager = new ActionManager();
         
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
-            this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
+            //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
-            this.items[i] = new Items();
-            this.items[i].addItem(this.game,"suppresant", this.suppresantArr[this.map.map.objects["suppressant"][i].name].x+16, this.suppresantArr[this.map.map.objects["suppressant"][i].name].y+16);
+            // this.items[i] = new Items();
+            // this.items[i].addItem(this.game,"suppresant", this.suppresantArr[this.map.map.objects["suppressant"][i].name].x+16, this.suppresantArr[this.map.map.objects["suppressant"][i].name].y+16);
+            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: ["suppresant"]};
         }
+        
+        for (var i=0; i<this.map.map.objects["doors"].length; i++) {
+            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["doors"][i].x, y:this.map.map.objects["doors"][i].y, name:"doors", itemslist: []};
+        }
+        
+        // create containers for each of the items
+        this.containerManager = new ContainerManager(this.game,  this.containerLocType);
+
         
         //var cc = this.map.map.objects["rooms"];
         
@@ -228,12 +249,13 @@ Lyra.LyraGame.prototype = {
         this.comm.displayInventory(this.players[0], this.game, this.ingameItems);
 
         // check for overlap with doors
-        this.doorManager.checkPlayerOverlap (this.game, this.players)
+        //this.doorManager.checkPlayerOverlap (this.game, this.players);
+        this.containerManager.checkPlayerOverlap(this.game, this.players);
 
         // update player
         for (var j=0; j < this.players.length; j++)
         { 
-            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.doorManager);
+            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
         }
 	},
     render: function() {
@@ -266,7 +288,9 @@ Lyra.LyraGame.prototype = {
 	    
 	    this.slimeManager.saveSlimeManager(this.game);
 	    
-	    this.doorManager.saveDoorManager(this.game);
+	    //this.doorManager.saveDoorManager(this.game);
+	    
+	    this.containerManager.saveContainerManager(this.game);
 	    
         var tp = new TestPost();
         tp.send(JSON.stringify(this.game.gameData));
@@ -282,7 +306,7 @@ Lyra.LyraGame.prototype = {
                 playerIdx = i;
             }
         }
-        this.actionManager.updateAction(this.game, playerIdx, this.doorManager);
+        this.actionManager.updateAction(this.game, playerIdx, this.containerManager);
     },
 
     upRequest: function() {

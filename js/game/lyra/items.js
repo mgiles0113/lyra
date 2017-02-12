@@ -21,17 +21,6 @@ class Items {
         
 }
 
-// //Loads the item resources
-// Items.preloadItems = function (game) {
-//     //Load the items needed.
-//     //1st-> Item Name/Key
-//     //2nd-> URL to asset
-//     for (var i=0; i<game.itemData.items.length; i++) {
-//         game.load.image(game.itemData.items[i].name, game.itemData.items[i].itemRef);
-//     }
-// }
-
-
 Items.ItemImages = function(game) {
     // load all the specified item images
     game.load.image("circuit",game.gameData.items["CIRCUIT"].itemRef);
@@ -41,84 +30,5 @@ Items.ItemImages = function(game) {
     game.load.image("wrench",game.gameData.items["WRENCH"].itemRef);
 }
 
-Items.rawData = function(idx, x, y, name, doorstate) {
-    var rawDoorData = {
-            idx : idx,
-            x: x,
-            y: y,
-            name: name,
-            doorstate: doorstate,
-            playerHighlight: new Array()
-    }
-    return (rawDoorData)
-}
-
-
-class ItemsManager {
-
-    constructor (game, itemLocArr) {
-        this.items = [];
-        if (game.gameData.itemsarray.length < 1) {
-            for (var i = 0; i<itemLocArr.length; i++ ) {
-                this.doors[i] = new Door();
-                var doorData = Door.rawData(i,  doorLocArr[i].x, doorLocArr[i].y, doorLocArr[i].name, game.gameData.doors["dooropen"].imageTagList);
-                //console.log(doorData);
-                this.doors[i].addDoor(game, doorData);
-            }
-        }
-        else {
-            // load existing doors into array
-            for (var i = 0; i < game.gameData.doorarray.length ; i++) {
-                this.doors[game.gameData.doorarray[i].idx] = new Door();
-                this.doors[game.gameData.doorarray[i].idx].addDoor(game, game.gameData.doorarray[i]);
-            }
-        }
-
-    }
-
-    // switch door states if overlap with the player
-    checkPlayerOverlap (game, players) {
-        for (var i=0; i < players.length; i++) {
-            for (var j=0; j < this.doors.length; j++) {
-                if ((this.doors[j].findPlayerHighlight(i) < 0) && (game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
-                {  // this player is currently not causing the highlight
-                        // console.log("overlap true: player: " + i + " door: " + this.doors[j].name);
-                        switch (this.doors[j].doorstate) {
-                            case "dooropen":
-                                this.doors[j].openDoorHighlighted(game, i);
-                                break;
-                            case "doorclosed":
-                                this.doors[j].closedDoorHighlighted(game, i);
-                                break;
-                            default:
-                                break;
-                        } 
-                }
-                else if ((this.doors[j].findPlayerHighlight(i) >= 0) && (!game.physics.arcade.overlap(players[i].sprite, this.doors[j].sprite)))
-                {
-                        switch (this.doors[j].doorstate) {
-                            case "dooropenhighlighted":
-                                this.doors[j].openDoor(game, i);
-                                break;
-                            case "doorclosedhighlighted" :
-                                this.doors[j].closedDoor(game, i);
-                                break;
-                            default:
-                                break;
-                        }
-                }
-            }
-        }
-    }
-    
-    saveItemManager (game) {
-        var savedItems = [];
-        for (var i = 0; i < this.items.length; i++) {
-            savedItems[i] = this.items[i].saveItem(); 
-        }
-        game.gameData.itemarray = savedItems;
-    }
-    
-}
 
 
