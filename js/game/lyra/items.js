@@ -31,4 +31,14 @@ Items.ItemImages = function(game) {
 }
 
 
-
+// use this class for items in containers
+class ContainerItem {
+    constructor(containerIdx, name) {
+        if (name == undefined) {
+            this.name = "empty";
+        } else {
+            this.name = name;
+        }
+        this.containerIdx = containerIdx;
+    }
+}

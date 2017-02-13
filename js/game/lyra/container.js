@@ -61,7 +61,8 @@ class Container {
     //add item to the item list
     addItemToList(game, name) {
         if (this.itemslist.length < this.itemscapacity) {
-            this.itemslist.push(name);
+            var pos = this.itemslist.length;
+            this.itemslist.push(new ContainerItem(pos, name));
             // fix container display
             this.setupContainerImage(game);
         }
@@ -74,7 +75,7 @@ class Container {
     // remove item from the list
     removeItemFromList(game, name) {
         for (var i=0; i< this.itemslist.length; i++) {
-            if (this.name == name) {
+            if (this.itemslist[i].name == name) {
                 this.hideAllItems();
                 this.itemslist.splice(i, 1);
                 this.showAllItems(game);
@@ -85,34 +86,54 @@ class Container {
     }
     
 
-    showItem(game, x, y, name, scalefactor) {
-        this.itemSprites[name] = game.add.sprite(x, y, name);
-        this.itemSprites[name].anchor.set(0.5, 0.5);
-        this.itemSprites[name].scale.setTo(scalefactor);
-        game.physics.arcade.enable(this.itemSprites[name]);
-        this.itemSprites[name].bringToTop();
+    showItem(game, x, y, idx, scalefactor) {
+        this.itemSprites[idx] = game.add.sprite(x, y, this.itemslist[idx].name);
+        this.itemSprites[idx].anchor.set(0.5, 0.5);
+        this.itemSprites[idx].scale.setTo(scalefactor);
+        game.physics.arcade.enable(this.itemSprites[idx]);
+        this.itemSprites[idx].bringToTop();
     }
     
-    hideItem(name) {
-        this.itemSprites[name].destroy();
+    hideItem(idx) {
+        this.itemSprites[idx].destroy();
     }
     
     //[TODO fix positioning the sprites based on how many in the container]
     showAllItems(game) {
+        var posArr = this.itemPositionOffsetsInContainer(game);
         for (var i=0; i<this.itemslist.length; i++) {
-            if (this.itemSprites[this.itemslist[i]]) {
-                this.hideItem(this.itemslist[i]);
-            }    
-            this.showItem(game, this.sprite.body.position.x + 16, this.sprite.body.position.y + 16, this.itemslist[i], 0.5);
+            if (this.itemSprites[i]) {
+                this.hideItem(i);
+            }
+            this.showItem(game, posArr[i][0], posArr[i][1], i, 0.5);
         }
     }
     
     hideAllItems() {
         for (var i=0; i<this.itemslist.length; i++) {
-            if (this.itemSprites[this.itemslist[i]]) {
-                this.hideItem(this.itemslist[i]);
+            if (this.itemSprites[i]) {
+                this.hideItem(i);
             }
         }        
+    }
+    
+    // position the items in container if more than one
+    // [TODO] handle container rotation
+    itemPositionOffsetsInContainer(game) {
+        switch (this.itemscapacity) {
+            case 1:
+                return ([[this.sprite.body.center.x, this.sprite.body.center.y]]);
+            case 2:
+                if (game.gameData.containers[this.name].width > game.gameData.containers[this.name].height) {
+                    return ([[this.sprite.body.center.x - game.gameData.containers[this.name].width/4, this.sprite.body.center.y],
+                           [this.sprite.body.center.x + game.gameData.containers[this.name].width/4, this.sprite.body.center.y]])                    
+                }
+                else {
+                    return ([[this.sprite.body.center.x, this.sprite.body.center.y - game.gameData.containers[this.name].height/4],
+                           [this.sprite.body.center.x, this.sprite.body.center.y + game.gameData.containers[this.name].height/4]])                    
+                }
+        }
+        return [];
     }
     
     openContainer (game) {
@@ -377,8 +398,8 @@ class ContainerManager {
                     if (game.physics.arcade.collide(this.containers[j].sprite, players[i].sprite)) {
                         // player collided
                         this.playerMovedInProximity(game, this.containers[j], i);
-                        // in case the player needs to do something
-                        players[i].lockedOut(players[i].sprite,this.containers[i].sprite);
+                        // in case the player needs to do something - currently not defined in player
+                        //players[i].lockedOut(players[i].sprite,this.containers[i].sprite);
                     }
                     // if the player is causing the highlight, check for proximity
                     if ((this.containers[j].findPlayerHighlight(i) >= 0) && (!this.calculateProximityAfterCollision(game, this.containers[j], players[i]))) {

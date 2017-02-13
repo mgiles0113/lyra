@@ -1,7 +1,6 @@
 body {
     background-image: url("/assets/images/space.jpeg");
-    background-size: 100vw 100vh;
-    background-repeat: no-repeat;
+    background-size: cover;
     padding: 0px;
     margin: 0px;
     font-family: 'Raleway', sans-serif;
@@ -25,13 +24,14 @@ label {
 }
 
 #menu-title {
-    font-size: 16em;
+    font-size: 10em;
     color: white;
     font-family: 'Bahiana', cursive;
     letter-spacing: 10px;
 }
 
-#login-title, #add-user-title {
+#login-title,
+#add-user-title {
     font-size: 4em;
     color: white;
 }
@@ -40,7 +40,8 @@ label {
     width: 100%;
 }
 
-#form-card, #add-user-form {
+#form-card,
+#add-user-form {
     margin: auto;
     padding: 25px;
     border-radius: 3px;
@@ -80,7 +81,9 @@ label {
     margin: auto;
 }
 
-#submit-button, #add-user-button, #create-user-link {
+#submit-button,
+#add-user-button,
+#create-user-link {
     margin-top: 25px;
     background: rgba(238, 235, 217, 1.0);
     color: black;
@@ -142,7 +145,8 @@ a:hover {
     
 }
 
-#comm-players, #comm-inventory {
+#comm-players,
+#comm-inventory {
     padding: 0px;
     height: 128px;
 }

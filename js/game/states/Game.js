@@ -99,7 +99,8 @@ Lyra.LyraGame.prototype = {
                     || (this.map.map.objects["rooms"][i].name == "p3")
                     || (this.map.map.objects["rooms"][i].name == "p4")
                       )) {
-                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: ["fuse"]};
+                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
+                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
             }
         }
         
@@ -125,7 +126,8 @@ Lyra.LyraGame.prototype = {
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
             //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
-            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: ["suppresant"]};
+            var containeritem =  new ContainerItem(0, "suppresant");
+            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: [containeritem]};
         }
         
         for (var i=0; i<this.map.map.objects["doors"].length; i++) {
