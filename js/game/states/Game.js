@@ -197,7 +197,6 @@ Lyra.LyraGame.prototype = {
         this.upKey.onDown.add(this.upRequest, this);
         this.upKey.onUp.add(this.upStopRequest, this);
 
-
         // setup action on object "a" key
         this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.leftKey.onDown.add(this.leftRequest, this);
@@ -214,7 +213,10 @@ Lyra.LyraGame.prototype = {
         this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         this.rightKey.onDown.add(this.rightRequest, this);
         this.rightKey.onUp.add(this.rightStopRequest, this);
-
+        
+        //setup point and click
+        this.ptclick = this.game.input.mousePointer.leftButton;
+        this.ptclick.onDown.add(this.ptclickRequest, this);
 
 
         // generate slime manager to control the slime
@@ -299,6 +301,7 @@ Lyra.LyraGame.prototype = {
 	    this.game.resume;
 	    
 	},
+	
     actionRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: E");
@@ -310,7 +313,22 @@ Lyra.LyraGame.prototype = {
         }
         this.actionManager.updateAction(this.game, playerIdx, this.containerManager);
     },
-
+    
+    
+    ptclickRequest: function() {
+        //find the selected player
+        var playerIdx = 0;
+        for( var i=0; i < this.players.length; i++){
+            if( this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        
+        //Grab
+        this.players[playerIdx].ptClick(this.game);
+    },
+    
+    
     upRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: W");
