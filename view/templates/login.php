@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Lyra Escape | Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Bahiana|Raleway" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="view/library/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="view/css/main.css" />
     <script src="js/library/phaser.js"></script>
@@ -14,7 +15,6 @@
             <h2 class="text-center" id="menu-title">Lyra Escape</h1>
             <div id="form-card">
                 <h4 class="text-center" id="login-title">Identify Yourself</h3>
-                <hr>
                 <form id="login-form">
                     <div class="form-group">
                         <label for="login-username" id="login-username-label">Username</label>
@@ -28,7 +28,6 @@
                         <option>English</option>
                     </select>
                     <button type="submit" id="submit-button" class="btn">Submit</button>
-                    <hr>
                     <a href="?page=addUser">
                         <button type="button" id="create-user-link" class="btn">Need An Account?</button>
                     </a>

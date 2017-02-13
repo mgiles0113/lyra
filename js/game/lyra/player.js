@@ -1,5 +1,6 @@
 class Player {
     constructor (game, x, y, idx) {
+        this.idx = idx
         this.isSelected = game.gameData.characters[game.gameData.crew[idx]].isSelected;
        
         // create player(s) 
@@ -92,12 +93,12 @@ class Player {
         //Restrict Pt & Click to floor tiles
         //game.physics.arcade.overlap(this.sprite, floors);
         
-        for(var i=0; i<containerManager.containers.length; i++) {
-            if ((containerManager.containers[i].sprite.body.checkCollision.any == true) 
-                    &&  (game.physics.arcade.collide(containerManager.containers[i].sprite, this.sprite))) {
-                 this.lockedOut(this.sprite,containerManager.containers[i].sprite);
-            }
-        }
+        // for(var i=0; i<containerManager.containers.length; i++) {
+        //     if ((containerManager.containers[i].sprite.body.checkCollision.any == true) 
+        //             &&  (game.physics.arcade.collide(containerManager.containers[i].sprite, this.sprite))) {
+        //          this.lockedOut(this.sprite,containerManager.containers[i].sprite);
+        //     }
+        // }
         
         
         // moved to wasd keys

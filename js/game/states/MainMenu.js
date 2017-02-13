@@ -19,7 +19,7 @@ Lyra.MainMenu.prototype = {
 		this.menuMusic = this.game.add.audio('menuMusic');
         
 	    if (this.game.userPreference.data.sound === "true") {
-	        this.menuMusic.play('', 0, 0.5, true, true);
+	        this.menuMusic.play('', 0, 0.1, true, true);
 	    }
 
         this.newGameText = this.game.add.text(

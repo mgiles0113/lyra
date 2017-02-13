@@ -17,6 +17,7 @@ class Container {
         game.physics.arcade.enable(this.sprite);
         this.sprite.body.setSize(game.gameData.containers[this.name].width, game.gameData.containers[this.name].height);
         this.sprite.immovable = containerData.immovable; this.sprite.body.immovable = containerData.immovablebody; this.sprite.body.moves = containerData.moves;
+        //this.sprite.anchor.set(0.5);
     }
     
     findPlayerHighlight(playerid) {
@@ -27,6 +28,23 @@ class Container {
         }
         return -1;
     }
+    
+    removePlayerHighlight(playerid) {
+        var playerIdx = this.findPlayerHighlight(playerid);
+        if (playerIdx >= 0) {
+            // player that removed the highlight removed from list
+            this.playerHighlight.splice(playerIdx, 1);
+        }
+    }
+    
+    addPlayerHighlight(playerid) {
+        var playerIdx = this.findPlayerHighlight(playerid);
+        // player that caused the highlight added to the highlight list
+        if (playerIdx < 0) {
+            this.playerHighlight.push(playerid);
+        }
+    }
+    
     
     // the state is updated if it exists, otherwise nothing changes
     setState (game, newState) {
@@ -97,12 +115,12 @@ class Container {
         }        
     }
     
-    openContainer (game, playerid) {
-        var playerIdx = this.findPlayerHighlight(playerid);
-        if (playerIdx >= 0) {
-            // player that removed the highlight removed from list
-            this.playerHighlight.splice(playerIdx, 1);
-        }
+    openContainer (game) {
+        // var playerIdx = this.findPlayerHighlight(playerid);
+        // if (playerIdx >= 0) {
+        //     // player that removed the highlight removed from list
+        //     this.playerHighlight.splice(playerIdx, 1);
+        // }
         if ((this.playerHighlight.length < 1) && (this.setState(game, "open"))) {  // only open the container if no one is highlighting
             //console.log(this.containerstate + " " + this.stateIdx);
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
@@ -111,12 +129,12 @@ class Container {
         }    
     }
     
-    closedContainer (game, playerid) {
-        var playerIdx = this.findPlayerHighlight(playerid);
-        if (playerIdx >= 0) {
-            // player that removed the highlight removed from list
-            this.playerHighlight.splice(playerIdx, 1);
-        }
+    closedContainer (game) {
+        // var playerIdx = this.findPlayerHighlight(playerid);
+        // if (playerIdx >= 0) {
+        //     // player that removed the highlight removed from list
+        //     this.playerHighlight.splice(playerIdx, 1);
+        // }
         if ((this.playerHighlight.length < 1) && this.setState(game, "closed")) {  // only close the container if no one is highlighting
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
             //this.sprite.animations.play(this.doorstate);
@@ -126,30 +144,30 @@ class Container {
     }
     
     
-    openContainerHighlighted (game, playerid) {
+    openContainerHighlighted (game) {
         if (this.setState(game, "openhighlight"))  {
             this.sprite.animations.play(this.containerstate);
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.showAllItems(game);
          }
-        var playerIdx = this.findPlayerHighlight(playerid);
-        // player that caused the highlight added to the highlight list
-        if (playerIdx < 0) {
-            this.playerHighlight.push(playerid);
-        }
+        // var playerIdx = this.findPlayerHighlight(playerid);
+        // // player that caused the highlight added to the highlight list
+        // if (playerIdx < 0) {
+        //     this.playerHighlight.push(playerid);
+        // }
     }   
     
-    closedContainerHighlighted (game, playerid) {
+    closedContainerHighlighted (game) {
         if (this.setState(game, "closedhighlight"))  {
-             this.sprite.animations.play(this.containerstate);
-             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
+            this.sprite.animations.play(this.containerstate);
+            this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.hideAllItems();
          }
-        // player that caused the highlight added to the highlight list
-        var playerIdx = this.findPlayerHighlight(playerid);
-        if (playerIdx < 0) {
-            this.playerHighlight.push(playerid);
-        }
+        // // player that caused the highlight added to the highlight list
+        // var playerIdx = this.findPlayerHighlight(playerid);
+        // if (playerIdx < 0) {
+        //     this.playerHighlight.push(playerid);
+        // }
     }
 
     switchContainerState (game) {
@@ -295,43 +313,100 @@ class ContainerManager {
         }
     }
     
+    
+    playerMovedInProximity(game, container, playerid) {
+        switch (container.containerstate) {
+            case "open":
+                container.openContainerHighlighted(game);
+                container.addPlayerHighlight(playerid);
+                break;
+            case "closed":
+                container.closedContainerHighlighted(game);
+                container.addPlayerHighlight(playerid);
+                break;
+            case "openhighlight":
+                //container.openContainerHighlighted(game);
+                container.addPlayerHighlight(playerid);
+                break;
+            case "closedhighlight":
+                //container.closedContainerHighlighted(game);
+                container.addPlayerHighlight(playerid);
+                break;
+        } 
+    }
+    
+    playerMovedOutOfProximity(game, container, playerid) {
+        switch (container.containerstate) {
+            case "open":
+                container.removePlayerHighlight(playerid);
+                //container.openContainer(game, playerid);
+                break;
+            case "closed":
+                container.removePlayerHighlight(playerid);
+                //container.closedContainer(game, playerid);
+                break;
+            case "openhighlight":
+                container.removePlayerHighlight(playerid);
+                container.openContainer(game, playerid);
+                break;
+            case "closedhighlight" :
+                container.removePlayerHighlight(playerid);
+                container.closedContainer(game, playerid);
+                break;
+            default:
+                break;
+        }
+    }
+ 
+    
     // switch container states if overlap with the player
     checkPlayerOverlap (game, players) {
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.containers.length; j++) {
-                this.containers[j].sprite.body.setSize(game.gameData.containers[this.containers[j].name].width + 10, game.gameData.containers[this.containers[j].name].height + 10);
-                if ((this.containers[j].findPlayerHighlight(i) < 0) && (game.physics.arcade.overlap(players[i].sprite, this.containers[j].sprite)))
-                {  // this player is currently not causing the highlight
-                        // console.log("overlap true: player: " + i + " door: " + this.doors[j].name);
-                        switch (this.containers[j].containerstate) {
-                            case "open":
-                                this.containers[j].openContainerHighlighted(game, i);
-                                break;
-                            case "closed":
-                                this.containers[j].closedContainerHighlighted(game, i);
-                                break;
-                            default:
-                                break;
-                        } 
+                // check for overlap or collision
+                if (!(this.containers[j].sprite.body.checkCollision.any) ) {
+                    if  (game.physics.arcade.overlap(players[i].sprite, this.containers[j].sprite)) {
+                        // player moved in proximity
+                        this.playerMovedInProximity(game, this.containers[j], i);
+                    }
+                    else {
+                        this.playerMovedOutOfProximity(game, this.containers[j], i);
+                    }
                 }
-                else if ((this.containers[j].findPlayerHighlight(i) >= 0) && (!game.physics.arcade.overlap(players[i].sprite, this.containers[j].sprite)))
-                {
-                        switch (this.containers[j].containerstate) {
-                            case "openhighlight":
-                                this.containers[j].openContainer(game, i);
-                                break;
-                            case "closedhighlight" :
-                                this.containers[j].closedContainer(game, i);
-                                break;
-                            default:
-                                break;
-                        }
+                else {
+                    if (game.physics.arcade.collide(this.containers[j].sprite, players[i].sprite)) {
+                        // player collided
+                        this.playerMovedInProximity(game, this.containers[j], i);
+                        // in case the player needs to do something
+                        players[i].lockedOut(players[i].sprite,this.containers[i].sprite);
+                    }
+                    // if the player is causing the highlight, check for proximity
+                    if ((this.containers[j].findPlayerHighlight(i) >= 0) && (!this.calculateProximityAfterCollision(game, this.containers[j], players[i]))) {
+                        this.playerMovedOutOfProximity(game, this.containers[j], i);
+                    }
                 }
-                this.containers[j].sprite.body.setSize(game.gameData.containers[this.containers[j].name].width, game.gameData.containers[this.containers[j].name].height);
             }
         }
     }
     
+    
+    calculateProximityAfterCollision(game, container, player) {
+        var xLwr = container.sprite.body.center.x - game.gameData.containers[container.name].width/2 - 10;
+        var xUpr = container.sprite.body.center.x + game.gameData.containers[container.name].width/2 + 10;
+        var yLwr = container.sprite.body.center.y - game.gameData.containers[container.name].height/2 - 10;
+        var yUpr = container.sprite.body.center.y + game.gameData.containers[container.name].height/2 + 10;
+
+        var pxLwr = player.sprite.body.center.x + game.gameData.characters[game.gameData.crew[player.idx]].width/2;
+        var pxUpr = player.sprite.body.center.x - game.gameData.characters[game.gameData.crew[player.idx]].width/2;
+        var pyLwr = player.sprite.body.center.y + game.gameData.characters[game.gameData.crew[player.idx]].height/2;
+        var pyUpr = player.sprite.body.center.y - game.gameData.characters[game.gameData.crew[player.idx]].height/2;
+
+        // find out if player is still close enough
+        if (pxLwr > xLwr && pxUpr < xUpr && pyLwr > yLwr && pyUpr < yUpr) {
+            return true;    
+        }
+        return false;
+    }
     
     
     saveContainerManager (game) {

@@ -11,7 +11,7 @@ Lyra.Preload.prototype = {
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 		
-		this.load.audio('menuMusic', 'assets/audio/darkmatter.mp3');
+		this.load.audio('menuMusic', 'assets/audio/Lyra_v1_0_0.mp3');
 		
 		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},

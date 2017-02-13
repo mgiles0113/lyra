@@ -1,8 +1,10 @@
 body {
     background-image: url("/assets/images/space.jpeg");
-    background-size: cover;
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
     padding: 0px;
     margin: 0px;
+    font-family: 'Raleway', sans-serif;
 }
 
 label {
@@ -10,6 +12,7 @@ label {
 }
 
 #interface {
+    
     margin: 150px auto;
     display: block;
     width: 1184px;
@@ -22,12 +25,14 @@ label {
 }
 
 #menu-title {
-    font-size: 6em;
+    font-size: 16em;
     color: white;
+    font-family: 'Bahiana', cursive;
+    letter-spacing: 10px;
 }
 
 #login-title, #add-user-title {
-    font-size: 2em;
+    font-size: 4em;
     color: white;
 }
 
@@ -36,13 +41,33 @@ label {
 }
 
 #form-card, #add-user-form {
-    margin: 25px auto;
+    margin: auto;
     padding: 25px;
     border-radius: 3px;
     text-align: center;
     width: 480px;
-    border: 1px solid white;
     background: rgba(0,0,0,.6);
+}
+
+
+#form-card input,
+#form-card select {
+    color: white;
+    background: rgba(62, 116, 183, .5);
+    min-height: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 0, 0, .3);
+    border-radius: 5px;
+}
+
+#form-card label,
+#add-user-form label {
+    font-size: 2em;
+    color: white;
+}
+
+::-webkit-input-placeholder {
+   color: white;
 }
 
 #form-card input,
@@ -57,7 +82,18 @@ label {
 
 #submit-button, #add-user-button, #create-user-link {
     margin-top: 25px;
-    height: 35px;
+    background: rgba(238, 235, 217, 1.0);
+    color: black;
+    font-size: 1.4em;
+    height: 45px;
+}
+
+#submit-button:hover,
+#add-user-button:hover,
+#create-user-link:hover {
+    color: rgba(238, 235, 217, 1.0);
+    background: rgba(62, 116, 183, .7);
+    border: 2px solid rgba(238, 235, 217, 1.0);
 }
 
 a {
@@ -73,9 +109,7 @@ a:hover {
     color: inherit;
 }
 
-#form-card label, #add-user-form label {
-    font-size: 1.5em;
-}
+
 
 #communicator-card {
     height: 128px;

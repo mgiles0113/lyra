@@ -62,6 +62,10 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
         
+        // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
+        
+        
+        
         // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
         // this.mapLayer[this.mapLayer.length - 1].debugSettings.forceFullRedraw = true;
         
@@ -121,8 +125,6 @@ Lyra.LyraGame.prototype = {
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
             //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
-            // this.items[i] = new Items();
-            // this.items[i].addItem(this.game,"suppresant", this.suppresantArr[this.map.map.objects["suppressant"][i].name].x+16, this.suppresantArr[this.map.map.objects["suppressant"][i].name].y+16);
             this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: ["suppresant"]};
         }
         
@@ -299,7 +301,7 @@ Lyra.LyraGame.prototype = {
 	},
     actionRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: E");
+        //console.log("ready to take action from keyboard: E");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -311,7 +313,7 @@ Lyra.LyraGame.prototype = {
 
     upRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: W");
+        //console.log("ready to take action from keyboard: W");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -323,7 +325,7 @@ Lyra.LyraGame.prototype = {
     
     downRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: S");
+        //console.log("ready to take action from keyboard: S");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -335,7 +337,7 @@ Lyra.LyraGame.prototype = {
     
     leftRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: A");
+        //console.log("ready to take action from keyboard: A");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -347,7 +349,7 @@ Lyra.LyraGame.prototype = {
     
     rightRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: D");
+        //console.log("ready to take action from keyboard: D");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -359,7 +361,7 @@ Lyra.LyraGame.prototype = {
 
     upStopRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: W");
+        //console.log("ready to take action from keyboard: W");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -371,7 +373,7 @@ Lyra.LyraGame.prototype = {
     
     downStopRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: S");
+        //console.log("ready to take action from keyboard: S");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -383,7 +385,7 @@ Lyra.LyraGame.prototype = {
     
     leftStopRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: A");
+        //console.log("ready to take action from keyboard: A");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
@@ -395,7 +397,7 @@ Lyra.LyraGame.prototype = {
     
     rightStopRequest: function() {
         // find the selected player
-        console.log("ready to take action from keyboard: D");
+        //console.log("ready to take action from keyboard: D");
         var playerIdx = 0;
         for (var i=0; i< this.players.length; i++) {
             if (this.players[i].isSelected) {
