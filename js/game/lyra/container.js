@@ -98,7 +98,6 @@ class Container {
         this.itemSprites[idx].destroy();
     }
     
-    //[TODO fix positioning the sprites based on how many in the container]
     showAllItems(game) {
         var posArr = this.itemPositionOffsetsInContainer(game);
         for (var i=0; i<this.itemslist.length; i++) {
@@ -137,11 +136,6 @@ class Container {
     }
     
     openContainer (game) {
-        // var playerIdx = this.findPlayerHighlight(playerid);
-        // if (playerIdx >= 0) {
-        //     // player that removed the highlight removed from list
-        //     this.playerHighlight.splice(playerIdx, 1);
-        // }
         if ((this.playerHighlight.length < 1) && (this.setState(game, "open"))) {  // only open the container if no one is highlighting
             //console.log(this.containerstate + " " + this.stateIdx);
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
@@ -151,11 +145,6 @@ class Container {
     }
     
     closedContainer (game) {
-        // var playerIdx = this.findPlayerHighlight(playerid);
-        // if (playerIdx >= 0) {
-        //     // player that removed the highlight removed from list
-        //     this.playerHighlight.splice(playerIdx, 1);
-        // }
         if ((this.playerHighlight.length < 1) && this.setState(game, "closed")) {  // only close the container if no one is highlighting
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
             //this.sprite.animations.play(this.doorstate);
@@ -171,11 +160,6 @@ class Container {
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.showAllItems(game);
          }
-        // var playerIdx = this.findPlayerHighlight(playerid);
-        // // player that caused the highlight added to the highlight list
-        // if (playerIdx < 0) {
-        //     this.playerHighlight.push(playerid);
-        // }
     }   
     
     closedContainerHighlighted (game) {
@@ -184,11 +168,6 @@ class Container {
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.hideAllItems();
          }
-        // // player that caused the highlight added to the highlight list
-        // var playerIdx = this.findPlayerHighlight(playerid);
-        // if (playerIdx < 0) {
-        //     this.playerHighlight.push(playerid);
-        // }
     }
 
     switchContainerState (game) {

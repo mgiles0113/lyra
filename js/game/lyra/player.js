@@ -195,3 +195,14 @@ Player.preloadPlayer = function (game) {
         game.load.spritesheet(game.gameData.characters[game.gameData.crew[i]].name, game.gameData.characters[game.gameData.crew[i]].playerRef, game.gameData.characters[game.gameData.crew[i]].height, game.gameData.characters[game.gameData.crew[i]].width, game.gameData.characters[game.gameData.crew[i]].frames);
     }        
 }
+
+
+// this class will manage all players and bandits
+class PlayerManager {
+    constructor () {
+        this.players = [];
+        
+    }
+    
+    
+}

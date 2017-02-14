@@ -224,17 +224,17 @@ Lyra.LyraGame.prototype = {
         // generate slime manager to control the slime
         var slimespore = getRandomInt(1, 7);
         if (slimespore == 7) {
-            this.slimeManager = new SlimeManager(this.game, this.roomArr["mh"].x, this.roomArr["mh"].y);
+            this.slimeManager = new SlimeManager(this.game, this.roomArr["mh"].x + 50, this.roomArr["mh"].y + 50);
         }
         else {
-            this.slimeManager = new SlimeManager(this.game, this.roomArr["r" + slimespore].x, this.roomArr["r" + slimespore].y);
+            this.slimeManager = new SlimeManager(this.game, this.roomArr["r" + slimespore].x + 50, this.roomArr["r" + slimespore].y + 50);
         }
 	},
 	update: function() {
 	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"]);
+       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager);
 
         /*  comment out checking for slime overlap with players */
         // [TODO] make slime items into a group
