@@ -396,10 +396,10 @@ class ContainerManager {
         var yLwr = container.sprite.body.center.y - game.gameData.containers[container.name].height/2 - 10;
         var yUpr = container.sprite.body.center.y + game.gameData.containers[container.name].height/2 + 10;
 
-        var pxLwr = player.sprite.body.center.x + game.gameData.characters[game.gameData.crew[player.idx]].width/2;
-        var pxUpr = player.sprite.body.center.x - game.gameData.characters[game.gameData.crew[player.idx]].width/2;
-        var pyLwr = player.sprite.body.center.y + game.gameData.characters[game.gameData.crew[player.idx]].height/2;
-        var pyUpr = player.sprite.body.center.y - game.gameData.characters[game.gameData.crew[player.idx]].height/2;
+        var pxLwr = player.sprite.body.center.x + game.gameData.characters[player.characterIdx].width/2;
+        var pxUpr = player.sprite.body.center.x - game.gameData.characters[player.characterIdx].width/2;
+        var pyLwr = player.sprite.body.center.y + game.gameData.characters[player.characterIdx].height/2;
+        var pyUpr = player.sprite.body.center.y - game.gameData.characters[player.characterIdx].height/2;
 
         // find out if player is still close enough
         if (pxLwr > xLwr && pxUpr < xUpr && pyLwr > yLwr && pyUpr < yUpr) {

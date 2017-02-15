@@ -129,6 +129,19 @@ Lyra.LyraGame.prototype = {
                     y : this.roomArr["cc"].y + i*50
                 })
             }
+            for (var i = 0; i< this.game.gameData.bandit.length; i++) {
+                playerLocType.push({
+                    idx : i + this.game.gameData.crew.length,
+                    isSelected: false, 
+                    characterIdx: this.game.gameData.bandit[i], 
+                    characterType: "bandit", 
+                    inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
+                    status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
+                    x : this.roomArr["d"].x + i*50 + 50,
+                    y : this.roomArr["d"].y + i*50
+                })
+            }
+
             playerLocType[0].isSelected = true;
         }
         
@@ -238,33 +251,22 @@ Lyra.LyraGame.prototype = {
 
 
         // generate slime manager to control the slime
-        var slimespore = getRandomInt(1, 7);
-        if (slimespore == 7) {
-            this.slimeManager = new SlimeManager(this.game, this.roomArr["mh"].x + 50, this.roomArr["mh"].y + 50);
+        var spawnCoord = [[ this.roomArr["mh"].x + 50, this.roomArr["mh"].y + 50]];
+        for (var j = 1; j < 7; j++) {
+            spawnCoord.push( [this.roomArr["r" + j].x + 50, this.roomArr["r" + j].y + 50])
         }
-        else {
-            this.slimeManager = new SlimeManager(this.game, this.roomArr["r" + slimespore].x + 50, this.roomArr["r" + slimespore].y + 50);
-        }
+        this.slimeManager = new SlimeManager(this.game, spawnCoord);
 	},
 	update: function() {
 	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager);
-
-        /*  comment out checking for slime overlap with players */
-        // [TODO] make slime items into a group
-        // for (var i=0; i<this.slimeManager.slimeCounter; i++) {
-        //     // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
-        //     for (var j=0; j < this.playerManager.players.length; j++)
-        //     { 
-        //         if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite)) {
-        //             this.players[j].stuckInSlimeSignal.dispatch(this.playerManager.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
-        //         }
-        //     }
-        // } 
+       //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager);
+        this.slimeManager.addNewSlime(this.game);
+        this.slimeManager.updateSlime(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager)
 
         //Comm. Window--> Switch btw players
+        // [TODO] consider passing this.playerManager and using array of indices "playerManager.crew" to select from playerManager.players
         this.comm.switchPlayer(this.playerManager.players, this.game);
         
         //Update Comm Window Inventory

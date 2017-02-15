@@ -87,6 +87,7 @@ class Player {
             this.sprite.customParams.status = "stuck";
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
+            console.log("Player " + this.idx  +" is stuck!");
         }, this);
     }
     
@@ -259,8 +260,8 @@ class Player {
 
 Player.preloadPlayer = function (game) {
     //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
-    for (var i=0; i<game.gameData.crew.length; i++) {
-        game.load.spritesheet(game.gameData.characters[game.gameData.crew[i]].name, game.gameData.characters[game.gameData.crew[i]].playerRef, game.gameData.characters[game.gameData.crew[i]].height, game.gameData.characters[game.gameData.crew[i]].width, game.gameData.characters[game.gameData.crew[i]].frames);
+    for (var i=0; i<game.gameData.characters.length; i++) {
+        game.load.spritesheet(game.gameData.characters[i].name, game.gameData.characters[i].playerRef, game.gameData.characters[i].height, game.gameData.characters[i].width, game.gameData.characters[i].frames);
     }        
 }
 
@@ -300,7 +301,7 @@ class PlayerManager {
         this.bandit = [];
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
-                if (playerLocType[i].type == "crew") {
+                if (playerLocType[i].characterType == "crew") {
                     this.crew.push(i);
                 }
                 else {
@@ -314,7 +315,7 @@ class PlayerManager {
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.playerarray.length ; i++) {
-                if (game.gameData.playerarray[i].type == "crew") {
+                if (game.gameData.playerarray[i].characterType == "crew") {
                     this.crew.push(i);
                 }
                 else {
