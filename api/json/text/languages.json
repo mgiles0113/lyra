@@ -1,6 +1,11 @@
 {
     "language" : ["English", "Pirate", "Español"],
     "languageCodes" : ["ENG", "PRT", "ESP"],
+    "languageWord" : {
+        "ENG" : "Language",
+        "PRT" : "Ye Tongue",
+        "ESP" : "Idioma"
+    },
     "createAccount" : {
         "ENG" : "Create Account",
         "PRT" : "Make yer Mark!",
@@ -35,6 +40,21 @@
         "ENG" : "Story",
         "PRT" : "Lyra's Tale",
         "ESP" : "Historia"
+    },
+    "sound" : {
+        "ENG" : "Sound",
+        "PRT" : "Ye Noise",
+        "ESP" : "Sonar"
+    },
+    "true" : {
+        "ENG" : "True",
+        "PRT" : "Bold!",
+        "ESP" : "Cierto"
+    },
+    "false" : {
+        "ENG" : "False",
+        "PRT" : "Lies!",
+        "ESP" : "Falso"
     },
     "mainmenu" : {"ENG" : "Main Menu", "PRT": "Ships Manifest", "ESP": "Menú principal"},
     "newgame" : {"ENG" : "New Game", "PRT": "First voyage", "ESP": "Nuevo juego"},

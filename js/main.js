@@ -41,10 +41,12 @@ function loadGame(userId) {
     game.userPreference = new UserPreference();
     game.userPreference.data.userId = userId;
     game.userPreference.ready = false;
+    game.userPreference.data.languageChoice = languageChoice;
     game.languageText = jsonLanguage;
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
     game.state.add('MainMenu', Lyra.MainMenu);
+    game.state.add('StoryMenu', Lyra.StoryMenu);
     game.state.add('LyraGame',Lyra.LyraGame);
     game.state.start('Boot');
 }

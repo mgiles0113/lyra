@@ -1,46 +1,93 @@
 class Player {
-    constructor (game, x, y, idx) {
-        this.idx = idx
-        this.isSelected = game.gameData.characters[game.gameData.crew[idx]].isSelected;
+    // constructor (game, x, y, idx) {
+    //     this.idx = idx
+    //     this.isSelected = game.gameData.characters[game.gameData.crew[idx]].isSelected;
        
+    //     // create player(s) 
+    //     this.sprite = game.add.sprite(x,y,game.gameData.characters[game.gameData.crew[idx]].name);
+    //     this.sprite.frame = game.gameData.characters[game.gameData.crew[idx]].frame;
+    //     this.sprite.anchor.set(0.5);
+       
+    //     //Custom Params for Player.
+    //     this.sprite.customParams = [];
+    //     this.sprite.customParams.inventory = game.gameData.characters[game.gameData.crew[idx]].inventory; //['fuse', 'circuit'];
+    //     this.sprite.customParams.inv_size = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
+       
+    //     this.sprite.customParams.status =  game.gameData.characters[game.gameData.crew[idx]].status;
+       
+    //     //Init Dest Coords as Sprite's Spawn Coord.
+    //     this.sprite.customParams.dest_x = game.gameData.characters[game.gameData.crew[idx]].dest_x;
+    //     this.sprite.customParams.dest_y = game.gameData.characters[game.gameData.crew[idx]].dest_y;
+    
+    //     game.physics.arcade.enable(this.sprite);
+    
+    //     this.sprite.body.setSize(game.gameData.characters[game.gameData.crew[idx]].width,game.gameData.characters[game.gameData.crew[idx]].height);
+    
+    //     //  We'll set a lower max angular velocity here to keep it from going totally nuts
+    //     this.sprite.body.maxAngular = 500;
+    
+    //     //  Apply a drag otherwise the sprite will just spin and never slow down
+    //     this.sprite.body.angularDrag = game.gameData.characters[game.gameData.crew[idx]].angulardrag;
+        
+        
+    //     this.sprite.body.velocity.x =  game.gameData.characters[game.gameData.crew[idx]].velocityx;
+    //     this.sprite.body.velocity.y = game.gameData.characters[game.gameData.crew[idx]].velocityy;
+        
+    //     // set up signal callback function when the overlap occurs between sprite and slime
+    //     this.stuckInSlimeSignal = new Phaser.Signal();
+    //     this.stuckInSlimeSignal.add(function(a,b) {
+    //         // [TODO] refer to function in player object?
+    //         console.log("overlap with slime");
+    //     });
+    //     // this.sprite.body.bounce.x = 0.2;
+    //     // this.sprite.body.bounce.y = 0.2;
+    // }
+    
+    addPlayer(game, x, y, playerData) {
+        this.idx = playerData.idx
+        this.isSelected = playerData.isSelected;
+        this.characterType = playerData.characterType;
+        this.characterIdx = playerData.characterIdx;
+        this.name = playerData.name;
         // create player(s) 
-        this.sprite = game.add.sprite(x,y,game.gameData.characters[game.gameData.crew[idx]].name);
-        this.sprite.frame = game.gameData.characters[game.gameData.crew[idx]].frame;
+        this.sprite = game.add.sprite(x,y,playerData.name);
+        this.sprite.frame = playerData.frame;
         this.sprite.anchor.set(0.5);
        
         //Custom Params for Player.
         this.sprite.customParams = [];
-        this.sprite.customParams.inventory = game.gameData.characters[game.gameData.crew[idx]].inventory; //['fuse', 'circuit'];
-        this.sprite.customParams.inv_size = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
+        this.sprite.customParams.inventory = playerData.inventory; //['fuse', 'circuit'];
+        this.sprite.customParams.inv_size = playerData.inventory.length;
        
-        this.sprite.customParams.status =  game.gameData.characters[game.gameData.crew[idx]].status;
+        this.sprite.customParams.status =  playerData.status;
        
         //Init Dest Coords as Sprite's Spawn Coord.
-        this.sprite.customParams.dest_x = game.gameData.characters[game.gameData.crew[idx]].dest_x;
-        this.sprite.customParams.dest_y = game.gameData.characters[game.gameData.crew[idx]].dest_y;
+        this.sprite.customParams.dest_x = playerData.dest_x;
+        this.sprite.customParams.dest_y = playerData.dest_y;
     
         game.physics.arcade.enable(this.sprite);
     
-        this.sprite.body.setSize(game.gameData.characters[game.gameData.crew[idx]].width,game.gameData.characters[game.gameData.crew[idx]].height);
+        this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width,game.gameData.characters[ playerData.characterIdx].height);
     
         //  We'll set a lower max angular velocity here to keep it from going totally nuts
         this.sprite.body.maxAngular = 500;
     
         //  Apply a drag otherwise the sprite will just spin and never slow down
-        this.sprite.body.angularDrag = game.gameData.characters[game.gameData.crew[idx]].angulardrag;
+        this.sprite.body.angularDrag =  playerData.angulardrag;
         
         
-        this.sprite.body.velocity.x =  game.gameData.characters[game.gameData.crew[idx]].velocityx;
-        this.sprite.body.velocity.y = game.gameData.characters[game.gameData.crew[idx]].velocityy;
+        this.sprite.body.velocity.x =   playerData.velocityx;
+        this.sprite.body.velocity.y = playerData.velocityy;
         
         // set up signal callback function when the overlap occurs between sprite and slime
         this.stuckInSlimeSignal = new Phaser.Signal();
         this.stuckInSlimeSignal.add(function(a,b) {
             // [TODO] refer to function in player object?
-            console.log("overlap with slime");
-        });
-        // this.sprite.body.bounce.x = 0.2;
-        // this.sprite.body.bounce.y = 0.2;
+            //console.log("overlap with slime");
+            this.sprite.customParams.status = "stuck";
+            this.sprite.body.velocity.x = 0;
+            this.sprite.body.velocity.y = 0;
+        }, this);
     }
     
     validDest(game,destCoords){
@@ -177,6 +224,27 @@ class Player {
         game.gameData.characters[game.gameData.crew[idx]].angularDrag =this.sprite.body.angularDrag;
     }
     
+    savePlayer() {
+        var playerData = {
+            isSelected : this.isSelected,
+            name : this.name,
+            idx : this.idx,
+            characterType : this.characterType,
+            characterIdx :  this.characterIdx,
+            inventory : this.sprite.customParams.inventory,
+            status : this.sprite.customParams.status,
+            dest_x : this.sprite.customParams.dest_x,
+            dest_y : this.sprite.customParams.dest_y,
+            velocityx : this.sprite.body.velocity.x,
+            velocityy : this.sprite.body.velocity.y,
+            frame : this.sprite.frame,
+            angularDrag : this.sprite.body.angularDrag,
+            x : this.sprite.body.center.x,
+            y : this.sprite.body.center.y
+        }
+        return playerData;
+    }
+    
 }
 
 // Player.preloadDefaultPlayer = function (game) {
@@ -196,13 +264,101 @@ Player.preloadPlayer = function (game) {
     }        
 }
 
+Player.rawData = function (game, idx, playerLocType) {
+    var playerData = {
+        isSelected : playerLocType.isSelected,
+        idx : idx,
+        name : game.gameData.characters[playerLocType.idx].name,
+        characterType : playerLocType.type,
+        characterIdx :  playerLocType.idx,
+        inventory : game.gameData.characters[playerLocType.idx].inventory,
+        status : playerLocType.status,
+        dest_x : null,
+        dest_y : null,
+        velocityx : game.gameData.characters[playerLocType.idx].velocityx,
+        velocityy : game.gameData.characters[playerLocType.idx].velocityy,
+        frame : game.gameData.characters[playerLocType.idx].frame,
+        angularDrag : game.gameData.characters[playerLocType.idx].angularDrag
+    }
+    return (playerData);
+}
 
 // this class will manage all players and bandits
+// playerLocType needs the following: 
+//    isSelected : true/false
+//    characterIdx : corresponds to index in gameData character array
+//    characterType : "crew" or "bandit"
+//    inventory : array of names
+//    status : player status (walk, stuck, sleep)
+//    x : x location for character
+//    y : y location
 class PlayerManager {
-    constructor () {
+    constructor (game, playerLocType) {
         this.players = [];
-        
+        // indexes in the array corresponding to the type character
+        this.crew = [];
+        this.bandit = [];
+        if  (game.gameData.playerarray.length < 1) {
+            for (var i = 0; i < playerLocType.length; i++) {
+                if (playerLocType[i].type == "crew") {
+                    this.crew.push(i);
+                }
+                else {
+                    this.bandit.push(i);
+                }
+                this.players[i] = new Player(); //(game, x, y, idx)
+                var playerData = Player.rawData(game, i, playerLocType[i]);
+                this.players[i].addPlayer(game,playerLocType[i].x, playerLocType[i].y, playerData);
+            }
+        }
+        else {
+            // load existing containers into array
+            for (var i = 0; i < game.gameData.playerarray.length ; i++) {
+                if (game.gameData.playerarray[i].type == "crew") {
+                    this.crew.push(i);
+                }
+                else {
+                    this.bandit.push(i);
+                }
+                this.players[i] = new Player();
+                this.players[i].addPlayer(game, game.gameData.playerarray[i].x, game.gameData.playerarray[i].y, game.gameData.playerarray[i]);
+            }
+        }
     }
+    
+    // returns 0 if isSelected not set
+    findSelectedPlayer () {
+        var playerIdx = 0;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected) {
+                playerIdx = i;
+            }
+        }
+        return playerIdx;
+
+    }
+
+    // returns -1 if no players awake
+    findSelectedAwakePlayer () {
+        var playerIdx = -1;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected && this.players[i].sprite.customParams.status == "awake") {
+                playerIdx = i;
+            }
+        }
+        return playerIdx;
+
+    }
+
+    
+    savePlayerManager (game) {
+        var savedPlayers = [];
+        for (var i = 0; i < this.players.length; i++) {
+            savedPlayers[i] = this.players[i].savePlayer(); 
+        }
+        game.gameData.playerarray = savedPlayers;
+    }
+    
     
     
 }

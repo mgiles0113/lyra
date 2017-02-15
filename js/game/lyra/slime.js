@@ -1,30 +1,3 @@
-var SLIME_ANIMATION = [
-    [0,1,10,11],
-    [1,2,11,12],
-    [2,3,12,13],
-    [3,4,13,14],
-    [4,5,13,14],
-    [5,6,15,16],
-    [6,7,16,17],
-    [7,8,17,18],
-    [8,9,18,19],
-    [9, 19],
-    [20],
-    [21],
-    [22],
-    [23],
-    [24],
-    [25],
-    [26],
-    [27],
-    [28],
-    [29]
-]
-
-
-var slimeLabels = ['greenCircle1', 'greenCircle2', 'greenCircle3', 'greenCircle4'];
-
-
 class Slime {
 
     
@@ -45,7 +18,7 @@ class Slime {
         this.slimeLabel = slimeData.slimelabel;
         
         this.slimesprite = game.add.sprite(this.xPos, this.yPos, this.slimeLabel);
-        for (var i = 0; i < SLIME_ANIMATION.length; i++) {
+        for (var i = 0; i < game.gameData.slimeanimations.length; i++) {
             this.slimesprite.animations.add('p'+i, game.gameData.slimeanimations[i], this.speed, true );
         }
         game.physics.arcade.enable(this.slimesprite);
@@ -69,21 +42,21 @@ class Slime {
     }
     
     updateTrajectory() {
-        var a = getRandomInt(2, 12);
-        var b = getRandomInt(2, 12);
-        var c = getRandomInt(5, 12);
+        var a = getRandomInt(20 , 90);
+        var b = getRandomInt(20, 90);
+        var c = getRandomInt(4, 10);
         // console.log(a , b, c);
         if  (getRandomInt(1, 2) == 2 ) {
-            this.slimesprite.body.velocity.x = a;
+            this.slimesprite.body.velocity.x = a; //(10 - this.phase)*a;
         }
         else
-            this.slimesprite.body.velocity.x = -a;
+            this.slimesprite.body.velocity.x = -a; //(10 - this.phase)*a;
             
         if  (getRandomInt(1, 2) == 2 ) {
-            this.slimesprite.body.velocity.y = b;
+            this.slimesprite.body.velocity.y = b; //(10 - this.phase)*b;
         }
         else
-            this.slimesprite.body.velocity.y = -b;
+            this.slimesprite.body.velocity.y = -b; //(10 - this.phase)*b;
         if  (getRandomInt(1, 2) == 2 ) {
             this.slimesprite.body.angularVelocity = c;
         }
@@ -132,6 +105,7 @@ class Slime {
 Slime.preloadSlime = function(game) {
         for (var i = 0; i< game.gameData.slimetemplate.length; i++) {
             game.load.spritesheet(game.gameData.slimetemplate[i].slimelabel, game.gameData.slimetemplate[i].imageref, game.gameData.slimetemplate[i].width, game.gameData.slimetemplate[i].height, game.gameData.slimetemplate[i].frames, 0, 0);
+            game.load.image(game.gameData.slimetemplate[i].slimelabel + "mature", game.gameData.slimetemplate[i].imageref, game.gameData.slimetemplate[i].width, game.gameData.slimetemplate[i].height);
         }
     }
     
@@ -143,7 +117,7 @@ Slime.rawData = function(idx, game) {
             age : 0,
             animation : 'p0',
             speed : 1, //getRandomInt(1,2);,
-            phaselife : getRandomInt(50, 200),
+            phaselife : getRandomInt(20, 50),
             phase : 0,
             numchildren : 0,
             isSuppressed : false,
@@ -179,26 +153,15 @@ class SlimeManager {
         }
     } 
     
-    updateSlimeArr (game, walls, containerManager) {
-        // moved to after replicate
-        // // play and update animation and collision with walls
-        // for (var i=0; i< this.slimeArr.length; i++) {
-        //     if (this.slimeArr[i].isMobile) {game.physics.arcade.collide(this.slimeArr[i].slimesprite, walls);}
-        //     this.slimeArr[i].age +=1;
-        //     // mature the slime
-        //     if ((this.slimeArr[i].age % this.slimeArr[i].phaseLife == 0) && this.slimeArr[i].phase >=0 && this.slimeArr[i].phase < 9) {
-        //         this.slimeArr[i].phase += 1;
-        //         this.slimeArr[i].animation = "p" + this.slimeArr[i].phase;
-        //         this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
-        //     }
-        // };
-        
-        // for now replicate to limit
+    updateSlimeArr (game, walls, containerManager, playerManager) {
+        // number of moving slime is limited
         if (this.movingSlime < this.limit) {
             // for (var i=0; i<1; i++) {
                 var rndNum = getRandomInt(0, this.slimeArr.length-1);
-                // slow down replication by requiring slime in phase 9, that is no longer mobile and only allow 20% of time
-                if ((this.slimeArr[rndNum].phase == 9 ) && ((this.slimeArr[rndNum].age % this.slimeArr[rndNum].phaseLife) == 0) && (!this.slimeArr[rndNum].isMobile)) {
+                // slow down replication by requiring slime in phase 9, that is no longer mobile and only allow 50% of time
+                if ((this.slimeArr[rndNum].phase == 9 )
+                && (this.slimeArr[rndNum].age % 2 == 0) //this.slimeArr[rndNum].phaseLife) == 0) 
+                && (!this.slimeArr[rndNum].isMobile)) {
                     this.slimeArr[this.slimeArr.length] = this.slimeArr[rndNum].replicateSlime(this.slimeArr.length, game);
                     this.movingSlime += 1;
                     // console.log("created slime #: " + this.slimeCounter);
@@ -214,7 +177,7 @@ class SlimeManager {
             if (this.slimeArr[k].isMobile) {
                 game.physics.arcade.collide(this.slimeArr[k].slimesprite, walls);
                 for (var c=0; c<containerManager.containers.length - 1; c++) {
-                    if (containerManager.containers[c].sprite.body.checkCollision.any) {
+                    if (containerManager.containers[c].name == "doors" && containerManager.containers[c].sprite.body.checkCollision.any) {
                         game.physics.arcade.collide(containerManager.containers[c].sprite, this.slimeArr[k].slimesprite);
                     }
                 }
@@ -230,37 +193,55 @@ class SlimeManager {
             // change trajectory every once in awhile if still mobile
             if (this.slimeArr[k].isMobile && this.slimeArr[k].age % this.slimeArr[k].phaseLife == 0 ) {
                 this.slimeArr[k].updateTrajectory(); 
-            }
-
-            var overlapTest = true;
-            for (var j=0; j<this.slimeArr.length - 1; j++) {
-                // this would cause slime to collide into each other.  If they are set to immobile, essentially blocks doors
-                // if (this.slimeArr[k].isMobile && !this.slimeArr[j].isMobile) {
-                //     if (game.physics.arcade.collide(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
-                //         overlapTest = false;
-                //         if (this.slimeArr[k].isMobile && this.slimeArr[k].age % 20 == 0) {
-                //             this.slimeArr[k].updateTrajectory(); 
-                //         }
-                //     }
-                // }
-                // skip testing slime that has been immobilized, otherwise look for overlap, keep moving if overlapping.
-                if ((j != k) && (this.slimeArr[k].isMobile)) {  // don't test against itself
-                    if (game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
-                        overlapTest = false;
-                        // update trajectory every once in awhile
-                        // if (this.slimeArr[k].age % this.slimeArr[k].phaseLife == 0) {
-                        //     this.slimeArr[k].updateTrajectory(); 
-                        //     //console.log("trajectory update")
-                        // }
-                    }
+            } 
+            
+            for (var j=0; j < playerManager.players.length; j++)
+            { 
+                if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                    playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
                 }
             }
+            
+
+            // var overlapTest = true;
+            // for (var j=0; j<this.slimeArr.length - 1; j++) {
+            //     // this would cause slime to collide into each other.  If they are set to immobile, essentially blocks doors
+            //     // if (this.slimeArr[k].isMobile && !this.slimeArr[j].isMobile) {
+            //     //     if (game.physics.arcade.collide(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
+            //     //         overlapTest = false;
+            //     //         if (this.slimeArr[k].isMobile && this.slimeArr[k].age % 20 == 0) {
+            //     //             this.slimeArr[k].updateTrajectory(); 
+            //     //         }
+            //     //     }
+            //     // }
+            //     // skip testing slime that has been immobilized, otherwise look for overlap, keep moving if overlapping.
+            //     if ((j != k) && (this.slimeArr[k].isMobile)) {  // don't test against itself
+            //         if (game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.slimeArr[j].slimesprite)) {
+            //             overlapTest = false;
+            //             // update trajectory every once in awhile
+            //             // if (this.slimeArr[k].age % this.slimeArr[k].phaseLife == 0) {
+            //             //     this.slimeArr[k].updateTrajectory(); 
+            //             //     //console.log("trajectory update")
+            //             // }
+            //         }
+            //     }
+            // }
+            
+            // play animation every once in awhile
+            if (this.slimeArr[k].phase == 9 && !this.slimeArr[k].isMobile && (this.slimeArr[k].age % 10 == 0)) {
+                     // change to text with no animation most slime
+                     this.slimeArr[k].slimesprite.animations.play(1, false);
+            }
+            
             // immobilize slime when not overlapping
-            if (overlapTest && this.slimeArr[k].phase == 9 && this.slimeArr[k].isMobile)  {
+            //if (overlapTest && this.slimeArr[k].phase == 9 && this.slimeArr[k].isMobile)  {
+            if (this.slimeArr[k].phase == 9 && this.slimeArr[k].isMobile)  {
                  this.slimeArr[k].immobilize();
                  this.movingSlime -= 1;
                  //console.log("immobilized: " + this.slimeArr[k].idx + " pos: " + this.slimeArr[k].slimesprite.body.position);
-
+                 // stop animation
+                 this.slimeArr[k].slimesprite.animations.stop();
+                 this.slimeArr[k].slimesprite.loadTexture(this.slimeArr[k].slimeLabel, 9, true);
             }
         }
     }

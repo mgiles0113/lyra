@@ -6,7 +6,7 @@ Lyra.LyraGame.prototype = {
 	preload: function() {
 	    if (this.game.newGame) {
             //this.slimeArr = []; // list of slime objects
-            this.players = [];  // list of players created on map
+            //this.players = [];  // list of players created on map
             this.mapLayer = [];  // layers of map tilesets
             //this.items = [];  // list of items created on map
             this.ingameItems = []; //all ingame items used
@@ -105,20 +105,36 @@ Lyra.LyraGame.prototype = {
         }
         
         
-        for (var i = 0; i< this.game.gameData.crew.length; i++) {
-            var xpos = this.game.gameData.characters[this.game.gameData.crew[i]].x;
-            var ypos = this.game.gameData.characters[this.game.gameData.crew[i]].y;
-            //[TODO] place holder to put players slightly offset on game in cc
-            if (xpos == null) {
-                xpos = this.roomArr["cc"].x + i*50;
+        // playerLocType needs the following: 
+        //    isSelected : true/false
+        //    characterIdx : corresponds to index in gameData character array
+        //    characterType : "crew" or "bandit"
+        //    inventory : array of names
+        //    status : player status (walk, stuck, sleep)
+        //    x : x location for character
+        //    y : y location
+        
+        // if < 1, no crew defined
+        if (this.game.gameData.playerarray.length < 1) {
+            var playerLocType = [];
+            for (var i = 0; i< this.game.gameData.crew.length; i++) {
+                playerLocType.push({
+                    idx : i,
+                    isSelected: false, 
+                    characterIdx: this.game.gameData.crew[i], 
+                    characterType: "crew", 
+                    inventory : this.game.gameData.characters[this.game.gameData.crew[i]].inventory,
+                    status: this.game.gameData.characters[this.game.gameData.crew[i]].status,
+                    x : this.roomArr["cc"].x + i*50,
+                    y : this.roomArr["cc"].y + i*50
+                })
             }
-            if (ypos == null) {
-                ypos = this.roomArr["cc"].y + i*50;
-            }
-            //Create players
-            this.players[i] = new Player(this.game, xpos, ypos, i);
-            
+            playerLocType[0].isSelected = true;
         }
+        
+        // playerManager manages all the players on the map (crew and bandits)
+        this.playerManager = new PlayerManager(this.game, playerLocType);
+
         
         //this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
         this.actionManager = new ActionManager();
@@ -234,34 +250,34 @@ Lyra.LyraGame.prototype = {
 	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
-       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager);
+       this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager);
 
         /*  comment out checking for slime overlap with players */
         // [TODO] make slime items into a group
         // for (var i=0; i<this.slimeManager.slimeCounter; i++) {
         //     // this.slimeArr[i].slimesprite.animations.play(this.slimeArr[i].animation);
-        //     for (var j=0; j < this.players.length; j++)
+        //     for (var j=0; j < this.playerManager.players.length; j++)
         //     { 
         //         if (this.game.physics.arcade.overlap(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite)) {
-        //             this.players[j].stuckInSlimeSignal.dispatch(this.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
+        //             this.players[j].stuckInSlimeSignal.dispatch(this.playerManager.players[j].sprite, this.slimeManager.slimeArr[i].slimesprite);
         //         }
         //     }
         // } 
 
         //Comm. Window--> Switch btw players
-        this.comm.switchPlayer(this.players, this.game);
+        this.comm.switchPlayer(this.playerManager.players, this.game);
         
         //Update Comm Window Inventory
-        this.comm.displayInventory(this.players[0], this.game, this.ingameItems);
+        this.comm.displayInventory(this.playerManager.players[0], this.game, this.ingameItems);
 
         // check for overlap with doors
         //this.doorManager.checkPlayerOverlap (this.game, this.players);
-        this.containerManager.checkPlayerOverlap(this.game, this.players);
+        this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players);
 
         // update player
-        for (var j=0; j < this.players.length; j++)
+        for (var j=0; j < this.playerManager.players.length; j++)
         { 
-            this.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
+            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
         }
 	},
     render: function() {
@@ -269,14 +285,14 @@ Lyra.LyraGame.prototype = {
          viewportText(this.game);
         
         // [TODO] depending on how players are generated, this may be one or more
-        for (var i=0; i < this.players.length; i++)
+        for (var i=0; i < this.playerManager.players.length; i++)
         { 
-            this.players[i].sprite.bringToTop();
-            if (this.players[i].isSelected) {
-                this.players[i].cameraFollow(this.game);
+            this.playerManager.players[i].sprite.bringToTop();
+            if (this.playerManager.players[i].isSelected) {
+                this.playerManager.players[i].cameraFollow(this.game);
                 
             }
-            this.game.debug.body(this.players[i]);
+            this.game.debug.body(this.playerManager.players[i]);
         }
     },
    	onLoadComplete: function() {
@@ -288,10 +304,8 @@ Lyra.LyraGame.prototype = {
 	    this.game.pause;
 	    console.log("going to save the gameData");
 	    
-	    for (var i=0; i < this.players.length; i++) {
-	        this.players[i].savePlayerData(this.game, i);
-	    }
-	    
+        this.playerManager.savePlayerManager(this.game);
+
 	    this.slimeManager.saveSlimeManager(this.game);
 	    
 	    //this.doorManager.saveDoorManager(this.game);
@@ -307,124 +321,101 @@ Lyra.LyraGame.prototype = {
     actionRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: E");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
-        }
+        var playerIdx = this.playerManager.findSelectedPlayer();
         this.actionManager.updateAction(this.game, playerIdx, this.containerManager);
     },
     
     
     ptclickRequest: function() {
         //find the selected player
-        var playerIdx = 0;
-        for( var i=0; i < this.players.length; i++){
-            if( this.players[i].isSelected) {
-                playerIdx = i;
-            }
-        }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
         
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
         //Grab
-        this.players[playerIdx].ptClick(this.game);
+            this.playerManager.players[playerIdx].ptClick(this.game);
+        }
     },
     
     
     upRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: W");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].goUp(this.game);
         }
-        this.players[playerIdx].goUp(this.game);
     },
     
     downRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: S");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].goDown(this.game);
         }
-        this.players[playerIdx].goDown(this.game);
     },
     
     leftRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: A");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].goLeft(this.game);
         }
-        this.players[playerIdx].goLeft(this.game);
     },
     
     rightRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: D");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].goRight(this.game);
         }
-        this.players[playerIdx].goRight(this.game);
     },
 
     upStopRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: W");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].stopUp(this.game);
         }
-        this.players[playerIdx].stopUp(this.game);
     },
     
     downStopRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: S");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].stopDown(this.game);
         }
-        this.players[playerIdx].stopDown(this.game);
     },
     
     leftStopRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: A");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].stopLeft(this.game);
         }
-        this.players[playerIdx].stopLeft(this.game);
     },
     
     rightStopRequest: function() {
         // find the selected player
         //console.log("ready to take action from keyboard: D");
-        var playerIdx = 0;
-        for (var i=0; i< this.players.length; i++) {
-            if (this.players[i].isSelected) {
-                playerIdx = i;
-            }
+        var playerIdx = this.playerManager.findSelectedAwakePlayer();
+        // if selected player is not awake, findSelectedAwakePlayer returns -1
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].stopRight(this.game);
         }
-        this.players[playerIdx].stopRight(this.game);
     },
 
 

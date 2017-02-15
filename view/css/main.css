@@ -11,7 +11,6 @@ label {
 }
 
 #interface {
-    
     margin: 150px auto;
     display: block;
     width: 1184px;
@@ -21,6 +20,7 @@ label {
 #primary-card {
     height: 672px;
     border-radius: 5px 5px 0px 0px;
+    position: relative;
 }
 
 #menu-title {
@@ -222,4 +222,27 @@ a:hover {
     width: 95%;
     margin: auto;
     display: block;
+}
+
+#story-card {
+    background-color: rgba(0,0,0,.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#story-card p {
+    color: white;
+    font-size: 4em;
+    margin: 15px 0px 0px 15px;
+}
+
+#story-next-card {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 75%;
+    left: 85%;
 }

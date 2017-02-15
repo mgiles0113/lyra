@@ -5,6 +5,8 @@ class UserPreference {
             "languageChoice" : "ENG",
         };
         this.data = {};
+        this.loaded = 0;
+        this.ready = 0;
     }
 
     load() {
@@ -19,19 +21,21 @@ class UserPreference {
             context: this,
             success: function(response) {
                 console.log(response);
-                this.update(JSON.parse(response));
+                this.loadedData = JSON.parse(response);
+                this.loadedData.languageChoice = this.data.languageChoice;
+                this.data = this.loadedData;
+                this.update();
             },
             error: function(response) {
                 console.log(response);
-                this.update(JSON.parse(response));
+                //this.update(JSON.parse(response));
             }
         });
     }
 
-    update(savedPreferences) {
-        this.data.sound = savedPreferences.sound || this.default.sound;
-        this.data.languageChoice = savedPreferences.languageChoice || this.default.languageChoice;
-
+    update() {
+        this.ready = false;
+        console.log("this ready: " + this.ready);
         $.ajax({
             url: apiUrl,
             type: 'POST',
@@ -44,13 +48,18 @@ class UserPreference {
             success: function(response) {
                 console.log('success');
                 console.log(response);
-                this.ready = true;
+                this.enable();
             },
             error: function(response) {
                 console.log('fail');
                 console.log(response);
-                this.ready = true;
+                this.enable();
             }
         });
+    }
+    
+    enable() {
+        this.ready = true;
+        console.log("this ready: " + this.ready);
     }
 }

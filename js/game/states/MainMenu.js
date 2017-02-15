@@ -16,12 +16,6 @@ Lyra.MainMenu.prototype = {
     preload: function() {},
     
 	create: function() {
-		this.menuMusic = this.game.add.audio('menuMusic');
-        
-	    if (this.game.userPreference.data.sound === "true") {
-	        this.menuMusic.play('', 0, 0.1, true, true);
-	    }
-
         this.newGameText = this.game.add.text(
                             this.game.world.centerX - 350,
                             this.game.world.centerY - 300,
@@ -65,6 +59,15 @@ Lyra.MainMenu.prototype = {
         this.storyText.fontSize = this.menuTextSize;
         this.storyText.fill = this.menuTextFill;
         this.storyText.events.onInputDown.add(this.launchStoryState, this);
+        this.storyText.active = 1;
+        this.storyText.events.onInputOver.add(function() {
+            this.storyText.fill = this.menuTextFill;
+        }, this);
+        this.storyText.events.onInputOut.add(function() {
+            if (!this.storyText.active) { 
+                this.storyText.fill = "#555559";
+            }
+        }, this);
 	},
 	clearSelectedText: function() {
 	    this.storyText.fill = this.menuTextFill;
@@ -85,10 +88,11 @@ Lyra.MainMenu.prototype = {
         }
 	},
 	update: function() {
-		
+
 	},
 	launchStoryState: function() {
 	    this.storyText.fill = this.menuTextFill;
+	    this.storyText.active = 1;
 	    this.newGameText.fill = "#555559";
 	    this.loadGameText.fill = "#555559";
         this.optionsText.fill = "#555559";
@@ -104,7 +108,27 @@ Lyra.MainMenu.prototype = {
             this.hardMapText.destroy(true);
             this.hardMapText = '';
         }
-	    console.log('launching story');
+        if(this.optionSoundText) {
+            this.optionSoundText.destroy(true);
+            this.optionSoundText = '';
+        }
+        if(this.optionLanguageText) {
+            this.optionLanguageText.destroy(true);
+            this.optionLanguageText = '';
+        }
+        if(this.englishText) {
+            this.englishText.destroy(true);
+            this.englishText = '';
+        }
+        if(this.pirateText) {
+            this.pirateText.destroy(true);
+            this.pirateText = '';
+        }
+        if(this.spanishText) {
+            this.spanishText.destroy(true);
+            this.spanishText = '';
+        }
+	    this.state.start("StoryMenu");
 	},
 	newGame: function() {
 	    console.log('new game clicked');
@@ -112,11 +136,33 @@ Lyra.MainMenu.prototype = {
         this.loadGameText.fill = "#555559";
         this.optionsText.fill = "#555559";
         this.storyText.fill = "#555559";
+        this.storyText.active = 0;
         
         if(this.gameSaveText) {
             this.gameSaveText.destroy(true);
             this.gameSaveText = '';
         }
+        if(this.optionSoundText) {
+            this.optionSoundText.destroy(true);
+            this.optionSoundText = '';
+        }
+        if(this.optionLanguageText) {
+            this.optionLanguageText.destroy(true);
+            this.optionLanguageText = '';
+        }
+        if(this.englishText) {
+            this.englishText.destroy(true);
+            this.englishText = '';
+        }
+        if(this.pirateText) {
+            this.pirateText.destroy(true);
+            this.pirateText = '';
+        }
+        if(this.spanishText) {
+            this.spanishText.destroy(true);
+            this.spanishText = '';
+        }
+        
         if (!this.easyMapText) {
             this.easyMapText = this.game.add.text(
                                 this.game.world.centerX - 100,
@@ -148,6 +194,7 @@ Lyra.MainMenu.prototype = {
 	    this.newGameText.fill = "#555559";
         this.optionsText.fill = "#555559";
         this.storyText.fill = "#555559";
+        this.storyText.active = 0;
         
         if(this.easyMapText) {
             this.easyMapText.destroy(true);
@@ -156,6 +203,26 @@ Lyra.MainMenu.prototype = {
         if(this.hardMapText) {
             this.hardMapText.destroy(true);
             this.hardMapText = '';
+        }
+        if(this.optionSoundText) {
+            this.optionSoundText.destroy(true);
+            this.optionSoundText = '';
+        }
+        if(this.optionLanguageText) {
+            this.optionLanguageText.destroy(true);
+            this.optionLanguageText = '';
+        }
+        if(this.englishText) {
+            this.englishText.destroy(true);
+            this.englishText = '';
+        }
+        if(this.pirateText) {
+            this.pirateText.destroy(true);
+            this.pirateText = '';
+        }
+        if(this.spanishText) {
+            this.spanishText.destroy(true);
+            this.spanishText = '';
         }
         
         if (!this.gameSaveLoadText) {
@@ -212,10 +279,13 @@ Lyra.MainMenu.prototype = {
 	},
 	optionsMenu: function() {
 	    console.log('options clicked');
+        console.log(this.game.userPreference.ready);
 	    this.optionsText.fill = this.menuTextFill;
 	    this.newGameText.fill = "#555559";
         this.loadGameText.fill = "#555559";
         this.storyText.fill = "#555559";
+        this.storyText.active = 0;
+        
         if(this.gameSaveText) {
             this.gameSaveText.destroy(true);
             this.gameSaveText = '';
@@ -228,6 +298,104 @@ Lyra.MainMenu.prototype = {
             this.hardMapText.destroy(true);
             this.hardMapText = '';
         }
+        
+        if (!this.optionSoundText) {
+            var soundText = '';
+            if (this.game.userPreference.data.sound === 'true') {
+                soundText = 'true';
+            } else {
+                soundText = 'false';
+            }
+            this.optionSoundText = this.game.add.text(
+                                this.game.world.centerX - (this.game.userPreference.data.languageChoice === 'PRT' ? 0 : 100),
+                                this.game.world.centerY - 150,
+                                this.game.languageText.sound[this.game.userPreference.data.languageChoice] + ':    ' + this.game.languageText[soundText][this.game.userPreference.data.languageChoice],
+                                'sound'
+                            );
+            this.optionSoundText.inputEnabled = true;
+            this.optionSoundText.fontSize = this.menuTextSize - 15;
+            this.optionSoundText.fill = this.menuTextFill;
+            
+            this.optionSoundText.events.onInputDown.add(function() {
+                if (this.game.userPreference.data.sound === "true") {
+                    this.game.userPreference.data.sound = "false";
+                    this.game.menuMusic.stop();
+                } else {
+                    this.game.userPreference.data.sound = "true";
+                    this.game.menuMusic.play('', 0, 0.1, true, true);
+                }
+                this.game.userPreference.update();
+                this.optionSoundText.destroy(true);
+                this.optionSoundText = '';
+                this.optionsMenu();
+            }, this);
+        }
+        
+        if (!this.optionLanguageText) {
+            var languageText = '';
+            this.optionLanguageText = this.game.add.text(
+                                this.game.world.centerX - (this.game.userPreference.data.languageChoice === 'PRT' ? 0 : 100),
+                                this.game.world.centerY - 100,
+                                this.game.languageText.languageWord[this.game.userPreference.data.languageChoice] + ": ",
+                                'language'
+                            );
+            this.optionLanguageText.inputEnabled = true;
+            this.optionLanguageText.fontSize = this.menuTextSize - 15;
+            this.optionLanguageText.fill = this.menuTextFill;
+            
+            this.englishText = this.game.add.text(
+                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
+                                this.game.world.centerY - 100,
+                                'English',
+                                'english'
+                            );
+            this.englishText.inputEnabled = true;
+            this.englishText.fontSize = this.menuTextSize - 15;
+            this.englishText.fill = this.game.userPreference.data.languageChoice === 'ENG' ?  this.menuTextFill : "#555559";
+            this.englishText.events.onInputDown.add(function() {
+                this.game.userPreference.data.languageChoice = "ENG";
+                this.game.userPreference.update();
+                this.optionLanguageText = '';
+                this.optionSoundText = '';
+                this.state.start('MainMenu');
+            }, this);
+            
+            this.pirateText = this.game.add.text(
+                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
+                                this.game.world.centerY,
+                                'Pirate',
+                                'pirate'
+                            );
+            this.pirateText.inputEnabled = true;
+            this.pirateText.fontSize = this.menuTextSize - 15;
+            this.pirateText.fill = this.game.userPreference.data.languageChoice === 'PRT' ?  this.menuTextFill : "#555559";
+            this.pirateText.events.onInputDown.add(function() {
+                console.log('pir clicked');
+                this.game.userPreference.data.languageChoice = "PRT";
+                this.game.userPreference.update();
+                this.optionLanguageText = '';
+                this.optionSoundText = '';
+                this.state.start('MainMenu');
+            }, this);
+            
+            this.spanishText = this.game.add.text(
+                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
+                                this.game.world.centerY - 50,
+                                'Espanol',
+                                'espanol'
+                            );
+            this.spanishText.inputEnabled = true;
+            this.spanishText.fontSize = this.menuTextSize - 15;
+            this.spanishText.fill = this.game.userPreference.data.languageChoice === 'ESP' ?  this.menuTextFill : "#555559";
+            this.spanishText.events.onInputDown.add(function() {
+                this.game.userPreference.data.languageChoice = "ESP";
+                this.game.userPreference.update();
+                this.optionLanguageText = '';
+                this.optionSoundText = '';
+                this.state.start('MainMenu');
+            }, this);
+        }
+        
 	},
 	loadMapData: function(mapSelection) {
         console.log('map selected: ' + mapSelection);
@@ -273,8 +441,8 @@ Lyra.MainMenu.prototype = {
     },
 	launchGame: function(mapData) {
 	    console.log('launching game');
-	    if (this.menuMusic.isPlaying) {
-	        this.menuMusic.stop();
+	    if (this.game.menuMusic.isPlaying) {
+	        this.game.menuMusic.stop();
 	    }
 	    console.log(mapData);
 	    this.game.gameData = JSON.parse(mapData);
