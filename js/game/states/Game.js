@@ -246,8 +246,8 @@ Lyra.LyraGame.prototype = {
         this.rightKey.onUp.add(this.rightStopRequest, this);
         
         //setup point and click
-        this.ptclick = this.game.input.mousePointer.leftButton;
-        this.ptclick.onDown.add(this.ptclickRequest, this);
+        //this.ptclick = this.game.input.activePointer.leftButton;
+        //this.ptclick.onDown.add(this.ptclickRequest, this);
 
 
         // generate slime manager to control the slime

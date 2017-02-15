@@ -131,22 +131,29 @@ class Player {
         //          this.lockedOut(this.sprite,containerManager.containers[i].sprite);
         //     }
         // }
-			/*
+        
+        if(this.isSelected == true){
+      
+            if(game.input.activePointer.leftButton.isDown){
+                this.sprite.customParams.dest_x = game.input.activePointer.worldX;
+                this.sprite.customParams.dest_y = game.input.activePointer.worldY;
+                this.sprite.customParams.status = "walking";
+            }
+                    
+        }  
+        
 		if( (this.sprite.customParams.status == "walking") ){
-			//game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 300);
-			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.body.y, 300);	
-				
+		    
+			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 300);	
+			console.log("X:" + this.sprite.customParams.dest_x);
+            console.log("Y:" + this.sprite.customParams.dest_y);
 				
 			//Stop Sprite when they reach dest
-			if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.body.y) ) ){
-			//if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
-			    this.sprite.body.velocity.x = 0;
-			    this.sprite.body.velocity.y = 0;
-			    
+			if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
 				this.sprite.customParams.status = "waiting";
 				console.log("I'm here.");
 			}
-				
+					
 			//Stop Sprite at Collision with Wall
 			if( (this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left) ){
 			    this.sprite.customParams.status = "waiting";
@@ -156,22 +163,21 @@ class Player {
 				    
 			}
 		
-		}*/
-		
+		}
         
     }
     
-    ptClick(game){
+    /*ptClick(game){
         
-        this.sprite.customParams.dest_x = game.input.mousePointer.x;
-        this.sprite.customParams.dest_y = game.input.mousePointer.y;
+        this.sprite.customParams.dest_x = game.input.activePointer.worldX;
+        this.sprite.customParams.dest_y = game.input.activePointer.worldY;
         console.log("X:" + this.sprite.customParams.dest_x);
         console.log("Y:" + this.sprite.customParams.dest_y);
         
         //Change status
 		this.sprite.customParams.status = "walking";
 
-    }
+    }*/
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;
