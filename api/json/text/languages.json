@@ -65,9 +65,9 @@
     "music" : {"ENG" : "Music", "PRT": "Yo ho ho", "ESP": "Musica"},
     "save" : {"ENG" : "Save", "PRT": "Stow it!", "ESP": "Guardar"},
     
-    "intro0" : {"ENG" : "There are those of us who wish to explore.  The Crew of Lyra has traveled to the Lyra constellation and recovered a golden lyre.  The peoples of earth believe the sound of the lyre will bring peace and harmony across the world.", 
-            "PRT": "Yarr! Thar be those of us who wish to explore. Thee Crew of Lyra has voyaged to thee Lyra constellation and recovered a golden lyre. Thee peoples of earth believe thee sound of thee lyre will bring peace and harmony across thee world.",
-            "ESP": "Hay quienes desean explorar. El Equipo de Lyra ha viajado a la constelación de Lyra y ha recuperado una lira de oro. Los pueblos de la tierra creen que el sonido de la lira traerá paz y armonía en todo el mundo." },
+    "intro0" : {"ENG" : "The Crew of Lyra has traveled to the Lyra constellation and recovered a golden lyre.  The peoples of Earth believe the sound of the lyre will bring peace and harmony across the world.", 
+            "PRT": "Yarr! Thar be those who sail beyond the seven seas. Thee Crew of Lyra has voyaged to thee Lyra constellation and recovered a golden lyre. Thee peoples of Earth believe thee sound of thee lyre will bring peace and harmony across thee world.",
+            "ESP": "El Equipo de Lyra ha viajado a la constelación de Lyra y ha recuperado una lira de oro. Los pueblos de la Tierra creen que el sonido de la lira traerá paz y armonía en todo el mundo." },
     "intro1" : {"ENG": "Pirates have overtaken the ship on it's return voyage.  The lyre is safely hidden onboard but asteroids have disabled the ship.", 
         "PRT": "Shiver me timbers! Pirates have overtaken thee galleon on it's return voyage. Thee lyre is safely hidden onboard but asteroids have disabled thee galleon.", 
         "ESP": "Los piratas han sobrepasado la nave en su viaje de regreso. La lira está escondida a bordo, pero los asteroides han desactivado la nave."},  
@@ -77,12 +77,21 @@
         "ESP": "La tripulación está en vainas del sueño y no está enterada de la situación. Las vainas de escape deben ser reparadas de los equipos ubicados en contenedores a bordo."},
     
     "intro3" : {"ENG" : "Pirates want the lyre to melt down for gold bullion.  They are boarding the ship at the docking bay. ", 
-        "PRT": "Shiver me timbers! Pirates want thee lyre to melt down for swag bullion. They be boarding thee galleon at thee docking bay.", 
+        "PRT": "Hoist the main sail and jibe starboard! Pirates want thee lyre to melt down for swag bullion. They be boarding thee galleon at thee docking bay.", 
         "ESP": "Los piratas quieren que la lira se derrita por los lingotes de oro. Están abordando el barco en la bahía de atraque."},
     
     "intro4" : {"ENG" : "Sticky slime has been released onboard.  Contact will cause crew to become immobilized. Slime suppressant cans are located throughout the ship. Spray on slime to neutralize it.", 
         "PRT": "Well shave me belly with a rusty razor! Sticky slime has been released onboard. Contact will cause ye mateys to become immobilized. Slime suppressant cans be stowed throughout thee galleon. Spray on slime to swab it.", 
         "ESP": "Sticky limo ha sido lanzado a bordo. El contacto causará que la tripulación se inmovilice. Las latas supresoras de limo se encuentran en todo el buque. Rocíe el limo para neutralizarlo."},
+
+    "credits" : {"ENG" : "Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license), http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)", 
+        "PRT": "Mates: Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license), http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com) ", 
+        "ESP": "Créditos: Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license), http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)"},
+    
+    "authors" : {"ENG" : "Created by:<br/><ul><li>Mark Giles</li><li>Corinna Huffaker</li><li>Runa Trinh</li></ul>", 
+        "PRT": "Yarn spinners:<br/><ul><li>Mark Giles</li><li>Corinna Huffaker</li><li>Runa Trinh</li></ul>", 
+        "ESP": "Creado por:<br/><ul><li>Mark Giles</li><li>Corinna Huffaker</li><li>Runa Trinh</li></ul>"},
+
     
     "intro5" : {"ENG" : "Escape with the lyre and the crew to save the Lyra mission!", 
         "PRT": "Ahoy ye lubber! Escape with thee lyre and thee crew to save thee Lyra mission!", 
@@ -119,7 +128,7 @@
     "victory" : {"ENG" : "Victory!", "PRT": "Shiver me timbers! Victory!", "ESP": "Victoria"},
     
     "totalfailure" : {"ENG" : "Mission Failure!", 
-        "PRT": "Lubbers!  Mission failed!", 
+        "PRT": "Lubbers!  We're sunk!", 
         "ESP": "Fracaso de la misión."},
     
     "partialfaillyre" : {"ENG" : "Mission Failure! Lyre is lost!", 
@@ -127,7 +136,7 @@
         "ESP": "¡Fracaso de misión! ¡Lyre se ha perdido!"},
     
     "partialfailcrew" : {"ENG" : "Mission Failure! Crew are lost!", 
-        "PRT": "Sail ho! Mission Failure! Crew be lost!", 
+        "PRT": "Dead men tell not tales! Crew be lost!", 
         "ESP": "¡Fracaso de misión! ¡La tripulación está perdida!"},
         
     "template" : {"ENG" : "English", 

@@ -1,5 +1,5 @@
 Lyra.StoryMenu = function() {
-	this.textArray = ['intro1', 'intro2', 'intro3', 'intro4', 'intro5'];
+	this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'credits', 'authors'];
 	this.primaryCard = $("#primary-card");
 	this.storyCard = $("<div id='story-card'></div>")
 	this.storyTextCard = $("<p></p>");
@@ -8,7 +8,7 @@ Lyra.StoryMenu = function() {
 
 Lyra.StoryMenu.prototype = {
 	preload: function() {
-		this.index = 1;
+		this.index = 0;
 	    this.storyTextCard.html(this.game.languageText[this.textArray[0]][this.game.userPreference.data.languageChoice]);
 	    this.index++;
 		this.storyCard.append(this.storyTextCard);
