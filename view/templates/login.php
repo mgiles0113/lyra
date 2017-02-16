@@ -54,8 +54,8 @@
             </div>
             <div class="communicator-submenu" id="timer">
                 <h4>Oxygen</h4>
-                <p>4:56</p>
-                <img src="assets/images/timerBar.png">
+                <p><span id="timer-minutes"></span>:<span id="timer-seconds"></span></p>
+                <div id="timer-bar"></div>
             </div>
         </div>
     </div>
@@ -74,10 +74,12 @@
     <script src="js/game/lyra/container.js"></script>
     <script src="js/game/lyra/userPreference.js"></script>
     <script src="js/game/lyra/testPost.js"></script>
+    <script src="js/game/lyra/timer.js"></script>
     <script src="js/game/states/StoryMenu.js"></script>
 	<script src="js/game/states/Preload.js"></script>
 	<script src="js/game/states/MainMenu.js"></script>
 	<script src="js/game/states/Game.js"></script>
+	<script src="js/game/states/EndGame.js"></script>
     <script src="js/ENVIRONMENT.js"></script>
     <script src="js/main.js"></script>
 </body>

@@ -62,6 +62,9 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
         
+        
+        this.timer = new Timer(30);
+        this.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         
         
@@ -258,7 +261,11 @@ Lyra.LyraGame.prototype = {
         this.slimeManager = new SlimeManager(this.game, spawnCoord);
 	},
 	update: function() {
-	    
+	    if (this.timer.timeUp) {
+	        console.log('time up!');
+	        this.state.remove();
+	        this.state.start('EndGame');
+	    }
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
        //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager);

@@ -48,6 +48,7 @@ function loadGame(userId) {
     game.state.add('MainMenu', Lyra.MainMenu);
     game.state.add('StoryMenu', Lyra.StoryMenu);
     game.state.add('LyraGame',Lyra.LyraGame);
+    game.state.add('EndGame', Lyra.EndGame);
     game.state.start('Boot');
 }
 

@@ -64,6 +64,7 @@ class Player {
         //Init Dest Coords as Sprite's Spawn Coord.
         this.sprite.customParams.dest_x = playerData.dest_x;
         this.sprite.customParams.dest_y = playerData.dest_y;
+        this.sprite.customParams.dist_dest = 0;
     
         game.physics.arcade.enable(this.sprite);
     
@@ -143,18 +144,24 @@ class Player {
         }  
         
 		if( (this.sprite.customParams.status == "walking") ){
+		    //Calculate the Distance to Destination
+		    this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y);
+            console.log(this.sprite.customParams.dist_dest);
 		    
+		    //Move to Destination
 			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 300);	
 			console.log("X:" + this.sprite.customParams.dest_x);
             console.log("Y:" + this.sprite.customParams.dest_y);
 				
-			//Stop Sprite when they reach dest
-			if( (this.sprite.getBounds().contains(this.sprite.customParams.dest_x, this.sprite.customParams.dest_y) ) ){
+			//Stop Sprite When Dest Reached
+			if( this.sprite.customParams.dist_dest < 5){
 				this.sprite.customParams.status = "waiting";
+				this.sprite.body.velocity.x = 0;
+				this.sprite.body.velocity.y = 0;
 				console.log("I'm here.");
 			}
 					
-			//Stop Sprite at Collision with Wall
+			//Stop Sprite when Collision Occurs
 			if( (this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left) ){
 			    this.sprite.customParams.status = "waiting";
 			    this.sprite.body.velocity.x = 0;
