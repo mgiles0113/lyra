@@ -16,6 +16,8 @@ Lyra.LyraGame.prototype = {
         }
         
         this.ready = false;
+        this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+		this.splash.anchor.setTo(0.5);
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 
@@ -63,7 +65,7 @@ Lyra.LyraGame.prototype = {
         }
         
         
-        this.timer = new Timer(30);
+        this.timer = new Timer(600);
         this.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         
