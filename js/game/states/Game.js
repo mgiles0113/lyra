@@ -65,7 +65,7 @@ Lyra.LyraGame.prototype = {
         }
         
         
-        this.timer = new Timer(600);
+        this.timer = new Timer(10);
         this.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         

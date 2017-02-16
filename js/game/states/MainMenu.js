@@ -1,403 +1,214 @@
 Lyra.MainMenu = function() {
-    this.menuTextStyle = {
-        "fillColor" : "#fff",
-        "size" : "40",
-        "verticalSpace" : "50",
+    this.menu = {
+        activeMenu : '',
+        mainMenuCard : $("#main-menu-card"),
+        
+        mainMenu : $(".main"),
+        noMainMenu : $(".no-main"),
+        
+        newGameText : $("#new-game-menu-text"),
+        newGame : $(".new"),
+        noNewGame : $(".no-new"),
+        passiveNewGame : $(".passive-new"),
+        newGameEasy : $("#new-game-easy"),
+	    newGameHard : $("#new-game-hard"),
+	    
+        loadGameText : $("#load-game-menu-text"),
+        loadGame : $(".load"),
+        noLoadGame : $(".no-load"),
+        passiveLoadGame : $(".passive-load"),
+        
+        optionsText : $("#options-menu-text"),
+        options : $(".options"),
+        noOptions : $(".no-options"),
+        passiveOptions : $(".passive-options"),
+        
+        storyText : $("#story-menu-text"),
+        story : $(".story"),
+        noStory : $(".no-story"),
+        passiveStory : $(".passive-story"),
+        
+	    loadGameGameSave : $("#load-game-game-save"),
+	    optionsSoundText : $("#options-sound-text"),
+	    optionsSoundTrue : $("#options-sound-true"),
+	    optionsSoundFalse : $("#options-sound-false"),
+	    optionsLanguageText : $("#options-language-text"),
+	    optionsLanguageEnglish : $("#options-language-english"),
+	    optionsLanguagePirate : $("#options-language-pirate"),
+	    optionsLanguageSpanish : $("#options-language-spanish")
     };
-
-    this.menuTextFill = '#fff';
-    this.menuTextSize = 40;
-    this.menuTextVerticalSpace = 50;
-
-    this.savedGames = [];
 };
 
 Lyra.MainMenu.prototype = {
-    preload: function() {},
-    
-	create: function() {
-        this.newGameText = this.game.add.text(
-                            this.game.world.centerX - 350,
-                            this.game.world.centerY - 300,
-                            this.game.languageText.newgame[this.game.userPreference.data.languageChoice],
-                            'newGame'
-                        );
-        this.newGameText.inputEnabled = true;
-        this.newGameText.fontSize = this.menuTextSize;
-        this.newGameText.fill = this.menuTextFill;
-        this.newGameText.events.onInputDown.add(this.newGame, this);
-        
-        this.loadGameText = this.game.add.text(
-                            this.game.world.centerX - 350,
-                            this.game.world.centerY - 225,
-                            this.game.languageText.loadgame[this.game.userPreference.data.languageChoice],
-                            'loadGame'
-                        );
-        this.loadGameText.inputEnabled = true;
-        this.loadGameText.fontSize = this.menuTextSize;
-        this.loadGameText.fill = this.menuTextFill;
-        this.loadGameText.events.onInputDown.add(this.loadGameMenu, this);
-
-        this.optionsText = this.game.add.text(
-                            this.game.world.centerX - 350,
-                            this.game.world.centerY - 150,
-                            this.game.languageText.options[this.game.userPreference.data.languageChoice],
-                            'options'
-                        );
-        this.optionsText.inputEnabled = true;
-        this.optionsText.fontSize = this.menuTextSize;
-        this.optionsText.fill = this.menuTextFill;
-        this.optionsText.events.onInputDown.add(this.optionsMenu, this);
-        
-        this.storyText = this.game.add.text(
-                            this.game.world.centerX - 350,
-                            this.game.world.centerY - 75,
-                            this.game.languageText.story[this.game.userPreference.data.languageChoice],
-                            'story'
-                        );
-        this.storyText.inputEnabled = true;
-        this.storyText.fontSize = this.menuTextSize;
-        this.storyText.fill = this.menuTextFill;
-        this.storyText.events.onInputDown.add(this.launchStoryState, this);
-        this.storyText.active = 1;
-        this.storyText.events.onInputOver.add(function() {
-            this.storyText.fill = this.menuTextFill;
-        }, this);
-        this.storyText.events.onInputOut.add(function() {
-            if (!this.storyText.active) { 
-                this.storyText.fill = "#555559";
-            }
-        }, this);
-	},
-	clearSelectedText: function() {
-	    this.storyText.fill = this.menuTextFill;
-	    this.newGameText.fill = this.menuTextFill;
-	    this.loadGameText.fill = this.menuTextFill;
-        this.optionsText.fill = this.menuTextFill;
-	    if(this.gameSaveText) {
-            this.gameSaveText.destroy(true);
-            this.gameSaveText = '';
-        }
-        if(this.easyMapText) {
-            this.easyMapText.destroy(true);
-            this.easyMapText = '';
-        }
-        if(this.hardMapText) {
-            this.hardMapText.destroy(true);
-            this.hardMapText = '';
-        }
-	},
-	update: function() {
-
-	},
-	launchStoryState: function() {
-	    this.storyText.fill = this.menuTextFill;
-	    this.storyText.active = 1;
-	    this.newGameText.fill = "#555559";
-	    this.loadGameText.fill = "#555559";
-        this.optionsText.fill = "#555559";
-        if(this.gameSaveText) {
-            this.gameSaveText.destroy(true);
-            this.gameSaveText = '';
-        }
-        if(this.easyMapText) {
-            this.easyMapText.destroy(true);
-            this.easyMapText = '';
-        }
-        if(this.hardMapText) {
-            this.hardMapText.destroy(true);
-            this.hardMapText = '';
-        }
-        if(this.optionSoundText) {
-            this.optionSoundText.destroy(true);
-            this.optionSoundText = '';
-        }
-        if(this.optionLanguageText) {
-            this.optionLanguageText.destroy(true);
-            this.optionLanguageText = '';
-        }
-        if(this.englishText) {
-            this.englishText.destroy(true);
-            this.englishText = '';
-        }
-        if(this.pirateText) {
-            this.pirateText.destroy(true);
-            this.pirateText = '';
-        }
-        if(this.spanishText) {
-            this.spanishText.destroy(true);
-            this.spanishText = '';
-        }
-	    this.state.start("StoryMenu");
-	},
-	newGame: function() {
-	    console.log('new game clicked');
-	    this.newGameText.fill = this.menuTextFill;
-        this.loadGameText.fill = "#555559";
-        this.optionsText.fill = "#555559";
-        this.storyText.fill = "#555559";
-        this.storyText.active = 0;
-        
-        if(this.gameSaveText) {
-            this.gameSaveText.destroy(true);
-            this.gameSaveText = '';
-        }
-        if(this.optionSoundText) {
-            this.optionSoundText.destroy(true);
-            this.optionSoundText = '';
-        }
-        if(this.optionLanguageText) {
-            this.optionLanguageText.destroy(true);
-            this.optionLanguageText = '';
-        }
-        if(this.englishText) {
-            this.englishText.destroy(true);
-            this.englishText = '';
-        }
-        if(this.pirateText) {
-            this.pirateText.destroy(true);
-            this.pirateText = '';
-        }
-        if(this.spanishText) {
-            this.spanishText.destroy(true);
-            this.spanishText = '';
-        }
-        
-        if (!this.easyMapText) {
-            this.easyMapText = this.game.add.text(
-                                this.game.world.centerX - 100,
-                                this.game.world.centerY - 325,
-                                this.game.languageText.easymap[this.game.userPreference.data.languageChoice],
-                                'easyMap'
-                            );
-            this.easyMapText.inputEnabled = true;
-            this.easyMapText.fontSize = this.menuTextSize - 15;
-            this.easyMapText.fill = this.menuTextFill;
-            this.easyMapText.events.onInputDown.add(function() { this.loadMapData('EASY'); }, this);
-        }
-        if (!this.hardMapText) {
-            this.hardMapText = this.game.add.text(
-                                this.game.world.centerX - 100,
-                                this.game.world.centerY - 275,
-                                this.game.languageText.hardmap[this.game.userPreference.data.languageChoice],
-                                'largeMap'
-                            );
-            this.hardMapText.inputEnabled = true;
-            this.hardMapText.fontSize = this.menuTextSize - 15;
-            this.hardMapText.fill = this.menuTextFill;
-            this.hardMapText.events.onInputDown.add(function() { this.loadMapData('HARD'); }, this);
-        }
-	},
-	loadGameMenu: function() {
-	    console.log('load game clicked');
-	    this.loadGameText.fill = this.menuTextFill;
-	    this.newGameText.fill = "#555559";
-        this.optionsText.fill = "#555559";
-        this.storyText.fill = "#555559";
-        this.storyText.active = 0;
-        
-        if(this.easyMapText) {
-            this.easyMapText.destroy(true);
-            this.easyMapText = '';
-        }
-        if(this.hardMapText) {
-            this.hardMapText.destroy(true);
-            this.hardMapText = '';
-        }
-        if(this.optionSoundText) {
-            this.optionSoundText.destroy(true);
-            this.optionSoundText = '';
-        }
-        if(this.optionLanguageText) {
-            this.optionLanguageText.destroy(true);
-            this.optionLanguageText = '';
-        }
-        if(this.englishText) {
-            this.englishText.destroy(true);
-            this.englishText = '';
-        }
-        if(this.pirateText) {
-            this.pirateText.destroy(true);
-            this.pirateText = '';
-        }
-        if(this.spanishText) {
-            this.spanishText.destroy(true);
-            this.spanishText = '';
-        }
-        
-        if (!this.gameSaveLoadText) {
-            this.gameSaveLoadText = this.game.add.text(
-                                this.game.world.centerX - 100,
-                                this.game.world.centerY - 225,
-                                'Loading...',
-                                'gameSaveLoad'
-                            );
-            this.gameSaveLoadText.inputEnabled = true;
-            this.gameSaveLoadText.fontSize = this.menuTextSize - 15;
-            this.gameSaveLoadText.fill = this.menuTextFill;
-        }
-        this.getSavedGameList();
-	},
-	populateSavedGameList : function() {
-	    console.log('populating');
-	    if (!this.gameSaveText) {
-            this.gameSaveText = this.game.add.text(
-                                this.game.world.centerX - 100,
-                                this.game.world.centerY - 225,
-                                'gameSave',
-                                'gameSave'
-                            );
-            this.gameSaveText.inputEnabled = true;
-            this.gameSaveText.fontSize = this.menuTextSize - 15;
-            this.gameSaveText.fill = this.menuTextFill;
-            this.gameSaveText.events.onInputDown.add(function() { this.restoreGameData('gameSave'); }, this);
-        }
-	},
-	getSavedGameList : function() {
-	    $.ajax({
-            url: apiUrl,
-            type: 'GET',
-            context: this,
-            data: { 
-                "entity" : "gameData",
-                "action" : "list",
-                "userId" : this.game.userPreference.data.userId
-            },
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                if(this.gameSaveLoadText) {
-                    this.gameSaveLoadText.destroy(true);
-                    this.gameSaveLoadText = '';
-                }
-                this.populateSavedGameList(JSON.parse(response));
-            },
-            error: function(response) {
-                console.log('fail');
-            }
+    preload: function() {
+        console.log('initializing main menu');
+        this.createClickEvents();
+        this.menu.mainMenuCard.css('display', 'inherit');
+        this.showMenu('main');
+    },
+    createClickEvents: function() {
+        var self = this;
+        // create listeners for menu items
+        this.menu.newGameText.click(function() {
+            self.showMenu('newGame');
         });
+        this.menu.newGameEasy.click(function() {
+            self.startNewGame('EASY');
+        });
+        this.menu.newGameHard.click(function() {
+            self.startNewGame('HARD');
+        });
+        this.menu.loadGameText.click(function() {
+            self.showMenu('loadGame');
+        });
+        this.menu.loadGameGameSave.click(function() {
+            self.startSavedGame('gameSave');
+        });
+        this.menu.optionsText.click(function() {
+            self.showMenu('options');
+        });
+        this.menu.storyText.click(function() {
+            self.showMenu('story');
+        });
+    },
+    destroyClickEvents: function() {
+        this.menu.newGameText.unbind('click');
+        this.menu.newGameEasy.unbind('click');
+        this.menu.newGameHard.unbind('click');
+        this.menu.loadGameText.unbind('click');
+        this.menu.loadGameGameSave.unbind('click');
+        this.menu.optionsText.unbind('click');
+        this.menu.storyText.unbind('click');
+    },
+    populateMenuText: function() {
+        this.languageChoice = this.game.userPreference.data.languageChoice;
+        this.menu.newGameText.html(this.game.languageText.newgame[this.languageChoice]);
+        this.menu.newGameEasy.html(this.game.languageText.easymap[this.languageChoice]);
+        this.menu.newGameHard.html(this.game.languageText.hardmap[this.languageChoice]);
+        this.menu.loadGameText.html(this.game.languageText.loadgame[this.languageChoice]);
+        this.menu.loadGameGameSave.html('gameSave');
+        this.menu.optionsText.html(this.game.languageText.options[this.languageChoice]);
+        this.menu.optionsSoundText.html(this.game.languageText.sound[this.languageChoice]);
+        this.menu.optionsSoundTrue.html(this.game.languageText.true[this.languageChoice]);
+        this.menu.optionsSoundFalse.html(this.game.languageText.false[this.languageChoice]);
+        this.menu.optionsLanguageText.html(this.game.languageText.languageWord[this.languageChoice]);
+	    this.menu.optionsLanguageEnglish.html('English');
+	    this.menu.optionsLanguagePirate.html('Pirate');
+	    this.menu.optionsLanguageSpanish.html('Espanol');
+	    this.menu.storyText.html(this.game.languageText.story[this.languageChoice]);
+	},
+	showMenu: function(menuSelection) {
+	    console.log('showMenu function');
+	    console.log('menu selection: ' + menuSelection);
+	    switch(menuSelection) {
+	        case 'main':
+                this.menu.noMainMenu.css('display', 'none');
+                this.menu.mainMenu.css('color', 'white');
+                this.menu.mainMenu.css('display', 'inherit');
+	            this.menu.activeMenu = menuSelection;
+	            break;
+            case 'newGame':
+                if (this.menu.activeMenu === menuSelection) {
+                    this.showMenu('main');
+                } else {
+                    this.menu.noNewGame.css('display', 'none');
+                    this.menu.passiveNewGame.css('display', 'inherit');
+                    this.menu.passiveNewGame.css('color', '#555559');
+                    this.menu.newGame.css('color', 'white');
+                    this.menu.newGame.css('display', 'inherit');
+                    this.menu.activeMenu = 'newGame';
+                }
+                break;
+            case 'loadGame':
+                if (this.menu.activeMenu === menuSelection) {
+                    this.showMenu('main');
+                } else {
+                    this.menu.noLoadGame.css('display', 'none');
+                    this.menu.passiveLoadGame.css('display', 'inherit');
+                    this.menu.passiveLoadGame.css('color', '#555559');
+                    this.menu.loadGame.css('color', 'white');
+                    this.menu.loadGame.css('display', 'inherit');
+                    this.menu.activeMenu = 'loadGame';
+                }
+                break;
+            case 'options':
+                if (this.menu.activeMenu === menuSelection) {
+                    this.showMenu('main');
+                } else {
+                    this.menu.noOptions.css('display', 'none');
+                    this.menu.passiveOptions.css('display', 'inherit')
+                                            .css('color', '#555559');
+                    this.menu.options.css('color', 'white')
+                                     .css('display', 'inherit');
+                    this.menu.activeMenu = 'options';
+                }
+                break;
+            case 'story':
+                if (this.menu.activeMenu === menuSelection) {
+                    this.showMenu('main');
+                } else {
+                    this.menu.noStory.css('display', 'none');
+                    this.menu.passiveStory.css('display', 'inherit')
+                                          .css('color', '#555559');
+                    this.menu.story.css('color', 'white')
+                                   .css('display', 'inherit');
+                    this.menu.activeMenu = 'story';
+                }
+                this.startNewState('StoryMenu');
+                break;
+	    }
+	},
+	startNewState: function(state) {
+	    this.destroyClickEvents();
+	    this.menu.mainMenuCard.css('display', 'none');
+	    
+	    switch(state) {
+	        case 'StoryMenu':
+	            this.state.start("StoryMenu");
+	            break;
+            case 'LyraGame':
+                this.state.start('LyraGame');
+                break;
+	    }
 	},
 	optionsMenu: function() {
-	    console.log('options clicked');
-        console.log(this.game.userPreference.ready);
-	    this.optionsText.fill = this.menuTextFill;
-	    this.newGameText.fill = "#555559";
-        this.loadGameText.fill = "#555559";
-        this.storyText.fill = "#555559";
-        this.storyText.active = 0;
-        
-        if(this.gameSaveText) {
-            this.gameSaveText.destroy(true);
-            this.gameSaveText = '';
-        }
-        if(this.easyMapText) {
-            this.easyMapText.destroy(true);
-            this.easyMapText = '';
-        }
-        if(this.hardMapText) {
-            this.hardMapText.destroy(true);
-            this.hardMapText = '';
-        }
-        
-        if (!this.optionSoundText) {
-            var soundText = '';
-            if (this.game.userPreference.data.sound === 'true') {
-                soundText = 'true';
+        this.optionSoundText.events.onInputDown.add(function() {
+            if (this.game.userPreference.data.sound === "true") {
+                this.game.userPreference.data.sound = "false";
+                this.game.menuMusic.stop();
             } else {
-                soundText = 'false';
+                this.game.userPreference.data.sound = "true";
+                this.game.menuMusic.play('', 0, 0.1, true, true);
             }
-            this.optionSoundText = this.game.add.text(
-                                this.game.world.centerX - (this.game.userPreference.data.languageChoice === 'PRT' ? 0 : 100),
-                                this.game.world.centerY - 150,
-                                this.game.languageText.sound[this.game.userPreference.data.languageChoice] + ':    ' + this.game.languageText[soundText][this.game.userPreference.data.languageChoice],
-                                'sound'
-                            );
-            this.optionSoundText.inputEnabled = true;
-            this.optionSoundText.fontSize = this.menuTextSize - 15;
-            this.optionSoundText.fill = this.menuTextFill;
-            
-            this.optionSoundText.events.onInputDown.add(function() {
-                if (this.game.userPreference.data.sound === "true") {
-                    this.game.userPreference.data.sound = "false";
-                    this.game.menuMusic.stop();
-                } else {
-                    this.game.userPreference.data.sound = "true";
-                    this.game.menuMusic.play('', 0, 0.1, true, true);
-                }
-                this.game.userPreference.update();
-                this.optionSoundText.destroy(true);
-                this.optionSoundText = '';
-                this.optionsMenu();
-            }, this);
-        }
-        
-        if (!this.optionLanguageText) {
-            var languageText = '';
-            this.optionLanguageText = this.game.add.text(
-                                this.game.world.centerX - (this.game.userPreference.data.languageChoice === 'PRT' ? 0 : 100),
-                                this.game.world.centerY - 100,
-                                this.game.languageText.languageWord[this.game.userPreference.data.languageChoice] + ": ",
-                                'language'
-                            );
-            this.optionLanguageText.inputEnabled = true;
-            this.optionLanguageText.fontSize = this.menuTextSize - 15;
-            this.optionLanguageText.fill = this.menuTextFill;
-            
-            this.englishText = this.game.add.text(
-                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
-                                this.game.world.centerY - 100,
-                                'English',
-                                'english'
-                            );
-            this.englishText.inputEnabled = true;
-            this.englishText.fontSize = this.menuTextSize - 15;
-            this.englishText.fill = this.game.userPreference.data.languageChoice === 'ENG' ?  this.menuTextFill : "#555559";
-            this.englishText.events.onInputDown.add(function() {
-                this.game.userPreference.data.languageChoice = "ENG";
-                this.game.userPreference.update();
-                this.optionLanguageText = '';
-                this.optionSoundText = '';
-                this.state.start('MainMenu');
-            }, this);
-            
-            this.pirateText = this.game.add.text(
-                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
-                                this.game.world.centerY,
-                                'Pirate',
-                                'pirate'
-                            );
-            this.pirateText.inputEnabled = true;
-            this.pirateText.fontSize = this.menuTextSize - 15;
-            this.pirateText.fill = this.game.userPreference.data.languageChoice === 'PRT' ?  this.menuTextFill : "#555559";
-            this.pirateText.events.onInputDown.add(function() {
-                console.log('pir clicked');
-                this.game.userPreference.data.languageChoice = "PRT";
-                this.game.userPreference.update();
-                this.optionLanguageText = '';
-                this.optionSoundText = '';
-                this.state.start('MainMenu');
-            }, this);
-            
-            this.spanishText = this.game.add.text(
-                                this.game.world.centerX + (this.game.userPreference.data.languageChoice === 'PRT' ? 150 : 50),
-                                this.game.world.centerY - 50,
-                                'Espanol',
-                                'espanol'
-                            );
-            this.spanishText.inputEnabled = true;
-            this.spanishText.fontSize = this.menuTextSize - 15;
-            this.spanishText.fill = this.game.userPreference.data.languageChoice === 'ESP' ?  this.menuTextFill : "#555559";
-            this.spanishText.events.onInputDown.add(function() {
-                this.game.userPreference.data.languageChoice = "ESP";
-                this.game.userPreference.update();
-                this.optionLanguageText = '';
-                this.optionSoundText = '';
-                this.state.start('MainMenu');
-            }, this);
-        }
-        
+            this.game.userPreference.update();
+            this.optionSoundText.destroy(true);
+            this.optionSoundText = '';
+            this.optionsMenu();
+        }, this);
+        this.englishText.events.onInputDown.add(function() {
+            this.game.userPreference.data.languageChoice = "ENG";
+            this.game.userPreference.update();
+            this.optionLanguageText = '';
+            this.optionSoundText = '';
+            this.state.start('MainMenu');
+        }, this);
+        this.pirateText.events.onInputDown.add(function() {
+            console.log('pir clicked');
+            this.game.userPreference.data.languageChoice = "PRT";
+            this.game.userPreference.update();
+            this.optionLanguageText = '';
+            this.optionSoundText = '';
+            this.state.start('MainMenu');
+        }, this);
+        this.spanishText.events.onInputDown.add(function() {
+            this.game.userPreference.data.languageChoice = "ESP";
+            this.game.userPreference.update();
+            this.optionLanguageText = '';
+            this.optionSoundText = '';
+            this.state.start('MainMenu');
+        }, this);
 	},
-	loadMapData: function(mapSelection) {
+	startNewGame: function(mapSelection) {
         console.log('map selected: ' + mapSelection);
         $.ajax({
             url: apiUrl,
@@ -417,7 +228,7 @@ Lyra.MainMenu.prototype = {
             }
         });
     },
-	restoreGameData: function(gameSaveFile) {
+	startSavedGame: function(gameSaveFile) {
         console.log('restore game data selected');
         $.ajax({
             url: apiUrl,
@@ -430,25 +241,21 @@ Lyra.MainMenu.prototype = {
             },
             dataType: 'json',
             success: function(response) {
-                console.log('it worked');
                 this.launchGame(JSON.parse(response));
             },
             error: function(response) {
-                console.log('fail');
                 console.log(response);
             }
         });
     },
 	launchGame: function(mapData) {
-	    console.log('launching game');
 	    if (this.game.menuMusic.isPlaying) {
 	        this.game.menuMusic.stop();
 	    }
-	    console.log(mapData);
 	    this.game.gameData = JSON.parse(mapData);
 	    this.game.playerData = PLAYER_DATA;
 	    this.game.itemData = ITEMS_DATA;
 	    this.game.newGame = true;
-        this.state.start('LyraGame');
+	    this.startNewState('LyraGame');
 	}
 };

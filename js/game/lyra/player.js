@@ -149,16 +149,13 @@ class Player {
             console.log(this.sprite.customParams.dist_dest);
 		    
 		    //Move to Destination
-			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 300);	
-			console.log("X:" + this.sprite.customParams.dest_x);
-            console.log("Y:" + this.sprite.customParams.dest_y);
+			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 150);	
 				
 			//Stop Sprite When Dest Reached
 			if( this.sprite.customParams.dist_dest < 5){
 				this.sprite.customParams.status = "waiting";
 				this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
-				console.log("I'm here.");
 			}
 					
 			//Stop Sprite when Collision Occurs
@@ -166,7 +163,6 @@ class Player {
 			    this.sprite.customParams.status = "waiting";
 			    this.sprite.body.velocity.x = 0;
 			    this.sprite.body.velocity.y = 0;
-				console.log("I'm stopping.");
 				    
 			}
 		
