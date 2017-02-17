@@ -162,4 +162,35 @@ class User {
         fwrite($gameSave, '{}');
         return $saveFile;
     }
+    
+    function getSavedGameFiles() {
+        $db = new DatabaseConnection();
+        $mysqli = $db->connect();
+        /* create a prepared statement */
+        if (!($stmt = $mysqli->prepare("SELECT * FROM SavedGame WHERE userID=?"))) {
+                echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+        }
+        /* bind parameters for markers */
+        if (!$stmt->bind_param("i", $this->id)) {
+            echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        /* execute query */
+        if (!$stmt->execute()) {
+            echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        
+        $id = -1;
+        $userID = -1;
+        $gameFileName = '';
+        
+        $savedGameFiles = [];
+        /* bind result variables */
+        $stmt->bind_result($id, $userID, $gameFileName);
+        
+        while ($stmt->fetch()) {
+            array_push($savedGameFiles, $gameFileName);
+        }
+        $stmt->close();
+        return $savedGameFiles;
+    }
 }

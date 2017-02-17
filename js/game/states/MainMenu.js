@@ -65,7 +65,8 @@ Lyra.MainMenu.prototype = {
             self.startNewGame('HARD');
         });
         this.menu.loadGameText.click(function() {
-            self.showMenu('loadGame');
+            console.log('laod game text clicked');
+            self.game.userPreference.getSavedGameFiles(this);
         });
         this.menu.loadGameGameSave.click(function() {
             self.startSavedGame('gameSave');
@@ -98,6 +99,16 @@ Lyra.MainMenu.prototype = {
             self.showMenu('story');
         });
     },
+    update: function() {
+        if (this.game.userPreference.savedGameFilesLoaded) {
+            this.game.userPreference.savedGameFilesLoaded = 0;
+            this.populateLoadMenuText();
+        }
+    },
+    populateLoadMenuText: function() {
+        
+        this.showMenu('loadGame');
+    }
     setLanguage: function(choice) {
         this.game.userPreference.data.languageChoice = choice;
         this.menu.activeMenu = '';

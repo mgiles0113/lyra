@@ -2,10 +2,6 @@
 require('classes/User.php');
 require('classes/DatabaseConnection.php');
 
-$jsonResponseBody = array(
-    "error" => ""
-);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     switch ($_POST['entity']) {
@@ -38,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'userPreference':
             getUserPreference($_GET['userId']);
             break;
+        case 'savedGameFiles':
+            getSavedGameFiles($_GET['userId']);
+            break;
         case 'gameData':
             if ($_GET['action'] == 'list') {
                 getGameData('list', 'none', $_GET['userId']);
@@ -46,8 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             break;
         default:
-            
     }
+}
+function getSavedGameFiles($userId) {
+    $user = new User();
+    $user->setId($userId);
+    $savedGameFiles = $user->getSavedGameFiles();
+    
+    $response = '{ "error" : "none", "savedGameCount" : "' . count($savedGameFiles) . '"';
+    if (count($savedGameFiles) > 0) {
+        $response .= ', "savedGameFiles" : ';
+        $response .= json_encode($savedGameFiles);
+    }
+    echo $response . '}';
 }
 
 function generateSavedGameFile($userId) {

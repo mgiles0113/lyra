@@ -84,4 +84,28 @@ class UserPreference {
             }
         });
     }
+    
+    getSavedGameFiles(menuState) {
+        console.log('sending save game request to server');
+        $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            data: {
+                'entity' : 'savedGameFiles',
+                'userId' : this.data.userId
+            },
+            dataType: 'json',
+            context: this,
+            success: function(response) {
+                console.log('successful response from server for saved game files');
+                console.log(response);
+                this.savedGames = response.savedGameFiles;
+                this.savedGameFilesLoaded = 1;
+            },
+            error: function(response) {
+                console.log(response);
+                console.log('fail');
+            }
+        });
+    }
 }

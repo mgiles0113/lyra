@@ -77,7 +77,7 @@
                         <button class="main passive-new load passive-options passive-sound-options passive-language-options passive-story" id="load-game-menu-text">Load Game</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-game-save">gameSave</button>
+                         <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-1">Load Game Slot 1</button>
                     </div>
                 </div>
                 <div class="row">
@@ -86,6 +86,7 @@
                     </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load options sound-options passive-language-options no-story" id="options-sound-text">Sound</button>
+                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-2">Load Game Slot 2</button>
                     </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load no-options sound-options no-language-options no-story" id="options-sound-true">True</button>
@@ -97,7 +98,7 @@
                     </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load options passive-sound-options language-options no-story" id="options-language-text">Language</button>
-                        
+                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-3">Load Game Slot 3</button>
                     </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-english">English</button>
@@ -107,14 +108,18 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3"></div>
-                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-4">Load Game Slot 4</button>
+                    </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-pirate">Pirate</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3"></div>
-                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-5">Load Game Slot 5</button>
+                    </div>
                     <div class="col-md-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-spanish">Spanish</button>
                     </div>

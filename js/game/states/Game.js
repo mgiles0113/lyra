@@ -55,20 +55,6 @@ Lyra.LyraGame.prototype = {
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
-        //Setup Pathfinder Engine
-        this.pathfinder = new EasyStar.js();
-        this.pathfinder.setGrid(this.test_map);
-        this.pathfinder.setAcceptableTiles([0]);
-        this.pathfinder.findPath(0, 0, 4, 0, function( path ) {
-            if (path === null) {
-                alert("Path was not found.");
-            } else {
-                alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
-            }       
-        });
-
-        this.pathfinder.calculate();
-    
         //Create comm window.
         this.comm = new Comm(this.game);
 
@@ -85,7 +71,48 @@ Lyra.LyraGame.prototype = {
             //this.mapLayer[i].resizeWorld(200,200);
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
+    
+        //console.log(this.mapLayer['walls']);
+        //Setup Pathfinder Engine
+        /*this.pathfinder = new EasyStar.js();
         
+        
+
+        //Get the walls map layer --> change to a 2d array.
+        /*var world_cols = 64;
+        var world_rows = 46;
+        var grid_col = 0;
+        var grid_row = 0;
+        
+        this.grid = [];
+        
+        for(grid_row = 0; grid_row < world_rows; grid_row++){
+            this.grid[grid_row] = [];
+            
+            for(grid_col = 0; grid_col < world_cols; grid_col++){
+                this.grid[grid_row][grid_col] = this.mapLayer['walls'].[(grid_row* world_cols) + grid_col];
+                
+            }
+        }
+        
+        
+        this.pathfinder.setGrid(this.test_map);
+        this.pathfinder.setAcceptableTiles([0]);
+        this.pathfinder.enableDiagonals();
+        
+        this.pathfinder.findPath(0, 0, 4, 0, function( path ) {
+            if (path === null) {
+	            console.log("The path to the destination point was not found.");
+	        
+
+            }else{
+	    	    for (var i = 0; i < path.length; i++){
+	    		console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
+	    	    }
+	        }
+	    });
+
+        this.pathfinder.calculate();*/
         
         this.timer = new Timer(600);
         this.timer.initialize();

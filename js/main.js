@@ -66,6 +66,7 @@ function loadLanguageFile(game) {
             populateLoginPage(response);
         },
         error: function(response) {
+            console.log(response);
             console.log('fail');
         }
     });

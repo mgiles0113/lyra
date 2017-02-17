@@ -136,8 +136,11 @@ class Player {
         if(this.isSelected == true){
       
             if(game.input.activePointer.leftButton.isDown){
-                this.sprite.customParams.dest_x = game.input.activePointer.worldX;
-                this.sprite.customParams.dest_y = game.input.activePointer.worldY;
+                
+                //Move Sprite to Exact Tile Coordinates
+                this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
+                this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
+                
                 this.sprite.customParams.status = "walking";
             }
                     
