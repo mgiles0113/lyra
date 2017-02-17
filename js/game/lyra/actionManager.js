@@ -4,7 +4,7 @@ class ActionManager {
     }
     updateAction(game, playerid, containerManager) {
         console.log("wouldn't it be great if this did something?")
-
+        
         for (var j=0; j<containerManager.containers.length; j++) {
             if (containerManager.containers[j].containerstate == "openhighlight"  ||
                 containerManager.containers[j].containerstate == "closedhighlight") {

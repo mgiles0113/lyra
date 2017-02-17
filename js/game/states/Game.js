@@ -13,6 +13,14 @@ Lyra.LyraGame.prototype = {
             this.roomArr = [];  // approx center of rooms on map
             this.containerLocType = [];
             //this.suppresantArr = [];  // locations on the map where suppresant can be placed
+            
+            //Test Map for Pathfinder
+            this.test_map = [[0,0,1,0,0],
+                             [1,0,1,0,1],
+	                         [0,0,1,0,0],
+	                         [0,0,1,1,0],
+	                         [0,0,0,0,0]];
+            
         }
         
         this.ready = false;
@@ -20,7 +28,7 @@ Lyra.LyraGame.prototype = {
 		this.splash.anchor.setTo(0.5);
 		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 256, 'preloadBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
-
+        
 		// moved to PreloadLyra
 		Map.loadMap(this.game, this.game.gameData.mapRef, this.game.gameData.imageTagList, this.game.gameData.imageRefList);
 		
@@ -47,6 +55,20 @@ Lyra.LyraGame.prototype = {
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
     
+        //Setup Pathfinder Engine
+        this.pathfinder = new EasyStar.js();
+        this.pathfinder.setGrid(this.test_map);
+        this.pathfinder.setAcceptableTiles([0]);
+        this.pathfinder.findPath(0, 0, 4, 0, function( path ) {
+            if (path === null) {
+                alert("Path was not found.");
+            } else {
+                alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+            }       
+        });
+
+        this.pathfinder.calculate();
+    
         //Create comm window.
         this.comm = new Comm(this.game);
 
@@ -65,7 +87,7 @@ Lyra.LyraGame.prototype = {
         }
         
         
-        this.timer = new Timer(10);
+        this.timer = new Timer(600);
         this.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         
@@ -428,6 +450,10 @@ Lyra.LyraGame.prototype = {
             this.playerManager.players[playerIdx].stopRight(this.game);
         }
     },
+    
+    onPathFound: function(){
+        
+    }
 
 
 

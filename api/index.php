@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         case 'userPreference':
             saveUserPreferences($_POST['data']);
             break;
+        case 'savedGameFile':
+            generateSavedGameFile($_POST['userId']);
+            break;
         case 'testPost':
             $gameSave = fopen("gameSave.json", "w");
             fwrite($gameSave, json_encode($_POST['data']));
@@ -45,6 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         default:
             
     }
+}
+
+function generateSavedGameFile($userId) {
+    $user = new User();
+    $user->setId($userId);
+    $saveFile = $user->generateSavedGameFile();
+    echo '{ "error" : "none", "saveFile" : "' . $saveFile . '" }';
 }
 
 function login() {

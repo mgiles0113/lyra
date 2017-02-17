@@ -171,15 +171,22 @@ class Container {
     }
 
     switchContainerState (game) {
+        
         switch (this.containerstate) {
             case "openhighlight" : 
                  if (this.setState(game, "closedhighlight")) {
+                    if (game.userPreference.data.sound === "true") {
+                        game.sfDoorOpen.play('', 0, 0.1, false, true);
+                    }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.hideAllItems();
                  }
                 break;
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
+                    if (game.userPreference.data.sound === "true") {
+                        game.sfDoorClose.play('', 0, 0.1, false, true);
+                    }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);
                 }

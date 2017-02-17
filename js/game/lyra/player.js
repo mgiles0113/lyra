@@ -151,19 +151,12 @@ class Player {
 		    //Move to Destination
 			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 150);	
 				
-			//Stop Sprite When Dest Reached
-			if( this.sprite.customParams.dist_dest < 5){
+			//Stop Sprite When Dest Reached or Collision Occurs
+			if( (this.sprite.customParams.dist_dest < 5) || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left){
 				this.sprite.customParams.status = "waiting";
+				this.sprite.customParams.dist_dest = 0;
 				this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
-			}
-					
-			//Stop Sprite when Collision Occurs
-			if( (this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left) ){
-			    this.sprite.customParams.status = "waiting";
-			    this.sprite.body.velocity.x = 0;
-			    this.sprite.body.velocity.y = 0;
-				    
 			}
 		
 		}

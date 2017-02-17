@@ -144,4 +144,22 @@ class User {
             $stmt->close();
         }
     }
+    
+    function generateSavedGameFile() {
+        $db = new DatabaseConnection();
+        $mysqli = $db->connect();
+        /* create a prepared statement */
+        if ($stmt = $mysqli->prepare("INSERT INTO SavedGame (userID, gameFileName) VALUES (?, ?)")) {
+            $saveFile = $this->id . '_' . date('Y_m_d_H_i_s') . '.json';
+            /* bind parameters for markers */
+            $stmt->bind_param("is", $this->id, $saveFile);
+		    /* execute query */
+            $stmt->execute();
+            /* close statement */
+            $stmt->close();
+        }
+        $gameSave = fopen('json/SavedGames/' . $saveFile, "w");
+        fwrite($gameSave, '{}');
+        return $saveFile;
+    }
 }

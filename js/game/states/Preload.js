@@ -11,6 +11,8 @@ Lyra.Preload.prototype = {
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 		
 		this.load.audio('menuMusic', 'assets/audio/Lyra_v1_0_0.mp3');
+		this.load.audio('doorOpen', 'assets/audio/door_open.mp3');
+        this.load.audio('doorClose', 'assets/audio/door_close.mp3');
 		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},
 	create: function() {
@@ -20,8 +22,9 @@ Lyra.Preload.prototype = {
 	update: function() {
 		if (this.cache.isSoundDecoded('menuMusic') && this.ready === true) {
 			this.game.menuMusic = this.game.add.audio('menuMusic');
+			this.game.sfDoorOpen = this.game.add.audio('doorOpen');
+			this.game.sfDoorClose = this.game.add.audio('doorClose');
 			if (this.game.userPreference.data.sound === "true" && this.game.menuMusic.isPlaying === false) {
-	        	
 	        	this.game.menuMusic.play('', 0, 0.1, true, true);
 	    	}
 			this.state.start('MainMenu');

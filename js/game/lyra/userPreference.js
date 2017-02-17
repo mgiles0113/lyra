@@ -7,6 +7,7 @@ class UserPreference {
         this.data = {};
         this.loaded = 0;
         this.ready = 0;
+        this.savedGames = [];
     }
 
     load() {
@@ -61,5 +62,26 @@ class UserPreference {
     enable() {
         this.ready = true;
         console.log("this ready: " + this.ready);
+    }
+    
+    generateSavedGameFile() {
+        $.ajax({
+            url: apiUrl,
+            type: 'POST',
+            data: {
+                'entity' : 'savedGameFile',
+                'userId' : this.data.userId
+            },
+            dataType: 'json',
+            context: this,
+            success: function(response) {
+                console.log(response);
+                this.savedGames.push(response.saveFile);
+                this.data.activeGame = response.saveFile;
+            },
+            error: function(response) {
+                console.log('fail');
+            }
+        });
     }
 }

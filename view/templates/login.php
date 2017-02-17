@@ -8,6 +8,7 @@
     <script src="js/library/phaser.js"></script>
     <script src="js/library/jquery-3.1.1.min.js"></script>
     <script src="js/library/bootstrap.min.js"></script>
+    <script src="js/library/easystar-0.2.1.min.js"></script>
 </head>
 <body>
     <div id="interface">
@@ -62,52 +63,60 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <button class=" main new passive-load passive-options passive-story" id="new-game-menu-text">New Game</button>
+                        <button class="main new passive-load passive-options passive-sound-options passive-story passive-language-options" id="new-game-menu-text">New Game</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main new no-load no-options no-story" id="new-game-easy">Easy Map</button>
+                        <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-easy">Easy Map</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main new no-load no-options no-story" id="new-game-hard">Hard Map</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <button class="main passive-new load passive-options passive-story" id="load-game-menu-text">Load Game</button>
-                    </div>
-                    <div class="col-md-3">
-                        <button class="no-main no-new load no-options no-story" id="load-game-game-save">gameSave</button>
+                        <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-hard">Hard Map</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <button class="main passive-new passive-load options passive-story" id="options-menu-text">Options</button>
+                        <button class="main passive-new load passive-options passive-sound-options passive-language-options passive-story" id="load-game-menu-text">Load Game</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main no-new no-load options no-story" id="options-sound-text">Sound</button>
-                    </div>
-                    <div class="col-md-3">
-                        <button class="no-main no-new no-load no-story" id="options-sound-true">True</button>
+                        <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-game-save">gameSave</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <button class="main passive-new passive-load passive-options story" id="story-menu-text">Story</button>
+                        <button class="main passive-new passive-load options sound-options language-options passive-story" id="options-menu-text">Options</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main no-new no-load options no-story" id="options-language-text">Language</button>
-                        <button class="no-main no-new no-load no-story" id="options-language-english">English</button>
-                        <button class="no-main no-new no-load no-story" id="options-sound-false">False</button>
+                        <button class="no-main no-new no-load options sound-options passive-language-options no-story" id="options-sound-text">Sound</button>
                     </div>
                     <div class="col-md-3">
-                        <button class="no-main no-new no-load no-story" id="options-language-pirate">Pirate</button>
+                        <button class="no-main no-new no-load no-options sound-options no-language-options no-story" id="options-sound-true">True</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="main passive-new passive-load passive-options passive-sound-options passive-language-options story" id="story-menu-text">Story</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="no-main no-new no-load options passive-sound-options language-options no-story" id="options-language-text">Language</button>
+                        
+                    </div>
+                    <div class="col-md-3">
+                        <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-english">English</button>
+                        <button class="no-main no-new no-load no-options sound-options no-language-options no-story" id="options-sound-false">False</button>
+                        
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
-                        <button class="no-main no-new no-story" id="options-language-spanish">Spanish</button>
+                        <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-pirate">Pirate</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-spanish">Spanish</button>
                     </div>
                 </div>
             </div>
