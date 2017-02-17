@@ -1,11 +1,13 @@
 class TestPost {
-    send(data) {
+    send(data, saveFile) {
+        console.log('tp savefiel: ' + saveFile);
 	    $.ajax({
             url: apiUrl,
             type: 'POST',
             data: {
                 'entity' : 'testPost',
-                'data' : data
+                'data' : data,
+                'saveFile' : saveFile
             },
             dataType: 'json',
             context: this,
@@ -13,6 +15,7 @@ class TestPost {
                 console.log('success');
             },
             error: function(response) {
+                console.log(response);
                 console.log('fail');
             }
         });

@@ -8,6 +8,8 @@ class UserPreference {
         this.loaded = 0;
         this.ready = 0;
         this.savedGames = [];
+        this.savedGameCount = 0;
+        this.newGameFileReady = 0;
     }
 
     load() {
@@ -64,13 +66,14 @@ class UserPreference {
         console.log("this ready: " + this.ready);
     }
     
-    generateSavedGameFile() {
+    generateSavedGameFile(game, mapSelection) {
         $.ajax({
             url: apiUrl,
             type: 'POST',
             data: {
                 'entity' : 'savedGameFile',
-                'userId' : this.data.userId
+                'userId' : this.data.userId,
+                'mapSelection' : mapSelection
             },
             dataType: 'json',
             context: this,
@@ -78,15 +81,17 @@ class UserPreference {
                 console.log(response);
                 this.savedGames.push(response.saveFile);
                 this.data.activeGame = response.saveFile;
+                this.data.mapData = response.mapData;
+                this.newGameFileReady = 1;
             },
             error: function(response) {
+                console.log(response);
                 console.log('fail');
             }
         });
     }
     
     getSavedGameFiles(menuState) {
-        console.log('sending save game request to server');
         $.ajax({
             url: apiUrl,
             type: 'GET',
@@ -97,13 +102,12 @@ class UserPreference {
             dataType: 'json',
             context: this,
             success: function(response) {
-                console.log('successful response from server for saved game files');
                 console.log(response);
-                this.savedGames = response.savedGameFiles;
+                this.savedGameCount = response.savedGameCount;
+                this.savedGames = response.savedGameFiles || [];
                 this.savedGameFilesLoaded = 1;
             },
             error: function(response) {
-                console.log(response);
                 console.log('fail');
             }
         });

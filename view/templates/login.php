@@ -67,6 +67,8 @@
                     </div>
                     <div class="col-md-3">
                         <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-easy">Easy Map</button>
+                        <a href="#" class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-left-arrow">< prev</a>
+                        <a href="#" class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-right-arrow">next ></a>
                     </div>
                     <div class="col-md-3">
                         <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-hard">Hard Map</button>

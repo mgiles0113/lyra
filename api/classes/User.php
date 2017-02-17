@@ -159,7 +159,7 @@ class User {
             $stmt->close();
         }
         $gameSave = fopen('json/SavedGames/' . $saveFile, "w");
-        fwrite($gameSave, '{}');
+
         return $saveFile;
     }
     

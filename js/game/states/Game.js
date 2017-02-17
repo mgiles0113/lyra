@@ -373,7 +373,7 @@ Lyra.LyraGame.prototype = {
 	    this.containerManager.saveContainerManager(this.game);
 	    
         var tp = new TestPost();
-        tp.send(JSON.stringify(this.game.gameData));
+        tp.send(JSON.stringify(this.game.gameData), this.game.userPreference.data.activeGame);
 	    this.game.resume;
 	    
 	},

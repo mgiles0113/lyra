@@ -283,3 +283,33 @@ a:hover {
 #main-menu-card button:focus {
     outline: 0;
 }
+
+#load-game-left-arrow::before {
+    width: 250px;
+}
+
+#load-game-left-arrow,
+#load-game-right-arrow {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .6);
+    color: rgb(0, 0, 0);
+    width: 45%;
+    margin: 0px auto;
+    text-align: center;
+    text-decoration: none;
+}
+
+#load-game-left-arrow:hover,
+#load-game-right-arrow:hover {
+    background-color: rgb(0, 0, 0);
+    color: rgba(255, 255, 255, .6);
+    transition: 1s;
+}
+
+#load-game-left-arrow {
+    float: left;
+}
+
+#load-game-right-arrow {
+    float: right;
+}

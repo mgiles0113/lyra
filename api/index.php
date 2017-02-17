@@ -12,12 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             saveUserPreferences($_POST['data']);
             break;
         case 'savedGameFile':
-            generateSavedGameFile($_POST['userId']);
+            generateSavedGameFile($_POST['userId'], $_POST['mapSelection']);
             break;
         case 'testPost':
-            $gameSave = fopen("gameSave.json", "w");
+            $gameSave = fopen('json/SavedGames/' . $_POST['saveFile'], "w");
             fwrite($gameSave, json_encode($_POST['data']));
-            echo '{ "error" : ' . $_POST['data'] . ' }';
+            echo '{ "error" : "none" }';
             break;
     }
     if ($_POST['action'] == 'login') {
@@ -51,7 +51,6 @@ function getSavedGameFiles($userId) {
     $user = new User();
     $user->setId($userId);
     $savedGameFiles = $user->getSavedGameFiles();
-    
     $response = '{ "error" : "none", "savedGameCount" : "' . count($savedGameFiles) . '"';
     if (count($savedGameFiles) > 0) {
         $response .= ', "savedGameFiles" : ';
@@ -60,11 +59,14 @@ function getSavedGameFiles($userId) {
     echo $response . '}';
 }
 
-function generateSavedGameFile($userId) {
+function generateSavedGameFile($userId, $mapSelection) {
     $user = new User();
     $user->setId($userId);
     $saveFile = $user->generateSavedGameFile();
-    echo '{ "error" : "none", "saveFile" : "' . $saveFile . '" }';
+    $saveFileFp = fopen('json/SavedGames/' . $saveFile, "w");
+    $mapData = file_get_contents('json/Maps/' . $mapSelection . '.json');
+    fwrite($saveFileFp, json_encode($mapData));
+    echo '{ "error" : "none", "saveFile" : "' . $saveFile . '", "mapData" : ' . json_encode($mapData) . '}';
 }
 
 function login() {
@@ -102,14 +104,9 @@ function addUser($username, $password, $languageChoice) {
     }
 }
 
-function getMap($mapSelection) {
-    $mapData = file_get_contents('json/Maps/' . $mapSelection . '.json');
-    echo json_encode($mapData);
-}
-
 function getGameData($type, $gameFile, $userId) {
     if ($type == 'game') {
-        $mapData = file_get_contents($gameFile . '.json');
+        $mapData = file_get_contents('json/SavedGames/' . $gameFile);
         echo json_encode($mapData);
     } else if ($type == 'list') {
         echo $userId;
