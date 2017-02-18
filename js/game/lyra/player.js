@@ -58,6 +58,7 @@ class Player {
         this.sprite.customParams = [];
         this.sprite.customParams.inventory = playerData.inventory; //['fuse', 'circuit'];
         this.sprite.customParams.inv_size = playerData.inventory.length;
+        this.sprite.customParams.walking = false;
        
         this.sprite.customParams.status =  playerData.status;
        
@@ -121,7 +122,7 @@ class Player {
         }
     }
     
-    updatePlayer (game, cursors, walls, floors, containerManager) {
+    updatePlayer (game, cursors, walls, floors, containerManager, pathfinder) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
@@ -132,21 +133,23 @@ class Player {
         //          this.lockedOut(this.sprite,containerManager.containers[i].sprite);
         //     }
         // }
-        
-        if(this.isSelected == true){
-      
-            if(game.input.activePointer.leftButton.isDown){
-                
-                //Move Sprite to Exact Tile Coordinates
-                this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
-                this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
-                
-                this.sprite.customParams.status = "walking";
-            }
+                        //Get the Path from Origin to Dest. 
+                /*
+                this.pathfinder.findPath(this.sprite.customParams.src_x, this.sprite.customParams.src_y, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, function( path ){
+                    if( path === null){
+                        console.log("The path to the destination point was not found.");
+                    }else{
+                        for (var i = 0; i < path.length; i++){
+	    		            console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
+	    	            }
+                    }
                     
-        }  
+                });
+                
+                this.pathfinder.calculate();
+                */
         
-		if( (this.sprite.customParams.status == "walking") ){
+		if( (this.sprite.customParams.walking == true) ){
 		    //Calculate the Distance to Destination
 		    this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y);
             console.log(this.sprite.customParams.dist_dest);
@@ -156,7 +159,7 @@ class Player {
 				
 			//Stop Sprite When Dest Reached or Collision Occurs
 			if( (this.sprite.customParams.dist_dest < 5) || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left){
-				this.sprite.customParams.status = "waiting";
+				this.sprite.customParams.walking = false;
 				this.sprite.customParams.dist_dest = 0;
 				this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
@@ -167,23 +170,21 @@ class Player {
         
     }
     
-    /*
+    
     ptClick(game){
         
-       // if(game.input.activePointer.leftButton.isDown){
-                
-            //Move Sprite to Exact Tile Coordinates
+            //Get Sprite Origin Coords.
+            this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, 32);
+            this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.y, 32);
+        
+            //Get Sprite Dest Coords
             this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
             this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
             
-            console.log("X:" + this.sprite.customParams.dest_x);
-            console.log("Y:" + this.sprite.customParams.dest_y);
+            this.sprite.customParams.walking = true;
             
-            //Change status
-		    this.sprite.customParams.status = "walking";
-
-       // }
-    }*/
+    }
+    
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;

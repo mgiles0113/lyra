@@ -99,7 +99,11 @@ Lyra.LyraGame.prototype = {
         this.pathfinder.setAcceptableTiles([0]);
         this.pathfinder.enableDiagonals();
         
-        //[TODO Move to the player class and have player call it.]
+        //If game slows down too much, change this.
+        this.pathfinder.setIterationsPerCalculation(1000);
+        
+        /*
+        //[TODO Move to the player class.]
         this.pathfinder.findPath(0, 0, 0, 3, function( path ) {
             if (path === null) {
 	            console.log("The path to the destination point was not found.");
@@ -112,13 +116,11 @@ Lyra.LyraGame.prototype = {
 	    });
 
         this.pathfinder.calculate();
-        
+        */
         
         this.game.gameData.timer = new Timer(600);
         this.game.gameData.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
-        
-        
         
         // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
         // this.mapLayer[this.mapLayer.length - 1].debugSettings.forceFullRedraw = true;
@@ -299,8 +301,8 @@ Lyra.LyraGame.prototype = {
         this.rightKey.onUp.add(this.rightStopRequest, this);
         
         //setup point and click
-        //this.ptclick = this.game.input.activePointer.leftButton;
-        //this.ptclick.onDown.add(this.ptclickRequest, this);
+        this.ptclick = this.game.input.mousePointer.leftButton;
+        this.ptclick.onDown.add(this.ptclickRequest, this);
 
 
         // generate slime manager to control the slime
@@ -346,7 +348,7 @@ Lyra.LyraGame.prototype = {
         // update player
         for (var j=0; j < this.playerManager.players.length; j++)
         { 
-            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
+            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager, this.pathfinder);
         }
         
         
