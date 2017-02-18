@@ -68,11 +68,9 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
     
-    
-        this.mapJSON = this.game.cache.getJSON('pathfinder_map');
-        this.map = this.mapJSON.layers[2].data;
-        //console.log(this.test_map);
-        
+        this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
+        //console.log(this.mapJSON);
+
         //Setup Pathfinder Engine
         this.pathfinder = new EasyStar.js();
         
@@ -88,18 +86,21 @@ Lyra.LyraGame.prototype = {
             this.grid[grid_row] = [];
             
             for(grid_col = 0; grid_col < map_cols; grid_col++){
-                this.grid[grid_row][grid_col] = this.map[(grid_row *64) + grid_col];
+                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *64) + grid_col];
                 
             }
         }
         
-        console.log(this.grid);
-        /*
-        this.pathfinder.setGrid(this.test_map);
+        //console.log(this.grid);
+        //console.log(this.grid[0][0]);
+        //console.log(this.grid[0][22]);
+        
+        this.pathfinder.setGrid(this.grid);
         this.pathfinder.setAcceptableTiles([0]);
         this.pathfinder.enableDiagonals();
         
-        this.pathfinder.findPath(0, 0, 4, 0, function( path ) {
+        //[TODO Move to the player class and have player call it.]
+        this.pathfinder.findPath(0, 0, 0, 3, function( path ) {
             if (path === null) {
 	            console.log("The path to the destination point was not found.");
 
@@ -110,8 +111,9 @@ Lyra.LyraGame.prototype = {
 	        }
 	    });
 
-        this.pathfinder.calculate();*/
-
+        this.pathfinder.calculate();
+        
+        
         this.game.gameData.timer = new Timer(600);
         this.game.gameData.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
