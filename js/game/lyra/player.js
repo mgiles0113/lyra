@@ -282,7 +282,7 @@ Player.rawData = function (game, idx, playerLocType) {
         isSelected : playerLocType.isSelected,
         idx : idx,
         name : game.gameData.characters[playerLocType.idx].name,
-        characterType : playerLocType.type,
+        characterType : playerLocType.characterType,
         characterIdx :  playerLocType.idx,
         inventory : game.gameData.characters[playerLocType.idx].inventory,
         status : playerLocType.status,
@@ -311,6 +311,7 @@ class PlayerManager {
         // indexes in the array corresponding to the type character
         this.crew = [];
         this.bandit = [];
+
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
                 if (playerLocType[i].characterType == "crew") {
@@ -323,18 +324,20 @@ class PlayerManager {
                 var playerData = Player.rawData(game, i, playerLocType[i]);
                 this.players[i].addPlayer(game,playerLocType[i].x, playerLocType[i].y, playerData);
             }
+            console.log(this.players);
         }
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.playerarray.length ; i++) {
-                if (game.gameData.playerarray[i].characterType == "crew") {
+                this.players[i] = new Player();
+                this.players[i].addPlayer(game, game.gameData.playerarray[i].x, game.gameData.playerarray[i].y, game.gameData.playerarray[i]);
+                if (this.players[i].characterType == "crew") {
                     this.crew.push(i);
                 }
                 else {
                     this.bandit.push(i);
                 }
-                this.players[i] = new Player();
-                this.players[i].addPlayer(game, game.gameData.playerarray[i].x, game.gameData.playerarray[i].y, game.gameData.playerarray[i]);
+
             }
         }
     }
@@ -377,7 +380,7 @@ class PlayerManager {
     savePlayerManager (game) {
         var savedPlayers = [];
         for (var i = 0; i < this.players.length; i++) {
-            savedPlayers[i] = this.players[i].savePlayer(); 
+            savedPlayers[i] = this.players[i].savePlayer();
         }
         game.gameData.playerarray = savedPlayers;
     }

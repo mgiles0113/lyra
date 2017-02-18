@@ -72,10 +72,7 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
     
-    
-    
-        this.test_mapLayer = this.game.gameData.mapLayerRef[2];
-        console.log(this.test_mapLayer);
+        //this.test_mapLayer = this.game.mapData.layers[2].data;
         
         //Setup Pathfinder Engine
         /*this.pathfinder = new EasyStar.js();
@@ -113,7 +110,7 @@ Lyra.LyraGame.prototype = {
 	    });
 
         this.pathfinder.calculate();*/
-        
+
         this.game.gameData.timer = new Timer(600);
         this.game.gameData.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
@@ -198,7 +195,6 @@ Lyra.LyraGame.prototype = {
 
             playerLocType[0].isSelected = true;
         }
-        
         // playerManager manages all the players on the map (crew and bandits)
         this.playerManager = new PlayerManager(this.game, playerLocType);
 
