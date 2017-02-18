@@ -84,9 +84,9 @@
         "PRT": "Well shave me belly with a rusty razor! Sticky slime has been released onboard. Contact will cause ye mateys to become immobilized. Slime suppressant cans be stowed throughout thee galleon. Spray on slime to swab it.", 
         "ESP": "Sticky limo ha sido lanzado a bordo. El contacto causará que la tripulación se inmovilice. Las latas supresoras de limo se encuentran en todo el buque. Rocíe el limo para neutralizarlo."},
 
-    "credits" : {"ENG" : "<h3>Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)</h3>", 
-        "PRT": "<h3>Mates: Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)</h3>", 
-        "ESP": "<h3>Créditos: Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)</h3>"},
+    "credits" : {"ENG" : "Credits:<br/><h3>Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)<br/>Bootstrap<br/>jquery</h3>", 
+        "PRT": "Mates:<br/><h3>Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)<br/>Bootstrap<br/>jquery</h3>", 
+        "ESP": "Créditos:<br/><h3>Phaser.io source code is available at: https://github.com/photonstorm/phaser/tree/v2.6.2 (MIT license),<br/>http://opengameart.org/content/sci-fi-interior-tiles (Buch: http://blog-buch.rhcloud.com)<br/>Bootstrap<br/>jquerygi</h3>"},
     
     "authors" : {"ENG" : "Created by:<br/><ul><li>Mark Giles</li><li>Corinna Huffaker</li><li>Runa Trinh</li></ul>", 
         "PRT": "Yarn spinners:<br/><ul><li>Mark Giles</li><li>Corinna Huffaker</li><li>Runa Trinh</li></ul>", 
@@ -139,6 +139,10 @@
         "PRT": "Dead men tell not tales! Crew be lost!", 
         "ESP": "¡Fracaso de misión! ¡La tripulación está perdida!"},
         
+    "timeout" : {"ENG" : "Crew axphyxiation! All are lost!", 
+        "PRT": "Davey Jones be welcomin' ye Crew!", 
+        "ESP": "¡Asfixia de la tripulación! ¡Todos están perdidos!"},        
+
     "template" : {"ENG" : "English", 
         "PRT": "Pirate", 
         "ESP":  "Español"}

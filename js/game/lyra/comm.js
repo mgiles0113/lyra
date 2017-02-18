@@ -52,6 +52,10 @@ class Comm {
 
         }
         
+        displayContainerInventory(container) {
+            
+        }
+        
         switchPlayer(players, game){
             //Update Current Player to Player1
             this.playerButtons.p1.click(function(){

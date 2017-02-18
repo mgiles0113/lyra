@@ -405,5 +405,6 @@
             "checkCollision" : [false, false, true, true]
         }
         },
-    "containerarray" : []
+    "containerarray" : [],
+    "gameresult" : "empty"
 }

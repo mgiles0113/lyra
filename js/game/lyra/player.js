@@ -152,7 +152,7 @@ class Player {
             console.log(this.sprite.customParams.dist_dest);
 		    
 		    //Move to Destination
-			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 150);	
+			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 200);	
 				
 			//Stop Sprite When Dest Reached or Collision Occurs
 			if( (this.sprite.customParams.dist_dest < 5) || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left){
@@ -160,22 +160,29 @@ class Player {
 				this.sprite.customParams.dist_dest = 0;
 				this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
+				
 			}
 		
 		}
         
     }
     
-    /*ptClick(game){
+    /*
+    ptClick(game){
         
-        this.sprite.customParams.dest_x = game.input.activePointer.worldX;
-        this.sprite.customParams.dest_y = game.input.activePointer.worldY;
-        console.log("X:" + this.sprite.customParams.dest_x);
-        console.log("Y:" + this.sprite.customParams.dest_y);
-        
-        //Change status
-		this.sprite.customParams.status = "walking";
+       // if(game.input.activePointer.leftButton.isDown){
+                
+            //Move Sprite to Exact Tile Coordinates
+            this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
+            this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
+            
+            console.log("X:" + this.sprite.customParams.dest_x);
+            console.log("Y:" + this.sprite.customParams.dest_y);
+            
+            //Change status
+		    this.sprite.customParams.status = "walking";
 
+       // }
     }*/
     
     goUp(game) {
@@ -344,7 +351,7 @@ class PlayerManager {
 
     }
 
-    // returns -1 if no players awake
+    // returns -1 if selected player is not awake
     findSelectedAwakePlayer () {
         var playerIdx = -1;
         for (var i=0; i< this.players.length; i++) {
@@ -354,6 +361,16 @@ class PlayerManager {
         }
         return playerIdx;
 
+    }
+    
+    // returns true if no players awake
+    isAnyCrewAwake() {
+        for (var i=0; i< this.crew.length; i++) {
+            if (this.players[this.crew[i]].sprite.customParams.status == "awake") {
+                return false;
+            }
+        }
+        return true; 
     }
 
     

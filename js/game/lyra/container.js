@@ -324,6 +324,7 @@ class ContainerManager {
     playerMovedInProximity(game, container, playerid) {
         switch (container.containerstate) {
             case "open":
+                console.log('openhighlight');
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
                 break;

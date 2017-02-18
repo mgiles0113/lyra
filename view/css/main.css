@@ -313,3 +313,8 @@ a:hover {
 #load-game-right-arrow {
     float: right;
 }
+
+.inactive-button {
+    color: grey;
+    background-color: grey;
+}

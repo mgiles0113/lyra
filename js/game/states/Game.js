@@ -72,12 +72,14 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
     
-        //console.log(this.mapLayer['walls']);
+    
+    
+        this.test_mapLayer = this.game.gameData.mapLayerRef[2];
+        console.log(this.test_mapLayer);
+        
         //Setup Pathfinder Engine
         /*this.pathfinder = new EasyStar.js();
         
-        
-
         //Get the walls map layer --> change to a 2d array.
         /*var world_cols = 64;
         var world_rows = 46;
@@ -95,7 +97,6 @@ Lyra.LyraGame.prototype = {
             }
         }
         
-        
         this.pathfinder.setGrid(this.test_map);
         this.pathfinder.setAcceptableTiles([0]);
         this.pathfinder.enableDiagonals();
@@ -103,7 +104,6 @@ Lyra.LyraGame.prototype = {
         this.pathfinder.findPath(0, 0, 4, 0, function( path ) {
             if (path === null) {
 	            console.log("The path to the destination point was not found.");
-	        
 
             }else{
 	    	    for (var i = 0; i < path.length; i++){
@@ -114,8 +114,8 @@ Lyra.LyraGame.prototype = {
 
         this.pathfinder.calculate();*/
         
-        this.timer = new Timer(600);
-        this.timer.initialize();
+        this.game.gameData.timer = new Timer(600);
+        this.game.gameData.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         
         
@@ -312,11 +312,21 @@ Lyra.LyraGame.prototype = {
         this.slimeManager = new SlimeManager(this.game, spawnCoord);
 	},
 	update: function() {
-	    if (this.timer.timeUp) {
+	    if (this.game.gameData.timer.timeUp) {
 	        console.log('time up!');
+	        this.game.gameData.gameresult = "timeout";
 	        this.state.remove();
 	        this.state.start('EndGame');
 	    }
+	    
+	    if (this.playerManager.isAnyCrewAwake()) {
+	        // there are no awake players
+	        console.log("there are no crew members awake");
+	        this.game.gameData.gameresult = "crewstuck";
+	        this.state.remove();
+	        this.state.start('EndGame');
+	    }
+	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
         // [TODO] ... for now limited to 100 slime objects, fix AI for replicate */
        //this.slimeManager.updateSlimeArr(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager);
@@ -339,6 +349,8 @@ Lyra.LyraGame.prototype = {
         { 
             this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
         }
+        
+        
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)

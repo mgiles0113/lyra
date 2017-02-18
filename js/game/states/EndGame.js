@@ -1,5 +1,10 @@
 Lyra.EndGame = function() {
-    this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'credits', 'authors'];
+	this.timeoutText = ['timeout', 'credits', 'authors'];
+	this.crewstuckText = ['partialfailcrew', 'credits', 'authors'];
+	this.victory = ['victory', 'credits', 'authors'];
+	this.escapenolyre = ['partialfaillyre', 'credits', 'authors'];
+	this.totalfailure = ['totalfailure', 'credits', 'authors'];
+    //this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'credits', 'authors'];
 	this.primaryCard = $("#primary-card");
 	this.storyCard = $("<div id='story-card'></div>")
 	this.storyTextCard = $("<p></p>");
@@ -9,6 +14,24 @@ Lyra.EndGame = function() {
 Lyra.EndGame.prototype = {
     preload: function() {
         $("#communicator-card").css('visibility', 'hidden');
+        
+        switch (this.game.gameData.gameresult) {
+        	case "timeout":
+        		this.textArray = this.timeoutText;
+        		break;
+        	case "crewstuck":
+        		this.textArray = this.crewstuckText;
+        		break;
+        	case "victory" :
+        		this.textArray = this.victory;
+        		break;
+        	case "escapenolyre":
+        		this.textArray = this.escapenolyre;
+        		break;
+        	default:
+        		this.textArray = this.totalfailure;
+        }
+        
         
         this.index = 0;
 	    this.storyTextCard.html(this.game.languageText[this.textArray[0]][this.game.userPreference.data.languageChoice]);
