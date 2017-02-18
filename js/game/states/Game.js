@@ -14,12 +14,8 @@ Lyra.LyraGame.prototype = {
             this.containerLocType = [];
             //this.suppresantArr = [];  // locations on the map where suppresant can be placed
             
-            //Test Map for Pathfinder
-            this.test_map = [[0,0,1,0,0],
-                             [1,0,1,0,1],
-	                         [0,0,1,0,0],
-	                         [0,0,1,1,0],
-	                         [0,0,0,0,0]];
+            //Map for Pathfinder
+            this.game.load.json('pathfinder_map', 'assets/tilemaps/maps/reference_map.json');
             
         }
         
@@ -62,7 +58,7 @@ Lyra.LyraGame.prototype = {
         // there are other ways to do this, sets a background color for the game          
         this.game.stage.backgroundColor = '#555';
 
-        // // create the map
+        //Create the map
         this.map = new Map();
         this.map.addMap(this.game, this.game.gameData.imageTagList);
 
@@ -72,28 +68,33 @@ Lyra.LyraGame.prototype = {
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
     
-        //this.test_mapLayer = this.game.mapData.layers[2].data;
+    
+        this.mapJSON = this.game.cache.getJSON('pathfinder_map');
+        this.map = this.mapJSON.layers[2].data;
+        //console.log(this.test_map);
         
         //Setup Pathfinder Engine
-        /*this.pathfinder = new EasyStar.js();
+        this.pathfinder = new EasyStar.js();
         
-        //Get the walls map layer --> change to a 2d array.
-        /*var world_cols = 64;
-        var world_rows = 46;
+        //Get the Walls Map Layer --> 2D Array.
+        var map_cols = 64;
+        var map_rows = 46;
         var grid_col = 0;
         var grid_row = 0;
         
         this.grid = [];
         
-        for(grid_row = 0; grid_row < world_rows; grid_row++){
+        for(grid_row = 0; grid_row < map_rows; grid_row++){
             this.grid[grid_row] = [];
             
-            for(grid_col = 0; grid_col < world_cols; grid_col++){
-                this.grid[grid_row][grid_col] = this.mapLayer['walls'].[(grid_row* world_cols) + grid_col];
+            for(grid_col = 0; grid_col < map_cols; grid_col++){
+                this.grid[grid_row][grid_col] = this.map[(grid_row *64) + grid_col];
                 
             }
         }
         
+        console.log(this.grid);
+        /*
         this.pathfinder.setGrid(this.test_map);
         this.pathfinder.setAcceptableTiles([0]);
         this.pathfinder.enableDiagonals();
@@ -485,11 +486,5 @@ Lyra.LyraGame.prototype = {
             this.playerManager.players[playerIdx].stopRight(this.game);
         }
     },
-    
-    onPathFound: function(){
-        
-    }
-
-
 
 }

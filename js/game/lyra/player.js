@@ -324,7 +324,7 @@ class PlayerManager {
                 var playerData = Player.rawData(game, i, playerLocType[i]);
                 this.players[i].addPlayer(game,playerLocType[i].x, playerLocType[i].y, playerData);
             }
-            console.log(this.players);
+           // console.log(this.players);
         }
         else {
             // load existing containers into array
