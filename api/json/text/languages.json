@@ -73,11 +73,11 @@
         "ESP": "Los piratas han sobrepasado la nave en su viaje de regreso. La lira está escondida a bordo, pero los asteroides han desactivado la nave."},  
     
     "intro2" : {"ENG": "The crew is in sleep pods and unaware of the situation.  Escape pods must be repaired from equipment located in containers onboard.", 
-        "PRT": "Ahoy! Thee crew is in sleep pods and unaware of thee situation. Escape pods must be repaired from equipment located in containers onboard.", 
+        "PRT": "Ahoy! Thee mateys be sleepin' and unaware of thee trials. Escape pods must be repaired from equipment located in containers onboard.", 
         "ESP": "La tripulación está en vainas del sueño y no está enterada de la situación. Las vainas de escape deben ser reparadas de los equipos ubicados en contenedores a bordo."},
     
     "intro3" : {"ENG" : "Pirates want the lyre to melt down for gold bullion.  They are boarding the ship at the docking bay. ", 
-        "PRT": "Hoist the main sail and jibe starboard! Pirates want thee lyre to melt down for swag bullion. They be boarding thee galleon at thee docking bay.", 
+        "PRT": "Hoist the main sail. Winds to starboard, port side tack! Pirates want thee lyre to melt down for swag bullion. They be boarding thee galleon at thee docking bay.", 
         "ESP": "Los piratas quieren que la lira se derrita por los lingotes de oro. Están abordando el barco en la bahía de atraque."},
     
     "intro4" : {"ENG" : "Sticky slime has been released onboard.  Contact will cause crew to become immobilized. Slime suppressant cans are located throughout the ship. Spray on slime to neutralize it.", 
@@ -110,12 +110,17 @@
             "ESP": "Encontrar equipos para reparar las vainas de escape en contenedores a bordo del buque. Utilice un supresor para detener el limo."},
     
     "text4" : {"ENG" : "Watch out for pirates!  Pirates carry stun guns that will knock you out.", 
-            "PRT": "Watch ou' fer shipmates! Shipmates carry stun cannons that will knock ye ou'.", 
+            "PRT": "Watch ou' fer scallywags! Scallywags carry stun cannons that will knock ye ou'.", 
             "ESP": "Cuidado con los piratas! Los piratas llevan armas de aturdimiento que te golpearán hacia fuera."},
     
     "text5" : {"ENG" : "The ships precious cargo, the golden lyre is hidden on board.  Save it along with the crew to complete your mission!", 
             "PRT": "Arrr! Thee ships precious cargo, thee golden lyre is hidden on board. Save it along with thee crew to complete yer mission!", 
             "ESP": "Los buques de carga preciosa, la lira de oro se oculta a bordo. ¡Guárdelo junto con la tripulación para completar su misión!"},
+            
+    "controls" : {"ENG" : "Controls:<br/><ul><li>w : up</li><li>a : left</li><li>s : down</li><li>d : right</li><li>e : toggle open or closed</li><li>z : save</li><li>mouse click on map : set destination for selected crew</li></ul> ",
+        "PRT": "Man the helm:<br/><ul><li>w : skyward</li><li>a : port</li><li>s : below</li><li>d : starboard</li><li>e : breached or hatch secured</li><li>z : stow</li><li>mouse click on map : Mark the black spot and go on the account</li></ul> ",
+        "ESP": "Controles: <br/><ul><li>w : arriba</li><li>a : izquierda</li><li>s : abajo</li><li>d : derecha</li><li>e :  activar o desactivar</li><li>z : guardar</li><li>el ratón sobre el mapa: establecer el destino de la tripulación seleccionada</li></ul> "
+    },
     
     "oxygenfalling" : {"ENG" : "Oxygen levels are falling! Five minutes remain.", 
         "PRT": "Yarr! Oxygen levels be critical. Five minutes remain.",

@@ -102,21 +102,6 @@ Lyra.LyraGame.prototype = {
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
         
-        /*
-        //[TODO Move to the player class.]
-        this.pathfinder.findPath(0, 0, 0, 3, function( path ) {
-            if (path === null) {
-	            console.log("The path to the destination point was not found.");
-
-            }else{
-	    	    for (var i = 0; i < path.length; i++){
-	    		console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
-	    	    }
-	        }
-	    });
-
-        this.pathfinder.calculate();
-        */
         
         this.game.gameData.timer = new Timer(600);
         this.game.gameData.timer.initialize();
@@ -154,10 +139,13 @@ Lyra.LyraGame.prototype = {
                     || (this.map.map.objects["rooms"][i].name == "p2")
                     || (this.map.map.objects["rooms"][i].name == "p3")
                     || (this.map.map.objects["rooms"][i].name == "p4")
+                    || (this.map.map.objects["rooms"][i].name == "e1")
                       )) {
                 this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
                 this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
+    
             }
+            if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"escapepod", itemslist: []};}
         }
         
         
@@ -348,7 +336,7 @@ Lyra.LyraGame.prototype = {
         // update player
         for (var j=0; j < this.playerManager.players.length; j++)
         { 
-            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager, this.pathfinder);
+            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
         }
         
         
@@ -406,7 +394,7 @@ Lyra.LyraGame.prototype = {
         // if selected player is not awake, findSelectedAwakePlayer returns -1
         if (playerIdx >= 0) {
         //Grab
-            this.playerManager.players[playerIdx].ptClick(this.game);
+            this.playerManager.players[playerIdx].ptClick(this.game, this.pathfinder);
         }
     },
     

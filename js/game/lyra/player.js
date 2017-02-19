@@ -59,6 +59,7 @@ class Player {
         this.sprite.customParams.inventory = playerData.inventory; //['fuse', 'circuit'];
         this.sprite.customParams.inv_size = playerData.inventory.length;
         this.sprite.customParams.walking = false;
+        this.sprite.customParams.path = [];
        
         this.sprite.customParams.status =  playerData.status;
        
@@ -122,7 +123,7 @@ class Player {
         }
     }
     
-    updatePlayer (game, cursors, walls, floors, containerManager, pathfinder) {
+    updatePlayer (game, cursors, walls, floors, containerManager) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
@@ -133,28 +134,12 @@ class Player {
         //          this.lockedOut(this.sprite,containerManager.containers[i].sprite);
         //     }
         // }
-                        //Get the Path from Origin to Dest. 
-                /*
-                this.pathfinder.findPath(this.sprite.customParams.src_x, this.sprite.customParams.src_y, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, function( path ){
-                    if( path === null){
-                        console.log("The path to the destination point was not found.");
-                    }else{
-                        for (var i = 0; i < path.length; i++){
-	    		            console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
-	    	            }
-                    }
-                    
-                });
-                
-                this.pathfinder.calculate();
-                */
         
 		if( (this.sprite.customParams.walking == true) ){
 		    //Calculate the Distance to Destination
 		    this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y);
-            console.log(this.sprite.customParams.dist_dest);
 		    
-		    //Move to Destination
+		    //Move to Destination By Grabbing the Next Point.
 			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 200);	
 				
 			//Stop Sprite When Dest Reached or Collision Occurs
@@ -171,7 +156,7 @@ class Player {
     }
     
     
-    ptClick(game){
+    ptClick(game, pathfinder){
         
             //Get Sprite Origin Coords.
             this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, 32);
@@ -182,6 +167,23 @@ class Player {
             this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
             
             this.sprite.customParams.walking = true;
+            
+            //Get the Path from Origin to Dest. 
+            //Convert to Tile Size
+            //[TODO} 1.GRAB PATH 2.Move player toward dest based on path points.]
+            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, function( path ){
+                if( path === null){
+                    console.log("The path to the destination point was not found.");
+                }else{
+                    for (var i = 0; i < path.length; i++){
+	    		        console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
+	    	        }
+                }
+                    
+            });
+                        
+            pathfinder.calculate();
+            
             
     }
     

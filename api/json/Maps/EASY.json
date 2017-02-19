@@ -330,7 +330,7 @@
         }
     },
     "itemsarray" : [],
-    "containernames" : ["smallbox","largebox", "transparent", "doors"],
+    "containernames" : ["smallbox","largebox", "transparent", "doors", "escapepod"],
     "containers" : {
         "smallbox" : {
             "imageTag" : "smallbox",
@@ -403,6 +403,24 @@
             "immovablebody" : true,
             "moves" : false,
             "checkCollision" : [false, false, true, true]
+        },
+        "escapepod" : {
+            "imageTag" : "escapepod",
+            "itemRef":"assets/sprites/escapePod.png",
+            "frames" : 6,
+            "name": "escapepod",
+            "width" : 128,
+            "height" : 128,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight","blastoff"],
+            "textureArr" : [0, 1, 2, 3],
+            "animationArr" : [[0],[0,1],[2],[2,3],[4,5]],
+            "itemscapacity" : 0,
+            "containerstate" : "open",
+            "stateIdx" : 0,
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : [false, false,   true, true]
         }
         },
     "containerarray" : [],

@@ -1,5 +1,5 @@
 Lyra.StoryMenu = function() {
-	this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'credits', 'authors'];
+	this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'controls', 'credits', 'authors'];
 	this.primaryCard = $("#primary-card");
 	this.storyCard = $("<div id='story-card'></div>")
 	this.storyTextCard = $("<p></p>");
