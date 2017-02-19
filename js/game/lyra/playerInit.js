@@ -4,8 +4,8 @@ var PLAYER1 = {
     isSelected: true,
     name: 'player1',
     playerRef:'assets/sprites/player_1.png',
-    x: 260,
-    y: 600
+    x: 256,
+    y: 608
 
 }
 
@@ -14,7 +14,7 @@ var PLAYER2 = {
     isSelected: false,
     name: 'player2',
     playerRef:'assets/sprites/player_2.png',
-    x: 360,
+    x: 352,
     y: 800
 
 }
@@ -24,8 +24,8 @@ var PLAYER3 = {
     isSelected: false,
     name: 'player3',
     playerRef:'assets/sprites/player_3.png',
-    x: 450,
-    y: 500,
+    x: 448,
+    y: 480,
 
 }
 

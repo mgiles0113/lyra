@@ -171,12 +171,12 @@ class Player {
     ptClick(game, pathfinder){
         
             //Get Sprite Origin Coords.
-            this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, 32);
-            this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.y, 32);
+            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.x, 32);
+            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.y, 32);
 
             //Get Sprite Dest Coords
-            this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
-            this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
+            this.sprite.customParams.dest_x = game.math.snapTo(game.input.activePointer.worldX, 32);
+            this.sprite.customParams.dest_y = game.math.snapTo(game.input.activePointer.worldY, 32);
 
             this.sprite.customParams.walking = true;
             
