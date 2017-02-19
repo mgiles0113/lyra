@@ -58,8 +58,12 @@ class Player {
         this.sprite.customParams = [];
         this.sprite.customParams.inventory = playerData.inventory; //['fuse', 'circuit'];
         this.sprite.customParams.inv_size = playerData.inventory.length;
-        this.sprite.customParams.walking = false;
+        this.sprite.customParams.walking = playerData.walking;
+        
+        //PathFinder for Pt&Click
         this.sprite.customParams.path = [];
+        this.sprite.customParams.next_pt_x = null;
+        this.sprite.customParams.next_pt_y = null;
        
         this.sprite.customParams.status =  playerData.status;
        
@@ -94,15 +98,6 @@ class Player {
         }, this);
     }
     
-    validDest(game,destCoords){
-        //Grab the coords.
-        this.sprite.customParams.dest_x = game.input.mousePointer.x;
-		this.sprite.customParams.dest_y = game.input.mousePointer.y;
-		
-        //Check that is on a floor tile/floor layer
-        
-    }
-    
     togglePlayer(){
         if(this.isSelected == false){
             this.isSelected = true;
@@ -123,36 +118,53 @@ class Player {
         }
     }
     
-    updatePlayer (game, cursors, walls, floors, containerManager) {
+    
+    // use this method for crew updates each update cycle
+    updateCrew(game, cursors, walls, floors) {
+        this.updatePlayer (game, cursors, walls, floors);
+    }
+    
+    // use this method for bandit updates each update cycle
+    updateBandit(game, cursors, walls, floors) {
+        this.updatePlayer (game, cursors, walls, floors);
+    }
+    
+    // generic update to move to destination
+    updatePlayer (game, cursors, walls, floors) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
         
-        // for(var i=0; i<containerManager.containers.length; i++) {
-        //     if ((containerManager.containers[i].sprite.body.checkCollision.any == true) 
-        //             &&  (game.physics.arcade.collide(containerManager.containers[i].sprite, this.sprite))) {
-        //          this.lockedOut(this.sprite,containerManager.containers[i].sprite);
-        //     }
-        // }
-        
-		if( (this.sprite.customParams.walking == true) ){
-		    //Calculate the Distance to Destination
-		    this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y);
+		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
+	
+	        //Move Sprite to Next Pt.	    
+		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, 200);
 		    
-		    //Move to Destination By Grabbing the Next Point.
-			game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.dest_x, this.sprite.customParams.dest_y, 200);	
+            //Check if sprite has reached the next point.
+            this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y);
+	
+            //Move to Destination By Grabbing the Next Point.
+			if( this.sprite.customParams.dist_dest < 5){
+			    
+			    //Get Next Point
+			    this.getNextPt();
+			    console.log(this.sprite.customParams.next_pt_x);
+		        console.log(this.sprite.customParams.next_pt_y);
+		        
+		        //Stop Sprite
+		        this.sprite.body.velocity.x = 0;
+				this.sprite.body.velocity.y = 0;
+			}
 				
-			//Stop Sprite When Dest Reached or Collision Occurs
-			if( (this.sprite.customParams.dist_dest < 5) || this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left){
+			//Stop Sprite When Collision Occurs
+			if( this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left ){
+			    this.sprite.customParams.path = [];
 				this.sprite.customParams.walking = false;
-				this.sprite.customParams.dist_dest = 0;
+				
 				this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
-				
 			}
-		
 		}
-        
     }
     
     
@@ -161,32 +173,54 @@ class Player {
             //Get Sprite Origin Coords.
             this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, 32);
             this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.y, 32);
-        
+
             //Get Sprite Dest Coords
             this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, 32);
             this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, 32);
-            
+
             this.sprite.customParams.walking = true;
             
             //Get the Path from Origin to Dest. 
-            //Convert to Tile Size
-            //[TODO} 1.GRAB PATH 2.Move player toward dest based on path points.]
-            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, function( path ){
-                if( path === null){
-                    console.log("The path to the destination point was not found.");
-                }else{
-                    for (var i = 0; i < path.length; i++){
-	    		        console.log("P: " + i + ", X: " + path[i].x + ", Y: " + path[i].y);
-	    	        }
-                }
-                    
-            });
-                        
+            //[TODO} Move player toward dest based on path points.
+            this.foundPath = this.getPath.bind(this);
+            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, this.foundPath);
             pathfinder.calculate();
-            
-            
+        
     }
     
+    getPath(path){
+        if( path != null){
+            this.sprite.customParams.path = [];
+                var pt_x;
+                var pt_y;
+            for(var i =0; i < path.length; i++){
+                pt_x = path[i].x * 32;
+                pt_y = path[i].y * 32;
+                this.sprite.customParams.path.push({pt_x, pt_y});
+            }
+        }
+        
+        //Set up the first point.
+        this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
+        this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+    }
+    
+    getNextPt(){
+        this.sprite.customParams.path.shift();
+        
+        //Check that there are points left in path.
+        if(this.sprite.customParams.path.length != 0){
+            this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
+            this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+            
+        //End of Path. Dest. Reached.
+        }else{
+            this.sprite.customParams.next_pt_x = null;
+            this.sprite.customParams.next_pt_y = null;
+            this.sprite.customParams.walking = false;
+        }
+
+    }
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;
@@ -226,19 +260,19 @@ class Player {
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
     
-    savePlayerData(game, idx) {
-        game.gameData.characters[game.gameData.crew[idx]].isSelected = this.isSelected;
-        game.gameData.characters[game.gameData.crew[idx]].inventory = this.sprite.customParams.inventory;
-        game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
-        game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
-        game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
-        game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x + game.gameData.characters[game.gameData.crew[idx]].width/2;
-        game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y + game.gameData.characters[game.gameData.crew[idx]].height/2;
-        game.gameData.characters[game.gameData.crew[idx]].velocityx = this.sprite.body.velocity.x;
-        game.gameData.characters[game.gameData.crew[idx]].velocityy = this.sprite.body.velocity.y;
-        game.gameData.characters[game.gameData.crew[idx]].frame = this.sprite.frame;
-        game.gameData.characters[game.gameData.crew[idx]].angularDrag =this.sprite.body.angularDrag;
-    }
+    // savePlayerData(game, idx) {
+    //     game.gameData.characters[game.gameData.crew[idx]].isSelected = this.isSelected;
+    //     game.gameData.characters[game.gameData.crew[idx]].inventory = this.sprite.customParams.inventory;
+    //     game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
+    //     game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
+    //     game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
+    //     game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x + game.gameData.characters[game.gameData.crew[idx]].width/2;
+    //     game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y + game.gameData.characters[game.gameData.crew[idx]].height/2;
+    //     game.gameData.characters[game.gameData.crew[idx]].velocityx = this.sprite.body.velocity.x;
+    //     game.gameData.characters[game.gameData.crew[idx]].velocityy = this.sprite.body.velocity.y;
+    //     game.gameData.characters[game.gameData.crew[idx]].frame = this.sprite.frame;
+    //     game.gameData.characters[game.gameData.crew[idx]].angularDrag =this.sprite.body.angularDrag;
+    // }
     
     savePlayer() {
         var playerData = {
@@ -247,6 +281,7 @@ class Player {
             idx : this.idx,
             characterType : this.characterType,
             characterIdx :  this.characterIdx,
+            walking : this.sprite.customParams.walking,
             inventory : this.sprite.customParams.inventory,
             status : this.sprite.customParams.status,
             dest_x : this.sprite.customParams.dest_x,
@@ -284,17 +319,18 @@ Player.rawData = function (game, idx, playerLocType) {
     var playerData = {
         isSelected : playerLocType.isSelected,
         idx : idx,
-        name : game.gameData.characters[playerLocType.idx].name,
+        name : game.gameData.characters[playerLocType.characterIdx].name,
         characterType : playerLocType.characterType,
-        characterIdx :  playerLocType.idx,
-        inventory : game.gameData.characters[playerLocType.idx].inventory,
+        characterIdx :  playerLocType.characterIdx,
+        walking : game.gameData.characters[playerLocType.characterIdx].walking,
+        inventory : game.gameData.characters[playerLocType.characterIdx].inventory,
         status : playerLocType.status,
-        dest_x : null,
-        dest_y : null,
-        velocityx : game.gameData.characters[playerLocType.idx].velocityx,
-        velocityy : game.gameData.characters[playerLocType.idx].velocityy,
-        frame : game.gameData.characters[playerLocType.idx].frame,
-        angularDrag : game.gameData.characters[playerLocType.idx].angularDrag
+        dest_x : game.gameData.characters[playerLocType.characterIdx].dest_x,
+        dest_y : game.gameData.characters[playerLocType.characterIdx].dest_y,
+        velocityx : game.gameData.characters[playerLocType.characterIdx].velocityx,
+        velocityy : game.gameData.characters[playerLocType.characterIdx].velocityy,
+        frame : game.gameData.characters[playerLocType.characterIdx].frame,
+        angulardrag : game.gameData.characters[playerLocType.characterIdx].angulardrag
     }
     return (playerData);
 }
@@ -314,7 +350,7 @@ class PlayerManager {
         // indexes in the array corresponding to the type character
         this.crew = [];
         this.bandit = [];
-
+        console.log(game.gameData.playerarray);
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
                 if (playerLocType[i].characterType == "crew") {
@@ -378,6 +414,22 @@ class PlayerManager {
         }
         return true; 
     }
+
+    // updates the player array first for crew and then for bandits
+    updatePlayerArray(game, cursors, walls, floors) {
+        for (var i=0; i< this.crew.length; i++) {
+            if (this.players[this.crew[i]].updateCrew(game, cursors, walls, floors)) {
+                return false;
+            }
+        }
+        for (var i=0; i< this.bandit.length; i++) {
+            if (this.players[this.bandit[i]].updateBandit(game, cursors, walls, floors)) {
+                return false;
+            }
+        }
+
+    }
+
 
     
     savePlayerManager (game) {

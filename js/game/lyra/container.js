@@ -232,7 +232,7 @@ class Container {
             y : this.sprite.body.position.y,
             playerHighlight : this.playerHighlight,
             immovable : this.sprite.immovable,
-            immovablebody : this.sprite.immovablebody,
+            immovablebody : this.sprite.body.immovablebody,
             moves : this.sprite.body.moves,
             checkCollision : this.sprite.body.checkCollision.any
         }
@@ -423,6 +423,7 @@ class ContainerManager {
             savedContainers[i] = this.containers[i].saveContainer(); 
         }
         game.gameData.containerarray = savedContainers;
+        //console.log(savedContainers);
     }
     
     

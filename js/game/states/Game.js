@@ -75,8 +75,8 @@ Lyra.LyraGame.prototype = {
         this.pathfinder = new EasyStar.js();
         
         //Get the Walls Map Layer --> 2D Array.
-        var map_cols = 64;
-        var map_rows = 46;
+        var map_cols = this.game.gameData.mapwidth/32;
+        var map_rows = this.game.gameData.mapheight/32;
         var grid_col = 0;
         var grid_row = 0;
         
@@ -86,24 +86,22 @@ Lyra.LyraGame.prototype = {
             this.grid[grid_row] = [];
             
             for(grid_col = 0; grid_col < map_cols; grid_col++){
-                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *64) + grid_col];
+                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
                 
             }
         }
         
-        //console.log(this.grid);
-        //console.log(this.grid[0][0]);
-        //console.log(this.grid[0][22]);
-        
         this.pathfinder.setGrid(this.grid);
         this.pathfinder.setAcceptableTiles([0]);
-        this.pathfinder.enableDiagonals();
         
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
         
-        
-        this.game.gameData.timer = new Timer(600);
+        if (this.game.gameData.timer == undefined) {
+            this.game.gameData.timer = new Timer(600);
+        } else {
+            this.game.gameData.timer = new Timer(this.game.gameData.timer.timeRemaining);
+        }
         this.game.gameData.timer.initialize();
         // map.putTile(<tileNumber>, x, y )  <<< this will replace a floor tile!
         
@@ -120,9 +118,6 @@ Lyra.LyraGame.prototype = {
         //this.map.setCollisionBetween(1, 100000, true, 'blockedLayer');
         this.map.map.setCollisionByExclusion([],true,this.mapLayer['walls']);
         //this.map.map.setCollision([21],false, this.mapLayer['floors']);
-        
-        //Set up Collision for Doors
-        //this.map.map.setCollisionByExclusion([0], true, this.mapLayer['doors']);
         
         // put a tile on the map
         // @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
@@ -145,7 +140,7 @@ Lyra.LyraGame.prototype = {
                 this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
     
             }
-            if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"escapepod", itemslist: []};}
+            if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
         }
         
         
@@ -157,7 +152,7 @@ Lyra.LyraGame.prototype = {
         //    status : player status (walk, stuck, sleep)
         //    x : x location for character
         //    y : y location
-        
+
         // if < 1, no crew defined
         if (this.game.gameData.playerarray.length < 1) {
             var playerLocType = [];
@@ -182,7 +177,7 @@ Lyra.LyraGame.prototype = {
                     inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
                     status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
                     x : this.roomArr["d"].x + i*50 + 50,
-                    y : this.roomArr["d"].y + i*50
+                    y : this.roomArr["d"].y + i*48
                 })
             }
 
@@ -192,7 +187,6 @@ Lyra.LyraGame.prototype = {
         this.playerManager = new PlayerManager(this.game, playerLocType);
 
         
-        //this.doorManager = new DoorManager(this.game, this.map.map.objects["doors"]);
         this.actionManager = new ActionManager();
         
         for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
@@ -329,15 +323,15 @@ Lyra.LyraGame.prototype = {
         //Update Comm Window Inventory
         this.comm.displayInventory(this.playerManager.players[0], this.game, this.ingameItems);
 
-        // check for overlap with doors
-        //this.doorManager.checkPlayerOverlap (this.game, this.players);
+        // check for overlap with containers
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players);
 
-        // update player
-        for (var j=0; j < this.playerManager.players.length; j++)
-        { 
-            this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors'], this.containerManager);
-        }
+        // update player - moved to playerManager
+        // for (var j=0; j < this.playerManager.players.length; j++)
+        // { 
+        //     this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors']);
+        // }
+        this.playerManager.updatePlayerArray(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors']);
         
         
 	},
@@ -368,8 +362,6 @@ Lyra.LyraGame.prototype = {
         this.playerManager.savePlayerManager(this.game);
 
 	    this.slimeManager.saveSlimeManager(this.game);
-	    
-	    //this.doorManager.saveDoorManager(this.game);
 	    
 	    this.containerManager.saveContainerManager(this.game);
 	    

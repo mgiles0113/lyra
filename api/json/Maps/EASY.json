@@ -1,5 +1,7 @@
 {
     "mapRef" : "assets/tilemaps/maps/reference_map.json",
+    "mapwidth" : 64,
+    "mapheight" : 46,
     "imageTagList" : [
         "scifitiles-sheet",
         "meta_tiles"
@@ -37,6 +39,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -57,6 +60,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -77,6 +81,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -97,6 +102,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -117,6 +123,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -137,6 +144,7 @@
                  "angulardrag": 50,
                  "dest_x" : null,
                  "dest_y" : null,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 },
@@ -155,8 +163,9 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : null,
-                 "dest_y" : null,
+                 "dest_x" : 220,
+                 "dest_y" : 700,
+                 "walking" : true,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -175,8 +184,9 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : null,
-                 "dest_y" : null,
+                 "dest_x" : 270,
+                 "dest_y" : 750,
+                 "walking" : true,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }, 
@@ -195,8 +205,9 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : null,
-                 "dest_y" : null,
+                 "dest_x" : 320,
+                 "dest_y" : 800,
+                 "walking" : true,
                  "status" : "awake",
                  "inventory": ["wrench"]
                 }
@@ -262,75 +273,36 @@
     "slimearray": [],
     "spawnCoord": [],
     "slimemotionlimit" : 20,
-    "doors": {
-        "imageTagList" : "doorimages",
-        "imageRefList" : "assets/lyraImages/doorimages.png",
-        "width" : 64,
-        "height" : 64,
-        "frames" : 4,
-        "dooropen" :
-            {
-            "imageTagList" : "dooropen",
-            "imageRefList" : "assets/lyraImages/dooropen.png",
-            "width" : 64,
-            "height" : 64,
-            "frame" : 0 ,
-            "animation" : [0]
-            },
-
-        "doorclosed" :
-            {        
-            "imageTagList" : "doorclosed",
-            "imageRefList" : "assets/lyraImages/doorclosed.png",
-            "width" : 64,
-            "height" : 64,
-            "frame" : 2 ,
-            "animation" : [2]
-            },
-        "dooropenhighlighted" :
-            {
-            "imageTagList" : "dooropenhighlighted",
-            "imageRefList" : "assets/lyraImages/dooropenhighlighted.png",
-            "width" : 64,
-            "height" : 64,
-            "frame" : 1 ,
-            "animation" : [0, 1]
-            },
-        "doorclosedhighlighted" :
-            {        
-            "imageTagList" : "doorclosedhighlighted",
-            "imageRefList" : "assets/lyraImages/doorclosedhighlighted.png",
-            "width" : 64,
-            "height" : 64,
-            "frame" : 3 ,
-            "animation" : [2, 3]
-            }
-        },
-    "doorarray": [],
+    "itemsnames" : ["CIRCUIT", "FUEL_TANK", "FUSE", "SUPPRESANT", "WRENCH"],
     "items" : {
         "CIRCUIT": {
             "itemRef":"assets/sprites/items/circuit.png",
-            "name": "circuit"
+            "name": "circuit",
+            "displayname" :  "circuit"
         },
         "FUEL_TANK": {
             "itemRef":"assets/sprites/items/fuel_tank.png",
-            "name": "fuel tank"
+            "name": "fuel_tank",
+            "displayname" : "fuel tank"
         },
         "FUSE": {
             "itemRef":"assets/sprites/items/fuse.png",
-            "name": "fuse"
+            "name": "fuse",
+            "displayname" : "fuse"
         },
         "SUPPRESANT": {
             "itemRef":"assets/sprites/items/suppresant.png",
-            "name": "suppresant"
+            "name": "suppresant",
+            "displayname" : "suppressant"
         },
         "WRENCH": {
             "itemRef":"assets/sprites/items/wrench.png",
-            "name": "wrench"
+            "name": "wrench",
+            "displayname" : "wrench"
         }
     },
     "itemsarray" : [],
-    "containernames" : ["smallbox","largebox", "transparent", "doors", "escapepod"],
+    "containernames" : ["smallbox","largebox", "transparent", "doors", "escapepod", "escapepodhold"],
     "containers" : {
         "smallbox" : {
             "imageTag" : "smallbox",
@@ -412,9 +384,27 @@
             "width" : 128,
             "height" : 128,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight","blastoff"],
-            "textureArr" : [0, 1, 2, 3],
+            "textureArr" : [0, 1, 2, 3, 4],
             "animationArr" : [[0],[0,1],[2],[2,3],[4,5]],
             "itemscapacity" : 0,
+            "containerstate" : "open",
+            "stateIdx" : 0,
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : [false, false,   true, true, true]
+        },
+        "escapepodhold": {
+            "imageTag" : "escapepodhold",
+            "itemRef":"assets/sprites/escapepodhold.png",
+            "frames" : 4,
+            "name": "escapepod",
+            "width" : 50,
+            "height" : 50,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "textureArr" : [0, 1, 2, 3],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 1,
             "containerstate" : "open",
             "stateIdx" : 0,
             "immovable" : true,

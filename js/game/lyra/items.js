@@ -23,11 +23,14 @@ class Items {
 
 Items.ItemImages = function(game) {
     // load all the specified item images
-    game.load.image("circuit",game.gameData.items["CIRCUIT"].itemRef);
-    game.load.image("fuel_tank",game.gameData.items["FUEL_TANK"].itemRef);
-    game.load.image("fuse",game.gameData.items["FUSE"].itemRef);
-    game.load.image("suppresant",game.gameData.items["SUPPRESANT"].itemRef);
-    game.load.image("wrench",game.gameData.items["WRENCH"].itemRef);
+    for (var i = 0; i < game.gameData.itemsnames.length; i++) {
+        game.load.image(game.gameData.items[game.gameData.itemsnames[i]].name, game.gameData.items[game.gameData.itemsnames[i]].itemRef);
+        
+        // game.load.image("fuel_tank",game.gameData.items["FUEL_TANK"].itemRef);
+        // game.load.image("fuse",game.gameData.items["FUSE"].itemRef);
+        // game.load.image("suppresant",game.gameData.items["SUPPRESANT"].itemRef);
+        // game.load.image("wrench",game.gameData.items["WRENCH"].itemRef);
+    }
 }
 
 

@@ -8,6 +8,17 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function shuffleArr(arr) {
+    var shuffleArr = [];
+    var idx = 0;
+    while (arr.length > 0) {
+        var rndNum = getRandomInt(0, arr.length-1);
+        shuffleArr[idx] = arr[rndNum];
+        arr.splice(rndNum, 1);
+    }
+    return(shuffleArr);
+}
+
 
 // render information about the display.  Copied off of phaser.io example/display/viewport.js
 // use for debugging and understanding window resize elements
