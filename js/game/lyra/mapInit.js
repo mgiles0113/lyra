@@ -1,10 +1,10 @@
 class MapBuilder {
     
-    placeContainersInRooms(game, roomManager) {
+    placeContainersInRooms(game, roomManager, mapObjSuppressant, mapObjDoors) {
         // add containers by room type
         var containerLocType = [];
         for (var i = 0; i<roomManager.roomIdx.length; i++) {
-            var roomDef = game.gameData.roomdef[this.rooms[roomManager.roomIdx[i]].name];
+            var roomDef = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type];
             for (var j = 0; j< roomDef.containers.length; j++) {
                 var containerDef = game.gameData.containers[roomDef.containers[j]];
 
@@ -19,8 +19,8 @@ class MapBuilder {
         for (var i = 0; i<roomManager.escapepodIdx.length; i++) {
             for (var j = 0; j< game.gameData.escapepod.containers.length; j++) {
                 containerDef = game.gameData.containers[game.gameData.escapepod.containers[j]];
-                containerLocType.push({x: (roomManager.rooms[roomManager.escapepodIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
-                        y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:game.gameData.escapepod.containers[j], itemslist:[]});
+                containerLocType.push({x: (roomManager.rooms[roomManager.escapepodIdx[i]].center_x + containerDef.width/2 +game.gameData.escapepod.containercoord[j][0]), 
+                        y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + game.gameData.escapepod.containercoord[j][1]), name:game.gameData.escapepod.containers[j], itemslist:[]});
             }
         }
         
@@ -41,8 +41,8 @@ class MapBuilder {
                     y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], itemslist:itemslistArr});
         }
         
-        containerLocType.concat(this.addSuppressant());
-        containerLocType.concat(this.addDoors());
+        containerLocType.concat(this.addSuppressant(mapObjSuppressant));
+        containerLocType.concat(this.addDoors(mapObjDoors));
         
         return containerLocType;
     }
@@ -61,91 +61,99 @@ class MapBuilder {
     }
     
     
-    getRoomsFromMap(mapRoomObj) {
-        var roomArr = [];
-        for (var i = 0; i<mapRoomObj.length; i++ ) {
-            roomArr[mapRoomObj[i].name] = mapRoomObj[i];
-    //         //[TODO] for now put a container in each room
-    //         // this is replaced by distributing containers throughout rooms
-    //         if (!( (this.map.map.objects["rooms"][i].name == "cc" )
-    //                 || (this.map.map.objects["rooms"][i].name == "p1")
-    //                 || (this.map.map.objects["rooms"][i].name == "p2")
-    //                 || (this.map.map.objects["rooms"][i].name == "p3")
-    //                 || (this.map.map.objects["rooms"][i].name == "p4")
-    //                 || (this.map.map.objects["rooms"][i].name == "e1")
-    //                   )) {
-    //             this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
-    //             this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
-    
-    //         }
-    //         if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
-        }
-        return roomArr;
-    }
-    
-    
     addPlayers(game, roomManager) {
         // find the rooms with locations for crew_quarters, dock and commandcenter
         var crewQtr;
         var dock;
         var cc;
-        for (var i=0; i< roomManager.rooms.length; i++) {
-            if (roomManager.rooms[i].name == "crew_quarters")
-                crewQtr = roomManager.rooms[i];
-            if (roomManager.rooms[i].name == "dock")
-                dock = roomManager.rooms[i];
-            if (roomManager.rooms[i].name == "commandcenter")
-                cc = roomManager.rooms[i];
-        }
-        
-        
-        // playerLocType needs the following: 
-        //    isSelected : true/false
-        //    characterIdx : corresponds to index in gameData character array
-        //    characterType : "crew" or "bandit"
-        //    inventory : array of names
-        //    status : player status (walk, stuck, sleep)
-        //    x : x location for character
-        //    y : y location
-        var playerLocType = [];
-        playerLocType.push({
-                idx : 0,
-                isSelected: false, 
-                characterIdx: game.gameData.crew[0], 
-                characterType: "crew", 
-                inventory : game.gameData.characters[game.gameData.crew[0]].inventory,
-                status: game.gameData.characters[game.gameData.crew[0]].status,
-                x : cc.center_x,
-                y : cc.center_y
-        })
-        // put remaining crew in quarters
-        for (var i = 1; i< game.gameData.crew.length; i++) {
+        // set bypassPositions to true to use the locArr instead of generating positions
+        var bypassPositions = false;
+        if (bypassPositions) {
+            // hard code positions to make debugging easier
+            var locarr = [[220, 700],[270, 750],[320, 800],[1845, 700],[1845, 750],[1845, 800]];
+            for (var i = 1; i< game.gameData.crew.length; i++) {
+                playerLocType.push({
+                    idx : i,
+                    isSelected: false, 
+                    characterIdx: game.gameData.crew[i], 
+                    characterType: "crew", 
+                    inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
+                    status: game.gameData.characters[game.gameData.crew[i]].status,
+                    x : locArr[i][0],
+                    y : locArr[i][1]
+                })
+            }
+            for (var i = 0; i< game.gameData.bandit.length; i++) {
+                playerLocType.push({
+                    idx : i + game.gameData.crew.length,
+                    isSelected: false, 
+                    characterIdx: game.gameData.bandit[i], 
+                    characterType: "bandit", 
+                    inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
+                    status: game.gameData.characters[game.gameData.bandit[i]].status,
+                    x : locArr[i+3][0],
+                    y : locArr[i+3][1]
+                })
+            }
+        } else {
+                
+            for (var i=0; i< roomManager.rooms.length; i++) {
+                if (roomManager.rooms[i].type == "crew_quarters")
+                    crewQtr = roomManager.rooms[i];
+                if (roomManager.rooms[i].type == "dock")
+                    dock = roomManager.rooms[i];
+                if (roomManager.rooms[i].type == "commandcenter")
+                    cc = roomManager.rooms[i];
+            }
+            
+            
+            // playerLocType needs the following: 
+            //    isSelected : true/false
+            //    characterIdx : corresponds to index in gameData character array
+            //    characterType : "crew" or "bandit"
+            //    inventory : array of names
+            //    status : player status (walk, stuck, sleep)
+            //    x : x location for character
+            //    y : y location
+            var playerLocType = [];
             playerLocType.push({
-                idx : i,
-                isSelected: false, 
-                characterIdx: game.gameData.crew[i], 
-                characterType: "crew", 
-                inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
-                status: game.gameData.characters[game.gameData.crew[i]].status,
-                x : crewQtr.center_x + i*50,
-                y : crewQtr.center_y + i*50
+                    idx : 0,
+                    isSelected: false, 
+                    characterIdx: game.gameData.crew[0], 
+                    characterType: "crew", 
+                    inventory : game.gameData.characters[game.gameData.crew[0]].inventory,
+                    status: game.gameData.characters[game.gameData.crew[0]].status,
+                    x : cc.center_x,
+                    y : cc.center_y
             })
+            // put remaining crew in quarters
+            for (var i = 1; i< game.gameData.crew.length; i++) {
+                playerLocType.push({
+                    idx : i,
+                    isSelected: false, 
+                    characterIdx: game.gameData.crew[i], 
+                    characterType: "crew", 
+                    inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
+                    status: game.gameData.characters[game.gameData.crew[i]].status,
+                    x : crewQtr.center_x + i*50,
+                    y : crewQtr.center_y + i*50
+                })
+            }
+            
+            // put bandits on docking bay
+            for (var i = 0; i< game.gameData.bandit.length; i++) {
+                playerLocType.push({
+                    idx : i + game.gameData.crew.length,
+                    isSelected: false, 
+                    characterIdx: game.gameData.bandit[i], 
+                    characterType: "bandit", 
+                    inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
+                    status: game.gameData.characters[game.gameData.bandit[i]].status,
+                    x : dock.center_x + i*50 + 50,
+                    y : dock.center_y + i*49
+                })
+            }
         }
-        
-        // put bandits on docking bay
-        for (var i = 0; i< game.gameData.bandit.length; i++) {
-            playerLocType.push({
-                idx : i + game.gameData.crew.length,
-                isSelected: false, 
-                characterIdx: game.gameData.bandit[i], 
-                characterType: "bandit", 
-                inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
-                status: game.gameData.characters[game.gameData.bandit[i]].status,
-                x : dock.center_x + i*50 + 50,
-                y : dock.center_y + i*49
-            })
-        }
-
         playerLocType[0].isSelected = true;
  
         return playerLocType;

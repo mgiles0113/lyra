@@ -23,8 +23,10 @@ class Items {
 
 Items.ItemImages = function(game) {
     // load all the specified item images
-    for (var i = 0; i < game.gameData.itemsnames.length; i++) {
-        game.load.image(game.gameData.items[game.gameData.itemsnames[i]].name, game.gameData.items[game.gameData.itemsnames[i]].itemRef);
+    var iterator = Object.keys(game.gameData.items);
+    //for (var i = 0; i < game.gameData.itemsnames.length; i++) {
+    for (var i = 0; i < iterator.length; i++) {
+        game.load.image(game.gameData.items[iterator[i]].name, game.gameData.items[iterator[i]].itemRef);
         
         // game.load.image("fuel_tank",game.gameData.items["FUEL_TANK"].itemRef);
         // game.load.image("fuse",game.gameData.items["FUSE"].itemRef);

@@ -1,7 +1,7 @@
 class Room {
     constructor(roomData) {
         this.type = roomData.type;
-        this.name = roomData.name;
+        //this.name = roomData.name;
         this.mapName = roomData.mapName;
         this.center_x = roomData.center_x;
         this.center_y = roomData.center_y;
@@ -42,6 +42,9 @@ class RoomManager {
         // array of indices into the escape pods
         this.escapepodIdx = [];
         // find the rooms corresponding to these types
+        this.commandcenterIdx = 0;
+        this.dockIdx = 1;
+        this.mainhallIdx = 2;
         var genericRoomCount = 0;
         if (game.gameData.roomarray == undefined || game.gameData.roomarray.length < 1) {
             // define the command center, main hall and docking bay

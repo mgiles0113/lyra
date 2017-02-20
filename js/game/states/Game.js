@@ -124,35 +124,43 @@ Lyra.LyraGame.prototype = {
         // this is just an experiment to show that we can place tiles!
         //this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
-        
-        for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
-            this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
-            //[TODO] for now put a container in each room
-            // this is replaced by distributing containers throughout rooms
-            if (!( (this.map.map.objects["rooms"][i].name == "cc" )
-                    || (this.map.map.objects["rooms"][i].name == "p1")
-                    || (this.map.map.objects["rooms"][i].name == "p2")
-                    || (this.map.map.objects["rooms"][i].name == "p3")
-                    || (this.map.map.objects["rooms"][i].name == "p4")
-                    || (this.map.map.objects["rooms"][i].name == "e1")
-                      )) {
-                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
-                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
+
+        // replaced by MapBuilder methods
+        // for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
+        //     this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
+        //     //[TODO] for now put a container in each room
+        //     // this is replaced by distributing containers throughout rooms
+        //     if (!( (this.map.map.objects["rooms"][i].name == "cc" )
+        //             || (this.map.map.objects["rooms"][i].name == "p1")
+        //             || (this.map.map.objects["rooms"][i].name == "p2")
+        //             || (this.map.map.objects["rooms"][i].name == "p3")
+        //             || (this.map.map.objects["rooms"][i].name == "p4")
+        //             || (this.map.map.objects["rooms"][i].name == "e1")
+        //               )) {
+        //         this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
+        //         this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
     
-            }
-            if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
+        //     }
+        //     if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
             
-        }
+        // }
         
         // [TODO] in progress building map with different rooms
-        // if (this.game.gameData.roomarray.length < 1) {
-        //     // need to build the map
-        //     this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
-            
-        // }
-        // else {
-        //     this.roomManager = new RoomManager(this.game);
-        // }
+        if (this.game.gameData.roomarray.length < 1) {
+            // need to build the map
+            this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
+             var mapInitializer = new MapBuilder();
+             var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager, this.map.map.objects["suppressant"], this.map.map.objects["doors"]);
+            this.containerManager = new ContainerManager(this.game,  this.containerLocType);
+                // playerManager manages all the players on the map (crew and bandits)
+            var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
+            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
+        }
+        else {
+            this.roomManager = new RoomManager(this.game);
+             this.containerManager = new ContainerManager(this.game);
+             this.playerManager = new PlayerManager(this.game, null, this.pathfinder);
+        }
                 
         
         // playerLocType needs the following: 
@@ -164,55 +172,56 @@ Lyra.LyraGame.prototype = {
         //    x : x location for character
         //    y : y location
 
-        // if < 1, no crew defined
-        if (this.game.gameData.playerarray.length < 1) {
-            var playerLocType = [];
-            for (var i = 0; i< this.game.gameData.crew.length; i++) {
-                playerLocType.push({
-                    idx : i,
-                    isSelected: false, 
-                    characterIdx: this.game.gameData.crew[i], 
-                    characterType: "crew", 
-                    inventory : this.game.gameData.characters[this.game.gameData.crew[i]].inventory,
-                    status: this.game.gameData.characters[this.game.gameData.crew[i]].status,
-                    x : this.roomArr["cc"].x + i*50,
-                    y : this.roomArr["cc"].y + i*50
-                })
-            }
-            for (var i = 0; i< this.game.gameData.bandit.length; i++) {
-                playerLocType.push({
-                    idx : i + this.game.gameData.crew.length,
-                    isSelected: false, 
-                    characterIdx: this.game.gameData.bandit[i], 
-                    characterType: "bandit", 
-                    inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
-                    status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
-                    x : this.roomArr["d"].x + i*50 + 50,
-                    y : this.roomArr["d"].y + i*48
-                })
-            }
+        // replaced by MapBuilder methods
+        // // if < 1, no crew defined
+        // if (this.game.gameData.playerarray.length < 1) {
+        //     var playerLocType = [];
+        //     for (var i = 0; i< this.game.gameData.crew.length; i++) {
+        //         playerLocType.push({
+        //             idx : i,
+        //             isSelected: false, 
+        //             characterIdx: this.game.gameData.crew[i], 
+        //             characterType: "crew", 
+        //             inventory : this.game.gameData.characters[this.game.gameData.crew[i]].inventory,
+        //             status: this.game.gameData.characters[this.game.gameData.crew[i]].status,
+        //             x : this.roomArr["cc"].x + i*50,
+        //             y : this.roomArr["cc"].y + i*50
+        //         })
+        //     }
+        //     for (var i = 0; i< this.game.gameData.bandit.length; i++) {
+        //         playerLocType.push({
+        //             idx : i + this.game.gameData.crew.length,
+        //             isSelected: false, 
+        //             characterIdx: this.game.gameData.bandit[i], 
+        //             characterType: "bandit", 
+        //             inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
+        //             status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
+        //             x : this.roomArr["d"].x + i*50 + 50,
+        //             y : this.roomArr["d"].y + i*48
+        //         })
+        //     }
 
-            playerLocType[0].isSelected = true;
-        }
-        // playerManager manages all the players on the map (crew and bandits)
-        this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
+        //     playerLocType[0].isSelected = true;
+        // }
+        // // playerManager manages all the players on the map (crew and bandits)
+        // this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
 
         
         this.actionManager = new ActionManager();
         
-        for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
-            //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
-            //Create suppressant items
-            var containeritem =  new ContainerItem(0, "suppresant");
-            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: [containeritem]};
-        }
+        // for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
+        //     //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
+        //     //Create suppressant items
+        //     var containeritem =  new ContainerItem(0, "suppresant");
+        //     this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: [containeritem]};
+        // }
         
-        for (var i=0; i<this.map.map.objects["doors"].length; i++) {
-            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["doors"][i].x, y:this.map.map.objects["doors"][i].y, name:"doors", itemslist: []};
-        }
+        // for (var i=0; i<this.map.map.objects["doors"].length; i++) {
+        //     this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["doors"][i].x, y:this.map.map.objects["doors"][i].y, name:"doors", itemslist: []};
+        // }
         
-        // create containers for each of the items
-        this.containerManager = new ContainerManager(this.game,  this.containerLocType);
+        // // create containers for each of the items
+        // this.containerManager = new ContainerManager(this.game,  this.containerLocType);
 
         
         //var cc = this.map.map.objects["rooms"];
@@ -230,8 +239,8 @@ Lyra.LyraGame.prototype = {
         // the display is scaled to fit the full size of the defined canvas
         //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         
-        //Create all in game items.
-        this.ingameItems = new Items();
+        // //Create all in game items.
+        // this.ingameItems = new Items();
 
         // setup getting keyboard input
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -299,9 +308,10 @@ Lyra.LyraGame.prototype = {
 
 
         // generate slime manager to control the slime
-        var spawnCoord = [[ this.roomArr["mh"].x + 50, this.roomArr["mh"].y + 50]];
-        for (var j = 1; j < 7; j++) {
-            spawnCoord.push( [this.roomArr["r" + j].x + 50, this.roomArr["r" + j].y + 50])
+        // [TODO] move building this array to MapBuilder
+        var spawnCoord = [[ this.roomManager.rooms[this.roomManager.mainhallIdx].center_x + 50, this.roomManager.rooms[this.roomManager.mainhallIdx].center_y + 50]];
+        for (var j = 0; j < this.roomManager.roomIdx.length ; j++) {
+            spawnCoord.push( [ this.roomManager.rooms[this.roomManager.roomIdx[j]].center_x + 50, this.roomManager.rooms[this.roomManager.roomIdx[j]].center_y + 50])
         }
         this.slimeManager = new SlimeManager(this.game, spawnCoord);
 	},
@@ -332,7 +342,7 @@ Lyra.LyraGame.prototype = {
         this.comm.switchPlayer(this.playerManager.players, this.game);
         
         //Update Comm Window Inventory
-        this.comm.displayInventory(this.playerManager.players[0], this.game, this.ingameItems);
+        //this.comm.displayInventory(this.playerManager.players[0], this.game, this.ingameItems);
 
         // check for overlap with containers
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players);

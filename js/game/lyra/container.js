@@ -262,11 +262,13 @@ Container.rawData = function(game, idx, x, y, name, itemslist) {
 }
 
 Container.preloadContainerImages = function(game) {
-    for (var i=0; i< game.gameData.containernames.length; i++) {
-        var name = game.gameData.containernames[i];
-        game.load.spritesheet(game.gameData.containers[name].imageTag, game.gameData.containers[name].itemRef, game.gameData.containers[name].width,game.gameData.containers[name].height, game.gameData.containers[name].frames, 0,0);
-        game.load.image(game.gameData.containers[name].imageTag + "open", game.gameData.containers[name].itemRef, game.gameData.containers[name].width,game.gameData.containers[name].height);
-        game.load.image(game.gameData.containers[name].imageTag + "closed", game.gameData.containers[name].itemRef, game.gameData.containers[name].width,game.gameData.containers[name].height);
+    var iterator = Object.keys(game.gameData.containers);
+    //for (var i=0; i< game.gameData.containernames.length; i++) {
+    for (var i=0; i< iterator.length; i++) {
+        //var name = iterator[i];
+        game.load.spritesheet(game.gameData.containers[iterator[i]].imageTag, game.gameData.containers[iterator[i]].itemRef, game.gameData.containers[iterator[i]].width,game.gameData.containers[iterator[i]].height, game.gameData.containers[iterator[i]].frames, 0,0);
+        game.load.image(game.gameData.containers[iterator[i]].imageTag + "open", game.gameData.containers[iterator[i]].itemRef, game.gameData.containers[iterator[i]].width,game.gameData.containers[iterator[i]].height);
+        game.load.image(game.gameData.containers[iterator[i]].imageTag + "closed", game.gameData.containers[iterator[i]].itemRef, game.gameData.containers[iterator[i]].width,game.gameData.containers[iterator[i]].height);
     }
 }
 

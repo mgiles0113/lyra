@@ -413,8 +413,8 @@ Lyra.MainMenu.prototype = {
 	        this.game.menuMusic.stop();
 	    }
 	    this.game.gameData = JSON.parse(mapData);
-	    this.game.playerData = PLAYER_DATA;
-	    this.game.itemData = ITEMS_DATA;
+	   // this.game.playerData = PLAYER_DATA;
+	   // this.game.itemData = ITEMS_DATA;
 	    this.game.newGame = true;
 	    console.log('active game file: ', this.game.userPreference.data.activeGame);
 	    this.startNewState('LyraGame');
