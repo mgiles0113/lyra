@@ -13,7 +13,7 @@ function shuffleArr(arr) {
     var idx = 0;
     while (arr.length > 0) {
         var rndNum = getRandomInt(0, arr.length-1);
-        shuffleArr[idx] = arr[rndNum];
+        shuffleArr.push(arr[rndNum]);
         arr.splice(rndNum, 1);
     }
     return(shuffleArr);

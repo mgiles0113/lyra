@@ -141,8 +141,19 @@ Lyra.LyraGame.prototype = {
     
             }
             if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
+            
         }
         
+        // [TODO] in progress building map with different rooms
+        // if (this.game.gameData.roomarray.length < 1) {
+        //     // need to build the map
+        //     this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
+            
+        // }
+        // else {
+        //     this.roomManager = new RoomManager(this.game);
+        // }
+                
         
         // playerLocType needs the following: 
         //    isSelected : true/false
@@ -184,7 +195,7 @@ Lyra.LyraGame.prototype = {
             playerLocType[0].isSelected = true;
         }
         // playerManager manages all the players on the map (crew and bandits)
-        this.playerManager = new PlayerManager(this.game, playerLocType);
+        this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
 
         
         this.actionManager = new ActionManager();

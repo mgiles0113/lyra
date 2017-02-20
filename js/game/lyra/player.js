@@ -144,7 +144,7 @@ class Player {
             this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y);
 	
             //Move to Destination By Grabbing the Next Point.
-			if( this.sprite.customParams.dist_dest < 5){
+			if( this.sprite.customParams.dist_dest < 2){
 			    
 			    //Get Next Point
 			    this.getNextPt();
@@ -187,6 +187,23 @@ class Player {
             pathfinder.calculate();
         
     }
+
+    
+    // use this function to restart point and click movement in a saved game.  this.sprite.customParams.walking == true and .dest_x, .dest_y are defined
+    restartPtClick(game, pathfinder){
+        
+            //Get Sprite Origin Coords.
+            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.body.center.x, 32);
+            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.body.center.y, 32);
+
+            //Get the Path from Origin to Dest. 
+            //[TODO} Move player toward dest based on path points.
+            this.foundPath = this.getPath.bind(this);
+            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, this.foundPath);
+            pathfinder.calculate();
+        
+    }
+
     
     getPath(path){
         if( path != null){
@@ -345,7 +362,7 @@ Player.rawData = function (game, idx, playerLocType) {
 //    x : x location for character
 //    y : y location
 class PlayerManager {
-    constructor (game, playerLocType) {
+    constructor (game, playerLocType, pathfinder) {
         this.players = [];
         // indexes in the array corresponding to the type character
         this.crew = [];
@@ -378,6 +395,12 @@ class PlayerManager {
                 }
 
             }
+        }
+        for (var i = 0; i <this.players.length; i++) {
+            // restart ptClick
+            if (this.players[i].sprite.customParams.walking && this.players[i].sprite.customParams.dest_x != null && this.players[i].sprite.customParams.dest_y != null ) { 
+                //this.players[i].restartPtClick(game, pathfinder);
+            } 
         }
     }
     

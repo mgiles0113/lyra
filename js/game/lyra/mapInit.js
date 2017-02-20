@@ -1,35 +1,104 @@
 class MapBuilder {
     
-    defineRooms(mapRoomArray) {
-        
-        
-        
-    }
-    
-    
-    addContainers() {
-        for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
-            this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
-            //[TODO] for now put a container in each room
-            // this is replaced by distributing containers throughout rooms
-            if (!( (this.map.map.objects["rooms"][i].name == "cc" )
-                    || (this.map.map.objects["rooms"][i].name == "p1")
-                    || (this.map.map.objects["rooms"][i].name == "p2")
-                    || (this.map.map.objects["rooms"][i].name == "p3")
-                    || (this.map.map.objects["rooms"][i].name == "p4")
-                    || (this.map.map.objects["rooms"][i].name == "e1")
-                      )) {
-                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
-                this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
-    
+    placeContainersInRooms(game, roomManager) {
+        // add containers by room type
+        var containerLocType = [];
+        for (var i = 0; i<roomManager.roomIdx.length; i++) {
+            var roomDef = game.gameData.roomdef[this.rooms[roomManager.roomIdx[i]].name];
+            for (var j = 0; j< roomDef.containers.length; j++) {
+                var containerDef = game.gameData.containers[roomDef.containers[j]];
+
+                // generate an array of indices creating a random list of allowed items in the container
+                var itemslistArr = this.generateItems(roomDef, containerDef);
+                containerLocType.push({x: (roomManager.rooms[roomManager.roomIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
+                        y: (roomManager.rooms[roomManager.roomIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:roomDef.containers[j], itemslist:itemslistArr});
             }
-            if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
         }
         
+        // add escape pods
+        for (var i = 0; i<roomManager.escapepodIdx.length; i++) {
+            for (var j = 0; j< game.gameData.escapepod.containers.length; j++) {
+                containerDef = game.gameData.containers[game.gameData.escapepod.containers[j]];
+                containerLocType.push({x: (roomManager.rooms[roomManager.escapepodIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
+                        y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:game.gameData.escapepod.containers[j], itemslist:[]});
+            }
+        }
+        
+        // do nothing for now with passages
+        // for (var i = 0; i<roomManager.passageIdx.length; i++) {
+            
+        // }
+        
+        // do nothing for command center at roomManager.rooms[0]
+
+        // do nothing for docking bay at roomManager.rooms[1]
+        
+        // add containers to main hall
+        for (var j = 0; j< game.gameData.mainhall.containers.length; j++) {
+            containerDef = game.gameData.containers[game.gameData.mainhall.containers[j]];
+            itemslistArr = this.generateItems(game.gameData.mainhall, game.gameData.containers[game.gameData.mainhall.containers[j]]);
+            containerLocType.push({x: roomManager.rooms[2].center_x + containerDef.width/2 + game.gameData.mainhall.containercoord[j][0], 
+                    y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], itemslist:itemslistArr});
+        }
+        
+        containerLocType.concat(this.addSuppressant());
+        containerLocType.concat(this.addDoors());
+        
+        return containerLocType;
     }
     
     
-    addPlayers(game) {
+    generateItems(roomDef, containerDef) {
+        // generate an array of indices creating a random list of allowed items in the container
+        var itemslistArr = [];
+        for (var k = 0; k < containerDef.itemscapacity; k++) {
+            var rndNum = getRandomInt(-1, roomDef.item_types_allowed.length - 1);
+            if (rndNum >= 0) {
+                itemslistArr.push(new ContainerItem(itemslistArr.length, roomDef.item_types_allowed[rndNum]));
+            }
+        }
+        return itemslistArr;
+    }
+    
+    
+    getRoomsFromMap(mapRoomObj) {
+        var roomArr = [];
+        for (var i = 0; i<mapRoomObj.length; i++ ) {
+            roomArr[mapRoomObj[i].name] = mapRoomObj[i];
+    //         //[TODO] for now put a container in each room
+    //         // this is replaced by distributing containers throughout rooms
+    //         if (!( (this.map.map.objects["rooms"][i].name == "cc" )
+    //                 || (this.map.map.objects["rooms"][i].name == "p1")
+    //                 || (this.map.map.objects["rooms"][i].name == "p2")
+    //                 || (this.map.map.objects["rooms"][i].name == "p3")
+    //                 || (this.map.map.objects["rooms"][i].name == "p4")
+    //                 || (this.map.map.objects["rooms"][i].name == "e1")
+    //                   )) {
+    //             this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
+    //             this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
+    
+    //         }
+    //         if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
+        }
+        return roomArr;
+    }
+    
+    
+    addPlayers(game, roomManager) {
+        // find the rooms with locations for crew_quarters, dock and commandcenter
+        var crewQtr;
+        var dock;
+        var cc;
+        for (var i=0; i< roomManager.rooms.length; i++) {
+            if (roomManager.rooms[i].name == "crew_quarters")
+                crewQtr = roomManager.rooms[i];
+            if (roomManager.rooms[i].name == "dock")
+                dock = roomManager.rooms[i];
+            if (roomManager.rooms[i].name == "commandcenter")
+                cc = roomManager.rooms[i];
+        }
+        
+        
         // playerLocType needs the following: 
         //    isSelected : true/false
         //    characterIdx : corresponds to index in gameData character array
@@ -38,76 +107,70 @@ class MapBuilder {
         //    status : player status (walk, stuck, sleep)
         //    x : x location for character
         //    y : y location
-
-        // if < 1, no crew defined
-        if (this.game.gameData.playerarray.length < 1) {
-            var playerLocType = [];
-            for (var i = 0; i< this.game.gameData.crew.length; i++) {
-                playerLocType.push({
-                    idx : i,
-                    isSelected: false, 
-                    characterIdx: this.game.gameData.crew[i], 
-                    characterType: "crew", 
-                    inventory : this.game.gameData.characters[this.game.gameData.crew[i]].inventory,
-                    status: this.game.gameData.characters[this.game.gameData.crew[i]].status,
-                    x : this.roomArr["cc"].x + i*50,
-                    y : this.roomArr["cc"].y + i*50
-                })
-            }
-            for (var i = 0; i< this.game.gameData.bandit.length; i++) {
-                playerLocType.push({
-                    idx : i + this.game.gameData.crew.length,
-                    isSelected: false, 
-                    characterIdx: this.game.gameData.bandit[i], 
-                    characterType: "bandit", 
-                    inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
-                    status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
-                    x : this.roomArr["d"].x + i*50 + 50,
-                    y : this.roomArr["d"].y + i*48
-                })
-            }
-
-            playerLocType[0].isSelected = true;
+        var playerLocType = [];
+        playerLocType.push({
+                idx : 0,
+                isSelected: false, 
+                characterIdx: game.gameData.crew[0], 
+                characterType: "crew", 
+                inventory : game.gameData.characters[game.gameData.crew[0]].inventory,
+                status: game.gameData.characters[game.gameData.crew[0]].status,
+                x : cc.center_x,
+                y : cc.center_y
+        })
+        // put remaining crew in quarters
+        for (var i = 1; i< game.gameData.crew.length; i++) {
+            playerLocType.push({
+                idx : i,
+                isSelected: false, 
+                characterIdx: game.gameData.crew[i], 
+                characterType: "crew", 
+                inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
+                status: game.gameData.characters[game.gameData.crew[i]].status,
+                x : crewQtr.center_x + i*50,
+                y : crewQtr.center_y + i*50
+            })
         }
+        
+        // put bandits on docking bay
+        for (var i = 0; i< game.gameData.bandit.length; i++) {
+            playerLocType.push({
+                idx : i + game.gameData.crew.length,
+                isSelected: false, 
+                characterIdx: game.gameData.bandit[i], 
+                characterType: "bandit", 
+                inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
+                status: game.gameData.characters[game.gameData.bandit[i]].status,
+                x : dock.center_x + i*50 + 50,
+                y : dock.center_y + i*49
+            })
+        }
+
+        playerLocType[0].isSelected = true;
+ 
         return playerLocType;
     }
     
     // private method to create suppressant container definitions
-    addSuppressant() {
+    addSuppressant(mapObjSuppressant) {
         var containerLocType = [];
-        for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
+        for (var i = 0; i<mapObjSuppressant.length; i++ ) {
             //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
             var containeritem =  new ContainerItem(0, "suppresant");
-            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: [containeritem]};
+            containerLocType[containerLocType.length] = {x:mapObjSuppressant[i].x, y:mapObjSuppressant[i].y, name:"transparent", itemslist: [containeritem]};
         }
         return containerLocType;
     }
 
     // private method to create door container definitions
-    addDoors() {
+    addDoors(mapObjDoors) {
         var containerLocType = [];
-        for (var i=0; i<this.map.map.objects["doors"].length; i++) {
-            this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["doors"][i].x, y:this.map.map.objects["doors"][i].y, name:"doors", itemslist: []};
+        for (var i=0; i<mapObjDoors.length; i++) {
+            containerLocType[containerLocType.length] = {x:mapObjDoors[i].x, y:mapObjDoors[i].y, name:"doors", itemslist: []};
         }
         return containerLocType;
     }
-    
-    // private method to create escape pods and populate with list of items needed to fix
-    addEscapePods() {
-        var containerLocType = [];
-        if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
-    }
-    
-    buildNewMapContainerDefinitions(game) {
-        var containerLocType = [];
-        containerLocType.concat(this.addContainers());
-        containerLocType.concat(this.addSuppressant());
-        containerLocType.concat(this.addDoors());
-        containerLocType.concat(this.addEscapePods());
-    }
-    
-    
 
 }
 

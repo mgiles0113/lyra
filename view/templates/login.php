@@ -145,6 +145,7 @@
     <script src="js/game/lyra/userPreference.js"></script>
     <script src="js/game/lyra/testPost.js"></script>
     <script src="js/game/lyra/timer.js"></script>
+    <script src="js/game/lyra/room.js"></script>
     <script src="js/game/states/StoryMenu.js"></script>
 	<script src="js/game/states/Preload.js"></script>
 	<script src="js/game/states/MainMenu.js"></script>

@@ -273,29 +273,29 @@
     "slimearray": [],
     "spawnCoord": [],
     "slimemotionlimit" : 20,
-    "itemsnames" : ["CIRCUIT", "FUEL_TANK", "FUSE", "SUPPRESANT", "WRENCH"],
+    "itemsnames" : ["circuit", "fuel_tank", "fuse", "suppresant", "wrench"],
     "items" : {
-        "CIRCUIT": {
+        "circuit": {
             "itemRef":"assets/sprites/items/circuit.png",
             "name": "circuit",
             "displayname" :  "circuit"
         },
-        "FUEL_TANK": {
+        "fuel_tank": {
             "itemRef":"assets/sprites/items/fuel_tank.png",
             "name": "fuel_tank",
             "displayname" : "fuel tank"
         },
-        "FUSE": {
+        "fuse": {
             "itemRef":"assets/sprites/items/fuse.png",
             "name": "fuse",
             "displayname" : "fuse"
         },
-        "SUPPRESANT": {
+        "suppresant": {
             "itemRef":"assets/sprites/items/suppresant.png",
             "name": "suppresant",
             "displayname" : "suppressant"
         },
-        "WRENCH": {
+        "wrench": {
             "itemRef":"assets/sprites/items/wrench.png",
             "name": "wrench",
             "displayname" : "wrench"
@@ -414,5 +414,74 @@
         }
         },
     "containerarray" : [],
+    "commandcenter" : {
+        "name" : "commandcenter",
+        "containers" : [],
+        "containercoord" : [],
+        "item_types_allowed" : []
+    },
+    "dock" : {
+        "name" : "dock",
+        "containers" : [],
+        "containercoord" : [],
+        "item_types_allowed" : []
+    },
+    "escapepod" : {
+        "name" : "escapepod",
+        "containers" : ["escapepodhold","escapepodhold","escapepodhold","escapepodhold"],
+        "containercoord" : [[50,50],[-50,50],[50,-50],[-50,-50]],
+        "item_types_allowed" : []
+    },
+    "passage" : {
+        "name" : "passage",
+        "containers" : [],
+        "containercoord" : [],
+        "item_types_allowed" : []
+    },
+    "mainhall" : {
+        "name" : "mainhall",
+        "containers" : [ "smallbox",  "smallbox",  "smallbox"],
+        "containercoord" : [[-100,0],[50,0],[0,0]],
+        "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+    },
+    "roomdef" : {
+        "med_bay" : {
+            "name" : "med_bay",
+            "containers" : ["largebox", "smallbox"],
+            "containercoord" : [[-50, -50], [50, 50]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        },
+        "cafeteria" : {
+            "name" : "cafeteria",
+            "containers" : ["largebox", "largebox", "smallbox"],
+            "containercoord" : [[-50, -50], [-50, 50], [50, 50]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        },
+        "crew_quarters" : {
+            "name" : "crew_quarters",
+            "containers" : ["largebox", "largebox", "smallbox"],
+            "containercoord" : [[-50, -50], [50, -50], [50, 50]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        },
+        "rec_room" : {
+            "name" : "rec_room",
+            "containers" : ["largebox", "smallbox"],
+            "containercoord" : [[-50, -50], [50, 50]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        },
+        "engine_room" : {
+            "name" : "engine_room",
+            "containers" : ["largebox", "smallbox"],
+            "containercoord" : [[-50, -50], [50, 50]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        },
+        "workshop" : {
+            "name" : "workshop",
+            "containers" : ["smallbox"],
+            "containercoord" : [[0,0]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        }
+    },
+    "roomarray" : [],
     "gameresult" : "empty"
 }
