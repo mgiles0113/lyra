@@ -428,8 +428,8 @@
     },
     "escapepod" : {
         "name" : "escapepod",
-        "containers" : ["escapepodhold","escapepodhold","escapepodhold","escapepodhold"],
-        "containercoord" : [[50,50],[-50,50],[50,-50],[-50,-50]],
+        "containers" : ["escapepod", "escapepodhold","escapepodhold","escapepodhold","escapepodhold"],
+        "containercoord" : [[0,0], [40,40],[-40,40],[40,-40],[-40,-40]],
         "item_types_allowed" : []
     },
     "passage" : {

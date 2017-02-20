@@ -41,8 +41,8 @@ class MapBuilder {
                     y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], itemslist:itemslistArr});
         }
         
-        containerLocType.concat(this.addSuppressant(mapObjSuppressant));
-        containerLocType.concat(this.addDoors(mapObjDoors));
+        containerLocType = containerLocType.concat(this.addSuppressant(mapObjSuppressant));
+        containerLocType = containerLocType.concat(this.addDoors(mapObjDoors));
         
         return containerLocType;
     }
@@ -70,7 +70,9 @@ class MapBuilder {
         var bypassPositions = false;
         if (bypassPositions) {
             // hard code positions to make debugging easier
-            var locarr = [[220, 700],[270, 750],[320, 800],[1845, 700],[1845, 750],[1845, 800]];
+            // player tile coordinates (7, 22), (7, 24), (9, 22), (0,0) ,  (58, 22), (64, 46)
+            var playerLocType = [];
+            var locArr = [[224, 704],[224, 768],[288, 704],[0, 0],[1856, 704],[2048, 1472]];
             for (var i = 1; i< game.gameData.crew.length; i++) {
                 playerLocType.push({
                     idx : i,
@@ -115,7 +117,6 @@ class MapBuilder {
             //    status : player status (walk, stuck, sleep)
             //    x : x location for character
             //    y : y location
-            var playerLocType = [];
             playerLocType.push({
                     idx : 0,
                     isSelected: false, 

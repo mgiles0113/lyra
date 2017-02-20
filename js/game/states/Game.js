@@ -151,7 +151,7 @@ Lyra.LyraGame.prototype = {
             this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
              var mapInitializer = new MapBuilder();
              var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager, this.map.map.objects["suppressant"], this.map.map.objects["doors"]);
-            this.containerManager = new ContainerManager(this.game,  this.containerLocType);
+            this.containerManager = new ContainerManager(this.game,  containerLocType);
                 // playerManager manages all the players on the map (crew and bandits)
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
             this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
