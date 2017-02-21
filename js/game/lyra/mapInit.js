@@ -15,8 +15,8 @@ class MapBuilder {
                 // generate an array of indices creating a random list of allowed items in the container
                 var itemslistArr = this.generateItems(roomDef, containerDef);
                 itemsList = itemsList.concat(itemslistArr);
-                containerLocType.push({x: (roomManager.rooms[roomManager.roomIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
-                        y: (roomManager.rooms[roomManager.roomIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:roomDef.containers[j], itemslist:itemslistArr});
+                containerLocType[containerLocType.length] = {x: (roomManager.rooms[roomManager.roomIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
+                        y: (roomManager.rooms[roomManager.roomIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:roomDef.containers[j], itemslist:itemslistArr};
                 if (containerLocType[containerLocType.length - 1].itemslist.length < containerDef.itemscapacity ) {
                     idxEmptyContainerSlot.push(containerLocType.length - 1);
                 }
@@ -73,23 +73,27 @@ class MapBuilder {
         for (var k = 0; k < containerDef.itemscapacity; k++) {
             var rndNum = getRandomInt(-1, roomDef.item_types_allowed.length - 1);
             if (rndNum >= 0) {
-                itemslistArr.push(new ContainerItem(itemslistArr.length-1, roomDef.item_types_allowed[rndNum]));
+                itemslistArr.push(new ContainerItem(itemslistArr.length, roomDef.item_types_allowed[rndNum]));
             }
         }
         return itemslistArr;
     }
     
+    //containerLocType is the array of containers to build
+    // idxEmptyContainerSlot is the array of indices into containerLocType with an empty slot
     assignLyre(idxEmptyContainerSlot, containerLocType) {
         // find all the containers with empty spaces
         if (idxEmptyContainerSlot.length < 1) {
             // replace an item with the lyre
-            var rndIdx = getRandomInt(0, idxEmptyContainerSlot.length-1);
+            var rndIdx = getRandomInt(0, containerLocType.length-1);
             containerLocType[rndIdx].itemslist.pop();
             containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
         }
         else {
             var rndIdx = getRandomInt(0, idxEmptyContainerSlot.length-1);
-            containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
+            containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.push(new ContainerItem(containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.length, "lyre"));
+            console.log("lyre located at: ");
+            console.log(containerLocType[rndIdx]);
         }
         return (containerLocType);
     }

@@ -105,6 +105,9 @@ class Container {
             if (this.itemSprites[i]) {
                 this.hideItem(i);
             }
+            if (posArr[i] == undefined || posArr[i].length < 1) {
+                console.log(this);
+            }
             this.showItem(game, posArr[i][0], posArr[i][1], i, 0.5);
         }
     }
