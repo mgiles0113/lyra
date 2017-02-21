@@ -75,6 +75,7 @@ Lyra.LyraGame.prototype = {
         this.pathfinder = new EasyStar.js();
         
         //Get the Walls Map Layer --> 2D Array.
+        // game.gameData.mapwidth and mapheight defined in terms of tiles
         var map_cols = this.game.gameData.mapwidth/32;
         var map_rows = this.game.gameData.mapheight/32;
         var grid_col = 0;
@@ -124,35 +125,18 @@ Lyra.LyraGame.prototype = {
         // this is just an experiment to show that we can place tiles!
         //this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
-
-        // replaced by MapBuilder methods
-        // for (var i = 0; i<this.map.map.objects["rooms"].length; i++ ) {
-        //     this.roomArr[this.map.map.objects["rooms"][i].name] = this.map.map.objects["rooms"][i];
-        //     //[TODO] for now put a container in each room
-        //     // this is replaced by distributing containers throughout rooms
-        //     if (!( (this.map.map.objects["rooms"][i].name == "cc" )
-        //             || (this.map.map.objects["rooms"][i].name == "p1")
-        //             || (this.map.map.objects["rooms"][i].name == "p2")
-        //             || (this.map.map.objects["rooms"][i].name == "p3")
-        //             || (this.map.map.objects["rooms"][i].name == "p4")
-        //             || (this.map.map.objects["rooms"][i].name == "e1")
-        //               )) {
-        //         this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x, y:this.map.map.objects["rooms"][i].y, name:"smallbox", itemslist: [new ContainerItem(0, "fuse")]};
-        //         this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y - 10, name:"largebox", itemslist: [new ContainerItem(0, "wrench"), new ContainerItem(0, "fuel_tank")]};
-    
-        //     }
-        //     if (this.map.map.objects["rooms"][i].name == "e1") { this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["rooms"][i].x - 64, y:this.map.map.objects["rooms"][i].y -64, name:"escapepod", itemslist: []};}
-            
-        // }
-        
-        // [TODO] in progress building map with different rooms
+        // Build map with different rooms if not already defined
         if (this.game.gameData.roomarray.length < 1) {
             // need to build the map
             this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
-             var mapInitializer = new MapBuilder();
-             var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager, this.map.map.objects["suppressant"], this.map.map.objects["doors"]);
+            var mapInitializer = new MapBuilder();
+            var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager);
+            containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
+            containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
             this.containerManager = new ContainerManager(this.game,  containerLocType);
-                // playerManager manages all the players on the map (crew and bandits)
+            
+            // playerManager manages all the players on the map (crew and bandits)
+            // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
             this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
         }
@@ -161,74 +145,12 @@ Lyra.LyraGame.prototype = {
              this.containerManager = new ContainerManager(this.game);
              this.playerManager = new PlayerManager(this.game, null, this.pathfinder);
         }
-                
-        
-        // playerLocType needs the following: 
-        //    isSelected : true/false
-        //    characterIdx : corresponds to index in gameData character array
-        //    characterType : "crew" or "bandit"
-        //    inventory : array of names
-        //    status : player status (walk, stuck, sleep)
-        //    x : x location for character
-        //    y : y location
-
-        // replaced by MapBuilder methods
-        // // if < 1, no crew defined
-        // if (this.game.gameData.playerarray.length < 1) {
-        //     var playerLocType = [];
-        //     for (var i = 0; i< this.game.gameData.crew.length; i++) {
-        //         playerLocType.push({
-        //             idx : i,
-        //             isSelected: false, 
-        //             characterIdx: this.game.gameData.crew[i], 
-        //             characterType: "crew", 
-        //             inventory : this.game.gameData.characters[this.game.gameData.crew[i]].inventory,
-        //             status: this.game.gameData.characters[this.game.gameData.crew[i]].status,
-        //             x : this.roomArr["cc"].x + i*50,
-        //             y : this.roomArr["cc"].y + i*50
-        //         })
-        //     }
-        //     for (var i = 0; i< this.game.gameData.bandit.length; i++) {
-        //         playerLocType.push({
-        //             idx : i + this.game.gameData.crew.length,
-        //             isSelected: false, 
-        //             characterIdx: this.game.gameData.bandit[i], 
-        //             characterType: "bandit", 
-        //             inventory : this.game.gameData.characters[this.game.gameData.bandit[i]].inventory,
-        //             status: this.game.gameData.characters[this.game.gameData.bandit[i]].status,
-        //             x : this.roomArr["d"].x + i*50 + 50,
-        //             y : this.roomArr["d"].y + i*48
-        //         })
-        //     }
-
-        //     playerLocType[0].isSelected = true;
-        // }
-        // // playerManager manages all the players on the map (crew and bandits)
-        // this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
-
         
         this.actionManager = new ActionManager();
         
-        // for (var i = 0; i<this.map.map.objects["suppressant"].length; i++ ) {
-        //     //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
-        //     //Create suppressant items
-        //     var containeritem =  new ContainerItem(0, "suppresant");
-        //     this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["suppressant"][i].x, y:this.map.map.objects["suppressant"][i].y, name:"transparent", itemslist: [containeritem]};
-        // }
-        
-        // for (var i=0; i<this.map.map.objects["doors"].length; i++) {
-        //     this.containerLocType[this.containerLocType.length] = {x:this.map.map.objects["doors"][i].x, y:this.map.map.objects["doors"][i].y, name:"doors", itemslist: []};
-        // }
-        
-        // // create containers for each of the items
-        // this.containerManager = new ContainerManager(this.game,  this.containerLocType);
-
-        
-        //var cc = this.map.map.objects["rooms"];
-        
         // set world boundaries to size of the current map.   This allows sprites to be followed by the camera
         // viewable area is the size of the game
-        this.game.world.setBounds(0, 0, 64*32, 46*32);
+        this.game.world.setBounds(0, 0, map_cols*32, map_rows*32);
         
         // // this appears to work partially for resizing the viewable part of the game (scroll bars vertical, more of map shown horizontal)
         // // worked when the game dimensions (mapwidth, mapheigt) are set to full map size
@@ -308,12 +230,7 @@ Lyra.LyraGame.prototype = {
 
 
         // generate slime manager to control the slime
-        // [TODO] move building this array to MapBuilder
-        var spawnCoord = [[ this.roomManager.rooms[this.roomManager.mainhallIdx].center_x + 50, this.roomManager.rooms[this.roomManager.mainhallIdx].center_y + 50]];
-        for (var j = 0; j < this.roomManager.roomIdx.length ; j++) {
-            spawnCoord.push( [ this.roomManager.rooms[this.roomManager.roomIdx[j]].center_x + 50, this.roomManager.rooms[this.roomManager.roomIdx[j]].center_y + 50])
-        }
-        this.slimeManager = new SlimeManager(this.game, spawnCoord);
+        this.slimeManager = new SlimeManager(this.game, this.roomManager.slimeSpawnCoord);
 	},
 	update: function() {
 	    if (this.game.gameData.timer.timeUp) {

@@ -61,7 +61,7 @@ class Player {
         this.sprite.customParams.walking = playerData.walking;
         
         //PathFinder for Pt&Click
-        this.sprite.customParams.path = [];
+        this.sprite.customParams.path = playerData.path;
         this.sprite.customParams.next_pt_x = null;
         this.sprite.customParams.next_pt_y = null;
        
@@ -206,6 +206,7 @@ class Player {
 
     
     getPath(path){
+        // if path was passed in, load the path
         if( path != null){
             this.sprite.customParams.path = [];
                 var pt_x;
@@ -217,9 +218,12 @@ class Player {
             }
         }
         
-        //Set up the first point.
-        this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
-        this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+        //[TODO] adding this condition because the path isn't always defined????
+        if (this.sprite.customParams.path.length > 0) {
+            // set up the first point
+            this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
+            this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+        }
     }
     
     getNextPt(){
@@ -303,6 +307,7 @@ class Player {
             status : this.sprite.customParams.status,
             dest_x : this.sprite.customParams.dest_x,
             dest_y : this.sprite.customParams.dest_y,
+            path: this.sprite.customParams.path,
             velocityx : this.sprite.body.velocity.x,
             velocityy : this.sprite.body.velocity.y,
             frame : this.sprite.frame,
@@ -344,6 +349,7 @@ Player.rawData = function (game, idx, playerLocType) {
         status : playerLocType.status,
         dest_x : game.gameData.characters[playerLocType.characterIdx].dest_x,
         dest_y : game.gameData.characters[playerLocType.characterIdx].dest_y,
+        path : [],
         velocityx : game.gameData.characters[playerLocType.characterIdx].velocityx,
         velocityy : game.gameData.characters[playerLocType.characterIdx].velocityy,
         frame : game.gameData.characters[playerLocType.characterIdx].frame,

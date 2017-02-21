@@ -6,6 +6,7 @@ class Container {
         this.name = containerData.name;
         this.itemscapacity = containerData.itemscapacity;
         this.itemslist = containerData.itemslist;
+        this.repairItems = containerData.repairItems;
         this.itemSprites = [];
         this.playerHighlight = containerData.playerHighlight;
         this.containerstate = containerData.containerstate;
@@ -226,6 +227,7 @@ class Container {
             name: this.name,
             itemscapacity : this.itemscapacity,
             itemslist : this.itemslist,
+            repairItems : this.repairItems,
             containerstate : this.containerstate,
             stateIdx : this.stateIdx,
             x : this.sprite.body.position.x,
@@ -242,7 +244,7 @@ class Container {
     
 }
 
-Container.rawData = function(game, idx, x, y, name, itemslist) {
+Container.rawData = function(game, idx, x, y, name, itemslist, itemsNeeded) {
     var rawContainerData = {
         idx : idx,
         x : x,
@@ -251,6 +253,7 @@ Container.rawData = function(game, idx, x, y, name, itemslist) {
         stateIdx : game.gameData.containers[name].stateIdx,
         itemscapacity : game.gameData.containers[name].itemscapacity,
         itemslist : itemslist,
+        repairItems : itemsNeeded,
         containerstate : game.gameData.containers[name].containerstate,
         playerHighlight : [],
         immovable : game.gameData.containers[name].immovable,
@@ -281,7 +284,11 @@ class ContainerManager {
         if  (game.gameData.containerarray.length < 1) {
             for (var i = 0; i < containerLocType.length; i++) {
                 this.containers[i] = new Container();
-                var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist);
+                if (containerLocType[i].itemsNeeded != undefined) {
+                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, containerLocType[i].repairItems);
+                } else {
+                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, []);
+                }
                 this.containers[i].addContainer(game, containerData);
                 this.containers[i].setupContainerImage(game);
             }

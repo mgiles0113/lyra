@@ -43,6 +43,7 @@ class RoomManager {
         this.escapepodIdx = [];
         // find the rooms corresponding to these types
         this.commandcenterIdx = 0;
+        this.slimeSpawnCoord = [];
         this.dockIdx = 1;
         this.mainhallIdx = 2;
         var genericRoomCount = 0;
@@ -57,6 +58,7 @@ class RoomManager {
                 }
                 if (mapRooms[i].name == "mh") {
                     this.rooms[2] = new Room(Room.rawData(2, mapRooms[i].name, "mainhall", mapRooms[i].x, mapRooms[i].y));
+                    this.slimeSpawnCoord.push([this.rooms[2].center_x + 50, this.rooms[2].center_y + 50]);
                 }
                 if (mapRooms[i].name.charAt(0) == "r") {
                     genericRoomCount += 1;
@@ -74,7 +76,7 @@ class RoomManager {
                                 mapRooms[i].x, mapRooms[i].y);
                     this.roomIdx.push(this.rooms.length);
                     this.rooms[this.rooms.length] =  new Room(roomData);
-                    
+                    this.slimeSpawnCoord.push([this.rooms[this.rooms.length-1].center_x + 50, this.rooms[this.rooms.length-1].center_y + 50]);
                 }
                 if (mapRooms[i].name.charAt(0) == "e") {
                     var roomData = Room.rawData(i, mapRooms[i].name,  "escapepod", 
@@ -97,12 +99,23 @@ class RoomManager {
                 this.rooms[i] = new Room(game.gameData.roomarray[i]);
                 if (this.rooms[i].mapName.charAt(0) == "r") {
                     this.roomIdx.push(i);
+                    this.slimeSpawnCoord.push([this.rooms[i].center_x + 50, this.rooms[i].center_y + 50]);
                 }
                 if (this.rooms[i].mapName.charAt(0) == "e") {
                     this.escapepodIdx.push(i);
                 }
                 if (this.rooms[i].mapName.charAt(0) == "p") {
                     this.passageIdx.push(i);
+                }
+                if (this.rooms[i].mapName.charAt(0) == "c") {
+                    this.commandcenterIdx = i;
+                }
+                if (this.rooms[i].mapName.charAt(0) == "d") {
+                    this.dockIdx = i;
+                }
+                if (this.rooms[i].mapName.charAt(0) == "m") {
+                    this.mainhallIdx = i;
+                    this.slimeSpawnCoord.push([this.rooms[i].center_x + 50, this.rooms[i].center_y + 50]);
                 }
             }
         }

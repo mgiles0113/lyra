@@ -1,5 +1,5 @@
 {
-    "mapRef" : "assets/tilemaps/maps/reference_map.json",
+    "mapRef" : "assets/tilemaps/maps/reference_map.manylayers.json",
     "mapwidth" : 64,
     "mapheight" : 46,
     "imageTagList" : [
@@ -273,7 +273,6 @@
     "slimearray": [],
     "spawnCoord": [],
     "slimemotionlimit" : 20,
-    "itemsnames" : ["circuit", "fuel_tank", "fuse", "suppresant", "wrench"],
     "items" : {
         "circuit": {
             "itemRef":"assets/sprites/items/circuit.png",
@@ -299,10 +298,14 @@
             "itemRef":"assets/sprites/items/wrench.png",
             "name": "wrench",
             "displayname" : "wrench"
+        },
+        "lyre": {
+            "itemRef":"assets/sprites/items/lyre.png",
+            "name": "lyre",
+            "displayname" : "lyre"
         }
     },
     "itemsarray" : [],
-    "containernames" : ["smallbox","largebox", "transparent", "doors", "escapepod", "escapepodhold"],
     "containers" : {
         "smallbox" : {
             "imageTag" : "smallbox",
@@ -398,15 +401,15 @@
             "imageTag" : "escapepodhold",
             "itemRef":"assets/sprites/escapepodhold.png",
             "frames" : 4,
-            "name": "escapepod",
+            "name": "escapepodhold",
             "width" : 50,
             "height" : 50,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
             "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
             "itemscapacity" : 1,
-            "containerstate" : "open",
-            "stateIdx" : 0,
+            "containerstate" : "closed",
+            "stateIdx" : 2,
             "immovable" : true,
             "immovablebody" : true,
             "moves" : false,
@@ -429,7 +432,7 @@
     "escapepod" : {
         "name" : "escapepod",
         "containers" : ["escapepod", "escapepodhold","escapepodhold","escapepodhold","escapepodhold"],
-        "containercoord" : [[0,0], [40,40],[-40,40],[40,-40],[-40,-40]],
+        "containercoord" : [[-80,-80], [-25,25],[-25,-22],[25,-22],[25,25]],
         "item_types_allowed" : []
     },
     "passage" : {
