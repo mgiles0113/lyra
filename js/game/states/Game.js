@@ -314,6 +314,8 @@ Lyra.LyraGame.prototype = {
 	    this.game.pause;
 	    console.log("going to save the gameData");
 	    
+	    this.roomManager.saveRooms(this.game);
+	    
         this.playerManager.savePlayerManager(this.game);
 
 	    this.slimeManager.saveSlimeManager(this.game);
