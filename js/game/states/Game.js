@@ -8,9 +8,7 @@ Lyra.LyraGame.prototype = {
             //this.slimeArr = []; // list of slime objects
             this.mapLayer = [];  // layers of map tilesets
             this.ingameItems = []; //all ingame items used
-            this.roomArr = [];  // approx center of rooms on map
-            this.containerLocType = [];
-            this.tile_size = 32; //tile dimensions
+            this.tile_size = this.game.gameData.tile_size; //tile dimensions
             //this.suppresantArr = [];  // locations on the map where suppresant can be placed
             
             //Map for Pathfinder
@@ -95,6 +93,8 @@ Lyra.LyraGame.prototype = {
         this.pathfinder.enableCornerCutting();
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
+        //[TODO]Add containers to avoid.
+        ///this.pathfinder.avoidAdditionalPoint(x,y);????
         
         if (this.game.gameData.timer == undefined) {
             this.game.gameData.timer = new Timer(600);
@@ -152,18 +152,19 @@ Lyra.LyraGame.prototype = {
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager,  this.mapLayer['floors']);
 
             this.containerManager = new ContainerManager(this.game);
-            this.playerManager = new PlayerManager(this.game, null, this.pathfinder);
+            this.playerManager = new PlayerManager(this.game, null, this.pathfinder, this.tile_size);
         }
         
         this.actionManager = new ActionManager();
         
         // set world boundaries to size of the current map.   This allows sprites to be followed by the camera
         // viewable area is the size of the game
-        this.game.world.setBounds(0, 0, map_cols*32, map_rows*32);
+        //this.game.world.setBounds(0, 0, map_cols*32, map_rows*32);
+        this.game.world.setBounds(0, 0, this.game.gameData.mapwidth*this.tile_size, this.game.gameData.mapheight*this.tile_size);
         
         // // this appears to work partially for resizing the viewable part of the game (scroll bars vertical, more of map shown horizontal)
         // // worked when the game dimensions (mapwidth, mapheigt) are set to full map size
-        this.game.camera.setSize(20*32, 20*32);
+        this.game.camera.setSize(20*this.tile_size, 20*this.tile_size);
         this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 
         // when the game dimensions (mapwidth, mapheigt) are set to some smaller dimension than the map

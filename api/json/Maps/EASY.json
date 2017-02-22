@@ -2,6 +2,7 @@
     "mapRef" : "assets/tilemaps/maps/reference_map.manylayers.json",
     "mapwidth" : 64,
     "mapheight" : 46,
+    "tile_size" : 32,
     "imageTagList" : [
         "scifitiles-sheet",
         "meta_tiles",

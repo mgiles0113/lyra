@@ -285,21 +285,7 @@ class Player {
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
     
-    // savePlayerData(game, idx) {
-    //     game.gameData.characters[game.gameData.crew[idx]].isSelected = this.isSelected;
-    //     game.gameData.characters[game.gameData.crew[idx]].inventory = this.sprite.customParams.inventory;
-    //     game.gameData.characters[game.gameData.crew[idx]].status = this.sprite.customParams.status;
-    //     game.gameData.characters[game.gameData.crew[idx]].dest_x = this.sprite.customParams.dest_x;
-    //     game.gameData.characters[game.gameData.crew[idx]].dest_y = this.sprite.customParams.dest_y;
-    //     game.gameData.characters[game.gameData.crew[idx]].x = this.sprite.body.position.x + game.gameData.characters[game.gameData.crew[idx]].width/2;
-    //     game.gameData.characters[game.gameData.crew[idx]].y = this.sprite.body.position.y + game.gameData.characters[game.gameData.crew[idx]].height/2;
-    //     game.gameData.characters[game.gameData.crew[idx]].velocityx = this.sprite.body.velocity.x;
-    //     game.gameData.characters[game.gameData.crew[idx]].velocityy = this.sprite.body.velocity.y;
-    //     game.gameData.characters[game.gameData.crew[idx]].frame = this.sprite.frame;
-    //     game.gameData.characters[game.gameData.crew[idx]].angularDrag =this.sprite.body.angularDrag;
-    // }
-    
-    savePlayer() {
+     savePlayer() {
         var playerData = {
             isSelected : this.isSelected,
             name : this.name,
@@ -409,7 +395,7 @@ class PlayerManager {
         for (var i = 0; i <this.players.length; i++) {
             // restart ptClick
             if (this.players[i].sprite.customParams.walking && this.players[i].sprite.customParams.dest_x != null && this.players[i].sprite.customParams.dest_y != null ) { 
-                //this.players[i].restartPtClick(game, pathfinder);
+               // this.players[i].restartPtClick(game, pathfinder);
             } 
         }
     }

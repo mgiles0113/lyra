@@ -231,7 +231,7 @@
         "ESP": "¡Fracaso de misión! ¡Lyre se ha perdido!"},
     
     "partialfailcrew" : {"ENG" : "Mission Failure! Crew are lost!", 
-        "PRT": "Dead men tell not tales! Crew be lost!", 
+        "PRT": "Dead men tell no tales! Crew be lost!", 
         "ESP": "¡Fracaso de misión! ¡La tripulación está perdida!"},
         
     "timeout" : {"ENG" : "Crew asphyxiation! All are lost!", 
