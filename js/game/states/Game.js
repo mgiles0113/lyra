@@ -6,12 +6,11 @@ Lyra.LyraGame.prototype = {
 	preload: function() {
 	    if (this.game.newGame) {
             //this.slimeArr = []; // list of slime objects
-            //this.players = [];  // list of players created on map
             this.mapLayer = [];  // layers of map tilesets
-            //this.items = [];  // list of items created on map
             this.ingameItems = []; //all ingame items used
             this.roomArr = [];  // approx center of rooms on map
             this.containerLocType = [];
+            this.tile_size = 32; //tile dimensions
             //this.suppresantArr = [];  // locations on the map where suppresant can be placed
             
             //Map for Pathfinder
@@ -69,15 +68,14 @@ Lyra.LyraGame.prototype = {
         }
     
         this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
-        //console.log(this.mapJSON);
 
         //Setup Pathfinder Engine
         this.pathfinder = new EasyStar.js();
         
         //Get the Walls Map Layer --> 2D Array.
         // game.gameData.mapwidth and mapheight defined in terms of tiles
-        var map_cols = this.game.gameData.mapwidth/32;
-        var map_rows = this.game.gameData.mapheight/32;
+        var map_cols = this.game.gameData.mapwidth/this.tile_size;
+        var map_rows = this.game.gameData.mapheight/this.tile_size;
         var grid_col = 0;
         var grid_row = 0;
         
@@ -94,9 +92,7 @@ Lyra.LyraGame.prototype = {
         
         this.pathfinder.setGrid(this.grid);
         this.pathfinder.setAcceptableTiles([0]);
-        //this.pathfinder.enableCornerCutting();
-
-        
+        this.pathfinder.enableCornerCutting();
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
         
@@ -146,7 +142,7 @@ Lyra.LyraGame.prototype = {
             // playerManager manages all the players on the map (crew and bandits)
             // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
-            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
+            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder, this.tile_size);
         }
         else {  // load previous game
             this.roomManager = new RoomManager(this.game);

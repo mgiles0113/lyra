@@ -109,7 +109,7 @@ class MapBuilder {
         var dock;
         var cc;
         // set bypassPositions to true to use the locArr instead of generating positions
-        var bypassPositions = true;
+        var bypassPositions = false;
         if (bypassPositions) {
             // hard code positions to make debugging easier
             // player tile coordinates (7, 22), (7, 24), (9, 22), (0,0) ,  (58, 22), (64, 46)

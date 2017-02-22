@@ -44,7 +44,7 @@ class Player {
     // }
     
     addPlayer(game, x, y, playerData) {
-        this.idx = playerData.idx
+        this.idx = playerData.idx;
         this.isSelected = playerData.isSelected;
         this.characterType = playerData.characterType;
         this.characterIdx = playerData.characterIdx;
@@ -155,35 +155,39 @@ class Player {
 		        this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
 			}
-				
-			//Stop Sprite When Collision Occurs
-			if( this.sprite.body.blocked.up || this.sprite.body.blocked.down || this.sprite.body.blocked.right || this.sprite.body.blocked.left ){
-			    this.sprite.customParams.path = [];
-				this.sprite.customParams.walking = false;
-				
-				this.sprite.body.velocity.x = 0;
+			
+			//If player overlaps slime, stop immed.
+			if( this.sprite.customParams.status == "stuck"){
+			     //Clear Path
+			     this.sprite.customParams.path = [];
+			     this.sprite.customParams.next_pt_x = this.sprite.body.x;
+			     this.sprite.customParams.next_pt_y = this.sprite.body.y;
+			     
+			    //Stop Sprite
+		        this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
+			    
 			}
 		}
     }
     
     
     ptClick(game, pathfinder){
-        
+
             //Get Sprite Origin Coords.
-            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.x, 32);
-            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.y, 32);
+            this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, this.sprite.width);
+            this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.y, this.sprite.height);
 
             //Get Sprite Dest Coords
-            this.sprite.customParams.dest_x = game.math.snapTo(game.input.activePointer.worldX, 32);
-            this.sprite.customParams.dest_y = game.math.snapTo(game.input.activePointer.worldY, 32);
+            this.sprite.customParams.dest_x = game.math.snapToFloor(game.input.activePointer.worldX, this.sprite.width);
+            this.sprite.customParams.dest_y = game.math.snapToFloor(game.input.activePointer.worldY, this.sprite.height);
 
             this.sprite.customParams.walking = true;
             
             //Get the Path from Origin to Dest. 
             //[TODO} Move player toward dest based on path points.
             this.foundPath = this.getPath.bind(this);
-            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, this.foundPath);
+            pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
             pathfinder.calculate();
         
     }
@@ -193,13 +197,13 @@ class Player {
     restartPtClick(game, pathfinder){
         
             //Get Sprite Origin Coords.
-            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.body.center.x, 32);
-            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.body.center.y, 32);
+            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.body.center.x, this.sprite.width);
+            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.body.center.y, this.sprite.height);
 
             //Get the Path from Origin to Dest. 
             //[TODO} Move player toward dest based on path points.
             this.foundPath = this.getPath.bind(this);
-            pathfinder.findPath(this.sprite.customParams.src_x/32, this.sprite.customParams.src_y/32, this.sprite.customParams.dest_x/32, this.sprite.customParams.dest_y/32, this.foundPath);
+            pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
             pathfinder.calculate();
         
     }
@@ -212,8 +216,8 @@ class Player {
                 var pt_x;
                 var pt_y;
             for(var i =0; i < path.length; i++){
-                pt_x = path[i].x * 32;
-                pt_y = path[i].y * 32;
+                pt_x = path[i].x * this.sprite.width + (this.sprite.width/2);
+                pt_y = path[i].y * this.sprite.height + (this.sprite.height/2);
                 this.sprite.customParams.path.push({pt_x, pt_y});
             }
         }
