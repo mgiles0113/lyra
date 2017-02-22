@@ -20,10 +20,10 @@ Lyra.Boot.prototype = {
 			// Same goes for mobile settings
 			// In this case we're saying "scale the game, no lower than 480x260 and no higher than 1024
 			this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-			this.scale.maxWidth = 1200;
+			this.scale.maxWidth = 1024;
 			this.scale.maxHeight = 800;
-			this.scale.minWidth = 1200;
-			this.scale.minHeight = 1200;
+			this.scale.minWidth = 1024;
+			this.scale.minHeight = 800;
 			this.scale.forceLandscape = true;
 			this.scale.pageAlighHorizontally = true;
 			this.scale.setScreenSize(true);

@@ -94,6 +94,8 @@ Lyra.LyraGame.prototype = {
         
         this.pathfinder.setGrid(this.grid);
         this.pathfinder.setAcceptableTiles([0]);
+        //this.pathfinder.enableCornerCutting();
+
         
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
@@ -130,6 +132,12 @@ Lyra.LyraGame.prototype = {
             // need to build the map
             this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
             var mapInitializer = new MapBuilder();
+            
+            // color floor tiles
+            // test placing some tiles
+            
+            this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager, this.mapLayer['floors']);
+
             var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager);
             containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
@@ -140,10 +148,15 @@ Lyra.LyraGame.prototype = {
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
             this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder);
         }
-        else {
+        else {  // load previous game
             this.roomManager = new RoomManager(this.game);
-             this.containerManager = new ContainerManager(this.game);
-             this.playerManager = new PlayerManager(this.game, null, this.pathfinder);
+            var mapInitializer = new MapBuilder();
+
+            // color floor tiles
+            this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager,  this.mapLayer['floors']);
+
+            this.containerManager = new ContainerManager(this.game);
+            this.playerManager = new PlayerManager(this.game, null, this.pathfinder);
         }
         
         this.actionManager = new ActionManager();
@@ -246,6 +259,10 @@ Lyra.LyraGame.prototype = {
 	        this.game.gameData.gameresult = "crewstuck";
 	        this.state.remove();
 	        this.state.start('EndGame');
+	    }
+	    
+	    if (this.game.gameData.gameresult != "empty") {
+	        this.blastOffEscapePod();
 	    }
 	    
         /*/ create slime spore and start slime growing(?enlarge the image of the slime?)
@@ -408,5 +425,11 @@ Lyra.LyraGame.prototype = {
             this.playerManager.players[playerIdx].stopRight(this.game);
         }
     },
+    
+    blastOffEscapePod: function() {
+        console.log(this.game.gameData.gameresult);
+        this.state.remove();
+        this.state.start('EndGame');
+    }
 
 }

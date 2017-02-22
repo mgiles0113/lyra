@@ -1269,6 +1269,19 @@
          "tileheight":32,
          "tilewidth":32,
          "transparentcolor":"#ff00ff"
+        }, 
+        {
+         "columns":8,
+         "firstgid":87,
+         "image":"maps\/floorTiles.png",
+         "imageheight":64,
+         "imagewidth":256,
+         "margin":0,
+         "name":"floortiles",
+         "spacing":0,
+         "tilecount":16,
+         "tileheight":32,
+         "tilewidth":32
         }],
  "tilewidth":32,
  "version":1,

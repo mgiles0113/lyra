@@ -1,7 +1,6 @@
 class Room {
     constructor(roomData) {
         this.type = roomData.type;
-        //this.name = roomData.name;
         this.mapName = roomData.mapName;
         this.center_x = roomData.center_x;
         this.center_y = roomData.center_y;

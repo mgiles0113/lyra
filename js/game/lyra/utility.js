@@ -19,7 +19,6 @@ function shuffleArr(arr) {
     return(shuffleArr);
 }
 
-
 // render information about the display.  Copied off of phaser.io example/display/viewport.js
 // use for debugging and understanding window resize elements
 function viewportText (game) {

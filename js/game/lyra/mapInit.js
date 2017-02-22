@@ -28,18 +28,12 @@ class MapBuilder {
         
         // add escape pods
         var itemsNeeded = [];
-        var numItems = 0;
         for (var i = 0; i<roomManager.escapepodIdx.length; i++) {
             for (var j = 0; j< game.gameData.escapepod.containers.length; j++) {
                 containerDef = game.gameData.containers[game.gameData.escapepod.containers[j]];
 
                 // require three repair items
-                if (containerDef.name == "escapepodhold" && numItems < 3) {
-                    itemsNeeded = [itemsList[getRandomInt(0, itemsList.length-1)]];
-                } else if (containerDef.name == "escapepodhold" && numItems == 3) {
-                    itemsNeeded = ["lyre"];
-                }
-                numItems += 1;
+                itemsNeeded = this.assignRepairItems(itemsList );
 
                 containerLocType.push({x: (roomManager.rooms[roomManager.escapepodIdx[i]].center_x + containerDef.width/2 +game.gameData.escapepod.containercoord[j][0]), 
                         y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + game.gameData.escapepod.containercoord[j][1]), name:game.gameData.escapepod.containers[j], itemslist:[], repairItems:itemsNeeded});
@@ -78,6 +72,16 @@ class MapBuilder {
         }
         return itemslistArr;
     }
+
+    assignRepairItems(itemsList ) {
+        var itemsNeeded = [];    
+        for (var i=0; i< 3; i++) {
+            itemsNeeded.push(itemsList[getRandomInt(0, itemsList.length-1)]);
+        }
+        itemsNeeded.push(new ContainerItem(itemsNeeded.length, "lyre"));
+        return itemsNeeded;
+}
+
     
     //containerLocType is the array of containers to build
     // idxEmptyContainerSlot is the array of indices into containerLocType with an empty slot
@@ -105,12 +109,12 @@ class MapBuilder {
         var dock;
         var cc;
         // set bypassPositions to true to use the locArr instead of generating positions
-        var bypassPositions = false;
+        var bypassPositions = true;
         if (bypassPositions) {
             // hard code positions to make debugging easier
             // player tile coordinates (7, 22), (7, 24), (9, 22), (0,0) ,  (58, 22), (64, 46)
              var locArr = [[224, 704],[224, 768],[288, 704],[0, 0],[1856, 704],[2048, 1472]];
-            for (var i = 1; i< game.gameData.crew.length; i++) {
+            for (var i = 0; i< game.gameData.crew.length; i++) {
                 playerLocType.push({
                     idx : i,
                     isSelected: false, 
@@ -221,10 +225,60 @@ class MapBuilder {
 
 
     // color map floor tiles
-    mapRoomFloorUpdate() {
+    mapRoomFloorUpdate(game, map, name, roomManager, floorLayer) {
         //this.map.map.layers[idx].name has the name equal to map name for cc, d, mh, r1, r2, r3, r4, r5, r6
         // this.map.map.layers[idx].data has 46 arrays of 64 elements, if not zero then part of the floor for corresponding room
-        
+        var floor = [];
+        switch (name) {
+            case "cc":
+                var floor = game.gameData.commandcenter.floor;
+                break;
+            case "mh":
+                var floor = game.gameData.mainhall.floor;
+                break;
+            case "d":
+                var floor = game.gameData.dock.floor;
+                break;
+            case "r1":
+            case "r2":
+            case "r3":
+            case "r4":
+            case "r5":
+            case "r6":
+                for (var i=0; i<roomManager.roomIdx.length; i++) {
+                    if (name == roomManager.rooms[roomManager.roomIdx[i]].mapName) {
+                        var floor = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type].floor;
+                    }
+                }
+        }
+        if (floor.length > 0) {
+            // find the data segment
+            var dataset = [];
+            for (var i = 0; i<map.layers.length; i++) {
+                if (map.layers[i].name == name) {
+                    dataset = map.layers[i].data;
+                }
+            }
+            // found layer
+            if (dataset.length > 0) {
+                for (var i = 0; i<dataset.length; i++) {
+                    for (var j = 0; j<dataset[i].length; j++) {
+                        if (dataset[i][j].index > 0) {
+                            map.putTile(floor[getRandomInt(0, floor.length-1)], j, i, floorLayer);
+                        }
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+    colorMapRooms(game, map, roomManager, floorLayer) {
+        var arr = ["cc", "mh", "d", "r1", "r2", "r3", "r4", "r5", "r6"];
+        for (var i=0; i< arr.length; i++) {
+            map = this.mapRoomFloorUpdate(game, map, arr[i], roomManager, floorLayer);
+        }
+        return map;
     }
 
 }

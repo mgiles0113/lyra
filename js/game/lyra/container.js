@@ -12,6 +12,7 @@ class Container {
         this.containerstate = containerData.containerstate;
         this.stateIdx = containerData.stateIdx;
         this.sprite = game.add.sprite(this.x, this.y, containerData.name);
+        this.textSprite = null;
         for (var i=0; i<game.gameData.containers[this.name].animationTags.length; i++) {
             this.sprite.animations.add(game.gameData.containers[this.name].animationTags[i],game.gameData.containers[this.name].animationArr[i],5,true);
         }
@@ -86,6 +87,65 @@ class Container {
         return false;
     }
     
+    
+    showEscapePodRepairList(game) {
+        var style = { font: 'bold 14pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 450 };
+        var text = game.languageText.repair[game.userPreference.data.languageChoice] + "\n";
+        for (var i = 0; i< this.repairItems.length; i++) {
+            text = text + game.languageText[this.repairItems[i].name][game.userPreference.data.languageChoice] + "\n";
+        }
+        this.textSprite = game.add.text(this.sprite.body.center.x-25, this.sprite.body.center.y-60, text, style);
+    }
+    
+    removeEscapePodRepairList(game) {
+        if (this.textSprite != undefined) {
+            this.textSprite.destroy();
+        }
+    }
+    
+    // call this when a player switches the escape pod from openhighlighted to closedhighlighted
+    checkEndGameConditions(game) {
+        var allItemsFound = 0;
+        var lyreFound = false;
+
+        for (var i=0; i<this.itemslist.length; i++) {
+            var isFound = false;
+            if (this.itemslist[i].name != "lyre") {
+                for (var j=0; j<this.repairItems.length-1; j++) {
+                    if (this.itemslist[i].name == this.repairItems[j].name ) {
+                        isFound = true;
+                    }
+                }
+            }
+            else {
+                lyreFound = true;
+            }
+            if (isFound) {
+                allItemsFound += 1;
+            }
+        }
+
+        //[TODO] technically, we should be checking that the correct crew are on board
+        // if a bandit is nearby, the game might end in victory anyway since playerHighlight tracks
+        // all of the players near the container.
+        // Need to pass in the playerManager to make this work correctly
+        if (allItemsFound >= 3) {
+            // items needed to escape are loaded
+            if (lyreFound) {
+                if (this.playerHighlight.length >= game.gameData.crew.length) {
+                    // lyre and repair items are all on board
+                    game.gameData.gameresult = "victory";
+                } else {
+                    game.gameData.gameresult = "crewstuck";
+                }
+            } else {
+                // lyre not found but all repair items are on board
+                game.gameData.gameresult = "escapenolyre";
+            }
+        } else {
+            this.removeEscapePodRepairList(game);
+        }
+    }
 
     showItem(game, x, y, idx, scalefactor) {
         this.itemSprites[idx] = game.add.sprite(x, y, this.itemslist[idx].name);
@@ -135,21 +195,32 @@ class Container {
                     return ([[this.sprite.body.center.x, this.sprite.body.center.y - game.gameData.containers[this.name].height/4],
                            [this.sprite.body.center.x, this.sprite.body.center.y + game.gameData.containers[this.name].height/4]])                    
                 }
+            case 4:
+                // hard coding for escape pod for now
+                return ([[this.sprite.body.center.x-25, this.sprite.body.center.y-25],[this.sprite.body.center.x-25, this.sprite.body.center.y+25],
+                        [this.sprite.body.center.x+25, this.sprite.body.center.y-25],[this.sprite.body.center.x+25, this.sprite.body.center.y+25]]);
         }
         return [];
     }
     
     openContainer (game) {
         if ((this.playerHighlight.length < 1) && (this.setState(game, "open"))) {  // only open the container if no one is highlighting
+            if (this.name == "escapepod") {
+                this.removeEscapePodRepairList(game);
+            }
             //console.log(this.containerstate + " " + this.stateIdx);
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.showAllItems(game);
+            
         }    
     }
     
     closedContainer (game) {
         if ((this.playerHighlight.length < 1) && this.setState(game, "closed")) {  // only close the container if no one is highlighting
+            if (this.name == "escapepod") {
+                this.removeEscapePodRepairList(game);
+            }
             this.sprite.loadTexture(game.gameData.containers[this.name].imageTag, game.gameData.containers[this.name].textureArr[this.stateIdx], true);
             //this.sprite.animations.play(this.doorstate);
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
@@ -163,15 +234,21 @@ class Container {
             this.sprite.animations.play(this.containerstate);
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.showAllItems(game);
+            if (this.name == "escapepod") {
+                this.showEscapePodRepairList(game);
+            }
          }
     }   
     
     closedContainerHighlighted (game) {
         if (this.setState(game, "closedhighlight"))  {
+            if (this.name == "escapepod") {
+                this.removeEscapePodRepairList(game);
+            }
             this.sprite.animations.play(this.containerstate);
             this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
             this.hideAllItems();
-         }
+            }
     }
 
     switchContainerState (game) {
@@ -184,6 +261,9 @@ class Container {
                     }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.hideAllItems();
+                    if (this.name == "escapepod") {
+                        this.checkEndGameConditions(game);
+                    }
                  }
                 break;
             case "closedhighlight":
@@ -193,6 +273,9 @@ class Container {
                     }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);
+                    if (this.name == "escapepod") {
+                        this.showEscapePodRepairList(game);
+                    }
                 }
                 break;
             }
@@ -215,8 +298,10 @@ class Container {
                 this.sprite.animations.play(this.containerstate);
                 this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                 this.showAllItems(game);
+                if (this.name == "escapepod") {
+                    this.showEscapePodRepairList(game);
+                }
                 break;
-                
             case "closedhighlight" :
                 this.sprite.animations.play(this.containerstate);
                 this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
@@ -287,7 +372,7 @@ class ContainerManager {
         if  (game.gameData.containerarray.length < 1) {
             for (var i = 0; i < containerLocType.length; i++) {
                 this.containers[i] = new Container();
-                if (containerLocType[i].itemsNeeded != undefined) {
+                if (containerLocType[i].repairItems != undefined) {
                     var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, containerLocType[i].repairItems);
                 } else {
                     var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, []);

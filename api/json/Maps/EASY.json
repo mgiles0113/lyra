@@ -4,11 +4,13 @@
     "mapheight" : 46,
     "imageTagList" : [
         "scifitiles-sheet",
-        "meta_tiles"
+        "meta_tiles",
+        "floortiles"
     ],
     "imageRefList" : [
         "assets/lyraImages/scifitiles-sheet.png",
-        "assets/lyraImages/meta_tiles.png"
+        "assets/lyraImages/meta_tiles.png",
+        "assets/lyraImages/floorTiles.png"
     ],
     "mapLayerRef" : [
         "floors",
@@ -421,19 +423,22 @@
         "name" : "commandcenter",
         "containers" : [],
         "containercoord" : [],
-        "item_types_allowed" : []
+        "item_types_allowed" : [],
+        "floor" : [95, 89, 90, 95, 96, 96]
     },
     "dock" : {
         "name" : "dock",
         "containers" : [],
         "containercoord" : [],
-        "item_types_allowed" : []
+        "item_types_allowed" : [],
+        "floor" : [98, 102, 98, 98, 101]
     },
     "escapepod" : {
         "name" : "escapepod",
-        "containers" : ["escapepod", "escapepodhold","escapepodhold","escapepodhold","escapepodhold"],
-        "containercoord" : [[-80,-80], [-25,25],[-25,-22],[25,-22],[25,25]],
-        "item_types_allowed" : []
+        "containers" : ["escapepod"],
+        "containercoord" : [[-90,-100]],
+        "item_types_allowed" : [],
+        "floor" : []
     },
     "passage" : {
         "name" : "passage",
@@ -445,44 +450,51 @@
         "name" : "mainhall",
         "containers" : [ "smallbox",  "smallbox",  "smallbox"],
         "containercoord" : [[-100,0],[50,0],[0,0]],
-        "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+        "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+        "floor" : [97]
     },
     "roomdef" : {
         "med_bay" : {
             "name" : "med_bay",
             "containers" : ["largebox", "smallbox"],
             "containercoord" : [[-50, -50], [50, 50]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "floor" : [88]
         },
         "cafeteria" : {
             "name" : "cafeteria",
             "containers" : ["largebox", "largebox", "smallbox"],
             "containercoord" : [[-50, -50], [-50, 50], [50, 50]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "floor" : [89, 90, 96, 89, 90]
         },
         "crew_quarters" : {
             "name" : "crew_quarters",
             "containers" : ["largebox", "largebox", "smallbox"],
             "containercoord" : [[-50, -50], [50, -50], [50, 50]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "floor" : [87]
         },
         "rec_room" : {
             "name" : "rec_room",
             "containers" : ["largebox", "smallbox"],
             "containercoord" : [[-50, -50], [50, 50]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "floor" : [95]
         },
         "engine_room" : {
             "name" : "engine_room",
             "containers" : ["largebox", "smallbox"],
             "containercoord" : [[-50, -50], [50, 50]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["circuit", "fuse"],
+            "floor" : [91, 92, 92, 91, 92, 93, 92]
         },
         "workshop" : {
             "name" : "workshop",
             "containers" : ["smallbox"],
             "containercoord" : [[0,0]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"]
+            "item_types_allowed" : ["fuel_tank", "wrench"],
+            "floor" : [94, 94, 93, 93, 92]
         }
     },
     "roomarray" : [],

@@ -121,7 +121,97 @@
         "PRT": "Man the helm:<br/><ul><li>w : skyward</li><li>a : port</li><li>s : below</li><li>d : starboard</li><li>e : breached or hatch secured</li><li>z : stow</li><li>mouse click on map : Mark the black spot and go on the account</li></ul> ",
         "ESP": "Controles: <br/><ul><li>w : arriba</li><li>a : izquierda</li><li>s : abajo</li><li>d : derecha</li><li>e :  activar o desactivar</li><li>z : guardar</li><li>el ratón sobre el mapa: establecer el destino de la tripulación seleccionada</li></ul> "
     },
+    "repair" : { 
+        "ENG" : "Repair items:",
+        "PRT": "Wha' ye' be needin'",
+        "ESP": "Artículos de reparación:"
+    },
     
+    "circuit" : {
+        "ENG" : "circuit",
+        "PRT": "gizmo",
+        "ESP": "circuito"
+    },
+    "fuel_tank" : {
+        "ENG" : "fuel tank",
+        "PRT": "grog",
+        "ESP": "depósito de combustible"
+    },
+    "fuse" : {
+        "ENG" : "fuse",
+        "PRT": "gadget",
+        "ESP": "fusible"
+    },
+    "suppresant" : {
+        "ENG" : "slime suppressant",
+        "PRT": "slime swabber'",
+        "ESP": "supresor de limo"
+    },
+    "wrench" : {
+        "ENG" : "wrench",
+        "PRT": "hook",
+        "ESP": "llave inglesa"
+    },
+    "lyre" : {
+        "ENG" : "golden lyre",
+        "PRT": "goldn' lyre",
+        "ESP": "lira dorada"
+    },
+    "commandcenter" : {
+        "ENG" : "Command Center",
+        "PRT": "Captn's Quarters",
+        "ESP": "Centro de comando"
+    },
+    "dock" : {
+        "ENG" : "Docking bay",
+        "PRT": "Dock",
+        "ESP": "Muelle de acoplamiento"
+    },
+    "escapepod" : {
+        "ENG" : "Escape pod",
+        "PRT": "Long boats",
+        "ESP": "Vaina de escape"
+    },
+    "passage" : {
+        "ENG" : "Passage way",
+        "PRT": "Passin' way",
+        "ESP": "Camino de paso"
+    },
+    "mainhall" : {
+        "ENG" : "Main Hall",
+        "PRT": "Gangway",
+        "ESP": "Sala principal"
+    },
+    "med_bay" : {
+        "ENG" : "Medical Bay",
+        "PRT": "Sick bay",
+        "ESP": "Bahía médica"
+    },
+    "cafeteria" : {
+        "ENG" : "Cafeteria",
+        "PRT": "Chow Hall",
+        "ESP": "Cafetería"
+    },
+    "crew_quarters" : {
+        "ENG" : "Crew Quarters",
+        "PRT": "Crew cabin'",
+        "ESP": "Cuartos de la tripulación"
+    },
+    "rec_room" : {
+        "ENG" : "Recreation Room",
+        "PRT": "Recreatin' cabin",
+        "ESP": "Salón de recreo"
+    },
+    "engine_room" : {
+        "ENG" : "Engine Room",
+        "PRT": "Engin' n' Machinery",
+        "ESP": "Sala de máquinas"
+    },
+    "workshop" : {
+        "ENG" : "Workshop",
+        "PRT": "Shipwrigth n' Carpentry",
+        "ESP": "Taller"
+    },
     "oxygenfalling" : {"ENG" : "Oxygen levels are falling! Five minutes remain.", 
         "PRT": "Yarr! Oxygen levels be critical. Five minutes remain.",
         "ESP": "¡Los niveles de oxígeno están cayendo! Quedan cinco minutos."},
