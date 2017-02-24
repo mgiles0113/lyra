@@ -5,7 +5,6 @@ class Comm {
 
             this.commCard = $("#communicator-card");
             this.commCard.css("visibility", "visible");
-            this.commCard.css("background-color", "black");
 
             // create player icons
             this.playerButtons = {

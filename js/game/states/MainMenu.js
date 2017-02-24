@@ -267,6 +267,7 @@ Lyra.MainMenu.prototype = {
 	    console.log('menu selection: ' + menuSelection);
 	    switch(menuSelection) {
 	        case 'main':
+	            console.log('were in');
                 this.menu.noMainMenu.css('display', 'none');
                 this.menu.mainMenu.css('color', 'white');
                 this.menu.mainMenu.css('display', 'inherit');

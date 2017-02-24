@@ -27,11 +27,9 @@ Items.ItemImages = function(game) {
     //for (var i = 0; i < game.gameData.itemsnames.length; i++) {
     for (var i = 0; i < iterator.length; i++) {
         game.load.image(game.gameData.items[iterator[i]].name, game.gameData.items[iterator[i]].itemRef);
-        
-        // game.load.image("fuel_tank",game.gameData.items["FUEL_TANK"].itemRef);
-        // game.load.image("fuse",game.gameData.items["FUSE"].itemRef);
-        // game.load.image("suppresant",game.gameData.items["SUPPRESANT"].itemRef);
-        // game.load.image("wrench",game.gameData.items["WRENCH"].itemRef);
+        if (game.gameData.items[iterator[i]].name.emitter != undefined) {
+            game.load.image(game.gameData.items[iterator[i]].name.emitter,game.gameData.items[iterator[i]].name.emitterRef);
+        }
     }
 }
 

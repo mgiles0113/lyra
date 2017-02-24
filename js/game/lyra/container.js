@@ -148,7 +148,7 @@ class Container {
     }
 
     showItem(game, x, y, idx, scalefactor) {
-        this.itemSprites[idx] = game.add.sprite(x, y, this.itemslist[idx].name);
+        this.itemSprites[idx] = this.sprite.addChild(game.add.sprite(x, y, this.itemslist[idx].name));
         this.itemSprites[idx].anchor.set(0.5, 0.5);
         this.itemSprites[idx].scale.setTo(scalefactor);
         game.physics.arcade.enable(this.itemSprites[idx]);
@@ -185,20 +185,21 @@ class Container {
     itemPositionOffsetsInContainer(game) {
         switch (this.itemscapacity) {
             case 1:
-                return ([[this.sprite.body.center.x, this.sprite.body.center.y]]);
+                // center on container
+                return([[game.gameData.containers[this.name].width/2,game.gameData.containers[this.name].height/2]]);
             case 2:
                 if (game.gameData.containers[this.name].width > game.gameData.containers[this.name].height) {
-                    return ([[this.sprite.body.center.x - game.gameData.containers[this.name].width/4, this.sprite.body.center.y],
-                           [this.sprite.body.center.x + game.gameData.containers[this.name].width/4, this.sprite.body.center.y]])                    
+                    return ([[game.gameData.containers[this.name].width/4, game.gameData.containers[this.name].height/2],
+                           [game.gameData.containers[this.name].width/4, game.gameData.containers[this.name].height/2]])                    
                 }
                 else {
-                    return ([[this.sprite.body.center.x, this.sprite.body.center.y - game.gameData.containers[this.name].height/4],
-                           [this.sprite.body.center.x, this.sprite.body.center.y + game.gameData.containers[this.name].height/4]])                    
+                    return ([[game.gameData.containers[this.name].width/2, game.gameData.containers[this.name].height/4],
+                           [game.gameData.containers[this.name].width/2, game.gameData.containers[this.name].height/4]])                    
                 }
             case 4:
                 // hard coding for escape pod for now
-                return ([[this.sprite.body.center.x-25, this.sprite.body.center.y-25],[this.sprite.body.center.x-25, this.sprite.body.center.y+25],
-                        [this.sprite.body.center.x+25, this.sprite.body.center.y-25],[this.sprite.body.center.x+25, this.sprite.body.center.y+25]]);
+                return ([[-25, -25],[-25, 25],
+                        [25, -25],[25, 25]]);
         }
         return [];
     }
@@ -250,6 +251,20 @@ class Container {
             this.hideAllItems();
             }
     }
+    
+    playContainerSound(game) {
+        if (game.gameData.containers[this.name].sounds != undefined && game.gameData.containers[this.name].sounds[this.stateIdx].length > 0) {
+            switch(game.gameData.containers[this.name].sounds[this.stateIdx]) {
+                case "doorOpen" :
+                    game.sfDoorOpen.play('', 0, 0.1, false, true);
+                    break;
+                case "doorClose" :
+                    game.sfDoorClose.play('', 0, 0.1, false, true);
+                    break;
+            }
+        }
+    }
+    
 
     switchContainerState (game) {
         
@@ -257,7 +272,7 @@ class Container {
             case "openhighlight" : 
                  if (this.setState(game, "closedhighlight")) {
                     if (game.userPreference.data.sound === "true") {
-                        game.sfDoorOpen.play('', 0, 0.1, false, true);
+                            this.playContainerSound(game);
                     }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.hideAllItems();
@@ -269,7 +284,7 @@ class Container {
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
                     if (game.userPreference.data.sound === "true") {
-                        game.sfDoorClose.play('', 0, 0.1, false, true);
+                            this.playContainerSound(game);
                     }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);

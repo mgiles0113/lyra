@@ -10,7 +10,7 @@ var languageSelection = $("#language-selection");
 var submitButton = $("#submit-button");
 
 var gameWidth = 1184;
-var gameHeight = 672;
+var gameHeight = 640;
 var languageChoice = "ENG";
 var jsonLanguage;
 

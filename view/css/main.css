@@ -6,24 +6,30 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
-label {
-    color: white;
-}
-
+/******************************************************************************
+ * GENERAL CARD SIZE AND POSITION
+ *****************************************************************************/
 #interface {
     margin: 150px auto;
     display: block;
     width: 1184px;
-    height: 800px;
+    height: 832px;
     position: relative;
 }
 
 #primary-card {
-    height: 672px;
+    height: 640px;
     border-radius: 5px 5px 0px 0px;
     position: relative;
 }
 
+#communicator-card {
+    height: 192px;
+}
+
+/*******************************************************************************
+ * LOGIN MENU
+ ******************************************************************************/
 #menu-title {
     font-size: 10em;
     color: white;
@@ -113,127 +119,13 @@ a:hover {
     color: inherit;
 }
 
-
-
-#communicator-card {
-    height: 128px;
-    border-radius: 0px 0px 5px 5px;
-}
-
-.communicator-submenu {
-    height: 128px;
-    display: inline-block;
-    float: left;
-}
-
-#timer-bar {
-    background: rgb(0, 255, 0);
-    width: 90%;
-    height: 25px;
-    margin-left: 5%;
-    transition: background-color 1s linear;
-    transition: width 1s linear;
-}
-
-#player-selection {
-    width: 384px;
-    
-}
-
-#inventory {
-    width: 480px;
-    border-left: 1px solid white;
-    border-right: 1px solid white;
-}
-
-#communicator-card {
+label {
     color: white;
 }
 
-#timer {
-    width: 320px;
-    
-}
-
-#comm-players,
-#comm-inventory {
-    padding: 0px;
-    height: 128px;
-}
-
-#comm-players li {
-    display: inline-block;
-    margin-left: 24px;
-    margin-right: 24px;
-    height: 80px;
-    width: 80px;
-    float: left;
-    border-radius: 50%;
-    text-align: center;
-}
-
-#p1 {
-    background-color: red;
-    
-}
-
-#p2 {
-    background-color: green;
-}
-
-#p3 {
-    background-color: blue;
-}
-
-#comm-inventory li {
-    display: inline-block;
-    height: 80px;
-    width: 80px;
-    float: left;
-    border-radius: 5px;
-    margin-left: 19px;
-    margin-right: 19px;
-    text-align: center;
-    background-color: black;
-    border: 1px solid white;
-}
-
-#item1 {
-    
-}
-
-#item2 {
-    
-}
-
-#item3 {
-    
-}
-
-#item4 {
-    
-}
-
-#timer {
-    text-align: center;
-}
-
-#timer p {
-    font-size: 1.5em;
-    
-}
-
-#communicator-card h4 {
-    margin-top: 5px;
-    text-align: center;
-}
-
-#timer img {
-    width: 95%;
-    margin: auto;
-    display: block;
-}
-
+/*******************************************************************************
+ * GAME - MAIN MENU
+ ******************************************************************************/
 #main-menu-card {
     display: none;
 	width: 90%;
@@ -243,29 +135,6 @@ a:hover {
 	left: 10%;
 	color: white;
 	font-size: 2em;
-}
-
-#story-card {
-    background-color: rgba(0,0,0,.6);
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-#story-card p {
-    color: white;
-    font-size: 4em;
-    margin: 15px 0px 0px 15px;
-}
-
-#story-next-card {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    top: 75%;
-    left: 85%;
 }
 
 #main-menu-card button {
@@ -317,4 +186,174 @@ a:hover {
 .inactive-button {
     color: grey;
     background-color: grey;
+}
+
+/*******************************************************************************
+ * GAME - STORY CARD
+ ******************************************************************************/
+ #story-card {
+    background-color: rgba(0,0,0,.6);
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#story-card p {
+    color: white;
+    font-size: 4em;
+    margin: 15px 0px 0px 15px;
+}
+
+#story-next-card {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 75%;
+    left: 85%;
+}
+ 
+
+/*******************************************************************************
+ * GAME - COMMUNICATOR CARD
+ ******************************************************************************/
+#communicator-card {
+    background-image: url("/assets/images/comm-background.gif");
+    background-size: contain;
+    background-color: rgba(0, 0, 0, .6);
+    color: white;
+    padding-top: 10px;
+}
+
+#communicator-card h4 {
+    text-align: center;
+}
+
+#communicator-card h5 {
+    text-align: center;
+}
+
+/* SECTION - PLAYER SELECTOR */
+#player-selector {
+    padding-left: 50px;
+    height: 176px;
+}
+
+.player-selector-player {
+    margin: 10px auto;
+    width: 80%;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.player-selector-active-player {
+    border: 1px solid yellow;
+}
+
+#p1 {
+    background-image: url("/assets/images/player-red.png");
+}
+
+#p2 {
+    background-image: url("/assets/images/player-green.png");
+}
+
+#p3 {
+    background-image: url("/assets/images/player-blue.png");
+}
+
+/* SECTION - INVENTORY MANAGER */
+.player-inventory-slot,
+.container-inventory-slot {
+    height: 50px;
+    width: 50px;
+}
+
+#player-inventory,
+#player-equipped {
+    background-color: rgba(255, 0, 0, .2);
+    height: 176px;
+}
+
+#player-inventory-row-1,
+#container-inventory-row-1 {
+    margin-bottom: 15px;
+}
+
+#player-inventory-slot-e-option-1,
+#player-inventory-slot-e-option-2 {
+    margin-left: 15px;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+#player-inventory-slot-e {
+    height: 50px;
+    width: 50px;
+    margin: auto;
+}
+
+.inactive-slot {
+    border: 2px solid black;
+    background-color: grey;
+}
+
+.inactive-option {
+    border: 2px solid black;
+    background-color: grey;
+}
+
+.player-inventory-slot {
+    text-align: center;
+}
+
+.player-inventory-option,
+.container-inventory-option {
+    margin-bottom: 3px;
+}
+
+.player-inventory-option {
+    text-align: center;
+}
+
+.container-inventory-slot {
+    text-align: center;
+}
+
+.container-inventory-option {
+    text-align: center;
+}
+
+/* SECTION - GAME TIMER */
+#timer {
+    padding-right: 50px;
+}
+
+#timer p {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#timer-bar {
+    background: rgb(0, 255, 0);
+    width: 90%;
+    height: 25px;
+    margin-left: 5%;
+    transition: background-color 1s linear;
+    transition: width 1s linear;
+}
+
+#timer img {
+    width: 95%;
+    margin: auto;
+    display: block;
 }

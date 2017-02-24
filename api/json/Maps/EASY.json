@@ -20,6 +20,10 @@
     ],
     "mapwidth" : "2048",
     "mapheight" : "1472",
+    "soundFiles" : {
+      "doorOpen" : "assets/audio/door_open.mp3",
+      "doorClose" : "assets/audio/door_close.mp3"
+    },
     "playerCount": 3,
     "banditCount": 3,
     "roomCount": 6,
@@ -295,7 +299,9 @@
         "suppresant": {
             "itemRef":"assets/sprites/items/suppresant.png",
             "name": "suppresant",
-            "displayname" : "suppressant"
+            "displayname" : "suppressant",
+            "emitter": "smoke",
+            "emitterRef": "assets/sprites/items/whitesmokeparticle.png"
         },
         "wrench": {
             "itemRef":"assets/sprites/items/wrench.png",
@@ -372,6 +378,7 @@
             "width" : 64,
             "height" : 64,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "sounds" : ["","doorOpen","","doorClose"],
             "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
             "itemscapacity" : 0,
@@ -391,7 +398,7 @@
             "height" : 128,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight","blastoff"],
             "textureArr" : [0, 1, 2, 3, 4],
-            "animationArr" : [[0],[0,1],[2],[2,3],[4,5]],
+            "animationArr" : [[0],[0,1],[2],[2,3,3,4,4,4,5,5],[4,5]],
             "itemscapacity" : 0,
             "containerstate" : "open",
             "stateIdx" : 0,
@@ -400,11 +407,11 @@
             "moves" : false,
             "checkCollision" : [false, false,   true, true, true]
         },
-        "escapepodhold": {
-            "imageTag" : "escapepodhold",
-            "itemRef":"assets/sprites/escapepodhold.png",
+        "engine": {
+            "imageTag" : "engine",
+            "itemRef":"assets/sprites/engine.png",
             "frames" : 4,
-            "name": "escapepodhold",
+            "name": "engine",
             "width" : 50,
             "height" : 50,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
@@ -485,8 +492,8 @@
         },
         "engine_room" : {
             "name" : "engine_room",
-            "containers" : ["largebox", "smallbox"],
-            "containercoord" : [[-50, -50], [50, 50]],
+            "containers" : ["engine", "engine", "engine", "engine","engine", "engine", "engine", "engine"],
+            "containercoord" : [[-20, 20], [-80, -40], [-20, -40], [-80, 20],[-50, -60], [-50, 40], [-100, -10], [0, -10]],
             "item_types_allowed" : ["circuit", "fuse"],
             "floor" : [91, 92, 92, 91, 92, 93, 92]
         },

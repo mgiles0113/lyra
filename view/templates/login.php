@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Lyra Escape | Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Bahiana|Raleway" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="view/library/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="view/css/main.css" />
@@ -36,93 +37,301 @@
             </div>
         </div>
         <div id="communicator-card" style="visibility: hidden">
-            <div class="communicator-submenu" id="player-selection">
-                <h4>Player Control</h4>
-                <ul id="comm-players">
-                    <li id="p1"></li>
-                    <li id="p2"></li>
-                    <li id="p3"></li>
-                </ul>
-            </div>
-            <div class="communicator-submenu" id="inventory">
-                <h4>Inventory</h4>
-                <ul id="comm-inventory">
-                    <li id="item1"></li>
-                    <li id="item2"></li>
-                    <li id="item3"></li>
-                    <li id="item4"></li>
-                </ul>
-            </div>
-            <div class="communicator-submenu" id="timer">
-                <h4>Oxygen</h4>
-                <p><span id="timer-minutes"></span>:<span id="timer-seconds"></span></p>
-                <div id="timer-bar"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-3" id="player-selector">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h4 id="player-selector-title">Player Control</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="player-selector-player player-selector-active-player" id="p1">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="player-selector-player" id="p2">
+                                    
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="player-selector-player" id="p3">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-7">
+                        <div class="row">
+                            <div class="col-xs-2" id="player-equipped">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h5>Equipped</h5>
+                                    </div>
+                                </div>
+                                <div class="row" id="player-inventory-row-1">
+                                    <div class="inactive-slot" id="player-inventory-slot-e">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-10">
+                                        <div class="row">
+                                            <div class="inactive-option" id="player-inventory-slot-e-option-1">
+                                                Unequip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="inactive-option" id="player-inventory-slot-e-option-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-5" id="player-inventory">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h4>Player Inventory</h4>
+                                    </div>
+                                </div>
+                                <div class="row" id="player-inventory-row-1">
+                                    <div class="col-xs-3">
+                                        <div class="player-inventory-slot inactive-slot" id="player-inventory-slot-1">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-1-action-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-1-action-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="player-inventory-slot inactive-slot" id="player-inventory-slot-2">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-2-action-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-2-action-2">
+                                                Transfer    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="player-inventory-row-2">
+                                    <div class="col-xs-3">
+                                        <div class="player-inventory-slot inactive-slot" id="player-inventory-slot-3">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-3-action-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-3-action-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="player-inventory-slot inactive-slot" id="player-inventory-slot-4">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-4-action-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-4-action-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-5" id="container-inventory">
+                                <div class="row">
+                                    <h4>Container Inventory</h4>
+                                </div>
+                                <div class="row" id="container-inventory-row-1">
+                                    <div class="col-xs-3">
+                                        <div class="container-inventory-slot inactive-slot" id="container-inventory-slot-1">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-1-option-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-1-option-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="container-inventory-slot inactive-slot" id="container-inventory-slot-2">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-2-option-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-2-option-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="container-inventory-row-2">
+                                    <div class="col-xs-3">
+                                        <div class="container-inventory-slot inactive-slot" id="container-inventory-slot-3">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-3-option-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-3-option-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="container-inventory-slot inactive-slot" id="container-inventory-slot-4">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-4-option-1">
+                                                Equip
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-4-option-2">
+                                                Transfer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2" id="timer">
+                        <div class="row">
+                            <h4 class="col-xs-12">Oxygen</h4>    
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <p><span id="timer-minutes"></span>:<span id="timer-seconds"></span></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div id="timer-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="main-menu-card">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="main new passive-load passive-options passive-sound-options passive-story passive-language-options" id="new-game-menu-text">New Game</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-easy">Easy Map</button>
                         <a href="#" class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-left-arrow">< prev</a>
                         <a href="#" class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-right-arrow">next ></a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main new no-load no-options no-sound-options no-language-options no-story" id="new-game-hard">Hard Map</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="main passive-new load passive-options passive-sound-options passive-language-options passive-story" id="load-game-menu-text">Load Game</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                          <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-1">Load Game Slot 1</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="main passive-new passive-load options sound-options language-options passive-story" id="options-menu-text">Options</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load options sound-options passive-language-options no-story" id="options-sound-text">Sound</button>
                         <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-2">Load Game Slot 2</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load no-options sound-options no-language-options no-story" id="options-sound-true">True</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="main passive-new passive-load passive-options passive-sound-options passive-language-options story" id="story-menu-text">Story</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load options passive-sound-options language-options no-story" id="options-language-text">Language</button>
                         <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-3">Load Game Slot 3</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-english">English</button>
                         <button class="no-main no-new no-load no-options sound-options no-language-options no-story" id="options-sound-false">False</button>
                         
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3"></div>
+                    <div class="col-xs-3">
                         <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-4">Load Game Slot 4</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-pirate">Pirate</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3"></div>
+                    <div class="col-xs-3">
                         <button class="no-main no-new load no-options no-sound-options no-language-options no-story" id="load-game-slot-5">Load Game Slot 5</button>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xs-3">
                         <button class="no-main no-new no-load no-options no-sound-options language-options no-story" id="options-language-spanish">Spanish</button>
                     </div>
                 </div>
