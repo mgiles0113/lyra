@@ -160,7 +160,7 @@ Slime.rawData = function(idx, game) {
 class SlimeManager {
     // limit will be the number of slime in motion, currently the total number
     // x, y are the starting position of the initial spore
-    constructor (game, spawnCoord) {
+    constructor (game, spawnCoord, numPlayers) {
         this.limit = game.gameData.slimemotionlimit;
         this.movingSlime = 0;
         this.lastToMature = 0;
@@ -214,14 +214,22 @@ class SlimeManager {
     
     
     updateSlime(game, walls, containerManager, playerManager) {
+        // this array will track slime that has been suppressed
         var slimeToKill = [];
+        
+        // track if the player still overlaps any slime
+        var playerStuck = [];
+        for (var j=0; j<playerManager.players.length; j++) {
+            playerStuck[j] = false;
+        }
+        
         for (var k=this.slimeArr.length - 1; k>=0 ; k--) {
             if (this.slimeArr[k].phase > 9) {
                 if (k == this.lastToMature && k>0) {
                     this.lastToMature = 0;
                 }
                 if (k > 0) {
-                    // don't kill the 0th slime
+                    // for now don't kill the 0th slime
                     slimeToKill.push(k);
                 }
             } else {
@@ -229,15 +237,15 @@ class SlimeManager {
                 if (this.slimeArr[k].phase == 9) {
                     // play animation every once in awhile
                     if (this.age % this.phaseLife == 0) {
-                        // change to text with no animation most slime
-                        this.slimeArr[k].slimesprite.animations.play(1, false);
+                        this.slimeArr[k].slimesprite.animations.play(this.slimeArr[k].animation, false);
                     }
                     if (this.slimeArr[k].isMobile)  {
+                        // change to text with no animation most slime
                          this.slimeArr[k].immobilize();
                          this.movingSlime -= 1;
                          // stop animation
                          this.slimeArr[k].slimesprite.animations.stop();
-                         this.slimeArr[k].slimesprite.loadTexture(this.slimeArr[k].slimeLabel, game.gameData.slimeanimations[9][getRandomInt(0, 7)], true);
+                         this.slimeArr[k].slimesprite.loadTexture(this.slimeArr[k].slimeLabel, game.gameData.slimeanimations[9][getRandomInt(0, game.gameData.slimeanimations[9].length-1)], true);
                          this.lastToMature = k;
                     }
                 } else {
@@ -250,16 +258,42 @@ class SlimeManager {
                 }
                 for (var j=0; j < playerManager.players.length; j++)
                 { 
-                    if (playerManager.players[j].emitterActive == true && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                        //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
-                        this.slimeArr[k].suppress(game);
-                    }
-                    if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                        playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
+                    // if (playerManager.players[j].emitterActive == true && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                    //     //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
+                    //     this.slimeArr[k].suppress(game);
+                    // }
+                    // if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                    //     playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
+                        
+                    // }
+                    if (game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                        playerStuck[j] = true;
+                        if (playerManager.players[j].emitterActive) {
+                            // spray slime if player overlaps and there's an emitter running
+                            //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
+                            this.slimeArr[k].suppress(game);
+                        }
+                        if (playerManager.players[j].sprite.customParams.status != "stuck") {
+                            playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
+                        }
                     }
                 }
             }
         }
+        
+        for (var j=0; j<playerStuck.length; j++) {
+            // only allow one shot per press of spacebar
+            if (playerManager.players[j].emitterActive) {
+                playerManager.players[j].emitterActive = false;
+            }
+            // make sure player is awake after slime suppressant
+            if (!playerStuck[j] && playerManager.players[j].sprite.customParams.status == "stuck") {
+                playerManager.players[j].sprite.customParams.status = "awake";
+            }
+        }
+        
+        
+        // kill off any slime that was suppressed by removing from slimeArr
         for (var k=0; k<slimeToKill.length; k++) {
             this.removeSuppressedSlime(game, slimeToKill[k]);
         }
