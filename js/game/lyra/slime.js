@@ -36,10 +36,13 @@ class Slime {
          this.isMobile = false;
     }
     
-    suppress() {
+    suppress(game) {
         this.phase = this.phase + 10;
+        this.immobilize();
         this.animation = "p" + this.phase;
+        this.slimesprite.loadTexture(this.slimeLabel, game.gameData.slimeanimations[this.phase][0], true);
         this.isSuppressed = true;
+        console.log("kill the slime");
     }
     
     updateTrajectory() {
@@ -202,40 +205,66 @@ class SlimeManager {
         }
     }
     
+    removeSuppressedSlime(game, slimeIdx) {
+        if (this.slimeArr[slimeIdx].isMobile) {
+            this.movingSlime -= 1;
+        }
+        this.slimeArr.splice(slimeIdx,1);
+    }
+    
     
     updateSlime(game, walls, containerManager, playerManager) {
+        var slimeToKill = [];
         for (var k=this.slimeArr.length - 1; k>=0 ; k--) {
-            this.slimeArr[k].age +=1;
-            if (this.slimeArr[k].phase == 9) {
-                // play animation every once in awhile
-                if (this.age % this.phaseLife == 0) {
-                    // change to text with no animation most slime
-                    this.slimeArr[k].slimesprite.animations.play(1, false);
+            if (this.slimeArr[k].phase > 9) {
+                if (k == this.lastToMature && k>0) {
+                    this.lastToMature = 0;
                 }
-                if (this.slimeArr[k].isMobile)  {
-                     this.slimeArr[k].immobilize();
-                     this.movingSlime -= 1;
-                     // stop animation
-                     this.slimeArr[k].slimesprite.animations.stop();
-                     this.slimeArr[k].slimesprite.loadTexture(this.slimeArr[k].slimeLabel, game.gameData.slimeanimations[9][getRandomInt(0, 7)], true);
-                     this.lastToMature = k;
+                if (k > 0) {
+                    // don't kill the 0th slime
+                    slimeToKill.push(k);
                 }
             } else {
-                this.slimeArr[k].updateSlime(game, walls);
-                for (var c=0; c<containerManager.containers.length - 1; c++) {
-                    if (containerManager.containers[c].name == "doors" && containerManager.containers[c].sprite.body.checkCollision.any) {
-                        game.physics.arcade.collide(containerManager.containers[c].sprite, this.slimeArr[k].slimesprite);
+                this.slimeArr[k].age +=1;
+                if (this.slimeArr[k].phase == 9) {
+                    // play animation every once in awhile
+                    if (this.age % this.phaseLife == 0) {
+                        // change to text with no animation most slime
+                        this.slimeArr[k].slimesprite.animations.play(1, false);
+                    }
+                    if (this.slimeArr[k].isMobile)  {
+                         this.slimeArr[k].immobilize();
+                         this.movingSlime -= 1;
+                         // stop animation
+                         this.slimeArr[k].slimesprite.animations.stop();
+                         this.slimeArr[k].slimesprite.loadTexture(this.slimeArr[k].slimeLabel, game.gameData.slimeanimations[9][getRandomInt(0, 7)], true);
+                         this.lastToMature = k;
+                    }
+                } else {
+                    this.slimeArr[k].updateSlime(game, walls);
+                    for (var c=0; c<containerManager.containers.length - 1; c++) {
+                        if (containerManager.containers[c].name == "doors" && containerManager.containers[c].sprite.body.checkCollision.any) {
+                            game.physics.arcade.collide(containerManager.containers[c].sprite, this.slimeArr[k].slimesprite);
+                        }
+                    }
+                }
+                for (var j=0; j < playerManager.players.length; j++)
+                { 
+                    if (playerManager.players[j].emitterActive == true && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                        //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
+                        this.slimeArr[k].suppress(game);
+                    }
+                    if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                        playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
                     }
                 }
             }
-            for (var j=0; j < playerManager.players.length; j++)
-            { 
-                if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                    playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
-                }
-            }
+        }
+        for (var k=0; k<slimeToKill.length; k++) {
+            this.removeSuppressedSlime(game, slimeToKill[k]);
         }
     }
+    
     
     
     

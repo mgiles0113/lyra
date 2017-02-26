@@ -175,7 +175,7 @@ Lyra.LyraGame.prototype = {
         // this.ingameItems = new Items();
 
         // setup getting keyboard input
-        this.cursors = this.game.input.keyboard.createCursorKeys();
+        //this.cursors = this.game.input.keyboard.createCursorKeys();
         
         //setup getting mouse input
         this.game.input.mouse.capture = true;
@@ -203,6 +203,11 @@ Lyra.LyraGame.prototype = {
                 }
             }
         });
+        
+        // setup space bar control
+        this.shoot = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+        this.shoot.onDown.add(this.startEmitter, this);
+        this.shoot.onUp.add(this.stopEmitter, this);
         
         // setup control of the "z" key
         this.saveKey = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
@@ -278,12 +283,8 @@ Lyra.LyraGame.prototype = {
         // check for overlap with containers
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players);
 
-        // update player - moved to playerManager
-        // for (var j=0; j < this.playerManager.players.length; j++)
-        // { 
-        //     this.playerManager.players[j].updatePlayer(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors']);
-        // }
-        this.playerManager.updatePlayerArray(this.game, this.cursors, this.mapLayer['walls'], this.mapLayer['floors']);
+        // loops through player array, updates bandits and players
+        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors']);
         
         
 	},
@@ -429,6 +430,21 @@ Lyra.LyraGame.prototype = {
         console.log(this.game.gameData.gameresult);
         this.state.remove();
         this.state.start('EndGame');
+    },
+    
+    startEmitter: function() {
+        // player can start spraying if not sleeping
+        var playerIdx = this.playerManager.findSelectedNotSleepingPlayer();
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].startItemEmitter(this.game);
+        }
+    },
+    
+    stopEmitter: function() {
+        // player stops spraying but may be knocked out
+        var playerIdx = this.playerManager.findSelectedPlayer();
+        if (playerIdx >= 0) {
+            this.playerManager.players[playerIdx].stopItemEmitter(this.game);
+        }
     }
-
 }

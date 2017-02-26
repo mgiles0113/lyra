@@ -1,48 +1,4 @@
 class Player {
-    // constructor (game, x, y, idx) {
-    //     this.idx = idx
-    //     this.isSelected = game.gameData.characters[game.gameData.crew[idx]].isSelected;
-       
-    //     // create player(s) 
-    //     this.sprite = game.add.sprite(x,y,game.gameData.characters[game.gameData.crew[idx]].name);
-    //     this.sprite.frame = game.gameData.characters[game.gameData.crew[idx]].frame;
-    //     this.sprite.anchor.set(0.5);
-       
-    //     //Custom Params for Player.
-    //     this.sprite.customParams = [];
-    //     this.sprite.customParams.inventory = game.gameData.characters[game.gameData.crew[idx]].inventory; //['fuse', 'circuit'];
-    //     this.sprite.customParams.inv_size = game.gameData.characters[game.gameData.crew[idx]].inventory.length;
-       
-    //     this.sprite.customParams.status =  game.gameData.characters[game.gameData.crew[idx]].status;
-       
-    //     //Init Dest Coords as Sprite's Spawn Coord.
-    //     this.sprite.customParams.dest_x = game.gameData.characters[game.gameData.crew[idx]].dest_x;
-    //     this.sprite.customParams.dest_y = game.gameData.characters[game.gameData.crew[idx]].dest_y;
-    
-    //     game.physics.arcade.enable(this.sprite);
-    
-    //     this.sprite.body.setSize(game.gameData.characters[game.gameData.crew[idx]].width,game.gameData.characters[game.gameData.crew[idx]].height);
-    
-    //     //  We'll set a lower max angular velocity here to keep it from going totally nuts
-    //     this.sprite.body.maxAngular = 500;
-    
-    //     //  Apply a drag otherwise the sprite will just spin and never slow down
-    //     this.sprite.body.angularDrag = game.gameData.characters[game.gameData.crew[idx]].angulardrag;
-        
-        
-    //     this.sprite.body.velocity.x =  game.gameData.characters[game.gameData.crew[idx]].velocityx;
-    //     this.sprite.body.velocity.y = game.gameData.characters[game.gameData.crew[idx]].velocityy;
-        
-    //     // set up signal callback function when the overlap occurs between sprite and slime
-    //     this.stuckInSlimeSignal = new Phaser.Signal();
-    //     this.stuckInSlimeSignal.add(function(a,b) {
-    //         // [TODO] refer to function in player object?
-    //         console.log("overlap with slime");
-    //     });
-    //     // this.sprite.body.bounce.x = 0.2;
-    //     // this.sprite.body.bounce.y = 0.2;
-    // }
-    
     addPlayer(game, x, y, playerData) {
         this.idx = playerData.idx;
         this.isSelected = playerData.isSelected;
@@ -59,6 +15,7 @@ class Player {
         this.sprite.customParams.inventory = playerData.inventory; //['fuse', 'circuit'];
         this.sprite.customParams.inv_size = playerData.inventory.length;
         this.sprite.customParams.walking = playerData.walking;
+        this.sprite.customParams.equipped = playerData.equipped;
         
         //PathFinder for Pt&Click
         this.sprite.customParams.path = playerData.path;
@@ -96,6 +53,9 @@ class Player {
             this.sprite.body.velocity.y = 0;
             console.log("Player " + this.idx  +" is stuck!");
         }, this);
+        
+       // add emitter
+       this.makeItemEmitter(game);
     }
     
     togglePlayer(){
@@ -120,17 +80,17 @@ class Player {
     
     
     // use this method for crew updates each update cycle
-    updateCrew(game, cursors, walls, floors) {
-        this.updatePlayer (game, cursors, walls, floors);
+    updateCrew(game, walls, floors) {
+        this.updatePlayer (game, walls, floors);
     }
     
     // use this method for bandit updates each update cycle
-    updateBandit(game, cursors, walls, floors) {
-        this.updatePlayer (game, cursors, walls, floors);
+    updateBandit(game, walls, floors) {
+        this.updatePlayer (game, walls, floors);
     }
     
     // generic update to move to destination
-    updatePlayer (game, cursors, walls, floors) {
+    updatePlayer (game, walls, floors) {
         
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
@@ -201,7 +161,6 @@ class Player {
             this.sprite.customParams.src_y = game.math.snapTo(this.sprite.body.center.y, this.sprite.height);
 
             //Get the Path from Origin to Dest. 
-            //[TODO} Move player toward dest based on path points.
             this.foundPath = this.getPath.bind(this);
             pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
             pathfinder.calculate();
@@ -285,6 +244,166 @@ class Player {
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
     
+    
+    makeItemEmitter(game) {
+        // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
+        if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
+        {
+             // create an emitter for the player
+            this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
+            this.emitter.at(this.sprite);
+            this.emitterActive = false;
+
+            //compact way of setting the X velocity range of the emitter
+            // [min=0] - The minimum value for this range
+            // [max=0] - The maximum value for this range
+            this.emitter.setXSpeed(-25, 25);
+            this.emitter.setYSpeed(-25, 25);
+            this.emitter.width = 50;
+            this.emitter.bounce.setTo(0.5, 0.5);
+    
+            this.emitter.bringToTop = true;
+            this.emitter.setRotation(0, 0);
+            
+            /**
+            * A more compact way of setting the alpha constraints of the particles.
+            * The rate parameter, if set to a value above zero, lets you set the speed at which the Particle change in alpha from min to max.
+            * If rate is zero, which is the default, the particle won't change alpha - instead it will pick a random alpha between min and max on emit.
+            * @method Phaser.Particles.Arcade.Emitter#setAlpha
+            * @param {number} [min=1] - The minimum value for this range.
+            * @param {number} [max=1] - The maximum value for this range.
+            * @param {number} [rate=0] - The rate (in ms) at which the particles will change in alpha from min to max, or set to zero to pick a random alpha between the two.
+            * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
+            * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
+            */
+            this.emitter.setAlpha(1, 10, 0);
+            
+            /**
+            * A more compact way of setting the scale constraints of the particles.
+            * The rate parameter, if set to a value above zero, lets you set the speed and ease which the Particle uses to change in scale from min to max across both axis.
+            * If rate is zero, which is the default, the particle won't change scale during update, instead it will pick a random scale between min and max on emit.
+            *
+            * @method Phaser.Particles.Arcade.Emitter#setScale
+            * @param {number} [minX=1] - The minimum value of Particle.scale.x.
+            * @param {number} [maxX=1] - The maximum value of Particle.scale.x.
+            * @param {number} [minY=1] - The minimum value of Particle.scale.y.
+            * @param {number} [maxY=1] - The maximum value of Particle.scale.y.
+            * @param {number} [rate=0] - The rate (in ms) at which the particles will change in scale from min to max, or set to zero to pick a random size between the two.
+            * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
+            * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
+            * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
+            */
+            this.emitter.setScale(0.1, 0.3, 0.1, 0.3, 0);
+            this.emitter.gravity = 0;
+            
+            // turns off until spacebar hit
+            this.emitter.kill();
+        }
+    }
+    
+    startItemEmitter(game) {
+        // emitter defined for the player as "this.emitter", child of the player sprite
+        // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
+        if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
+        {
+            /**
+            * This function generates a new set of particles for use by this emitter.
+            * The particles are stored internally waiting to be emitted via Emitter.start.
+            *
+            * @method Phaser.Particles.Arcade.Emitter#makeParticles
+            * @param {array|string} keys - A string or an array of strings that the particle sprites will use as their texture. If an array one is picked at random.
+            * @param {array|number} [frames=0] - A frame number, or array of frames that the sprite will use. If an array one is picked at random.
+            * @param {number} [quantity] - The number of particles to generate. If not given it will use the value of Emitter.maxParticles. If the value is greater than Emitter.maxParticles it will use Emitter.maxParticles as the quantity.
+            * @param {boolean} [collide=false] - If you want the particles to be able to collide with other Arcade Physics bodies then set this to true.
+            * @param {boolean} [collideWorldBounds=false] - A particle can be set to collide against the World bounds automatically and rebound back into the World if this is set to true. Otherwise it will leave the World.
+            * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
+            */
+            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped].emitter,0,50,false);
+            game.physics.arcade.enable(this.emitter);
+            //game.physics.arcade.collide(this.emitter);
+
+        //      // create an emitter for the player
+        //     this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
+        //     this.emitter.at(this.sprite);
+        
+        //      this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped].emitter);
+        
+        //     //compact way of setting the X velocity range of the emitter
+        //     // [min=0] - The minimum value for this range
+        //     // [max=0] - The maximum value for this range
+        //     this.emitter.setXSpeed(-25, 25);
+        //     this.emitter.setYSpeed(-25, 25);
+        //     this.emitter.width = 50;
+        //     this.emitter.bounce.setTo(0.5, 0.5);
+    
+        //     this.emitter.bringToTop = true;
+        //     this.emitter.setRotation(0, 0);
+            
+        //     /**
+        //     * A more compact way of setting the alpha constraints of the particles.
+        //     * The rate parameter, if set to a value above zero, lets you set the speed at which the Particle change in alpha from min to max.
+        //     * If rate is zero, which is the default, the particle won't change alpha - instead it will pick a random alpha between min and max on emit.
+        //     * @method Phaser.Particles.Arcade.Emitter#setAlpha
+        //     * @param {number} [min=1] - The minimum value for this range.
+        //     * @param {number} [max=1] - The maximum value for this range.
+        //     * @param {number} [rate=0] - The rate (in ms) at which the particles will change in alpha from min to max, or set to zero to pick a random alpha between the two.
+        //     * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
+        //     * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
+        //     */
+        //     this.emitter.setAlpha(1, 10, 0);
+            
+        //     /**
+        //     * A more compact way of setting the scale constraints of the particles.
+        //     * The rate parameter, if set to a value above zero, lets you set the speed and ease which the Particle uses to change in scale from min to max across both axis.
+        //     * If rate is zero, which is the default, the particle won't change scale during update, instead it will pick a random scale between min and max on emit.
+        //     *
+        //     * @method Phaser.Particles.Arcade.Emitter#setScale
+        //     * @param {number} [minX=1] - The minimum value of Particle.scale.x.
+        //     * @param {number} [maxX=1] - The maximum value of Particle.scale.x.
+        //     * @param {number} [minY=1] - The minimum value of Particle.scale.y.
+        //     * @param {number} [maxY=1] - The maximum value of Particle.scale.y.
+        //     * @param {number} [rate=0] - The rate (in ms) at which the particles will change in scale from min to max, or set to zero to pick a random size between the two.
+        //     * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
+        //     * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
+        //     * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
+        //     */
+        //     this.emitter.setScale(0.1, 0.3, 0.1, 0.3, 0);
+        //     this.emitter.gravity = 0;
+    
+    
+        //     /**
+        //     * Call this function to emit the given quantity of particles at all once (an explosion)
+        //     * 
+        //     * @method Phaser.Particles.Arcade.Emitter#explode
+        //     * @param {number} [lifespan=0] - How long each particle lives once emitted in ms. 0 = forever.
+        //     * @param {number} [quantity=0] - How many particles to launch.
+        //     * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
+        //     */
+        this.emitterActive = true;
+        this.emitter.at(this.sprite);
+        
+        //	false means don't explode all the sprites at once, but instead release at a rate of 20 particles per frame
+        //	The 5000 value is the lifespan of each particle
+        //this.emitter.start(false, 5000, 20);
+        
+        
+        this.emitter.explode(1000, 50);
+            // emitter.emitX = 200;
+        
+            // //game.add.tween(emitter).to( { emitX: 700 }, 2000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
+            // game.add.tween(emitter).to( { emitX: 600 }, 2000, Phaser.Easing.Back.InOut, true, 0, Number.MAX_VALUE, true);
+
+        }
+    }
+    
+    stopItemEmitter(game) {
+        //this.emitter.kill();
+        this.emitterActive = false;
+        //this.emitter.stop();
+    }
+    
+    
+    
      savePlayer() {
         var playerData = {
             isSelected : this.isSelected,
@@ -294,6 +413,7 @@ class Player {
             characterIdx :  this.characterIdx,
             walking : this.sprite.customParams.walking,
             inventory : this.sprite.customParams.inventory,
+            equipped : this.sprite.customParams.equipped,
             status : this.sprite.customParams.status,
             dest_x : this.sprite.customParams.dest_x,
             dest_y : this.sprite.customParams.dest_y,
@@ -309,16 +429,6 @@ class Player {
     }
     
 }
-
-// Player.preloadDefaultPlayer = function (game) {
-    
-//     //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
-//     for (var i=0; i<game.playerData.players.length; i++) {
-//         game.load.spritesheet(game.playerData.players[i].name, game.playerData.players[i].playerRef, game.playerData.height, game.playerData.width, game.playerData.frames);
-//     }
-        
-// }
-
 
 Player.preloadPlayer = function (game) {
     //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
@@ -336,6 +446,7 @@ Player.rawData = function (game, idx, playerLocType) {
         characterIdx :  playerLocType.characterIdx,
         walking : game.gameData.characters[playerLocType.characterIdx].walking,
         inventory : game.gameData.characters[playerLocType.characterIdx].inventory,
+        equipped : ["suppresant"],
         status : playerLocType.status,
         dest_x : game.gameData.characters[playerLocType.characterIdx].dest_x,
         dest_y : game.gameData.characters[playerLocType.characterIdx].dest_y,
@@ -423,6 +534,19 @@ class PlayerManager {
         return playerIdx;
 
     }
+
+    // returns -1 if selected player is not awake
+    findSelectedNotSleepingPlayer () {
+        var playerIdx = -1;
+        for (var i=0; i< this.players.length; i++) {
+            if (this.players[i].isSelected && this.players[i].sprite.customParams.status != "sleep") {
+                playerIdx = i;
+            }
+        }
+        return playerIdx;
+
+    }
+
     
     // returns true if no players awake
     isAnyCrewAwake() {
@@ -435,14 +559,14 @@ class PlayerManager {
     }
 
     // updates the player array first for crew and then for bandits
-    updatePlayerArray(game, cursors, walls, floors) {
+    updatePlayerArray(game,  walls, floors) {
         for (var i=0; i< this.crew.length; i++) {
-            if (this.players[this.crew[i]].updateCrew(game, cursors, walls, floors)) {
+            if (this.players[this.crew[i]].updateCrew(game, walls, floors)) {
                 return false;
             }
         }
         for (var i=0; i< this.bandit.length; i++) {
-            if (this.players[this.bandit[i]].updateBandit(game, cursors, walls, floors)) {
+            if (this.players[this.bandit[i]].updateBandit(game, walls, floors)) {
                 return false;
             }
         }

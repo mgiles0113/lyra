@@ -27,8 +27,8 @@ Items.ItemImages = function(game) {
     //for (var i = 0; i < game.gameData.itemsnames.length; i++) {
     for (var i = 0; i < iterator.length; i++) {
         game.load.image(game.gameData.items[iterator[i]].name, game.gameData.items[iterator[i]].itemRef);
-        if (game.gameData.items[iterator[i]].name.emitter != undefined) {
-            game.load.image(game.gameData.items[iterator[i]].name.emitter,game.gameData.items[iterator[i]].name.emitterRef);
+        if (game.gameData.items[iterator[i]].emitter != undefined) {
+            game.load.image(game.gameData.items[iterator[i]].emitter,game.gameData.items[iterator[i]].emitterRef);
         }
     }
 }
