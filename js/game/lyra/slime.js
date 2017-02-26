@@ -168,11 +168,7 @@ class SlimeManager {
         if (game.gameData.slimearray.length < 1) {
             this.slimeArr=[];
             // spawn to new set of room coordinates
-            var coord = this.spawnCoord[getRandomInt(0, this.spawnCoord.length-1)];
-            this.slimeArr[0] = new Slime(game, coord[0], coord[1], Slime.rawData(0, game));
-            this.slimeArr[0].immobilize();
-            //this.slimeCounter = 1;
-            this.slimeArr[0].slimesprite.animations.play(this.slimeArr[0].animation);
+            this.generateFirstSlime(game) 
         }
         else {
             // load existing slime into array
@@ -190,6 +186,14 @@ class SlimeManager {
         }
     } 
     
+    generateFirstSlime(game) {
+            var coord = this.spawnCoord[getRandomInt(0, this.spawnCoord.length-1)];
+            this.slimeArr[0] = new Slime(game, coord[0], coord[1], Slime.rawData(0, game));
+            this.slimeArr[0].immobilize();
+            //this.slimeCounter = 1;
+            this.slimeArr[0].slimesprite.animations.play(this.slimeArr[0].animation);
+    }
+    
     addNewSlime (game) {
         // number of moving slime is limited
         if (this.movingSlime < this.limit) {
@@ -206,10 +210,22 @@ class SlimeManager {
     }
     
     removeSuppressedSlime(game, slimeIdx) {
-        if (this.slimeArr[slimeIdx].isMobile) {
-            this.movingSlime -= 1;
+        // just in case there's a logic error, don't try to remove from empty array
+        if (this.slimeArr.length < 1) {
+            if (this.slimeArr[slimeIdx].isMobile) {
+                this.movingSlime -= 1;
+            }
+            if (slimeToKill[k] == this.lastToMature) {
+                // setup a new starting point
+                if (this.slimeArr.length > 2) { // there are at least three slime left, we're about to remove one
+                        this.lastToMature = this.slimeArr.length - 2;
+                } else {
+                    this.lastToMature = 0;
+                }
+            }
+            // remove slime from array
+            this.slimeArr.splice(slimeIdx,1);
         }
-        this.slimeArr.splice(slimeIdx,1);
     }
     
     
@@ -222,16 +238,17 @@ class SlimeManager {
         for (var j=0; j<playerManager.players.length; j++) {
             playerStuck[j] = false;
         }
+        // in case all slime are suppressed
+        if (this.slimeArr.length < 1) {
+            this.generateFirstSlime(game);
+            this.movingSlime = 0;
+            this.lastToMature = 0;
+        }
         
         for (var k=this.slimeArr.length - 1; k>=0 ; k--) {
             if (this.slimeArr[k].phase > 9) {
-                if (k == this.lastToMature && k>0) {
-                    this.lastToMature = 0;
-                }
-                if (k > 0) {
-                    // for now don't kill the 0th slime
-                    slimeToKill.push(k);
-                }
+                // prepare slime to suppress
+                slimeToKill.push(k);
             } else {
                 this.slimeArr[k].age +=1;
                 if (this.slimeArr[k].phase == 9) {
@@ -294,6 +311,8 @@ class SlimeManager {
         
         
         // kill off any slime that was suppressed by removing from slimeArr
+        // remove higher indices first so array index in the array doesn't change
+        slimeToKill = slimeToKill.sort(function(a, b){return b-a});
         for (var k=0; k<slimeToKill.length; k++) {
             this.removeSuppressedSlime(game, slimeToKill[k]);
         }
