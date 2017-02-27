@@ -245,6 +245,30 @@ class Player {
     }
     
     
+    // use this method to do stuff when the player wakes up sleep-->awake
+    playerWokeFromSleep(game) {
+        
+    }
+    
+    // use this method when awake crew/bandit encounters a player not on their team (player --> bandit or bandit --> player)
+    // other player could be "stuck" or "sleep"
+    playerOverlapOtherTeam(game, player) {
+        // player is the other player encountered
+        console.log("awake player: " + this.name + " ran into player: " + player.name);
+    }
+    
+    // use this method to define what to do if a player overlaps a container (container is not collidable)
+    playerOverlapContainer(game, container) {
+        
+    }
+    
+    // use this method to define what to do if a player collides a container (container is collidable)
+    playerCollideContainer(game, container) {
+
+    }
+    
+    
+    
     makeItemEmitter(game) {
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
         if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
@@ -306,6 +330,7 @@ class Player {
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
         if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
         {
+            // make particles from equipped item
             /**
             * This function generates a new set of particles for use by this emitter.
             * The particles are stored internally waiting to be emitted via Emitter.start.
@@ -320,74 +345,25 @@ class Player {
             */
             this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped].emitter,0,50,false);
             game.physics.arcade.enable(this.emitter);
-            //game.physics.arcade.collide(this.emitter);
 
-        //      // create an emitter for the player
-        //     this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
-        //     this.emitter.at(this.sprite);
-        
-        //      this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped].emitter);
-        
-        //     //compact way of setting the X velocity range of the emitter
-        //     // [min=0] - The minimum value for this range
-        //     // [max=0] - The maximum value for this range
-        //     this.emitter.setXSpeed(-25, 25);
-        //     this.emitter.setYSpeed(-25, 25);
-        //     this.emitter.width = 50;
-        //     this.emitter.bounce.setTo(0.5, 0.5);
     
-        //     this.emitter.bringToTop = true;
-        //     this.emitter.setRotation(0, 0);
-            
-        //     /**
-        //     * A more compact way of setting the alpha constraints of the particles.
-        //     * The rate parameter, if set to a value above zero, lets you set the speed at which the Particle change in alpha from min to max.
-        //     * If rate is zero, which is the default, the particle won't change alpha - instead it will pick a random alpha between min and max on emit.
-        //     * @method Phaser.Particles.Arcade.Emitter#setAlpha
-        //     * @param {number} [min=1] - The minimum value for this range.
-        //     * @param {number} [max=1] - The maximum value for this range.
-        //     * @param {number} [rate=0] - The rate (in ms) at which the particles will change in alpha from min to max, or set to zero to pick a random alpha between the two.
-        //     * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
-        //     * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
-        //     */
-        //     this.emitter.setAlpha(1, 10, 0);
-            
-        //     /**
-        //     * A more compact way of setting the scale constraints of the particles.
-        //     * The rate parameter, if set to a value above zero, lets you set the speed and ease which the Particle uses to change in scale from min to max across both axis.
-        //     * If rate is zero, which is the default, the particle won't change scale during update, instead it will pick a random scale between min and max on emit.
-        //     *
-        //     * @method Phaser.Particles.Arcade.Emitter#setScale
-        //     * @param {number} [minX=1] - The minimum value of Particle.scale.x.
-        //     * @param {number} [maxX=1] - The maximum value of Particle.scale.x.
-        //     * @param {number} [minY=1] - The minimum value of Particle.scale.y.
-        //     * @param {number} [maxY=1] - The maximum value of Particle.scale.y.
-        //     * @param {number} [rate=0] - The rate (in ms) at which the particles will change in scale from min to max, or set to zero to pick a random size between the two.
-        //     * @param {function} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
-        //     * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
-        //     * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
-        //     */
-        //     this.emitter.setScale(0.1, 0.3, 0.1, 0.3, 0);
-        //     this.emitter.gravity = 0;
-    
-    
-        //     /**
-        //     * Call this function to emit the given quantity of particles at all once (an explosion)
-        //     * 
-        //     * @method Phaser.Particles.Arcade.Emitter#explode
-        //     * @param {number} [lifespan=0] - How long each particle lives once emitted in ms. 0 = forever.
-        //     * @param {number} [quantity=0] - How many particles to launch.
-        //     * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
-        //     */
-        this.emitterActive = true;
-        this.emitter.at(this.sprite);
+            /**
+            * Call this function to emit the given quantity of particles at all once (an explosion)
+            * 
+            * @method Phaser.Particles.Arcade.Emitter#explode
+            * @param {number} [lifespan=0] - How long each particle lives once emitted in ms. 0 = forever.
+            * @param {number} [quantity=0] - How many particles to launch.
+            * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
+            */
+            this.emitterActive = true;
+            this.emitter.at(this.sprite);
         
-        //	false means don't explode all the sprites at once, but instead release at a rate of 20 particles per frame
-        //	The 5000 value is the lifespan of each particle
-        //this.emitter.start(false, 5000, 20);
+            //	false means don't explode all the sprites at once, but instead release at a rate of 20 particles per frame
+            //	The 5000 value is the lifespan of each particle
+            //this.emitter.start(false, 5000, 20);
         
         
-        this.emitter.explode(1000, 50);
+            this.emitter.explode(1000, 50);
             // emitter.emitX = 200;
         
             // //game.add.tween(emitter).to( { emitX: 700 }, 2000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
@@ -560,14 +536,38 @@ class PlayerManager {
 
     // updates the player array first for crew and then for bandits
     updatePlayerArray(game,  walls, floors) {
+        // update players
         for (var i=0; i< this.crew.length; i++) {
             if (this.players[this.crew[i]].updateCrew(game, walls, floors)) {
                 return false;
             }
         }
+        // update bandits
         for (var i=0; i< this.bandit.length; i++) {
             if (this.players[this.bandit[i]].updateBandit(game, walls, floors)) {
                 return false;
+            }
+        }
+        // loop through player arrays to find overlap between players
+        for (var i=0; i<this.players.length; i++) {
+            for (var j=0; j<this.players.length; j++) {
+                if (i != j) {
+                    if (game.physics.arcade.overlap(this.players[i].sprite, this.players[j].sprite) ) {
+                        if (this.players[i].characterType == "crew" && this.players[j].characterType == "crew") {
+                            if (this.players[j].sprite.customParams.status == "sleep") {
+                                // wake up sleeping player
+                                this.players[j].sprite.customParams.status = "awake";
+                                this.players[j].playerWokeFromSleep(game);
+                            }
+                        }
+                        if (this.players[i].characterType !=  this.players[j].characterType) {
+                            if (this.players[i].sprite.customParams.status == "awake") {
+                                // do something - ran into bandit
+                                this.players[i].playerOverlapOtherTeam(game, this.players[j]);
+                            }
+                        }
+                    }
+                }
             }
         }
 

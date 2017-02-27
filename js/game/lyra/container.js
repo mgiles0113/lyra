@@ -488,6 +488,7 @@ class ContainerManager {
                     if  (game.physics.arcade.overlap(players[i].sprite, this.containers[j].sprite)) {
                         // player moved in proximity
                         this.playerMovedInProximity(game, this.containers[j], i);
+                        players[i].playerOverlapContainer(game, this.containers[j]);
                     }
                     else {
                         this.playerMovedOutOfProximity(game, this.containers[j], i);
@@ -497,6 +498,8 @@ class ContainerManager {
                     if (game.physics.arcade.collide(this.containers[j].sprite, players[i].sprite)) {
                         // player collided
                         this.playerMovedInProximity(game, this.containers[j], i);
+                        players[i].playerCollideContainer(game, this.containers[j]);
+
                         // in case the player needs to do something - currently not defined in player
                         //players[i].lockedOut(players[i].sprite,this.containers[i].sprite);
                     }

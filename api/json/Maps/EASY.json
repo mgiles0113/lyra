@@ -68,7 +68,7 @@
                  "dest_x" : null,
                  "dest_y" : null,
                  "walking" : false,
-                 "status" : "awake",
+                 "status" : "sleep",
                  "inventory": ["wrench"]
                 }, 
                 {"name": "crew3",  
@@ -89,7 +89,7 @@
                  "dest_x" : null,
                  "dest_y" : null,
                  "walking" : false,
-                 "status" : "awake",
+                 "status" : "sleep",
                  "inventory": ["wrench"]
                 }, 
                 {"name": "crew4", 
@@ -110,7 +110,7 @@
                  "dest_x" : null,
                  "dest_y" : null,
                  "walking" : false,
-                 "status" : "awake",
+                 "status" : "sleep",
                  "inventory": ["wrench"]
                 }, 
                 {"name": "crew5", 
@@ -131,7 +131,7 @@
                  "dest_x" : null,
                  "dest_y" : null,
                  "walking" : false,
-                 "status" : "awake",
+                 "status" : "sleep",
                  "inventory": ["wrench"]
                 }, 
                 {"name": "crew6",
@@ -152,7 +152,7 @@
                  "dest_x" : null,
                  "dest_y" : null,
                  "walking" : false,
-                 "status" : "awake",
+                 "status" : "sleep",
                  "inventory": ["wrench"]
                 },
                 {"name": "bandit1", 
