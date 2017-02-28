@@ -171,6 +171,14 @@ class SlimeManager {
             this.generateFirstSlime(game) 
         }
         else {
+            // load suppressed slime images on the gameboard
+            var slimeImage = [];
+            if (game.gameData.slimeSuppressedArray != undefined) {
+                for (var j=0; j< game.gameData.slimeSuppressedArray.length; j++) {
+                    slimeImage[j] = new Slime(game, game.gameData.slimeSuppressedArray[j].x, game.gameData.slimeSuppressedArray[j].y, game.gameData.slimeSuppressedArray[j]);
+                    slimeImage[j].slimesprite.loadTexture(slimeImage[j].slimeLabel, game.gameData.slimeanimations[slimeImage[j].phase][0], true )
+                }
+            }
             // load existing slime into array
             this.slimeArr=[];
             for (var i = 0; i < game.gameData.slimearray.length ; i++) {
@@ -210,12 +218,20 @@ class SlimeManager {
     }
     
     removeSuppressedSlime(game, slimeIdx) {
+        // create array of suppressed slime - this is to recreate for saved game
+        if (game.gameData.slimeSuppressedArray == undefined) {
+            game.gameData.slimeSuppressedArray = [];
+        }
+        var offsetX = game.gameData.slimetemplate[this.slimeArr[slimeIdx].template].width*game.gameData.slimetemplate[this.slimeArr[slimeIdx].template].anchor[0];
+        var offsetY = game.gameData.slimetemplate[this.slimeArr[slimeIdx].template].height*game.gameData.slimetemplate[this.slimeArr[slimeIdx].template].anchor[1];
+        game.gameData.slimeSuppressedArray.push(this.slimeArr[slimeIdx].saveSlime (offsetX, offsetY));
+        
         // just in case there's a logic error, don't try to remove from empty array
-        if (this.slimeArr.length < 1) {
+        if (this.slimeArr.length > 1) {
             if (this.slimeArr[slimeIdx].isMobile) {
                 this.movingSlime -= 1;
             }
-            if (slimeToKill[k] == this.lastToMature) {
+            if (slimeIdx == this.lastToMature) {
                 // setup a new starting point
                 if (this.slimeArr.length > 2) { // there are at least three slime left, we're about to remove one
                         this.lastToMature = this.slimeArr.length - 2;

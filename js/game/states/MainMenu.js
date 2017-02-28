@@ -72,6 +72,7 @@ Lyra.MainMenu.prototype = {
         });
         this.menu.loadGameText.click(function() {
             self.game.userPreference.getSavedGameFiles(this);
+            self.game.userPreference.savedGames.sort(function(a,b) {return(b-a)});
         });
         this.menu.loadGameLeftArrow.click(function() {
             if (self.menu.savedGameList.currentPage > 1) {

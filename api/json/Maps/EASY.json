@@ -457,7 +457,7 @@
             "animationTags" : ["open", "openhighlight", "open", "openhighlight"],
             "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1,2,3],[0],[0,1,2,3]],
-            "itemscapacity" : 100,
+            "itemscapacity" : 1,
             "containerstate" : "open",
             "stateIdx" : 0,
             "immovable" : true,

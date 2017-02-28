@@ -8,6 +8,7 @@ var loginPassword = $("#login-password");
 var loginPasswordLabel = $("#login-password-label");
 var languageSelection = $("#language-selection");
 var submitButton = $("#submit-button");
+var createAccountButton = $("#create-user-link");
 
 var gameWidth = 1184;
 var gameHeight = 640;
@@ -30,6 +31,7 @@ function populateLoginPage(languageText) {
         loginUsernameLabel.html(jsonLanguage.username[languageChoice]);
         loginPasswordLabel.html(jsonLanguage.password[languageChoice]);
         submitButton.html(jsonLanguage.submit[languageChoice]);
+        createAccountButton.html(jsonLanguage.createAccount[languageChoice]);
         document.title = gameTitle + " | " + jsonLanguage.login[languageChoice];
     });
 }

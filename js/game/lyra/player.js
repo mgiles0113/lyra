@@ -1,10 +1,13 @@
 class Player {
     addPlayer(game, x, y, playerData) {
+        this.game = game;
         this.idx = playerData.idx;
         this.isSelected = playerData.isSelected;
         this.characterType = playerData.characterType;
         this.characterIdx = playerData.characterIdx;
         this.name = playerData.name;
+        this.itemsCapacity = 4;
+        
         // create player(s) 
         this.sprite = game.add.sprite(x,y,playerData.name);
         this.sprite.frame = playerData.frame;
@@ -58,6 +61,26 @@ class Player {
        this.makeItemEmitter(game);
     }
     
+    // add item to the item list
+    addItemToList(item) {
+        if (this.sprite.customParams.inventory.length < this.itemsCapacity) {
+            this.sprite.customParams.inventory.push(item);
+        } else {
+            //[TODO] raise a signal that says this item can't be added
+            console.log("the " + this.name +" inventory is full");
+        }
+    }
+    
+    // remove item from the list
+    removeItemFromList(itemIndex) {
+        var item = '';
+        if (item = this.sprite.customParams.inventory.splice(itemIndex, 1)) {
+            return item;
+        } else {
+            return false;
+        }
+    }
+    
     togglePlayer(){
         if(this.isSelected == false){
             this.isSelected = true;
@@ -69,7 +92,7 @@ class Player {
 
     // return inventory
     getInventory(slot) {
-        if (slot < this.sprite.customParams.inv_size) {
+        if (slot < this.sprite.customParams.inventory.length) {
             return this.sprite.customParams.inventory[slot];
         } else {
             return 'empty';

@@ -1,5 +1,6 @@
 class Container {
     addContainer (game, containerData) {
+        this.game = game;
         this.idx = containerData.idx;
         this.x = containerData.x;
         this.y = containerData.y;
@@ -69,53 +70,52 @@ class Container {
         }
         return false;
     }
-    
+
     // transfer item from one inventory to another
     // sourceType indicates if the source of the transfer is a player or container
-    transferItem(sourceType, sourceInventoryIndex, sourceItemIndex, destinationInventoryIndex) {
+    transferItem(sourceType, sourceItemIndex, player, comm) {
+        var item = {};
         if (sourceType === 'container') {
             // remove item from this container
-            this.
-            // add item to specified player
-            
-            // refresh container inventory
-            
-            // refresh player inventory
-            
+            if (player.sprite.customParams.inventory.length < player.itemsCapacity && (item = this.removeItemFromList(sourceItemIndex))) {
+                // add item to specified player
+                console.log(item.name);
+                player.addItemToList(item.name);
+                // refresh container display
+                
+            }
         } else if (sourceType === 'player') {
-            // remove item from player
-            
-            // add item to specified player
+            // remove item from specified player
+            if (this.itemslist.length < this.itemscapacity && (item = player.removeItemFromList(sourceItemIndex))) {
+                // add item to this container
+                this.addItemToList(new ContainerItem(this.idx, item));
+                // refresh container display
+                this.setupContainerImage(this.game);
+            }
         }
     }
     
     //add item to the item list
-    addItemToList(game, name) {
+    addItemToList(item) {
         if (this.itemslist.length < this.itemscapacity) {
             var pos = this.itemslist.length;
-            this.itemslist.push(new ContainerItem(pos, name));
-            // fix container display
-            this.setupContainerImage(game);
-        }
-        else {
+            this.itemslist.push(item);
+        } else {
             //[TODO] raise a signal that says this item can't be added
             console.log("the " + this.name +" container is full");
         }
     }
     
     // remove item from the list
-    removeItemFromList(game, name) {
-        for (var i=0; i< this.itemslist.length; i++) {
-            if (this.itemslist[i].name == name) {
-                this.hideAllItems();
-                this.itemslist.splice(i, 1);
-                this.showAllItems(game);
-                return name;
-            }
+    removeItemFromList(itemIndex) {
+        var item = {};
+        if (item = this.itemslist.splice(itemIndex, 1)) {
+            this.itemSprites[itemIndex].destroy();
+            return item[0];
+        } else {
+            return false;
         }
-        return false;
     }
-    
     
     showEscapePodRepairList(game) {
         var style = { font: 'bold 14pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 450 };
@@ -457,10 +457,10 @@ class ContainerManager {
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.containerarray.length ; i++) {
-                if (this.containerRoomArray[containerarray[i].roomMapName] == undefined) {
-                    this.containerRoomArray[containerarray[i].roomMapName] = [];
+                if (this.containerRoomArray[game.gameData.containerarray[i].roomMapName] == undefined) {
+                    this.containerRoomArray[game.gameData.containerarray[i].roomMapName] = [];
                 }
-                this.containerRoomArray[containerarray[i].roomMapName].push(i);
+                this.containerRoomArray[game.gameData.containerarray[i].roomMapName].push(i);
                 this.containers[i] = new Container();
                 this.containers[i].addContainer(game, game.gameData.containerarray[i]);
                 this.containers[i].setupContainerImage(game);
@@ -560,6 +560,11 @@ class ContainerManager {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
                         if (players[i].isSelected && j== comm.activeContainerIndex) {
                             comm.clearContainerInventory();
+                            // special case to replenish coffee if it was taken
+                            if (this.containers[j].name == "espresso" && this.containers[j].itemslist.length < 1) {
+                                // reload the coffee
+                                this.containers[j].addItemToList(new ContainerItem(0, "coffeecup"));
+                            }
                         }
                     }
                 }
@@ -577,6 +582,11 @@ class ContainerManager {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
                         if (players[i].isSelected && j== comm.activeContainerIndex) {
                             comm.clearContainerInventory();
+                            // special case to replenish coffee if it was taken
+                            if (this.containers[j].name == "espresso" && this.containers[j].itemslist.length < 1) {
+                                // reload the coffee
+                                this.containers[j].addItemToList(new ContainerItem(0, "coffeecup"));
+                            }
                         }
                     }
                 }
