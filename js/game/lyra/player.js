@@ -66,18 +66,15 @@ class Player {
             this.isSelected = false;
         }
     }
-    
-    //Return inventory
-    getInventory(slot){
-        if( slot < this.sprite.customParams.inv_size ){
+
+    // return inventory
+    getInventory(slot) {
+        if (slot < this.sprite.customParams.inv_size) {
             return this.sprite.customParams.inventory[slot];
-        
-        }else{
+        } else {
             return 'empty';
-            
         }
     }
-    
     
     // use this method for crew updates each update cycle
     updateCrew(game, walls, floors) {

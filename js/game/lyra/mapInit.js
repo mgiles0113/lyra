@@ -1,5 +1,13 @@
 class MapBuilder {
     
+    // containerLocType is used to define all the containers on the map
+    // object contains the following:
+    // x: position relative to map (center of room + x offset)
+    // y: position relative to map (center of room + y offset)
+    // name: name used in EASY.json to identify container
+    // room: mapname where item is located
+    // itemslist: list of items (ContainerItem objects)
+    // repairItems: optional (used for escape pods to list the items required to repair, includes lyre in list) 
     placeContainersInRooms(game, roomManager) {
         // add containers by room type
         var containerLocType = [];
@@ -9,6 +17,17 @@ class MapBuilder {
         var idxEmptyContainerSlot = [];
         for (var i = 0; i<roomManager.roomIdx.length; i++) {
             var roomDef = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type];
+            if (roomDef.name == "cafeteria") {
+                // add espresso machine - this is so latte doesn't end up in another container
+                // for now hard coded to center of cafeteria
+                containerLocType.push({
+                            x: roomManager.rooms[roomManager.roomIdx[i]].center_x + game.gameData.containers["espresso"].width/2 - 208, 
+                            y: roomManager.rooms[roomManager.roomIdx[i]].center_y + game.gameData.containers["espresso"].height/2 - 112,
+                            name: "espresso",
+                            room: roomManager.rooms[roomManager.roomIdx[i]].mapName, 
+                            itemslist: [new ContainerItem(0, "coffeecup")]
+                            });
+            }
             for (var j = 0; j< roomDef.containers.length; j++) {
                 var containerDef = game.gameData.containers[roomDef.containers[j]];
 
@@ -16,7 +35,7 @@ class MapBuilder {
                 var itemslistArr = this.generateItems(roomDef, containerDef);
                 itemsList = itemsList.concat(itemslistArr);
                 containerLocType[containerLocType.length] = {x: (roomManager.rooms[roomManager.roomIdx[i]].center_x + containerDef.width/2 + roomDef.containercoord[j][0]), 
-                        y: (roomManager.rooms[roomManager.roomIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:roomDef.containers[j], itemslist:itemslistArr};
+                        y: (roomManager.rooms[roomManager.roomIdx[i]].center_y + containerDef.height/2 + roomDef.containercoord[j][1]), name:roomDef.containers[j], room: roomManager.rooms[roomManager.roomIdx[i]].mapName, itemslist:itemslistArr};
                 if (containerLocType[containerLocType.length - 1].itemslist.length < containerDef.itemscapacity ) {
                     idxEmptyContainerSlot.push(containerLocType.length - 1);
                 }
@@ -24,7 +43,7 @@ class MapBuilder {
         }
         
         // assign the lyre to a container
-        containerLocType = this.assignLyre(idxEmptyContainerSlot, containerLocType);
+        containerLocType = this.assignLyre(game, idxEmptyContainerSlot, containerLocType);
         
         // add escape pods
         var itemsNeeded = [];
@@ -36,7 +55,7 @@ class MapBuilder {
                 itemsNeeded = this.assignRepairItems(itemsList );
 
                 containerLocType.push({x: (roomManager.rooms[roomManager.escapepodIdx[i]].center_x + containerDef.width/2 +game.gameData.escapepod.containercoord[j][0]), 
-                        y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + game.gameData.escapepod.containercoord[j][1]), name:game.gameData.escapepod.containers[j], itemslist:[], repairItems:itemsNeeded});
+                        y: (roomManager.rooms[roomManager.escapepodIdx[i]].center_y + containerDef.height/2 + game.gameData.escapepod.containercoord[j][1]), name:game.gameData.escapepod.containers[j], room: roomManager.rooms[roomManager.escapepodIdx[i]].mapName, itemslist:[], repairItems:itemsNeeded});
             }
         }
         
@@ -54,7 +73,8 @@ class MapBuilder {
             containerDef = game.gameData.containers[game.gameData.mainhall.containers[j]];
             itemslistArr = this.generateItems(game.gameData.mainhall, game.gameData.containers[game.gameData.mainhall.containers[j]]);
             containerLocType.push({x: roomManager.rooms[2].center_x + containerDef.width/2 + game.gameData.mainhall.containercoord[j][0], 
-                    y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], itemslist:itemslistArr});
+                    y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], room: roomManager.rooms[roomManager.mainhallIdx].mapName, itemslist:itemslistArr});
+
         }
         
         return containerLocType;
@@ -65,8 +85,9 @@ class MapBuilder {
         // generate an array of indices creating a random list of allowed items in the container
         var itemslistArr = [];
         for (var k = 0; k < containerDef.itemscapacity; k++) {
-            var rndNum = getRandomInt(-1, roomDef.item_types_allowed.length - 1);
-            if (rndNum >= 0) {
+            var rndEmpty = getRandomInt(0,5);  // 20% chance that container is empty
+            if (rndEmpty > 0) {
+                var rndNum = getRandomInt(0, roomDef.item_types_allowed.length - 1);
                 itemslistArr.push(new ContainerItem(itemslistArr.length, roomDef.item_types_allowed[rndNum]));
             }
         }
@@ -85,7 +106,7 @@ class MapBuilder {
     
     //containerLocType is the array of containers to build
     // idxEmptyContainerSlot is the array of indices into containerLocType with an empty slot
-    assignLyre(idxEmptyContainerSlot, containerLocType) {
+    assignLyre(game, idxEmptyContainerSlot, containerLocType) {
         // find all the containers with empty spaces
         if (idxEmptyContainerSlot.length < 1) {
             // replace an item with the lyre
@@ -98,6 +119,7 @@ class MapBuilder {
             containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.push(new ContainerItem(containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.length, "lyre"));
             console.log("lyre located at: ");
             console.log(containerLocType[rndIdx]);
+            game.gameData.lyreLocation = containerLocType[rndIdx];
         }
         return (containerLocType);
     }
@@ -121,7 +143,7 @@ class MapBuilder {
                     characterIdx: game.gameData.crew[i], 
                     characterType: "crew", 
                     inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
-                    status: game.gameData.characters[game.gameData.crew[i]].status,
+                    status: "awake",
                     x : locArr[i][0],
                     y : locArr[i][1]
                 })
@@ -133,7 +155,7 @@ class MapBuilder {
                     characterIdx: game.gameData.bandit[i], 
                     characterType: "bandit", 
                     inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
-                    status: game.gameData.characters[game.gameData.bandit[i]].status,
+                    status: "awake",
                     x : locArr[i+3][0],
                     y : locArr[i+3][1]
                 })
@@ -208,7 +230,7 @@ class MapBuilder {
             //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
             var containeritem =  new ContainerItem(0, "suppresant");
-            containerLocType[containerLocType.length] = {x:mapObjSuppressant[i].x, y:mapObjSuppressant[i].y, name:"transparent", itemslist: [containeritem]};
+            containerLocType[containerLocType.length] = {x:mapObjSuppressant[i].x, y:mapObjSuppressant[i].y, name:"transparent", room: mapObjSuppressant[i].mapName, itemslist: [containeritem]};
         }
         return containerLocType;
     }
@@ -217,7 +239,7 @@ class MapBuilder {
     addDoors(mapObjDoors) {
         var containerLocType = [];
         for (var i=0; i<mapObjDoors.length; i++) {
-            containerLocType[containerLocType.length] = {x:mapObjDoors[i].x, y:mapObjDoors[i].y, name:"doors", itemslist: []};
+            containerLocType[containerLocType.length] = {x:mapObjDoors[i].x, y:mapObjDoors[i].y, name:"doors", room: mapObjDoors[i].mapName, itemslist: []};
         }
         return containerLocType;
     }

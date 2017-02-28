@@ -5,6 +5,7 @@ class Container {
         this.y = containerData.y;
         this.name = containerData.name;
         this.itemscapacity = containerData.itemscapacity;
+        this.roomMapName = containerData.roomMapName;
         this.itemslist = containerData.itemslist;
         this.repairItems = containerData.repairItems;
         this.itemSprites = [];
@@ -20,6 +21,15 @@ class Container {
         this.sprite.body.setSize(game.gameData.containers[this.name].width, game.gameData.containers[this.name].height);
         this.sprite.immovable = containerData.immovable; this.sprite.body.immovable = containerData.immovablebody; this.sprite.body.moves = containerData.moves;
         //this.sprite.anchor.set(0.5);
+    }
+
+    // return inventory
+    getInventory(slot) {
+        if( slot < this.itemslist.length ){
+            return this.itemslist[slot].name;
+        }else{
+            return 'empty';
+        }
     }
     
     findPlayerHighlight(playerid) {
@@ -160,24 +170,33 @@ class Container {
     }
     
     showAllItems(game) {
-        var posArr = this.itemPositionOffsetsInContainer(game);
-        for (var i=0; i<this.itemslist.length; i++) {
-            if (this.itemSprites[i]) {
-                this.hideItem(i);
+        if (this.name == "espresso") {
+            this.showItem(game, game.gameData.containers[this.name].width/2-15, game.gameData.containers[this.name].height/2-15, 0, 0.5);
+        }
+        else {
+            var posArr = this.itemPositionOffsetsInContainer(game);
+            for (var i=0; i<this.itemslist.length; i++) {
+                if (this.itemSprites[i]) {
+                    this.hideItem(i);
+                }
+                if (posArr[i] == undefined || posArr[i].length < 1) {
+                    console.log(this);
+                }
+                this.showItem(game, posArr[i][0], posArr[i][1], i, 0.5);
             }
-            if (posArr[i] == undefined || posArr[i].length < 1) {
-                console.log(this);
-            }
-            this.showItem(game, posArr[i][0], posArr[i][1], i, 0.5);
         }
     }
     
     hideAllItems() {
-        for (var i=0; i<this.itemslist.length; i++) {
-            if (this.itemSprites[i]) {
-                this.hideItem(i);
+        if (this.name == "espresso") {
+            this.hideItem(0);
+        } else {
+            for (var i=0; i<this.itemslist.length; i++) {
+                if (this.itemSprites[i]) {
+                    this.hideItem(i);
+                }
             }
-        }        
+        }
     }
     
     // position the items in container if more than one
@@ -190,11 +209,11 @@ class Container {
             case 2:
                 if (game.gameData.containers[this.name].width > game.gameData.containers[this.name].height) {
                     return ([[game.gameData.containers[this.name].width/4, game.gameData.containers[this.name].height/2],
-                           [game.gameData.containers[this.name].width/4, game.gameData.containers[this.name].height/2]])                    
+                           [3*game.gameData.containers[this.name].width/4, game.gameData.containers[this.name].height/2]])                    
                 }
                 else {
                     return ([[game.gameData.containers[this.name].width/2, game.gameData.containers[this.name].height/4],
-                           [game.gameData.containers[this.name].width/2, game.gameData.containers[this.name].height/4]])                    
+                           [game.gameData.containers[this.name].width/2, 3*game.gameData.containers[this.name].height/4]])                    
                 }
             case 4:
                 // hard coding for escape pod for now
@@ -330,6 +349,7 @@ class Container {
             name: this.name,
             itemscapacity : this.itemscapacity,
             itemslist : this.itemslist,
+            roomMapName: this.roomMapName,
             repairItems : this.repairItems,
             containerstate : this.containerstate,
             stateIdx : this.stateIdx,
@@ -347,7 +367,7 @@ class Container {
     
 }
 
-Container.rawData = function(game, idx, x, y, name, itemslist, itemsNeeded) {
+Container.rawData = function(game, idx, x, y, name, room, itemslist, itemsNeeded) {
     var rawContainerData = {
         idx : idx,
         x : x,
@@ -357,6 +377,7 @@ Container.rawData = function(game, idx, x, y, name, itemslist, itemsNeeded) {
         itemscapacity : game.gameData.containers[name].itemscapacity,
         itemslist : itemslist,
         repairItems : itemsNeeded,
+        roomMapName: room,
         containerstate : game.gameData.containers[name].containerstate,
         playerHighlight : [],
         immovable : game.gameData.containers[name].immovable,
@@ -378,19 +399,34 @@ Container.preloadContainerImages = function(game) {
     }
 }
 
+
+// containerLocType is used to define all the containers on the map for initial build
+// object contains the following:
+// x: position relative to map (center of room + x offset)
+// y: position relative to map (center of room + y offset)
+// name: name used in EASY.json to identify container
+// room: mapname where item is located
+// itemslist: list of items (ContainerItem objects)
+// repairItems: optional (used for escape pods to list the items required to repair, includes lyre in list) 
 class ContainerManager {
     // containerLocType has to be an array of objects containing the locations of container and it's type/name and list of items
     constructor (game, containerLocType) {
         this.containers = [];
         this.containerCount = 0;
+        this.containerRoomArray = [];
         // keep track of largest container index for creating and deleting.
         if  (game.gameData.containerarray.length < 1) {
             for (var i = 0; i < containerLocType.length; i++) {
+                // make array of container indices located in each room, indexed by room name
+                if (this.containerRoomArray[containerLocType[i].room] == undefined) {
+                    this.containerRoomArray[containerLocType[i].room] = [];
+                }
+                this.containerRoomArray[containerLocType[i].room].push(i);
                 this.containers[i] = new Container();
                 if (containerLocType[i].repairItems != undefined) {
-                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, containerLocType[i].repairItems);
+                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].room, containerLocType[i].itemslist, containerLocType[i].repairItems);
                 } else {
-                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist, []);
+                    var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].room, containerLocType[i].itemslist, []);
                 }
                 this.containers[i].addContainer(game, containerData);
                 this.containers[i].setupContainerImage(game);
@@ -400,6 +436,10 @@ class ContainerManager {
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.containerarray.length ; i++) {
+                if (this.containerRoomArray[containerarray[i].roomMapName] == undefined) {
+                    this.containerRoomArray[containerarray[i].roomMapName] = [];
+                }
+                this.containerRoomArray[containerarray[i].roomMapName].push(i);
                 this.containers[i] = new Container();
                 this.containers[i].addContainer(game, game.gameData.containerarray[i]);
                 this.containers[i].setupContainerImage(game);
@@ -415,7 +455,7 @@ class ContainerManager {
     addNewContainer(game, containerLocType) {
         for (var i = 0; i < containerLocType.length; i++) {
             this.containers[this.containers.length] = new Container();
-                var containerData = Container.rawData(game, this.containerCount, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].itemslist);
+                var containerData = Container.rawData(game, this.containerCount, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].room, containerLocType[i].itemslist);
                 this.containers[this.containers.length].addContainer(game, containerData);
                 this.containers[this.containers.length].setupContainerImage(game);
                 this.containerCount += 1;
@@ -433,10 +473,14 @@ class ContainerManager {
     }
     
     
-    playerMovedInProximity(game, container, playerid) {
+    playerMovedInProximity(game, container, playerid, comm) {
         switch (container.containerstate) {
             case "open":
-                console.log('openhighlight');
+                console.log('moved in');
+                // display container inventory to communicator window
+                comm.displayContainerInventory(container.idx);
+                comm.activeContainerIndex = container.idx;
+                
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
                 break;
@@ -455,7 +499,7 @@ class ContainerManager {
         } 
     }
     
-    playerMovedOutOfProximity(game, container, playerid) {
+    playerMovedOutOfProximity(game, container, playerid, comm) {
         switch (container.containerstate) {
             case "open":
                 container.removePlayerHighlight(playerid);
@@ -468,50 +512,54 @@ class ContainerManager {
             case "openhighlight":
                 container.removePlayerHighlight(playerid);
                 container.openContainer(game, playerid);
+                
                 break;
             case "closedhighlight" :
                 container.removePlayerHighlight(playerid);
                 container.closedContainer(game, playerid);
+                
                 break;
             default:
                 break;
         }
     }
  
-    
     // switch container states if overlap with the player
-    checkPlayerOverlap (game, players) {
+    checkPlayerOverlap (game, players, comm) {
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.containers.length; j++) {
                 // check for overlap or collision
                 if (!(this.containers[j].sprite.body.checkCollision.any) ) {
                     if  (game.physics.arcade.overlap(players[i].sprite, this.containers[j].sprite)) {
                         // player moved in proximity
-                        this.playerMovedInProximity(game, this.containers[j], i);
+                        this.playerMovedInProximity(game, this.containers[j], i, comm);
                         players[i].playerOverlapContainer(game, this.containers[j]);
                     }
                     else {
-                        this.playerMovedOutOfProximity(game, this.containers[j], i);
+                        this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
                     }
                 }
                 else {
                     if (game.physics.arcade.collide(this.containers[j].sprite, players[i].sprite)) {
                         // player collided
-                        this.playerMovedInProximity(game, this.containers[j], i);
+                        this.playerMovedInProximity(game, this.containers[j], i, comm);
                         players[i].playerCollideContainer(game, this.containers[j]);
-
+                        
                         // in case the player needs to do something - currently not defined in player
                         //players[i].lockedOut(players[i].sprite,this.containers[i].sprite);
                     }
                     // if the player is causing the highlight, check for proximity
                     if ((this.containers[j].findPlayerHighlight(i) >= 0) && (!this.calculateProximityAfterCollision(game, this.containers[j], players[i]))) {
-                        this.playerMovedOutOfProximity(game, this.containers[j], i);
+                        this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
+                        if (comm.activeContainerIndex !== -1) {
+                            comm.activeContainerIndex = -1;
+                            comm.clearContainerInventory();
+                        }
                     }
                 }
             }
         }
     }
-    
     
     calculateProximityAfterCollision(game, container, player) {
         var xLwr = container.sprite.body.center.x - game.gameData.containers[container.name].width/2 - 10;
@@ -531,7 +579,6 @@ class ContainerManager {
         return false;
     }
     
-    
     saveContainerManager (game) {
         var savedContainers = [];
         for (var i = 0; i < this.containers.length; i++) {
@@ -540,9 +587,4 @@ class ContainerManager {
         game.gameData.containerarray = savedContainers;
         //console.log(savedContainers);
     }
-    
-    
-    
 }
-
-    

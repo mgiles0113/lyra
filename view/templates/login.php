@@ -106,12 +106,12 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-1-action-1">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-1-option-1">
                                                 Equip
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-1-action-2">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-1-option-2">
                                                 Transfer
                                             </div>
                                         </div>
@@ -123,12 +123,12 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-2-action-1">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-2-option-1">
                                                 Equip
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-2-action-2">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-2-option-2">
                                                 Transfer    
                                             </div>
                                         </div>
@@ -142,12 +142,12 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-3-action-1">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-3-option-1">
                                                 Equip
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-3-action-2">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-3-option-2">
                                                 Transfer
                                             </div>
                                         </div>
@@ -159,12 +159,12 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-4-action-1">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-4-option-1">
                                                 Equip
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-option-4-action-2">
+                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-4-option-2">
                                                 Transfer
                                             </div>
                                         </div>

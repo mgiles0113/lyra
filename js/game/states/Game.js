@@ -47,9 +47,6 @@ Lyra.LyraGame.prototype = {
 		this.preloadBar.cropEnabled = false;
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    
-        //Create comm window.
-        this.comm = new Comm(this.game);
 
         //this.game.world.scaleMode = 
         // there are other ways to do this, sets a background color for the game          
@@ -180,8 +177,11 @@ Lyra.LyraGame.prototype = {
         //setup getting mouse input
         this.game.input.mouse.capture = true;
         
-        // options overlay container
+        //Create comm window.
+        this.comm = new Comm(this.game, this.playerManager, this.containerManager);
+        this.comm.displayPlayerInventory(0);
         
+        // options overlay container
         this.optionsOverlay = $("<div id='optionsOverlay'></div>");
         this.optionsOverlay.css("width", "100vw");
         this.optionsOverlay.css("height", "100vh");
@@ -273,20 +273,11 @@ Lyra.LyraGame.prototype = {
         this.slimeManager.addNewSlime(this.game);
         this.slimeManager.updateSlime(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager)
 
-        //Comm. Window--> Switch btw players
-        // [TODO] consider passing this.playerManager and using array of indices "playerManager.crew" to select from playerManager.players
-        this.comm.switchPlayer(this.playerManager.players, this.game);
-        
-        //Update Comm Window Inventory
-        //this.comm.displayInventory(this.playerManager.players[0], this.game, this.ingameItems);
-
         // check for overlap with containers
-        this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players);
+        this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm);
 
         // loops through player array, updates bandits and players
         this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors']);
-        
-        
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)
