@@ -25,9 +25,9 @@ class Container {
 
     // return inventory
     getInventory(slot) {
-        if( slot < this.itemslist.length ){
+        if (slot < this.itemslist.length) {
             return this.itemslist[slot].name;
-        }else{
+        } else{
             return 'empty';
         }
     }
@@ -70,6 +70,25 @@ class Container {
         return false;
     }
     
+    // transfer item from one inventory to another
+    // sourceType indicates if the source of the transfer is a player or container
+    transferItem(sourceType, sourceInventoryIndex, sourceItemIndex, destinationInventoryIndex) {
+        if (sourceType === 'container') {
+            // remove item from this container
+            this.
+            // add item to specified player
+            
+            // refresh container inventory
+            
+            // refresh player inventory
+            
+        } else if (sourceType === 'player') {
+            // remove item from player
+            
+            // add item to specified player
+        }
+    }
+    
     //add item to the item list
     addItemToList(game, name) {
         if (this.itemslist.length < this.itemscapacity) {
@@ -91,7 +110,7 @@ class Container {
                 this.hideAllItems();
                 this.itemslist.splice(i, 1);
                 this.showAllItems(game);
-                return (true);
+                return name;
             }
         }
         return false;
@@ -283,13 +302,13 @@ class Container {
             }
         }
     }
-    
 
     switchContainerState (game, comm) {
         
         switch (this.containerstate) {
             case "openhighlight" : 
                  if (this.setState(game, "closedhighlight")) {
+                    comm.clearContainerInventory();
                     if (game.userPreference.data.sound === "true") {
                             this.playContainerSound(game);
                     }
@@ -302,7 +321,8 @@ class Container {
                 break;
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
-                    comm.displayContainerInventory(this.idx);
+                    comm.activeContainerIndex = this.idx;
+                    comm.displayContainerInventory();
                     if (game.userPreference.data.sound === "true") {
                             this.playContainerSound(game);
                     }
@@ -479,8 +499,8 @@ class ContainerManager {
             case "open":
                 console.log('moved in');
                 // display container inventory to communicator window
-                comm.displayContainerInventory(container.idx);
                 comm.activeContainerIndex = container.idx;
+                comm.displayContainerInventory();
                 
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
@@ -538,6 +558,9 @@ class ContainerManager {
                     }
                     else {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
+                        if (players[i].isSelected && j== comm.activeContainerIndex) {
+                            comm.clearContainerInventory();
+                        }
                     }
                 }
                 else {
@@ -552,8 +575,7 @@ class ContainerManager {
                     // if the player is causing the highlight, check for proximity
                     if ((this.containers[j].findPlayerHighlight(i) >= 0) && (!this.calculateProximityAfterCollision(game, this.containers[j], players[i]))) {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
-                        if (comm.activeContainerIndex !== -1) {
-                            comm.activeContainerIndex = -1;
+                        if (players[i].isSelected && j== comm.activeContainerIndex) {
                             comm.clearContainerInventory();
                         }
                     }

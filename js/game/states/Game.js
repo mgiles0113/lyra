@@ -169,6 +169,7 @@ Lyra.LyraGame.prototype = {
         //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         
         // //Create all in game items.
+        // deprecated - created along with containers and inventory
         // this.ingameItems = new Items();
 
         // setup getting keyboard input

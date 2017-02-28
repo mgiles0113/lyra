@@ -219,8 +219,8 @@ class Comm {
             this.containerItems.item4.slot.unbind('click');
             this.containerItems.item4.option1.unbind('click');
             this.containerItems.item4.option2.unbind('click');
-        };
-
+        }
+        
         // get all player items and display to communicator
         displayPlayerInventory(playerIndex){
             this.clearPlayerInventory();
@@ -239,20 +239,23 @@ class Comm {
             }
         }
 
-        displayContainerInventory(containerIndex) {
+        displayContainerInventory() {
             // show all items in the container's inventory
-            for (var i = 0; i < 4; i++) {
-                console.log(this.containerManager.containers[containerIndex].getInventory(i));
-                if (this.containerManager.containers[containerIndex].getInventory(i) !== 'empty') {
-                    this.containerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
-                    this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.containerManager.containers[containerIndex].getInventory(i) + '.png)');
-                } else {
-                    this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');    
+            if (this.activeContainerIndex !== -1) {
+                for (var i = 0; i < 4; i++) {
+                    console.log(this.containerManager.containers[this.activeContainerIndex].getInventory(i));
+                    if (this.containerManager.containers[this.activeContainerIndex].getInventory(i) !== 'empty') {
+                        this.containerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
+                        this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.containerManager.containers[this.activeContainerIndex].getInventory(i) + '.png)');
+                    } else {
+                        this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');    
+                    }
                 }
             }
         }
         
         clearContainerInventory() {
+            this.activeContainerIndex = -1;
             for (var i = 0; i < 4; i++) {
                 this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');
             }
