@@ -2,7 +2,7 @@ class ActionManager {
     constructor () {
         this.actionArr = [];
     }
-    updateAction(game, playerid, containerManager) {
+    updateAction(game, playerid, containerManager, comm) {
         console.log("wouldn't it be great if this did something?")
         
         for (var j=0; j<containerManager.containers.length; j++) {
@@ -11,7 +11,7 @@ class ActionManager {
                 var playerIdx = containerManager.containers[j].findPlayerHighlight(playerid);
                 // player that caused the highlight for this container
                 if (playerIdx >= 0) {
-                    containerManager.containers[j].switchContainerState(game);
+                    containerManager.containers[j].switchContainerState(game, comm);
                 }
             }
         }

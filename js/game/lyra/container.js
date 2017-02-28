@@ -285,7 +285,7 @@ class Container {
     }
     
 
-    switchContainerState (game) {
+    switchContainerState (game, comm) {
         
         switch (this.containerstate) {
             case "openhighlight" : 
@@ -302,6 +302,7 @@ class Container {
                 break;
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
+                    comm.displayContainerInventory(this.idx);
                     if (game.userPreference.data.sound === "true") {
                             this.playContainerSound(game);
                     }

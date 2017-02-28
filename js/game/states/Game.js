@@ -321,7 +321,7 @@ Lyra.LyraGame.prototype = {
         // find the selected player
         //console.log("ready to take action from keyboard: E");
         var playerIdx = this.playerManager.findSelectedPlayer();
-        this.actionManager.updateAction(this.game, playerIdx, this.containerManager);
+        this.actionManager.updateAction(this.game, playerIdx, this.containerManager, this.comm);
     },
     
     
