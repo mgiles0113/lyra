@@ -280,7 +280,6 @@ label {
 
 #player-inventory,
 #player-equipped {
-    background-color: rgba(255, 0, 0, .2);
     height: 176px;
 }
 
@@ -302,35 +301,77 @@ label {
     margin: auto;
 }
 
+/* all inventory slots */
+.active-slot {
+    border: 2px solid #4e9a06;
+    background-color: #97df52;
+}
+
 .inactive-slot {
-    border: 2px solid black;
-    background-color: grey;
+    border: 2px solid #898989;
+    background-color: #c6c6c6;
 }
 
-.inactive-option {
-    border: 2px solid black;
-    background-color: grey;
-}
-
-.player-inventory-slot {
-    text-align: center;
-}
-
-.player-inventory-option,
-.container-inventory-option {
+/* styling for player option buttons */
+.player-inventory-option {
     margin-bottom: 3px;
 }
 
-.player-inventory-option {
-    text-align: center;
+#player-inventory-slot-e-option-1 {
+    height: 25px;
+    width: 50px;
+    margin-left: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-.container-inventory-slot {
-    text-align: center;
+/* styling for player equip option buttons */
+.player-inventory-option-equip {
+    height: 25px;
+    width: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-bottom: 3px;
 }
 
-.container-inventory-option {
-    text-align: center;
+.player-equip-active {
+    background-image: url("/assets/images/equip_green.png");
+}
+
+.player-equip-inactive {
+    background-image: url("/assets/images/equip_grey.png");
+}
+
+/* styling for player transfer option buttons */
+.player-inventory-option-transfer {
+    height: 20px;
+    width: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.player-transfer-active {
+    background-image: url("/assets/images/right_green_arrow.png");
+}
+
+.player-transfer-inactive {
+    background-image: url("/assets/images/right_grey_arrow.png");
+}
+
+/* styling for container transfer option buttons */
+.container-inventory-option-transfer {
+    height: 20px;
+    width: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.transfer-active {
+    background-image: url("/assets/images/left_green_arrow.png");
+}
+
+.transfer-inactive {
+    background-image: url("/assets/images/left_grey_arrow.png");
 }
 
 /* SECTION - GAME TIMER */
@@ -356,4 +397,8 @@ label {
     width: 95%;
     margin: auto;
     display: block;
+}
+
+.disabled-option {
+    display: none;
 }

@@ -80,13 +80,13 @@
                                 <div class="row">
                                     <div class="col-xs-10">
                                         <div class="row">
-                                            <div class="inactive-option" id="player-inventory-slot-e-option-1">
-                                                Unequip
+                                            <div class="player-equip-inactive" id="player-inventory-slot-e-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="inactive-option" id="player-inventory-slot-e-option-2">
-                                                Transfer
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -106,13 +106,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-1-option-1">
-                                                Equip
+                                            <div class="player-inventory-option-equip player-equip-inactive" id="player-inventory-slot-1-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-1-option-2">
-                                                Transfer
+                                            <div class="player-inventory-option-transfer player-transfer-inactive" id="player-inventory-slot-1-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -123,13 +123,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-2-option-1">
-                                                Equip
+                                            <div class="player-inventory-option-equip player-equip-inactive" id="player-inventory-slot-2-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-2-option-2">
-                                                Transfer    
+                                            <div class="player-inventory-option-transfer player-transfer-inactive" id="player-inventory-slot-2-option-2">
+                                                    
                                             </div>
                                         </div>
                                     </div>
@@ -142,13 +142,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-3-option-1">
-                                                Equip
+                                            <div class="player-inventory-option-equip player-equip-inactive" id="player-inventory-slot-3-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-3-option-2">
-                                                Transfer
+                                            <div class="player-inventory-option-transfer player-transfer-inactive" id="player-inventory-slot-3-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -159,13 +159,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-4-option-1">
-                                                Equip
+                                            <div class="player-inventory-option-equip player-equip-inactive" id="player-inventory-slot-4-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="player-inventory-option inactive-option" id="player-inventory-slot-4-option-2">
-                                                Transfer
+                                            <div class="player-inventory-option-transfer player-transfer-inactive" id="player-inventory-slot-4-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -183,13 +183,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-1-option-1">
-                                                Equip
+                                            <div class="container-inventory-option disabled-option" id="container-inventory-slot-1-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-1-option-2">
-                                                Transfer
+                                            <div class="container-inventory-option-transfer transfer-inactive" id="container-inventory-slot-1-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -200,13 +200,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-2-option-1">
-                                                Equip
+                                            <div class="container-inventory-option disabled-option" id="container-inventory-slot-2-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-2-option-2">
-                                                Transfer
+                                            <div class="container-inventory-option-transfer transfer-inactive" id="container-inventory-slot-2-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -219,13 +219,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-3-option-1">
-                                                Equip
+                                            <div class="container-inventory-option disabled-option" id="container-inventory-slot-3-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-3-option-2">
-                                                Transfer
+                                            <div class="container-inventory-option-transfer transfer-inactive" id="container-inventory-slot-3-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -236,13 +236,13 @@
                                     </div>
                                     <div class="col-xs-3">
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-4-option-1">
-                                                Equip
+                                            <div class="container-inventory-option disabled-option" id="container-inventory-slot-4-option-1">
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="container-inventory-option inactive-option" id="container-inventory-slot-4-option-2">
-                                                Transfer
+                                            <div class="container-inventory-option-transfer transfer-inactive" id="container-inventory-slot-4-option-2">
+                                                
                                             </div>
                                         </div>
                                     </div>

@@ -278,7 +278,7 @@ Lyra.LyraGame.prototype = {
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm);
 
         // loops through player array, updates bandits and players
-        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors']);
+        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map);
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)

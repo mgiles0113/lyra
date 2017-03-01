@@ -85,10 +85,12 @@ class Comm {
                     slot : $("#container-inventory-slot-1"),
                     option1 : {
                         isActive : false,
+                        isEnabled : false,
                         element : $("#container-inventory-slot-1-option-1")
                     },
                     option2 : {
                         isActive : false,
+                        isEnabled : true,
                         element : $("#container-inventory-slot-1-option-2")
                     }
                 },
@@ -96,10 +98,12 @@ class Comm {
                     slot : $("#container-inventory-slot-2"),
                     option1 : {
                         isActive : false,
+                        isEnabled : false,
                         element : $("#container-inventory-slot-2-option-1")
                     },
                     option2 : {
                         isActive : false,
+                        isEnabled : true,
                         element : $("#container-inventory-slot-2-option-2")
                     }
                 },
@@ -107,10 +111,12 @@ class Comm {
                     slot : $("#container-inventory-slot-3"),
                     option1 : {
                         isActive : false,
+                        isEnabled : false,
                         element : $("#container-inventory-slot-3-option-1")
                     },
                     option2 : {
                         isActive : false,
+                        isEnabled : true,
                         element : $("#container-inventory-slot-3-option-2")
                     }
                 },
@@ -118,17 +124,18 @@ class Comm {
                     slot : $("#container-inventory-slot-4"),
                     option1 : {
                         isActive : false,
+                        isEnabled : false,
                         element : $("#container-inventory-slot-4-option-1")
                     },
                     option2 : {
                         isActive : false,
+                        isEnabled : true,
                         element : $("#container-inventory-slot-4-option-2")
                     }
                 }
             };
-            
+
             this.createClickEvents();
-            
         }
         
         resetCommunicatorInventory() {
@@ -155,8 +162,15 @@ class Comm {
                 console.log('equipped item slot clicked');
             });
             this.playerEquippedItem.option1.element.click(function() {
-                if (self.playerEquippedItem.option1.isActive && self.activeContainerIndex !== -1) {
-                    console.log('equipped item option 1 clicked');    
+                var currentPlayer = self.playerManager.players[self.activePlayerIndex];
+                if (currentPlayer.sprite.customParams.inventory.length < currentPlayer.itemsCapacity) {
+                    if (self.playerEquippedItem.option1.isActive) {
+                        console.log('equipped item option 1 clicked');
+                        currentPlayer.unequipItem();
+                        self.resetCommunicatorInventory();
+                    }
+                } else {
+                    console.log('No room in player inventory. Make room or equip from player inventory to swap this item');
                 }
             });
             this.playerEquippedItem.option2.element.click(function() {
@@ -169,8 +183,15 @@ class Comm {
                 console.log('player item 1 slot clicked');
             });
             this.playerItems.item1.option1.element.click(function() {
-                if (self.playerItems.item1.option1.isActive && self.activeContainerIndex !== -1) {
+                if (self.playerItems.item1.option1.isActive) {
                     console.log('player item 1 option 1 clicked');
+                    var currentPlayer = self.playerManager.players[self.activePlayerIndex];
+                    var inventoryItem = currentPlayer.removeItemFromList(0);
+                    var equippedItem = currentPlayer.equipItem(inventoryItem[0]);
+                    if (equippedItem) {
+                        currentPlayer.addItemToList(equippedItem);
+                    }
+                    self.resetCommunicatorInventory();
                 }
             });
             this.playerItems.item1.option2.element.click(function() {
@@ -296,23 +317,53 @@ class Comm {
             });
         }
 
-        enableSlot(type, number) {
+        enableSlot(type, slot) {
             if (type === 'container') {
-                this.containerItems['item' + number].option1.isActive = true;
-                this.containerItems['item' + number].option2.isActive = true;
+                this.containerItems['item' + slot].slot.removeClass('inactive-slot');
+                this.containerItems['item' + slot].slot.addClass('active-slot');
+                this.containerItems['item' + slot].option1.isActive = true;
+                this.containerItems['item' + slot].option2.isActive = true;
+                this.containerItems['item' + slot].option2.element.removeClass('transfer-inactive');
+                this.containerItems['item' + slot].option2.element.addClass('transfer-active');
             } else if (type === 'player') {
-                this.playerItems['item' + number].option1.isActive = true;
-                this.playerItems['item' + number].option2.isActive = true;
+                if (slot === "equipped") {
+                    this.playerEquippedItem.slot.removeClass('inactive-slot');
+                    this.playerEquippedItem.slot.addClass('active-slot');
+                    this.playerEquippedItem.option1.isActive = true;
+                    this.playerEquippedItem.option2.isActive = true;
+                } else {
+                    this.playerItems['item' + slot].slot.removeClass('inactive-slot');
+                    this.playerItems['item' + slot].slot.addClass('active-slot');
+                    this.playerItems['item' + slot].option1.element.removeClass('player-equip-inactive');
+                    this.playerItems['item' + slot].option2.element.addClass('player-equip-active');
+                    this.playerItems['item' + slot].option1.isActive = true;
+                    this.playerItems['item' + slot].option2.isActive = true;    
+                }
             }
         }
 
-        disableSlot(type, number) {
+        disableSlot(type, slot) {
             if (type === 'container') {
-                this.containerItems['item' + number].option1.isActive = false;
-                this.containerItems['item' + number].option2.isActive = false;
+                this.containerItems['item' + slot].slot.removeClass('active-slot');
+                this.containerItems['item' + slot].slot.addClass('inactive-slot');
+                this.containerItems['item' + slot].option1.isActive = false;
+                this.containerItems['item' + slot].option2.isActive = false;
+                this.containerItems['item' + slot].option2.element.removeClass('transfer-active');
+                this.containerItems['item' + slot].option2.element.addClass('transfer-inactive');
             } else if (type === 'player') {
-                this.playerItems['item' + number].option1.isActive = false;
-                this.playerItems['item' + number].option2.isActive = false;
+                if (slot === "equipped") {
+                    this.playerEquippedItem.slot.removeClass('active-slot');
+                    this.playerEquippedItem.slot.addClass('inactive-slot');
+                    this.playerEquippedItem.option1.isActive = false;
+                    this.playerEquippedItem.option2.isActive = false;
+                } else {
+                    this.playerItems['item' + slot].slot.removeClass('active-slot');
+                    this.playerItems['item' + slot].slot.addClass('inactive-slot');
+                    this.playerItems['item' + slot].option1.element.removeClass('player-equip-active');
+                    this.playerItems['item' + slot].option2.element.addClass('player-equip-inactive');
+                    this.playerItems['item' + slot].option1.isActive = false;
+                    this.playerItems['item' + slot].option2.isActive = false;
+                }
             }
         }
 
@@ -355,14 +406,20 @@ class Comm {
         
         // get all player items and display to communicator
         displayPlayerInventory() {
+            var currentPlayer = this.playerManager.players[this.activePlayerIndex];
             this.clearPlayerInventory();
             // show all items in the player's inventory
-            for (var i = 0; i < 4; i++) {
-                if (this.playerManager.players[this.activePlayerIndex].getInventory(i) !== 'empty') {
+            for (var i = 0; i < currentPlayer.sprite.customParams.inventory.length; i++) {
+                if (currentPlayer.getInventory(i) !== 'empty') {
                     this.playerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
                     this.playerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].getInventory(i) + '.png)');
                     this.enableSlot('player', i + 1);
                 }
+            }
+            if (currentPlayer.equippedItem !== "empty") {
+                this.playerEquippedItem.slot.css('backgroundSize', 'contain');
+                this.playerEquippedItem.slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].equippedItem + '.png)');
+                this.enableSlot('player', 'equipped');
             }
         }
 
@@ -371,6 +428,8 @@ class Comm {
                 this.playerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');
                 this.disableSlot('player', i + 1);
             }
+            this.playerEquippedItem.slot.css('backgroundImage', 'none');
+            this.disableSlot('player', 'equipped');
         }
 
         displayContainerInventory() {
@@ -394,6 +453,7 @@ class Comm {
             this.activeContainerIndex = -1;
             for (var i = 0; i < 4; i++) {
                 this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');
+                this.disableSlot('container', i + 1);
             }
         }
         

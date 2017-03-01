@@ -250,16 +250,16 @@ class MapBuilder {
     mapRoomFloorUpdate(game, map, name, roomManager, floorLayer) {
         //this.map.map.layers[idx].name has the name equal to map name for cc, d, mh, r1, r2, r3, r4, r5, r6
         // this.map.map.layers[idx].data has 46 arrays of 64 elements, if not zero then part of the floor for corresponding room
-        var floor = [];
+        var floors = [];
         switch (name) {
             case "cc":
-                var floor = game.gameData.commandcenter.floor;
+                var floors = game.gameData.commandcenter.floor;
                 break;
             case "mh":
-                var floor = game.gameData.mainhall.floor;
+                var floors = game.gameData.mainhall.floor;
                 break;
             case "d":
-                var floor = game.gameData.dock.floor;
+                var floors = game.gameData.dock.floor;
                 break;
             case "r1":
             case "r2":
@@ -269,11 +269,11 @@ class MapBuilder {
             case "r6":
                 for (var i=0; i<roomManager.roomIdx.length; i++) {
                     if (name == roomManager.rooms[roomManager.roomIdx[i]].mapName) {
-                        var floor = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type].floor;
+                        var floors = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type].floor;
                     }
                 }
         }
-        if (floor.length > 0) {
+        if (floors.length > 0) {
             // find the data segment
             var dataset = [];
             for (var i = 0; i<map.layers.length; i++) {
@@ -286,7 +286,7 @@ class MapBuilder {
                 for (var i = 0; i<dataset.length; i++) {
                     for (var j = 0; j<dataset[i].length; j++) {
                         if (dataset[i][j].index > 0) {
-                            map.putTile(floor[getRandomInt(0, floor.length-1)], j, i, floorLayer);
+                            map.putTile(floors[getRandomInt(0, floors.length-1)], j, i, floorLayer);
                         }
                     }
                 }

@@ -190,6 +190,9 @@ class Container {
     
     showAllItems(game) {
         if (this.name == "espresso") {
+            if (this.name == "espresso" && this.itemslist.length < 1) {
+                this.itemslist.push(new ContainerItem(0, "coffeecup", 1));
+            }
             this.showItem(game, game.gameData.containers[this.name].width/2-15, game.gameData.containers[this.name].height/2-15, 0, 0.5);
         }
         else {
@@ -207,14 +210,13 @@ class Container {
     }
     
     hideAllItems() {
-        if (this.name == "espresso") {
-            this.hideItem(0);
-        } else {
-            for (var i=0; i<this.itemslist.length; i++) {
-                if (this.itemSprites[i]) {
-                    this.hideItem(i);
-                }
+        for (var i=0; i<this.itemslist.length; i++) {
+            if (this.itemSprites[i]) {
+                this.hideItem(i);
             }
+        }
+        if (this.name == "espresso" && this.itemslist.length < 1) {
+            this.itemslist.push(new ContainerItem(0, "coffeecup", 1));
         }
     }
     
@@ -457,10 +459,10 @@ class ContainerManager {
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.containerarray.length ; i++) {
-                if (this.containerRoomArray[game.gameData.containerarray[i].roomMapName] == undefined) {
-                    this.containerRoomArray[game.gameData.containerarray[i].roomMapName] = [];
+                if (this.containerRoomArray[containerarray[i].roomMapName] == undefined) {
+                    this.containerRoomArray[containerarray[i].roomMapName] = [];
                 }
-                this.containerRoomArray[game.gameData.containerarray[i].roomMapName].push(i);
+                this.containerRoomArray[containerarray[i].roomMapName].push(i);
                 this.containers[i] = new Container();
                 this.containers[i].addContainer(game, game.gameData.containerarray[i]);
                 this.containers[i].setupContainerImage(game);
@@ -560,11 +562,6 @@ class ContainerManager {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
                         if (players[i].isSelected && j== comm.activeContainerIndex) {
                             comm.clearContainerInventory();
-                            // special case to replenish coffee if it was taken
-                            if (this.containers[j].name == "espresso" && this.containers[j].itemslist.length < 1) {
-                                // reload the coffee
-                                this.containers[j].addItemToList(new ContainerItem(0, "coffeecup"));
-                            }
                         }
                     }
                 }
@@ -582,11 +579,6 @@ class ContainerManager {
                         this.playerMovedOutOfProximity(game, this.containers[j], i, comm);
                         if (players[i].isSelected && j== comm.activeContainerIndex) {
                             comm.clearContainerInventory();
-                            // special case to replenish coffee if it was taken
-                            if (this.containers[j].name == "espresso" && this.containers[j].itemslist.length < 1) {
-                                // reload the coffee
-                                this.containers[j].addItemToList(new ContainerItem(0, "coffeecup"));
-                            }
                         }
                     }
                 }

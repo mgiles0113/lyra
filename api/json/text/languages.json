@@ -117,9 +117,13 @@
             "PRT": "Arrr! Thee ships precious cargo, thee golden lyre is hidden on board. Save it along with thee crew to complete yer mission!", 
             "ESP": "Los buques de carga preciosa, la lira de oro se oculta a bordo. ¡Guárdelo junto con la tripulación para completar su misión!"},
             
-    "controls" : {"ENG" : "Controls:<br/><ul><li>w : up</li><li>a : left</li><li>s : down</li><li>d : right</li><li>e : toggle open or closed</li><li>z : save</li><li>mouse click on map : set destination for selected crew</li></ul> ",
-        "PRT": "Man the helm:<br/><ul><li>w : skyward</li><li>a : port</li><li>s : below</li><li>d : starboard</li><li>e : breached or hatch secured</li><li>z : stow</li><li>mouse click on map : Mark the black spot and go on the account</li></ul> ",
-        "ESP": "Controles: <br/><ul><li>w : arriba</li><li>a : izquierda</li><li>s : abajo</li><li>d : derecha</li><li>e :  activar o desactivar</li><li>z : guardar</li><li>el ratón sobre el mapa: establecer el destino de la tripulación seleccionada</li></ul> "
+    "controls" : {"ENG" : "Controls:<br/><h2><ul><li>w : up</li><li>a : left</li><li>s : down</li><li>d : right</li><li>e : toggle open or closed</li><li>z : save</li><li>mouse click on map : set destination for selected crew</li><li>spacebar: spray equipped item</li></ul></h2> ",
+        "PRT": "Man the helm:<br/><h2><ul><li>w : skyward</li><li>a : port</li><li>s : below</li><li>d : starboard</li><li>e : breached or hatch secured</li><li>z : stow</li><li>mouse click on map : Mark the black spot and go on the account</li><li>spacebar: slosh ye' swabber</li></ul></h2> ",
+        "ESP": "Controles: <br/><h2><ul><li>w : arriba</li><li>a : izquierda</li><li>s : abajo</li><li>d : derecha</li><li>e :  activar o desactivar</li><li>z : guardar</li><li>el ratón sobre el mapa: establecer el destino de la tripulación seleccionada</li><li>Barra espaciadora: artículo equipado con spray</li></ul></h2> "
+    },
+    "outofcapacity" : {"ENG" : "Equipped item no longer working!",
+        "PRT": "Yer' swabber is done fer!",
+        "ESP": "¡El artículo equipado ya no funciona!"
     },
     "repair" : { 
         "ENG" : "Repair items:",

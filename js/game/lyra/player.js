@@ -7,6 +7,7 @@ class Player {
         this.characterIdx = playerData.characterIdx;
         this.name = playerData.name;
         this.itemsCapacity = 4;
+        this.equippedItem = "empty";
         
         // create player(s) 
         this.sprite = game.add.sprite(x,y,playerData.name);
@@ -58,12 +59,37 @@ class Player {
         }, this);
         
        // add emitter
-       this.makeItemEmitter(game);
+       //this.makeItemEmitter(game);
     }
-    
+
+    equipItem(item) {
+        if (this.equippedItem !== "empty") {
+            var swapItem = this.equippedItem;
+            this.equippedItem = item;
+            return swapItem;
+        } else {
+            this.equippedItem = item;
+        }
+        
+        return false;
+    }
+
+    unequipItem() {
+        if (this.sprite.customParams.inventory.length < this.itemsCapacity) {
+            console.log('attempting to unequip...');
+            console.log(this.equippedItem);
+            this.addItemToList(this.equippedItem);
+            this.equippedItem = "empty";
+        } else {
+            console.log('No room in player inventory. Make some room and try again.')
+        }
+    }
+
     // add item to the item list
     addItemToList(item) {
         if (this.sprite.customParams.inventory.length < this.itemsCapacity) {
+            console.log('pushing to player inventory');
+            console.log(item);
             this.sprite.customParams.inventory.push(item);
         } else {
             //[TODO] raise a signal that says this item can't be added
@@ -291,7 +317,7 @@ class Player {
     
     makeItemEmitter(game) {
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
-        if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
+        if (game.gameData.items[this.sprite.customParams.equipped.name].emitter != undefined )
         {
              // create an emitter for the player
             this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
@@ -348,8 +374,11 @@ class Player {
     startItemEmitter(game) {
         // emitter defined for the player as "this.emitter", child of the player sprite
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
-        if (game.gameData.items[this.sprite.customParams.equipped].emitter != undefined)
+        if (game.gameData.items[this.sprite.customParams.equipped.name].emitter != undefined && this.sprite.customParams.equipped.capacity != undefined 
+           && (this.sprite.customParams.equipped.capacity > 0))
         {
+            this.this.sprite.customParams.equipped.capacity -= 1;
+
             // make particles from equipped item
             /**
             * This function generates a new set of particles for use by this emitter.
@@ -363,7 +392,7 @@ class Player {
             * @param {boolean} [collideWorldBounds=false] - A particle can be set to collide against the World bounds automatically and rebound back into the World if this is set to true. Otherwise it will leave the World.
             * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
             */
-            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped].emitter,0,50,false);
+            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped.name].emitter,0,50,false);
             game.physics.arcade.enable(this.emitter);
 
     
@@ -398,6 +427,31 @@ class Player {
         //this.emitter.stop();
     }
     
+    
+    
+    // methods to help with AI
+    // player which room am I in map? method
+    // returns the room name (mapName in roomManager) or empty string.  Empty is either the passages or esacape pods currently
+    playerWhereAmI(game, map) {
+        //this.map.map.layers[idx].name has the name equal to map name for cc, d, mh, r1, r2, r3, r4, r5, r6
+        // this.map.map.layers[idx].data has 46 arrays of 64 elements, if not zero then part of the floor for corresponding room
+        
+        // find floor tile nearest sprite location
+        var tileX = Math.floor(this.sprite.body.center.x/game.gameData.tile_size);
+        var tileY = Math.ceil(this.sprite.body.center.y/game.gameData.tile_size);
+        
+        // find floor if in a room
+        for (var i = 0; i<map.layers.length; i++) {
+            if (map.layers[i].name != "walls" && map.layers[i].name != "doors" && map.layers[i].name != "floors"
+               && map.layers[i].name != "rooms" && map.layers[i].name != "suppresant") {
+                if (map.layers[i].data[tileY][tileX].index > 0 ) {
+                    return map.layers[i].name;
+                }
+            }
+        }
+        return "";
+    }
+
     
     
      savePlayer() {
@@ -555,7 +609,7 @@ class PlayerManager {
     }
 
     // updates the player array first for crew and then for bandits
-    updatePlayerArray(game,  walls, floors) {
+    updatePlayerArray(game,  walls, floors, map) {
         // update players
         for (var i=0; i< this.crew.length; i++) {
             if (this.players[this.crew[i]].updateCrew(game, walls, floors)) {

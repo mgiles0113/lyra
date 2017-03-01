@@ -37,12 +37,15 @@ Items.ItemImages = function(game) {
 
 // use this class for items in containers
 class ContainerItem {
-    constructor(containerIdx, name) {
+    constructor(containerIdx, name, capacity) {
         if (name == undefined) {
             this.name = "empty";
         } else {
             this.name = name;
         }
         this.containerIdx = containerIdx;
+        if (capacity != undefined) {
+            this.capacity = capacity;
+        }
     }
 }
