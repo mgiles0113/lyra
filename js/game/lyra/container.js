@@ -33,6 +33,7 @@ class Container {
         }
     }
     
+
     findPlayerHighlight(playerid) {
         for (var i = 0; i < this.playerHighlight.length; i++) {
             if (playerid == this.playerHighlight[i]) {
@@ -219,6 +220,18 @@ class Container {
             this.itemslist.push(new ContainerItem(0, "coffeecup", 1));
         }
     }
+    
+    // return -1 if not in container or index of lyre if in container
+    // used by bandits AI to find lyre
+    isLyreInContainer() {
+        for (var i=0; i<this.itemslist.length; i++) {
+            if (this.itemslist[i].name == "lyre") {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
     
     // position the items in container if more than one
     // [TODO] handle container rotation

@@ -64,6 +64,16 @@ class Player {
         
        // add emitter
        //this.makeItemEmitter(game);
+       
+       //add animations to the player
+       //walk down
+       //this.sprite.animations.add('down',[0,1,2], 10, true);
+       //walk up
+       //this.sprite.animations.add('up',[3,4,5], 10, true);
+       //walk left
+       //this.sprite.animations.add('left',[6,7,8], 10, true);
+       //walk right
+       //this.sprite.animations.add('right',[9,10,11], 10, true);
     }
 
     equipItem(item) {
@@ -264,34 +274,38 @@ class Player {
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;
-        this.sprite.frame = 3;
+        //this.sprite.animations.play('up');
     }
     
     goRight(game) {
         this.sprite.body.velocity.x = 300;
-        this.sprite.frame = 6;
+        //this.sprite.animations.play('right');
     }
     goLeft(game) {
         this.sprite.body.velocity.x = -300;
-        this.sprite.frame = 9;
+        //this.sprite.animations.play('left');
     }
     goDown(game) {
         this.sprite.body.velocity.y = 300;
-        this.sprite.frame = 0;
+        //this.sprite.animations.play('down');
     }
    
     stopUp(game) {
         this.sprite.body.velocity.y = 0;
+        //this.sprite.animations.stop();
     }
     
     stopRight(game) {
         this.sprite.body.velocity.x = 0;
+        //this.sprite.animations.stop();
     }
     stopLeft(game) {
         this.sprite.body.velocity.x = 0;
+        //this.sprite.animations.stop();
     }
     stopDown(game) {
         this.sprite.body.velocity.y = 0;
+        //this.sprite.animations.stop();
     }
     
     
@@ -315,7 +329,16 @@ class Player {
     
     // use this method to define what to do if a player overlaps a container (container is not collidable)
     playerOverlapContainer(game, container) {
-        
+        if (this.characterType == "bandit") {
+            var slot = container.isLyreInContainer();
+            if ( slot >= 0) {
+                this.getInventory(slot);
+                //[TODO] clean up the container list, recall bandits
+            }
+            else {
+                // remove container from the list of containers to search
+            }
+        }
     }
     
     // use this method to define what to do if a player collides a container (container is collidable)
@@ -602,6 +625,10 @@ class PlayerManager {
         this.banditContainerList = [];
         // if bandits have visited a room, add to this list(deprioritize)
         this.banditRoomList = [];
+        // track if the banditsHaveLyre
+        if (game.gameData.banditsHaveLyre == undefined)  {
+            game.gameData.banditsHaveLyre = false;
+        }
         console.log(game.gameData.playerarray);
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
@@ -694,22 +721,33 @@ class PlayerManager {
         }
         // update bandits
         for (var i=0; i< this.bandit.length; i++) {
+            // assuming the bandits only pick up the lyre, this is going to indicate recall to dock
+            if (this.players[this.bandit[i]].inventory.length > 0) {
+                game.gameData.banditsHaveLyre = true;
+            }
+            if (game.gameData.banditsHaveLyre) {
+                // [TODO] recall bandits to dock
+                
+            }
+            
+            // path to next container has been established
             if (this.players[this.bandit[i]].sprite.customParams.path.length > 0) {
                 this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager, roomManager);
             }
-            else {
-                // find next container
-                if (this.players[this.bandit[i]].sprite.customParams.containerList.length > 0) {
-                    var nextContainer = this.players[this.bandit[i]].sprite.customParams.containerList.pop();
-                    this.players[this.bandit[i]].sprite.customParams.dest_x = containerManager.containers[nextContainer].sprite.body.x;
-                    this.players[this.bandit[i]].sprite.customParams.dest_y = containerManager.containers[nextContainer].sprite.body.y;
-                    this.banditContainerList.push(nextContainer);
-                } else {
-                    // find the next room and container list
-                    var nextRoom = this.findNextRoomTooSearch(game, map, this.players[this.bandit[i]], containerManager);
-                    this.players[this.bandit[i]].sprite.customParams.containerList = this.getListOfContainersInRoomThatHaveNotBeenSearched(nextRoom, containerManager);
-                }
-            }
+            // [TODO] need to think this through....  when does container get added to 'searched' stack?
+            // else {
+            //     // find next container and setup path
+            //     if (this.players[this.bandit[i]].sprite.customParams.containerList.length > 0) {
+            //         var nextContainer = this.players[this.bandit[i]].sprite.customParams.containerList.pop();
+            //         this.players[this.bandit[i]].sprite.customParams.dest_x = containerManager.containers[nextContainer].sprite.body.x;
+            //         this.players[this.bandit[i]].sprite.customParams.dest_y = containerManager.containers[nextContainer].sprite.body.y;
+            //         this.banditContainerList.push(nextContainer);
+            //     } else {
+            //         // find the next room and container list
+            //         var nextRoom = this.findNextRoomTooSearch(game, map, this.players[this.bandit[i]], containerManager);
+            //         this.players[this.bandit[i]].sprite.customParams.containerList = this.getListOfContainersInRoomThatHaveNotBeenSearched(nextRoom, containerManager);
+            //     }
+            // }
         }
         // loop through player arrays to find overlap between players
         for (var i=0; i<this.players.length; i++) {
