@@ -531,7 +531,7 @@ class Player {
 Player.preloadPlayer = function (game) {
     //Load the items needed: 1st-> Player Name/Key 2nd-> URL to asset
     for (var i=0; i<game.gameData.characters.length; i++) {
-        game.load.spritesheet(game.gameData.characters[i].name, game.gameData.characters[i].playerRef, game.gameData.characters[i].height, game.gameData.characters[i].width, game.gameData.characters[i].frames);
+        game.load.spritesheet(game.gameData.characters[i].name, game.gameData.characters[i].playerRef, game.gameData.characters[i].width, game.gameData.characters[i].height, game.gameData.characters[i].frames);
     }        
 }
 

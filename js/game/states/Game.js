@@ -87,7 +87,7 @@ Lyra.LyraGame.prototype = {
         
         this.pathfinder.setGrid(this.grid);
         this.pathfinder.setAcceptableTiles([0]);
-        this.pathfinder.enableCornerCutting();
+        //this.pathfinder.enableCornerCutting();
         //If game slows down too much, change this.
         this.pathfinder.setIterationsPerCalculation(1000);
         //[TODO]Add containers to avoid.
