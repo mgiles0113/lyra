@@ -330,22 +330,27 @@ class Player {
     // use this method to define what to do if a player overlaps a container (container is not collidable)
     playerOverlapContainer(game, container) {
         if (this.characterType == "bandit") {
-            var slot = container.isLyreInContainer();
-            if ( slot >= 0) {
-                this.getInventory(slot);
-                //[TODO] clean up the container list, recall bandits
-            }
-            else {
-                // remove container from the list of containers to search
-            }
+            this.moveLyreToPlayerInventory(container);
         }
     }
     
     // use this method to define what to do if a player collides a container (container is collidable)
     playerCollideContainer(game, container) {
-
+        if (this.characterType == "bandit") {
+            this.moveLyreToPlayerInventory(container);
+        }
     }
     
+    moveLyreToPlayerInventory(container) {
+        var slot = container.isLyreInContainer();
+        if ( slot >= 0) {
+            this.getInventory(slot);
+            //[TODO] clean up the container list, recall bandits
+        }
+        else {
+            //[TODO] remove container from the list of containers to search
+        }
+    }
     
     
     makeItemEmitter(game) {
@@ -722,7 +727,7 @@ class PlayerManager {
         // update bandits
         for (var i=0; i< this.bandit.length; i++) {
             // assuming the bandits only pick up the lyre, this is going to indicate recall to dock
-            if (this.players[this.bandit[i]].inventory.length > 0) {
+            if (this.players[this.bandit[i]].sprite.customParams.inventory.length > 0) {
                 game.gameData.banditsHaveLyre = true;
             }
             if (game.gameData.banditsHaveLyre) {
