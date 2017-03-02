@@ -264,20 +264,20 @@ class Player {
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;
-        this.sprite.frame = 2;
+        this.sprite.frame = 3;
     }
     
     goRight(game) {
         this.sprite.body.velocity.x = 300;
-        this.sprite.frame = 1;
+        this.sprite.frame = 6;
     }
     goLeft(game) {
         this.sprite.body.velocity.x = -300;
-        this.sprite.frame = 0;
+        this.sprite.frame = 9;
     }
     goDown(game) {
         this.sprite.body.velocity.y = 300;
-        this.sprite.frame = 3;
+        this.sprite.frame = 0;
     }
    
     stopUp(game) {
