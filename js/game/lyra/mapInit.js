@@ -142,7 +142,6 @@ class MapBuilder {
                     isSelected: false, 
                     characterIdx: game.gameData.crew[i], 
                     characterType: "crew", 
-                    inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
                     status: "awake",
                     x : locArr[i][0],
                     y : locArr[i][1]
@@ -154,7 +153,6 @@ class MapBuilder {
                     isSelected: false, 
                     characterIdx: game.gameData.bandit[i], 
                     characterType: "bandit", 
-                    inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
                     status: "awake",
                     x : locArr[i+3][0],
                     y : locArr[i+3][1]
@@ -185,7 +183,6 @@ class MapBuilder {
                     isSelected: false, 
                     characterIdx: game.gameData.crew[0], 
                     characterType: "crew", 
-                    inventory : game.gameData.characters[game.gameData.crew[0]].inventory,
                     status: game.gameData.characters[game.gameData.crew[0]].status,
                     x : cc.center_x,
                     y : cc.center_y
@@ -197,7 +194,6 @@ class MapBuilder {
                     isSelected: false, 
                     characterIdx: game.gameData.crew[i], 
                     characterType: "crew", 
-                    inventory : game.gameData.characters[game.gameData.crew[i]].inventory,
                     status: game.gameData.characters[game.gameData.crew[i]].status,
                     x : crewQtr.center_x + i*50,
                     y : crewQtr.center_y + i*50
@@ -211,7 +207,6 @@ class MapBuilder {
                     isSelected: false, 
                     characterIdx: game.gameData.bandit[i], 
                     characterType: "bandit", 
-                    inventory : game.gameData.characters[game.gameData.bandit[i]].inventory,
                     status: game.gameData.characters[game.gameData.bandit[i]].status,
                     x : dock.center_x + i*50 + 50,
                     y : dock.center_y + i*49
@@ -302,5 +297,16 @@ class MapBuilder {
         }
         return map;
     }
+
+
+    findDoorsLayerIdx(map) {
+        for (var i = 0; i<map.layers.length; i++) {
+            if (map.layers[i].name == "doors") {
+                return (i);
+            }
+        }
+        return -1;
+    }
+
 
 }

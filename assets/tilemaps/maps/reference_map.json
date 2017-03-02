@@ -41,7 +41,7 @@
                 {
                  "height":64,
                  "id":1,
-                 "name":"r1N1_e1S1",
+                 "name":"r1_e1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -52,7 +52,7 @@
                 {
                  "height":64,
                  "id":4,
-                 "name":"r1E1_r2W2",
+                 "name":"r1_r2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -63,7 +63,7 @@
                 {
                  "height":64,
                  "id":5,
-                 "name":"e1S2_r2N1",
+                 "name":"e1_r2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -74,7 +74,7 @@
                 {
                  "height":64,
                  "id":6,
-                 "name":"pE1_r1W1",
+                 "name":"p1_r1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -85,7 +85,7 @@
                 {
                  "height":64,
                  "id":7,
-                 "name":"ccN1_pS1",
+                 "name":"cc_p1",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -96,7 +96,7 @@
                 {
                  "height":64,
                  "id":8,
-                 "name":"r1S1_mhN1",
+                 "name":"r1_mh",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -107,7 +107,7 @@
                 {
                  "height":64,
                  "id":9,
-                 "name":"ccE1_hmW1",
+                 "name":"cc_mh",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -118,7 +118,7 @@
                 {
                  "height":64,
                  "id":10,
-                 "name":"mhS1_r6N1",
+                 "name":"mh_r6",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -129,7 +129,7 @@
                 {
                  "height":64,
                  "id":11,
-                 "name":"ccS1_p4N1",
+                 "name":"cc_p4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -140,7 +140,7 @@
                 {
                  "height":64,
                  "id":12,
-                 "name":"p4E1_r6W1",
+                 "name":"p4_r6",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -151,7 +151,7 @@
                 {
                  "height":64,
                  "id":13,
-                 "name":"r5W1_r6E1",
+                 "name":"r5_r6",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -162,7 +162,7 @@
                 {
                  "height":64,
                  "id":14,
-                 "name":"mhS2_r5N1",
+                 "name":"mh_r5",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -173,7 +173,7 @@
                 {
                  "height":64,
                  "id":15,
-                 "name":"mhN2_r2S1",
+                 "name":"mh_r2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -184,7 +184,7 @@
                 {
                  "height":64,
                  "id":16,
-                 "name":"r2E1_r3W1",
+                 "name":"r2_r3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -195,7 +195,7 @@
                 {
                  "height":64,
                  "id":17,
-                 "name":"mhN3_r3S1",
+                 "name":"mh_r3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -206,7 +206,7 @@
                 {
                  "height":64,
                  "id":18,
-                 "name":"mhS3_r4N1",
+                 "name":"mh_r4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -217,7 +217,7 @@
                 {
                  "height":64,
                  "id":19,
-                 "name":"r3W1_r4E1",
+                 "name":"r3_r4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -228,7 +228,7 @@
                 {
                  "height":64,
                  "id":20,
-                 "name":"mhE1_dW1",
+                 "name":"mh_d",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -239,7 +239,7 @@
                 {
                  "height":64,
                  "id":21,
-                 "name":"r3E1_p2W1",
+                 "name":"r3_p2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -250,7 +250,7 @@
                 {
                  "height":64,
                  "id":22,
-                 "name":"p2S1_dN1",
+                 "name":"p2_d",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -261,7 +261,7 @@
                 {
                  "height":64,
                  "id":23,
-                 "name":"dS1_p3N1",
+                 "name":"d_p3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -272,7 +272,7 @@
                 {
                  "height":64,
                  "id":24,
-                 "name":"p3W1_r4E1",
+                 "name":"p3_r4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -283,7 +283,7 @@
                 {
                  "height":64,
                  "id":25,
-                 "name":"r4S1_e3N2",
+                 "name":"r4_e3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -294,7 +294,7 @@
                 {
                  "height":64,
                  "id":26,
-                 "name":"r5S2_e3N1",
+                 "name":"r5_e3",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -305,7 +305,7 @@
                 {
                  "height":64,
                  "id":27,
-                 "name":"r5S1_e4N2",
+                 "name":"r5_e4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -316,7 +316,7 @@
                 {
                  "height":64,
                  "id":28,
-                 "name":"r6S1_e4N1",
+                 "name":"r6_e4",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -327,7 +327,7 @@
                 {
                  "height":64,
                  "id":29,
-                 "name":"r3N1_e2S2",
+                 "name":"r3_e2",
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -338,7 +338,7 @@
                 {
                  "height":64,
                  "id":30,
-                 "name":"r2N2_e2S1",
+                 "name":"r2_e2",
                  "rotation":0,
                  "type":"",
                  "visible":true,

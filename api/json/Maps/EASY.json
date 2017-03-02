@@ -48,7 +48,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "awake",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "crew2", 
                  "type" : "crew",
@@ -69,7 +70,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "crew3",  
                  "type" : "crew",
@@ -90,7 +92,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "crew4", 
                  "type" : "crew",
@@ -111,7 +114,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "crew5", 
                  "type" : "crew",
@@ -132,7 +136,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "crew6",
                  "type" : "crew",
@@ -153,7 +158,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"]
+                 "inventory": ["wrench"],
+                 "equipped": ["suppresant"]
                 },
                 {"name": "bandit1", 
                  "type" : "bandit",
@@ -170,11 +176,12 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 220,
-                 "dest_y" : 700,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : true,
                  "status" : "awake",
-                 "inventory": ["wrench"]
+                 "inventory": [""],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "bandit2", 
                  "type" : "bandit",
@@ -191,11 +198,12 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 270,
-                 "dest_y" : 750,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : true,
                  "status" : "awake",
-                 "inventory": ["wrench"]
+                 "inventory": [""],
+                 "equipped": ["suppresant"]
                 }, 
                 {"name": "bandit3",
                  "type" : "bandit",
@@ -212,11 +220,12 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 320,
-                 "dest_y" : 800,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : true,
                  "status" : "awake",
-                 "inventory": ["wrench"]
+                 "inventory": [""],
+                 "equipped": ["suppresant"]
                 }
     ],
     "crew" : [0, 1, 2],
@@ -301,7 +310,8 @@
             "name": "suppresant",
             "displayname" : "suppressant",
             "emitter": "smoke",
-            "emitterRef": "assets/sprites/items/whitesmokeparticle.png"
+            "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
+            "capacity" : 10
         },
         "wrench": {
             "itemRef":"assets/sprites/items/wrench.png",
@@ -315,7 +325,10 @@
         },
         "coffeecup": {
             "itemRef":"assets/sprites/items/coffeecup.png",
-            "name": "coffeecup"
+            "name": "coffeecup",
+            "emitter": "smoke",
+            "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
+            "capacity" : 1
         }
     },
     "itemsarray" : [],

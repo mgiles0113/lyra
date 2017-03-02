@@ -33,6 +33,10 @@ class Player {
         this.sprite.customParams.dest_y = playerData.dest_y;
         this.sprite.customParams.dist_dest = 0;
     
+        // custom params for bandit AI
+        this.sprite.customParams.containerList = playerData.containerList;
+        this.sprite.customParams.currentRoom = playerData.currentRoom;
+
         game.physics.arcade.enable(this.sprite);
     
         this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width,game.gameData.characters[ playerData.characterIdx].height);
@@ -126,12 +130,18 @@ class Player {
     }
     
     // use this method for crew updates each update cycle
-    updateCrew(game, walls, floors) {
-        this.updatePlayer (game, walls, floors);
+    updateCrew(game, walls, floors, map, containerManager, roomManager) {
+        
+        // uncomment this to see the connected doors and containers for the room this player is in
+        // if (this.isSelected) {
+        //     this.playerAI(game, map, containerManager);
+        // }
+        
+        this.updatePlayer (game, walls, floors, map);
     }
     
     // use this method for bandit updates each update cycle
-    updateBandit(game, walls, floors) {
+    updateBandit(game, walls, floors, map, containerManager, roomManager) {
         this.updatePlayer (game, walls, floors);
     }
     
@@ -203,12 +213,12 @@ class Player {
     restartPtClick(game, pathfinder){
         
             //Get Sprite Origin Coords.
-            this.sprite.customParams.src_x = game.math.snapTo(this.sprite.body.center.x, this.sprite.width);
-            this.sprite.customParams.src_y = game.math.snapTo(this.sprite.body.center.y, this.sprite.height);
+            this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.body.center.x, this.sprite.width);
+            this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.body.center.y, this.sprite.height);
 
             //Get the Path from Origin to Dest. 
             this.foundPath = this.getPath.bind(this);
-            pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
+            pathfinder.findPath(Math.floor(this.sprite.customParams.src_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.src_y/game.gameData.tile_size), Math.floor(this.sprite.customParams.dest_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.dest_y/game.gameData.tile_size), this.foundPath);
             pathfinder.calculate();
         
     }
@@ -232,7 +242,7 @@ class Player {
             // set up the first point
             this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
             this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
-        }
+        } 
     }
     
     getNextPt(){
@@ -426,10 +436,28 @@ class Player {
         this.emitterActive = false;
         //this.emitter.stop();
     }
-    
-    
+ 
     
     // methods to help with AI
+    playerAI(game, map, containerManager) {
+        // for now this just show that the methods work
+        var roomName = this.playerWhereAmI(game, map);
+        if (roomName.length > 0) {
+            console.log(roomName);
+            // get list of containers in this room
+            if (containerManager.containerRoomArray[roomName] != undefined) {
+                var containerArr = containerManager.containerRoomArray[roomName];
+                console.log(containerArr);
+            }
+            
+            // get doors connected to this room
+            var doorArr = this.roomsConnectingToThisRoom(game, map, roomName);
+            console.log(doorArr);
+        }
+    }
+    
+    
+    
     // player which room am I in map? method
     // returns the room name (mapName in roomManager) or empty string.  Empty is either the passages or esacape pods currently
     playerWhereAmI(game, map) {
@@ -451,10 +479,28 @@ class Player {
         }
         return "";
     }
-
+    
+        
+    // doors connected to the room I am in
+    // this method depends on the naming convention for door names identifying the room
+    // <room1>_<room2> 
+    roomsConnectingToThisRoom(game, map, roomMapName) {
+        var doorArray = [];
+        for (var i=0; i<map.objects["doors"].length ; i++) {
+            var idx = map.objects["doors"][i].name.indexOf(roomMapName);
+            if (idx == 0){
+                doorArray.push( map.objects["doors"][i].name.substring(map.objects["doors"][i].name.indexOf("_")+1,map.objects["doors"][i].name.length));
+            }
+            else if (idx > 0) {
+                doorArray.push( map.objects["doors"][i].name.substring(0, map.objects["doors"][i].name.indexOf("_")));
+            }
+        }
+        return (doorArray);
+    }
     
     
-     savePlayer() {
+    savePlayer() {
+        //[TODO] stringify inventory and equipped?
         var playerData = {
             isSelected : this.isSelected,
             name : this.name,
@@ -473,7 +519,9 @@ class Player {
             frame : this.sprite.frame,
             angularDrag : this.sprite.body.angularDrag,
             x : this.sprite.body.center.x,
-            y : this.sprite.body.center.y
+            y : this.sprite.body.center.y,
+            containerList : this.sprite.customParams.containerList,
+            currentRoom: this.sprite.customParams.currentRoom
         }
         return playerData;
     }
@@ -495,8 +543,8 @@ Player.rawData = function (game, idx, playerLocType) {
         characterType : playerLocType.characterType,
         characterIdx :  playerLocType.characterIdx,
         walking : game.gameData.characters[playerLocType.characterIdx].walking,
-        inventory : game.gameData.characters[playerLocType.characterIdx].inventory,
-        equipped : ["suppresant"],
+        inventory : [],
+        equipped : [],
         status : playerLocType.status,
         dest_x : game.gameData.characters[playerLocType.characterIdx].dest_x,
         dest_y : game.gameData.characters[playerLocType.characterIdx].dest_y,
@@ -504,8 +552,35 @@ Player.rawData = function (game, idx, playerLocType) {
         velocityx : game.gameData.characters[playerLocType.characterIdx].velocityx,
         velocityy : game.gameData.characters[playerLocType.characterIdx].velocityy,
         frame : game.gameData.characters[playerLocType.characterIdx].frame,
-        angulardrag : game.gameData.characters[playerLocType.characterIdx].angulardrag
+        angulardrag : game.gameData.characters[playerLocType.characterIdx].angulardrag,
+        containerList : [],
+        currentRoom: ""
     }
+        // setup inventory as ContainerItem
+        for (var i=0; i<game.gameData.characters[playerLocType.characterIdx].inventory.length; i++){
+            var itemName = game.gameData.characters[playerLocType.characterIdx].inventory[i];
+            if (itemName.length > 0) {
+                if (game.gameData.items[itemName].capacity != undefined) {
+                    playerData.inventory[i] = new ContainerItem(i, itemName, game.gameData.items[itemName].capacity);
+                }
+                else {
+                    playerData.inventory[i] = new ContainerItem(i, itemName);
+                }
+            }
+        }
+    
+        for (var i=0; i<game.gameData.characters[playerLocType.characterIdx].equipped.length; i++){
+            var itemName = game.gameData.characters[playerLocType.characterIdx].equipped[i];
+            if (itemName.length > 0) {
+                if (game.gameData.items[itemName].capacity != undefined) {
+                    playerData.equipped[i] = new ContainerItem(i, itemName, game.gameData.items[itemName].capacity);
+                }
+                else {
+                    playerData.equipped[i] = new ContainerItem(i, itemName);
+                }
+            }
+        }
+
     return (playerData);
 }
 
@@ -514,7 +589,6 @@ Player.rawData = function (game, idx, playerLocType) {
 //    isSelected : true/false
 //    characterIdx : corresponds to index in gameData character array
 //    characterType : "crew" or "bandit"
-//    inventory : array of names
 //    status : player status (walk, stuck, sleep)
 //    x : x location for character
 //    y : y location
@@ -524,6 +598,10 @@ class PlayerManager {
         // indexes in the array corresponding to the type character
         this.crew = [];
         this.bandit = [];
+        // if bandits have visited a container, add to this list (deprioritize)
+        this.banditContainerList = [];
+        // if bandits have visited a room, add to this list(deprioritize)
+        this.banditRoomList = [];
         console.log(game.gameData.playerarray);
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
@@ -556,7 +634,7 @@ class PlayerManager {
         for (var i = 0; i <this.players.length; i++) {
             // restart ptClick
             if (this.players[i].sprite.customParams.walking && this.players[i].sprite.customParams.dest_x != null && this.players[i].sprite.customParams.dest_y != null ) { 
-               // this.players[i].restartPtClick(game, pathfinder);
+               this.players[i].restartPtClick(game, pathfinder);
             } 
         }
     }
@@ -609,17 +687,28 @@ class PlayerManager {
     }
 
     // updates the player array first for crew and then for bandits
-    updatePlayerArray(game,  walls, floors, map) {
+    updatePlayerArray(game,  walls, floors, map, containerManager, roomManager) {
         // update players
         for (var i=0; i< this.crew.length; i++) {
-            if (this.players[this.crew[i]].updateCrew(game, walls, floors)) {
-                return false;
-            }
+            this.players[this.crew[i]].updateCrew(game, walls, floors, map, containerManager, roomManager);
         }
         // update bandits
         for (var i=0; i< this.bandit.length; i++) {
-            if (this.players[this.bandit[i]].updateBandit(game, walls, floors)) {
-                return false;
+            if (this.players[this.bandit[i]].sprite.customParams.path.length > 0) {
+                this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager, roomManager);
+            }
+            else {
+                // find next container
+                if (this.players[this.bandit[i]].sprite.customParams.containerList.length > 0) {
+                    var nextContainer = this.players[this.bandit[i]].sprite.customParams.containerList.pop();
+                    this.players[this.bandit[i]].sprite.customParams.dest_x = containerManager.containers[nextContainer].sprite.body.x;
+                    this.players[this.bandit[i]].sprite.customParams.dest_y = containerManager.containers[nextContainer].sprite.body.y;
+                    this.banditContainerList.push(nextContainer);
+                } else {
+                    // find the next room and container list
+                    var nextRoom = this.findNextRoomTooSearch(game, map, this.players[this.bandit[i]], containerManager);
+                    this.players[this.bandit[i]].sprite.customParams.containerList = this.getListOfContainersInRoomThatHaveNotBeenSearched(nextRoom, containerManager);
+                }
             }
         }
         // loop through player arrays to find overlap between players
@@ -648,6 +737,72 @@ class PlayerManager {
     }
 
 
+    // returns true if room is on the list of rooms already searched or not really a room name
+    hasRoomBeenSearched(roomName) {
+        if (roomName.length < 1) {
+            return true;
+        }
+        for (var i=0; i< this.banditRoomList; i++) {
+            if (this.banditRoomList[i] == roomName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getListOfContainersInRoomThatHaveNotBeenSearched(roomName, containerManager) {
+        var containerList = containerManager.containerRoomArray[roomName];
+        if (containerList == undefined) {
+            // there are no containers in the room
+            return ([]);
+        }
+                
+        for (var j=0; j<this.banditContainerList.length; j++) {
+            for (var k=0; k<containerList.length; k++) {
+                if (this.banditContainerList[j] == containerList[k]) {
+                    // container has already been searched, remove from list
+                    containerList = containerList.splice(k, 1);
+                }
+            }
+        }
+        if (containerList.length < 1) {
+            // all containers inthe room have been searched, add to list of rooms
+            if (!this.hasRoomBeenSearched(roomName)) {
+                this.banditRoomList.push(roomName);
+            }
+        }
+        return containerList;
+    }
+
+
+
+    findNextRoomTooSearch(game, map, bandit, containerManager) {
+        bandit.sprite.customParams.currentRoom = bandit.playerWhereAmI(game, map);
+        if (bandit.sprite.customParams.currentRoom.length < 1) {
+            // [TODO]in passage or escape pod, find the next door or fix map so this doesn't happen
+            nextRoom = "d";
+        } else {
+            // get list of containers in current room
+            bandit.sprite.customParams.containerList = this.getListOfContainersInRoomThatHaveNotBeenSearched(bandit.sprite.customParams.currentRoom, containerManager);
+            // if the container list is now empty, find a door
+            if (bandit.sprite.customParams.containerList.length < 1) {
+                var connectedRooms = bandit.roomsConnectingToThisRoom(game, map, bandit.sprite.customParams.currentRoom);
+                // go through the list and remove any rooms already searched
+                for (var j=0; j<connectedRooms.length; j++) {
+                    if (this.hasRoomBeenSearched(connectedRooms[j])) {
+                        connectedRooms = connectedRooms.splice(j, 1);
+                    }
+                }
+                if (connectedRooms.length < 1) {
+                    // get the list again
+                    connectedRooms = bandit.roomsConnectingToThisRoom(game, map, bandit.sprite.customParams.currentRoom);
+                }
+                // randomly choose the next room to go to
+                var nextRoom = connectedRooms[getRandomInt(0,connectedRooms.length-1)];
+            }
+        }
+        return(nextRoom);
+    }
     
     savePlayerManager (game) {
         var savedPlayers = [];

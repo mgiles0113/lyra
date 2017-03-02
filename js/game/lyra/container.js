@@ -473,6 +473,7 @@ class ContainerManager {
         }
     }
     
+
     
     // use this to drop an item on the map
     addNewContainer(game, containerLocType) {
@@ -485,6 +486,7 @@ class ContainerManager {
         }
     }
     
+    //[TODO] rethink this method - we are using indices to track stuff.  Maybe use an inactive state instead
     // use this if loose item is picked up off the map into player inventory
     removeContainer(containerId) {
         // for now only allow removing containers that are transparent

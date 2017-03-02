@@ -130,7 +130,7 @@ Lyra.LyraGame.prototype = {
             // test placing some tiles
             
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager, this.mapLayer['floors']);
-
+            
             var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager);
             containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
@@ -278,7 +278,7 @@ Lyra.LyraGame.prototype = {
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm);
 
         // loops through player array, updates bandits and players
-        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map);
+        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map, this.containerManager, this.roomManager);
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)

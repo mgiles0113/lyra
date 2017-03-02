@@ -25,7 +25,9 @@ class Slime {
         game.physics.arcade.enable(this.slimesprite);
         this.slimesprite.body.setSize(game.gameData.slimetemplate[this.template].width,game.gameData.slimetemplate[this.template].height);
         this.slimesprite.anchor.set(game.gameData.slimetemplate[this.template].anchor[0], game.gameData.slimetemplate[this.template].anchor[1]); // center collision over image
-        this.slimesprite.body.setCircle(game.gameData.slimetemplate[this.template].radius); // radius of collision body
+        
+        // try not setting a radius to see if collision/overlap lines up better
+        //this.slimesprite.body.setCircle(game.gameData.slimetemplate[this.template].radius); // radius of collision body
         this.slimesprite.body.bounce.x = 0.1;
         this.slimesprite.body.bounce.y = 0.1;
     }

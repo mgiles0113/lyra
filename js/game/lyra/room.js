@@ -146,7 +146,7 @@ class RoomManager {
         return (shuffleArr(indexArr));
     }
 
-    saveRooms(game) {
+   saveRooms(game) {
         var savedRoomsArr = []
         for (var i=0; i<this.rooms.length; i++) {
             savedRoomsArr[i] = this.rooms[i].saveRoom();
