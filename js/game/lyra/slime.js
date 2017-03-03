@@ -38,8 +38,12 @@ class Slime {
          this.isMobile = false;
     }
     
-    suppress(game) {
-        this.phase = this.phase + 10;
+    suppress(game, equipped) {
+        var offset = 10;
+        if (equipped[0].name == "coffeecup") {
+            offset = 20;
+        }
+        this.phase = this.phase + offset;
         this.immobilize();
         this.animation = "p" + this.phase;
         this.slimesprite.loadTexture(this.slimeLabel, game.gameData.slimeanimations[this.phase][0], true);
@@ -294,21 +298,24 @@ class SlimeManager {
                 for (var j=0; j < playerManager.players.length; j++)
                 { 
                     // if (playerManager.players[j].emitterActive == true && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                    //     //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
-                    //     this.slimeArr[k].suppress(game);
+                    //     //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped));
+                    //     this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped);
                     // }
                     // if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
                     //     playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
                         
                     // }
                     if (game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
+                        // player is still overlapping active slime
                         playerStuck[j] = true;
+                        // player has spacebar selected and equipped item has capacity
                         if (playerManager.players[j].emitterActive) {
                             // spray slime if player overlaps and there's an emitter running
                             //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game));
-                            this.slimeArr[k].suppress(game);
+                            this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped);
                         }
-                        if (playerManager.players[j].sprite.customParams.status != "stuck") {
+                        // if not already stuck or asleep, set player to stuck
+                        if (!(playerManager.players[j].sprite.customParams.status == "stuck" || playerManager.players[j].sprite.customParams.status == "sleep")) {
                             playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
                         }
                     }

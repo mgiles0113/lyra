@@ -169,7 +169,7 @@
              "imageref" :  "assets/lyraImages/greenCircle1.png",
              "height": 32,
              "width": 32,
-             "frames": 30,
+             "frames": 40,
              "radius": 20,
              "anchor": [0.5, 0.5]
             },
@@ -178,14 +178,14 @@
              "height": 32,
              "width": 32,
              "frames": 30,
-             "radius": 20,
+             "radius": 40,
              "anchor": [0.5, 0.5]
             },
         {"slimelabel": "greenCircle3",
              "imageref" :  "assets/lyraImages/greenCircle3.png",
              "height": 32,
              "width": 32,
-             "frames": 30,
+             "frames": 40,
              "radius": 20,
              "anchor": [0.5, 0.5]
             },
@@ -193,7 +193,7 @@
              "imageref" :  "assets/lyraImages/greenCircle4.png",
              "height": 32,
              "width": 32,
-             "frames": 30,
+             "frames": 40,
              "radius": 20,
              "anchor": [0.5, 0.5]
             }
@@ -218,7 +218,17 @@
                 [26],
                 [27],
                 [28],
-                [29]
+                [29],
+                [30],
+                [31],
+                [32],
+                [33],
+                [34],
+                [35],
+                [36],
+                [37],
+                [38],
+                [39]                
     ],
     "slimearray": [],
     "spawnCoord": [],

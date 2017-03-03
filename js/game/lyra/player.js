@@ -7,7 +7,7 @@ class Player {
         this.characterIdx = playerData.characterIdx;
         this.name = playerData.name;
         this.itemsCapacity = 4;
-        this.equippedItem = "empty";
+        this.equippedItem = playerData.equipped;
         
         // create player(s) 
         this.sprite = game.add.sprite(x,y,playerData.name);
@@ -39,14 +39,14 @@ class Player {
 
         game.physics.arcade.enable(this.sprite);
     
-        this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width,game.gameData.characters[ playerData.characterIdx].height);
-    
+        //Set smaller so player doesn't get stuck.
+        this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width - 2,game.gameData.characters[ playerData.characterIdx].height - 2);
+        
         //  We'll set a lower max angular velocity here to keep it from going totally nuts
         this.sprite.body.maxAngular = 500;
     
         //  Apply a drag otherwise the sprite will just spin and never slow down
         this.sprite.body.angularDrag =  playerData.angulardrag;
-        
         
         this.sprite.body.velocity.x =   playerData.velocityx;
         this.sprite.body.velocity.y = playerData.velocityy;
@@ -66,14 +66,10 @@ class Player {
        //this.makeItemEmitter(game);
        
        //add animations to the player
-       //walk down
-       //this.sprite.animations.add('down',[0,1,2], 10, true);
-       //walk up
-       //this.sprite.animations.add('up',[3,4,5], 10, true);
-       //walk left
-       //this.sprite.animations.add('left',[6,7,8], 10, true);
-       //walk right
-       //this.sprite.animations.add('right',[9,10,11], 10, true);
+       this.sprite.animations.add('down',[0,1,2], 10, true);
+       this.sprite.animations.add('up',[3,4,5], 10, true);
+       this.sprite.animations.add('left',[9,10,11], 10, true);
+       this.sprite.animations.add('right',[6,7,8], 10, true);
     }
 
     equipItem(item) {
@@ -162,7 +158,7 @@ class Player {
         game.physics.arcade.collide(this.sprite, walls);
         
 		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
-	
+	        
 	        //Move Sprite to Next Pt.	    
 		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, 200);
 		    
@@ -173,13 +169,20 @@ class Player {
 			if( this.sprite.customParams.dist_dest < 2){
 			    
 			    //Get Next Point
-			    this.getNextPt();
-			    console.log(this.sprite.customParams.next_pt_x);
-		        console.log(this.sprite.customParams.next_pt_y);
+			    this.getNextPt(game);
+			    this.getAnimations(game);
+			    
+			    //Stop if end of path.
+			    if(this.sprite.customParams.walking == false){
+			        this.sprite.frame = 0;
+			    }
 		        
 		        //Stop Sprite
 		        this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
+				
+				//Stop Animation
+				this.sprite.animations.stop();
 			}
 			
 			//If player overlaps slime, stop immed.
@@ -192,11 +195,44 @@ class Player {
 			    //Stop Sprite
 		        this.sprite.body.velocity.x = 0;
 				this.sprite.body.velocity.y = 0;
+				
+				//Stop Walking.
+				this.sprite.customParams.walking = false;
+				
+				//Stop Animation
+				this.sprite.animations.stop();
 			    
 			}
 		}
+		
+		
     }
     
+    getAnimations(game){
+        var angle_rads = game.math.angleBetween(this.sprite.x, this.sprite.y, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y);
+        var angle = game.math.radToDeg(angle_rads);
+        console.log(angle);
+        
+        if(angle != 0){
+            //Left
+            if( (angle > 135 && angle <= 180) || (angle >= -180 && angle <= -135) ){
+                this.sprite.animations.play('left');    
+        
+            //Up    
+            }else if(angle > -135 && angle <= -45){
+                this.sprite.animations.play('up');
+        
+            //Right  
+            }else if(angle > -45 && angle <= 45){
+                this.sprite.animations.play('right');
+        
+            //Down    
+            }else if(angle > 45 && angle <= 135){
+                this.sprite.animations.play('down');
+            }
+        }
+     
+    }
     
     ptClick(game, pathfinder){
 
@@ -211,7 +247,6 @@ class Player {
             this.sprite.customParams.walking = true;
             
             //Get the Path from Origin to Dest. 
-            //[TODO} Move player toward dest based on path points.
             this.foundPath = this.getPath.bind(this);
             pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
             pathfinder.calculate();
@@ -252,10 +287,11 @@ class Player {
             // set up the first point
             this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
             this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+            
         } 
     }
     
-    getNextPt(){
+    getNextPt(game){
         this.sprite.customParams.path.shift();
         
         //Check that there are points left in path.
@@ -274,38 +310,38 @@ class Player {
     
     goUp(game) {
         this.sprite.body.velocity.y = -300;
-        //this.sprite.animations.play('up');
+        this.sprite.animations.play('up');
     }
     
     goRight(game) {
         this.sprite.body.velocity.x = 300;
-        //this.sprite.animations.play('right');
+        this.sprite.animations.play('right');
     }
     goLeft(game) {
         this.sprite.body.velocity.x = -300;
-        //this.sprite.animations.play('left');
+        this.sprite.animations.play('left');
     }
     goDown(game) {
         this.sprite.body.velocity.y = 300;
-        //this.sprite.animations.play('down');
+        this.sprite.animations.play('down');
     }
    
     stopUp(game) {
         this.sprite.body.velocity.y = 0;
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
     }
     
     stopRight(game) {
         this.sprite.body.velocity.x = 0;
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
     }
     stopLeft(game) {
         this.sprite.body.velocity.x = 0;
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
     }
     stopDown(game) {
         this.sprite.body.velocity.y = 0;
-        //this.sprite.animations.stop();
+        this.sprite.animations.stop();
     }
     
     
@@ -606,6 +642,8 @@ Player.rawData = function (game, idx, playerLocType) {
                 else {
                     playerData.equipped[i] = new ContainerItem(i, itemName);
                 }
+            } else {
+                playerData.equipped = "empty";
             }
         }
 

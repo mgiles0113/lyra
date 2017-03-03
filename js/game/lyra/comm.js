@@ -436,7 +436,7 @@ class Comm {
             // show all items in the container's inventory
             if (this.activeContainerIndex !== -1) {
                 for (var i = 0; i < 4; i++) {
-                    console.log(this.containerManager.containers[this.activeContainerIndex].getInventory(i));
+                    //console.log(this.containerManager.containers[this.activeContainerIndex].getInventory(i));
                     if (this.containerManager.containers[this.activeContainerIndex].getInventory(i) !== 'empty') {
                         this.containerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
                         this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.containerManager.containers[this.activeContainerIndex].getInventory(i) + '.png)');

@@ -55,43 +55,12 @@ Lyra.LyraGame.prototype = {
         //Create the map
         this.map = new Map();
         this.map.addMap(this.game, this.game.gameData.imageTagList);
-
+        
         for (var i=0; i<this.game.gameData.mapLayerRef.length; i++) {
             this.mapLayer[this.game.gameData.mapLayerRef[i]] = this.map.map.createLayer(this.game.gameData.mapLayerRef[i]);
             //this.mapLayer[i].resizeWorld(200,200);
             this.mapLayer[this.game.gameData.mapLayerRef[i]].debugSettings.forceFullRedraw = true;
         }
-    
-        this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
-
-        //Setup Pathfinder Engine
-        this.pathfinder = new EasyStar.js();
-        
-        //Get the Walls Map Layer --> 2D Array.
-        // game.gameData.mapwidth and mapheight defined in terms of tiles
-        var map_cols = this.game.gameData.mapwidth/this.tile_size;
-        var map_rows = this.game.gameData.mapheight/this.tile_size;
-        var grid_col = 0;
-        var grid_row = 0;
-        
-        this.grid = [];
-        
-        for(grid_row = 0; grid_row < map_rows; grid_row++){
-            this.grid[grid_row] = [];
-            
-            for(grid_col = 0; grid_col < map_cols; grid_col++){
-                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
-                
-            }
-        }
-        
-        this.pathfinder.setGrid(this.grid);
-        this.pathfinder.setAcceptableTiles([0]);
-        //this.pathfinder.enableCornerCutting();
-        //If game slows down too much, change this.
-        this.pathfinder.setIterationsPerCalculation(1000);
-        //[TODO]Add containers to avoid.
-        ///this.pathfinder.avoidAdditionalPoint(x,y);????
         
         if (this.game.gameData.timer == undefined) {
             this.game.gameData.timer = new Timer(600);
@@ -104,16 +73,8 @@ Lyra.LyraGame.prototype = {
         // this.map.tileSetImages[this.imageTagList[0]].draw(this.mapLayer[this.mapLayer.length - 1],10,10,1);
         // this.mapLayer[this.mapLayer.length - 1].debugSettings.forceFullRedraw = true;
         
-        
-        // add collision for walls
-        // set the second parameter to > gid number in tile map for the tiles we want to collide
-        //this.map.map.setCollisionBetween(1, 64*46 , true, this.mapLayer[(this.mapLayer.length-1)], false);
-        
-        
-        //In Player Fn --> Detecting Collision everywhere, but Colliding correctly
         //this.map.setCollisionBetween(1, 100000, true, 'blockedLayer');
         this.map.map.setCollisionByExclusion([],true,this.mapLayer['walls']);
-        //this.map.map.setCollision([21],false, this.mapLayer['floors']);
         
         // put a tile on the map
         // @param {Phaser.Tile|number} tile - The index of this tile to set or a Phaser.Tile object.
@@ -135,6 +96,47 @@ Lyra.LyraGame.prototype = {
             containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
             this.containerManager = new ContainerManager(this.game,  containerLocType);
+            
+                   //Setup Pathfinder Engine
+        this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
+        this.pathfinder = new EasyStar.js();
+        
+        //Get the Walls Map Layer --> 2D Array of Tiles.
+        var map_cols = this.game.gameData.mapwidth/this.tile_size;
+        var map_rows = this.game.gameData.mapheight/this.tile_size;
+        var grid_col = 0;
+        var grid_row = 0;
+        
+        this.grid = [];
+        
+        for(grid_row = 0; grid_row < map_rows; grid_row++){
+            this.grid[grid_row] = [];
+            
+            for(grid_col = 0; grid_col < map_cols; grid_col++){
+                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
+                
+            }
+        }
+        
+        //Add Containers as Obstacles to Tile Map.
+        for(var i = 0; i < this.containerManager.containerCount; i++){
+            
+            if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
+                //var container_x = this.containerManager.containers[i].x/this.tile_size;
+                //var container_y = this.containerManager.containers[i].y/this.tile_size; 
+                var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
+                var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
+                
+                //Give Containers a gid of 1.
+                if( container_x != undefined && container_y != undefined){
+                    this.grid[container_y][container_x] = 1;
+                }
+            }
+        }
+        
+        this.pathfinder.setGrid(this.grid);
+        this.pathfinder.setAcceptableTiles([0]);
+        this.pathfinder.setIterationsPerCalculation(1000);
             
             // playerManager manages all the players on the map (crew and bandits)
             // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations
@@ -164,17 +166,6 @@ Lyra.LyraGame.prototype = {
         this.game.camera.setSize(20*this.tile_size, 20*this.tile_size);
         this.game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 
-        // when the game dimensions (mapwidth, mapheigt) are set to some smaller dimension than the map
-        // the display is scaled to fit the full size of the defined canvas
-        //this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        
-        // //Create all in game items.
-        // deprecated - created along with containers and inventory
-        // this.ingameItems = new Items();
-
-        // setup getting keyboard input
-        //this.cursors = this.game.input.keyboard.createCursorKeys();
-        
         //setup getting mouse input
         this.game.input.mouse.capture = true;
         
@@ -247,6 +238,8 @@ Lyra.LyraGame.prototype = {
 
         // generate slime manager to control the slime
         this.slimeManager = new SlimeManager(this.game, this.roomManager.slimeSpawnCoord);
+
+        
 	},
 	update: function() {
 	    if (this.game.gameData.timer.timeUp) {
