@@ -467,19 +467,25 @@ Container.preloadContainerImages = function(game) {
 // repairItems: optional (used for escape pods to list the items required to repair, includes lyre in list) 
 class ContainerManager {
     // containerLocType has to be an array of objects containing the locations of container and it's type/name and list of items
-    constructor (game, containerLocType) {
+    constructor (game, containerLocType, lyrelocator) {
         this.containers = [];
         this.containerCount = 0;
         this.containerRoomArray = [];
+        this.containerRoomArray["unknown"] = [];
         // keep track of largest container index for creating and deleting.
         if  (game.gameData.containerarray.length < 1) {
             for (var i = 0; i < containerLocType.length; i++) {
                 // make array of container indices located in each room, indexed by room name
-                if (this.containerRoomArray[containerLocType[i].room] == undefined) {
+                if (containerLocType[i].room != undefined && containerLocType[i].room.length > 0 && this.containerRoomArray[containerLocType[i].room] == undefined) {
                     this.containerRoomArray[containerLocType[i].room] = [];
                 }
-                this.containerRoomArray[containerLocType[i].room].push(i);
+                if (containerLocType[i].room == undefined || containerLocType[i].room.length < 1) {
+                    this.containerRoomArray["unknown"].push(i);
+                } else {
+                    this.containerRoomArray[containerLocType[i].room].push(i);
+                }
                 this.containers[i] = new Container();
+                
                 if (containerLocType[i].repairItems != undefined) {
                     var containerData = Container.rawData(game, i, containerLocType[i].x, containerLocType[i].y, containerLocType[i].name, containerLocType[i].room, containerLocType[i].itemslist, containerLocType[i].repairItems);
                 } else {
@@ -487,6 +493,9 @@ class ContainerManager {
                 }
                 this.containers[i].addContainer(game, containerData);
                 this.containers[i].setupContainerImage(game);
+                if (this.containers[i].isLyreInContainer() >= 0) {
+                    lyrelocator.putLyreInContainer(game, this.containers[i]);
+                }
             }
             this.containerCount = this.containers.length;
         }
@@ -502,6 +511,9 @@ class ContainerManager {
                 this.containers[i].setupContainerImage(game);
                 if (this.containers[i].idx >= this.containerCount) {
                     this.containerCount = this.containers[i].idx + 1;  // count of containers that were created is at least this big
+                }
+                if (this.container[i].isLyreInContainer()  >= 0) {
+                    lyrelocator.putLyreInContainer(game, this.container[i]);
                 }
             }
         }
@@ -584,7 +596,8 @@ class ContainerManager {
     }
  
     // switch container states if overlap with the player
-    checkPlayerOverlap (game, players, comm) {
+    checkPlayerOverlap (game, players, comm, lyrelocator) {
+        var lastplayer = players.length -1;
         for (var i=0; i < players.length; i++) {
             for (var j=0; j < this.containers.length; j++) {
                 // check for overlap or collision
@@ -617,6 +630,11 @@ class ContainerManager {
                             comm.clearContainerInventory();
                         }
                     }
+                }
+                // only on the last player check to see if lyre is in container
+                // [TODO] it would be better to do this asyncronously when items are picked up or dropped
+                if (i==lastplayer && (this.containers[j].isLyreInContainer()>=0)) {
+                        lyrelocator.putLyreInContainer(game, this.containers[j]);
                 }
             }
         }

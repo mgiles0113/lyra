@@ -356,6 +356,7 @@
     <script src="js/game/lyra/timer.js"></script>
     <script src="js/game/lyra/room.js"></script>
     <script src="js/game/lyra/grid.js"></script>
+    <script src="js/game/lyra/lyreLocator.js"></script>
     <script src="js/game/states/StoryMenu.js"></script>
 	<script src="js/game/states/Preload.js"></script>
 	<script src="js/game/states/MainMenu.js"></script>

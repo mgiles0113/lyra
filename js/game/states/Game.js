@@ -82,8 +82,10 @@ Lyra.LyraGame.prototype = {
         //this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
         // Build map with different rooms if not already defined
+        
         if (this.game.gameData.roomarray.length < 1) {
             // need to build the map
+            this.lyrelocator = new LyreLocator();
             this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
             var mapInitializer = new MapBuilder();
             
@@ -92,10 +94,10 @@ Lyra.LyraGame.prototype = {
             
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager, this.mapLayer['floors']);
             
-            var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager);
+            var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager, this.lyrelocator);
             containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
-            this.containerManager = new ContainerManager(this.game,  containerLocType);
+            this.containerManager = new ContainerManager(this.game,  containerLocType, this.lyrelocator);
             
                    //Setup Pathfinder Engine
         this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
@@ -120,7 +122,7 @@ Lyra.LyraGame.prototype = {
         
         for(var i = 0; i < this.containerManager.containerCount; i++){
             
-            if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso'){
+            if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso' || this.containerManager.containers[i].name == 'engine'){
                 if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
                        
                     var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
@@ -142,7 +144,7 @@ Lyra.LyraGame.prototype = {
             // playerManager manages all the players on the map (crew and bandits)
             // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
-            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder, this.tile_size);
+            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder, this.containerManager);
         }
         else {  // load previous game
             this.roomManager = new RoomManager(this.game);
@@ -152,7 +154,7 @@ Lyra.LyraGame.prototype = {
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager,  this.mapLayer['floors']);
 
             this.containerManager = new ContainerManager(this.game);
-            this.playerManager = new PlayerManager(this.game, null, this.pathfinder, this.tile_size);
+            this.playerManager = new PlayerManager(this.game, null, this.pathfinder, this.containerManager);
         }
         
         this.actionManager = new ActionManager();
@@ -269,10 +271,10 @@ Lyra.LyraGame.prototype = {
         this.slimeManager.updateSlime(this.game, this.mapLayer["walls"], this.containerManager, this.playerManager)
 
         // check for overlap with containers
-        this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm);
+        this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm, this.lyrelocator);
 
         // loops through player array, updates bandits and players
-        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map, this.containerManager, this.roomManager);
+        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map, this.containerManager, this.roomManager, this.lyrelocator, this.pathfinder);
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)

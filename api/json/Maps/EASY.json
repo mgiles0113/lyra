@@ -112,7 +112,7 @@
                  "angulardrag": 50,
                  "dest_x" : 1536,
                  "dest_y" : 704,
-                 "walking" : true,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
                  "equipped": ["suppresant"]
@@ -134,7 +134,7 @@
                  "angulardrag": 50,
                  "dest_x" : 544,
                  "dest_y" : 800,
-                 "walking" : true,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
                  "equipped": ["suppresant"]
@@ -156,7 +156,7 @@
                  "angulardrag": 50,
                  "dest_x" : 1760,
                  "dest_y" : 480,
-                 "walking" : true,
+                 "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
                  "equipped": ["suppresant"]
@@ -491,7 +491,7 @@
         "engine_room" : {
             "name" : "engine_room",
             "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine","engine","engine","engine","engine"],
-            "containercoord" : [[-144, 16], [-144, -16],[-116,-48],[-116,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
+            "containercoord" : [[-144, 16], [-144, -16],[-112,-48],[-112,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
             "item_types_allowed" : ["circuit", "fuse"],
             "floor" : [97, 97, 98, 102]
         },

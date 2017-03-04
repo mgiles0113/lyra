@@ -8,7 +8,7 @@ class MapBuilder {
     // room: mapname where item is located
     // itemslist: list of items (ContainerItem objects)
     // repairItems: optional (used for escape pods to list the items required to repair, includes lyre in list) 
-    placeContainersInRooms(game, roomManager) {
+    placeContainersInRooms(game, roomManager, lyrelocator) {
         // add containers by room type
         var containerLocType = [];
         // list of items placed on map - use to choose needed items for escapepod repair
@@ -43,7 +43,7 @@ class MapBuilder {
         }
         
         // assign the lyre to a container
-        containerLocType = this.assignLyre(game, idxEmptyContainerSlot, containerLocType);
+        containerLocType = this.assignLyre(game, idxEmptyContainerSlot, containerLocType, lyrelocator);
         
         // add escape pods
         var itemsNeeded = [];
@@ -106,7 +106,7 @@ class MapBuilder {
     
     //containerLocType is the array of containers to build
     // idxEmptyContainerSlot is the array of indices into containerLocType with an empty slot
-    assignLyre(game, idxEmptyContainerSlot, containerLocType) {
+    assignLyre(game, idxEmptyContainerSlot, containerLocType, lyrelocator) {
         // find all the containers with empty spaces
         if (idxEmptyContainerSlot.length < 1) {
             // replace an item with the lyre
@@ -117,7 +117,7 @@ class MapBuilder {
             var rndIdx = idxEmptyContainerSlot[getRandomInt(0, idxEmptyContainerSlot.length-1)];
         }
         containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
-        game.gameData.lyreLocation = {x: containerLocType[rndIdx].x, y: containerLocType[rndIdx].y, found: false};
+        lyrelocator.initializeLocation (game, containerLocType[rndIdx].x, containerLocType[rndIdx].y);
         console.log("lyre located at: ");
         console.log(containerLocType[rndIdx]);
         console.log(game.gameData.lyreLocation);
