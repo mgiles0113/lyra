@@ -112,15 +112,16 @@ class MapBuilder {
             // replace an item with the lyre
             var rndIdx = getRandomInt(0, containerLocType.length-1);
             containerLocType[rndIdx].itemslist.pop();
-            containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
         }
         else {
-            var rndIdx = getRandomInt(0, idxEmptyContainerSlot.length-1);
-            containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.push(new ContainerItem(containerLocType[idxEmptyContainerSlot[rndIdx]].itemslist.length, "lyre"));
-            console.log("lyre located at: ");
-            console.log(containerLocType[rndIdx]);
-            game.gameData.lyreLocation = containerLocType[rndIdx];
+            var rndIdx = idxEmptyContainerSlot[getRandomInt(0, idxEmptyContainerSlot.length-1)];
         }
+        containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
+        game.gameData.lyreLocation = {x: containerLocType[rndIdx].x, y: containerLocType[rndIdx].y, found: false};
+        console.log("lyre located at: ");
+        console.log(containerLocType[rndIdx]);
+        console.log(game.gameData.lyreLocation);
+
         return (containerLocType);
     }
     

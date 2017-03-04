@@ -476,7 +476,8 @@ class Comm {
 
 Comm.preloadComm = function (game) {
         game.load.image('empty', 'assets/sprites/item_ph.png');
-        game.load.image('p1_icon', 'assets/sprites/p1_iconph.png');
-        game.load.image('p2_icon', 'assets/sprites/p2_iconph.png');
-        game.load.image('p3_icon', 'assets/sprites/p3_iconph.png');
+        // looks like these were removed.  IF adding back, make a parameter in EASY.json for character icon.
+        // game.load.image('p1_icon', 'assets/sprites/p1_iconph.png');
+        // game.load.image('p2_icon', 'assets/sprites/p2_iconph.png');
+        // game.load.image('p3_icon', 'assets/sprites/p3_iconph.png');
 }

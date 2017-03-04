@@ -13,6 +13,7 @@ Lyra.Preload.prototype = {
 		this.load.audio('menuMusic', 'assets/audio/Lyra_v1_0_0.mp3');
 		this.load.audio('doorOpen', 'assets/audio/door_open.mp3');
         this.load.audio('doorClose', 'assets/audio/door_close.mp3');
+        this.load.audio('lyremusic','assets/audio/Music_Box-Big_Daddy-1389738694.mp3');
 		this.load.onLoadComplete.add(this.onLoadComplete, this);
 	},
 	create: function() {
@@ -24,6 +25,7 @@ Lyra.Preload.prototype = {
 			this.game.menuMusic = this.game.add.audio('menuMusic');
 			this.game.sfDoorOpen = this.game.add.audio('doorOpen');
 			this.game.sfDoorClose = this.game.add.audio('doorClose');
+			this.game.sflyremusic = this.game.add.audio('lyremusic');
 			if (this.game.userPreference.data.sound === "true" && this.game.menuMusic.isPlaying === false) {
 	        	this.game.menuMusic.play('', 0, 0.1, true, true);
 	    	}

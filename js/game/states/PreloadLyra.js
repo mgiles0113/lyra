@@ -1,3 +1,4 @@
+// deprecated??? I don't think we call this method - all done in Game.js
 Lyra.PreloadLyra = function() {
 	this.ready = false;
 };

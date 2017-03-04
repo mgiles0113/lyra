@@ -306,6 +306,7 @@ class Container {
     }
     
     playContainerSound(game) {
+        // play container
         if (game.gameData.containers[this.name].sounds != undefined && game.gameData.containers[this.name].sounds[this.stateIdx].length > 0) {
             switch(game.gameData.containers[this.name].sounds[this.stateIdx]) {
                 case "doorOpen" :
@@ -314,6 +315,23 @@ class Container {
                 case "doorClose" :
                     game.sfDoorClose.play('', 0, 0.1, false, true);
                     break;
+            }
+        }
+    }
+    
+    playItemSound(game) {
+        // does container have item that makes sound? also used to identify lyre found
+        for (var i=0; i<this.itemslist.length; i++) {
+            if (game.gameData.items[this.itemslist[i].name].sounds != undefined) {
+                switch(game.gameData.items[this.itemslist[i].name].sounds) {
+                    case "lyremusic" :
+                        if (game.userPreference.data.sound === "true") {
+                            game.sflyremusic.play('', 0, 0.1, false, true);
+                        }
+                        // this signals the bandits that the lyre is found
+                        game.gameData.lyreLocation.found = true;
+                        break;
+                }
             }
         }
     }
@@ -341,6 +359,9 @@ class Container {
                     if (game.userPreference.data.sound === "true") {
                             this.playContainerSound(game);
                     }
+                    // using this to make lyre sound and to indicate to bandits that the lyre is found
+                    this.playItemSound(game);
+                    
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);
                     if (this.name == "escapepod") {

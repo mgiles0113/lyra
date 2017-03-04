@@ -63,7 +63,7 @@ class Player {
         }, this);
         
        // add emitter
-       //this.makeItemEmitter(game);
+       this.makeItemEmitter(game);
        
        //add animations to the player
        this.sprite.animations.add('down',[0,1,2], 10, true);
@@ -391,7 +391,7 @@ class Player {
     
     makeItemEmitter(game) {
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
-        if (game.gameData.items[this.sprite.customParams.equipped.name].emitter != undefined )
+        if (game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined )
         {
              // create an emitter for the player
             this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
@@ -448,10 +448,10 @@ class Player {
     startItemEmitter(game) {
         // emitter defined for the player as "this.emitter", child of the player sprite
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
-        if (game.gameData.items[this.sprite.customParams.equipped.name].emitter != undefined && this.sprite.customParams.equipped.capacity != undefined 
-           && (this.sprite.customParams.equipped.capacity > 0))
+        if (game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined && this.sprite.customParams.equipped[0].capacity != undefined 
+           && (this.sprite.customParams.equipped[0].capacity > 0))
         {
-            this.this.sprite.customParams.equipped.capacity -= 1;
+            this.sprite.customParams.equipped[0].capacity -= 1;
 
             // make particles from equipped item
             /**
@@ -466,7 +466,7 @@ class Player {
             * @param {boolean} [collideWorldBounds=false] - A particle can be set to collide against the World bounds automatically and rebound back into the World if this is set to true. Otherwise it will leave the World.
             * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
             */
-            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped.name].emitter,0,50,false);
+            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped[0].name].emitter,0,50,false);
             game.physics.arcade.enable(this.emitter);
 
     
@@ -746,11 +746,27 @@ class PlayerManager {
     }
 
     
-    // returns true if no players awake
+    // returns true if no players awake or if players have no capacity to suppress slime
     isAnyCrewAwake() {
         for (var i=0; i< this.crew.length; i++) {
             if (this.players[this.crew[i]].sprite.customParams.status == "awake") {
                 return false;
+            }
+            if (this.players[this.crew[i]].sprite.customParams.status == "stuck") {
+                // if player has item in equipped to suppress slime, don't end
+                for (var i=0; this.players[this.crew[i]].sprite.customParams.equipped.length; i++) {
+                    if (this.players[this.crew[i]].sprite.customParams.equipped[i].capacity != undefined &&
+                    this.players[this.crew[i]].sprite.customParams.equipped[i].capacity > 0) {
+                        return false;
+                    }
+                }
+                // if player has item in inventory to suppress slime, don't end
+                for (var i=0; this.players[this.crew[i]].sprite.customParams.inventory.length; i++) {
+                    if (this.players[this.crew[i]].sprite.customParams.inventory[i].capacity != undefined &&
+                    this.players[this.crew[i]].sprite.customParams.inventory[i].capacity > 0) {
+                        return false;
+                    }
+                }
             }
         }
         return true; 
