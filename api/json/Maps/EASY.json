@@ -271,7 +271,7 @@
         "coffeecup": {
             "itemRef":"assets/sprites/items/coffeecup.png",
             "name": "coffeecup",
-            "emitter": "smoke",
+            "emitter": "coffeespill",
             "emitterRef": "assets/sprites/items/coffeeSpillParticle.png",
             "capacity" : 1
         }

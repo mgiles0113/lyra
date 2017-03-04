@@ -148,7 +148,9 @@ class Player {
     
     // use this method for bandit updates each update cycle
     updateBandit(game, walls, floors, map, containerManager, roomManager) {
-        this.updatePlayer (game, walls, floors);
+        if (this.sprite.customParams.walking == true) {
+            this.updatePlayer (game, walls, floors);
+        }
     }
     
     // generic update to move to destination
@@ -256,17 +258,19 @@ class Player {
     
     // use this function to restart point and click movement in a saved game.  this.sprite.customParams.walking == true and .dest_x, .dest_y are defined
     restartPtClick(game, pathfinder){
+            this.sprite.customParams.walking = false;
         
             //Get Sprite Origin Coords.
             this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.body.center.x, this.sprite.width);
             this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.body.center.y, this.sprite.height);
 
             //Get the Path from Origin to Dest. 
-            this.foundPath = this.getPath.bind(this);
+            this.foundPath = this.getBanditPath.bind(this);
             pathfinder.findPath(Math.floor(this.sprite.customParams.src_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.src_y/game.gameData.tile_size), Math.floor(this.sprite.customParams.dest_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.dest_y/game.gameData.tile_size), this.foundPath);
             pathfinder.calculate();
-        
     }
+    
+    
 
     
     getPath(path){
@@ -287,9 +291,35 @@ class Player {
             // set up the first point
             this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
             this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
-            
+
         } 
     }
+
+
+    // copy of getPath but sets walking parameter for bandit
+    // using walking to indicate that the path is ready
+    getBanditPath(path) {
+        // if path was passed in, load the path
+        if( path != null){
+            this.sprite.customParams.path = [];
+                var pt_x;
+                var pt_y;
+            for(var i =0; i < path.length; i++){
+                pt_x = path[i].x * this.sprite.width + (this.sprite.width/2);
+                pt_y = path[i].y * this.sprite.height + (this.sprite.height/2);
+                this.sprite.customParams.path.push({pt_x, pt_y});
+            }
+        }
+        
+        //[TODO] adding this condition because the path isn't always defined????
+        if (this.sprite.customParams.path.length > 0) {
+            // set up the first point
+            this.sprite.customParams.next_pt_x = this.sprite.customParams.path[0].pt_x;
+            this.sprite.customParams.next_pt_y = this.sprite.customParams.path[0].pt_y;
+            this.sprite.customParams.walking = true;
+        } 
+    }
+
     
     getNextPt(game){
         this.sprite.customParams.path.shift();
