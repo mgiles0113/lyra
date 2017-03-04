@@ -754,14 +754,14 @@ class PlayerManager {
             }
             if (this.players[this.crew[i]].sprite.customParams.status == "stuck") {
                 // if player has item in equipped to suppress slime, don't end
-                for (var i=0; this.players[this.crew[i]].sprite.customParams.equipped.length; i++) {
+                for (var i=0;i<this.players[this.crew[i]].sprite.customParams.equipped.length; i++) {
                     if (this.players[this.crew[i]].sprite.customParams.equipped[i].capacity != undefined &&
                     this.players[this.crew[i]].sprite.customParams.equipped[i].capacity > 0) {
                         return false;
                     }
                 }
                 // if player has item in inventory to suppress slime, don't end
-                for (var i=0; this.players[this.crew[i]].sprite.customParams.inventory.length; i++) {
+                for (var i=0; i<this.players[this.crew[i]].sprite.customParams.inventory.length; i++) {
                     if (this.players[this.crew[i]].sprite.customParams.inventory[i].capacity != undefined &&
                     this.players[this.crew[i]].sprite.customParams.inventory[i].capacity > 0) {
                         return false;

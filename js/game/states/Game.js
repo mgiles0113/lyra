@@ -129,7 +129,7 @@ Lyra.LyraGame.prototype = {
                 
                 //Give Containers a gid of 1.
                 if( container_x != undefined && container_y != undefined){
-                    this.grid[container_y][container_x] = 1;
+                    //this.grid[container_y][container_x] = 1;
                 }
             }
         }
