@@ -118,20 +118,21 @@ Lyra.LyraGame.prototype = {
             }
         }
         
-        //Add Containers as Obstacles to Tile Map.
         for(var i = 0; i < this.containerManager.containerCount; i++){
             
-            //if(this.containerManager.containers[i] != 'doors')
-            if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
+            if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso'){
+                if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
                        
-                var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
-                var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
+                    var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
+                    var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
                 
-                //Give Containers a gid of 1.
-                if( container_x != undefined && container_y != undefined){
-                    //this.grid[container_y][container_x] = 1;
+                    //Give Containers a gid of 1.
+                    if( container_x != undefined && container_y != undefined){
+                    this.grid[container_y][container_x] = 1;
+                    }
                 }
             }
+
         }
         
         this.pathfinder.setGrid(this.grid);

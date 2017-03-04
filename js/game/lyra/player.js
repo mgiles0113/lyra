@@ -136,7 +136,7 @@ class Player {
     }
     
     // use this method for crew updates each update cycle
-    updateCrew(game, walls, floors, map, containerManager, roomManager) {
+    updateCrew(game, walls, floors, map, containerManager) {
         
         // uncomment this to see the connected doors and containers for the room this player is in
         // if (this.isSelected) {
@@ -147,7 +147,7 @@ class Player {
     }
     
     // use this method for bandit updates each update cycle
-    updateBandit(game, walls, floors, map, containerManager, roomManager) {
+    updateBandit(game, walls, floors, map, containerManager) {
         if (this.sprite.customParams.walking == true) {
             this.updatePlayer (game, walls, floors);
         }
@@ -806,7 +806,7 @@ class PlayerManager {
     updatePlayerArray(game,  walls, floors, map, containerManager, roomManager) {
         // update players
         for (var i=0; i< this.crew.length; i++) {
-            this.players[this.crew[i]].updateCrew(game, walls, floors, map, containerManager, roomManager);
+            this.players[this.crew[i]].updateCrew(game, walls, floors, map, containerManager);
         }
         // update bandits
         for (var i=0; i< this.bandit.length; i++) {
@@ -821,7 +821,7 @@ class PlayerManager {
             
             // path to next container has been established
             if (this.players[this.bandit[i]].sprite.customParams.path.length > 0) {
-                this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager, roomManager);
+                this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager);
             }
             // [TODO] need to think this through....  when does container get added to 'searched' stack?
             // else {
