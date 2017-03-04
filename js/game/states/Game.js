@@ -121,7 +121,7 @@ Lyra.LyraGame.prototype = {
         //Add Containers as Obstacles to Tile Map.
         for(var i = 0; i < this.containerManager.containerCount; i++){
             
-            if(this.containerManager.containers[i] != 'doors')
+            //if(this.containerManager.containers[i] != 'doors')
             if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
                        
                 var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 

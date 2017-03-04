@@ -70,8 +70,8 @@
                  "dest_y" : null,
                  "walking" : false,
                  "status" : "sleep",
-                 "inventory": ["wrench"],
-                 "equipped": ["suppresant"]
+                 "inventory": ["suppresant"],
+                 "equipped": ["coffeecup"]
                 }, 
                 {"name": "crew3",  
                  "type" : "crew",
@@ -272,7 +272,7 @@
             "itemRef":"assets/sprites/items/coffeecup.png",
             "name": "coffeecup",
             "emitter": "smoke",
-            "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
+            "emitterRef": "assets/sprites/items/coffeeSpillParticle.png",
             "capacity" : 1
         }
     },
