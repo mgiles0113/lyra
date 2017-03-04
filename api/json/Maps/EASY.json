@@ -374,8 +374,8 @@
             "itemRef":"assets/sprites/engine.png",
             "frames" : 4,
             "name": "engine",
-            "width" : 50,
-            "height" : 50,
+            "width" : 32,
+            "height" : 32,
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
             "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
@@ -490,8 +490,8 @@
         },
         "engine_room" : {
             "name" : "engine_room",
-            "containers" : ["engine", "engine", "engine", "engine","engine", "engine", "engine", "engine"],
-            "containercoord" : [[-32, 32], [-96, -32], [-16, -32], [-96, 16],[-48, -48], [-48, 48], [-96, -16], [16, -16]],
+            "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine","engine","engine","engine","engine"],
+            "containercoord" : [[-144, 16], [-144, -16],[-116,-48],[-116,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
             "item_types_allowed" : ["circuit", "fuse"],
             "floor" : [97, 97, 98, 102]
         },

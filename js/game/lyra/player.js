@@ -731,10 +731,11 @@ class PlayerManager {
 
             }
         }
-        for (var i = 0; i <this.players.length; i++) {
+        for (var i = 0; i <this.bandit.length; i++) {
             // restart ptClick
-            if (this.players[i].sprite.customParams.walking && this.players[i].sprite.customParams.dest_x != null && this.players[i].sprite.customParams.dest_y != null ) { 
-               this.players[i].restartPtClick(game, pathfinder);
+            if (this.players[this.bandit[i]].sprite.customParams.walking && this.players[this.bandit[i]].sprite.customParams.dest_x != null && this.players[this.bandit[i]].sprite.customParams.dest_y != null )
+            {
+               this.players[this.bandit[i]].restartPtClick(game, pathfinder);
             } 
         }
     }
