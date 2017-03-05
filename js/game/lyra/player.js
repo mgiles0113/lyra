@@ -42,7 +42,7 @@ class Player {
         game.physics.arcade.enable(this.sprite);
     
         //Set smaller so player doesn't get stuck.
-        this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width - 2,game.gameData.characters[ playerData.characterIdx].height - 2);
+        this.sprite.body.setSize(game.gameData.characters[ playerData.characterIdx].width - 4,game.gameData.characters[ playerData.characterIdx].height - 4);
         
         //  We'll set a lower max angular velocity here to keep it from going totally nuts
         this.sprite.body.maxAngular = 500;
@@ -429,7 +429,7 @@ class Player {
         if (game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined )
         {
              // create an emitter for the player
-            this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 50);
+            this.emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y, 400);
             this.emitter.at(this.sprite);
             this.emitterActive = false;
 
@@ -438,7 +438,8 @@ class Player {
             // [max=0] - The maximum value for this range
             this.emitter.setXSpeed(-25, 25);
             this.emitter.setYSpeed(-25, 25);
-            this.emitter.width = 50;
+            this.emitter.width = 100;
+            this.emitter.height = 100;
             this.emitter.bounce.setTo(0.5, 0.5);
     
             this.emitter.bringToTop = true;
@@ -1021,6 +1022,9 @@ class PlayerManager {
                     this.players[this.bandit[banditIdx]].sprite.customParams.dest_x = containerManager.containers[containerIdx].sprite.body.x ;
                     this.players[this.bandit[banditIdx]].sprite.customParams.dest_y = containerManager.containers[containerIdx].sprite.body.y;
 
+                    console.log("starting path calculation");
+                    console.log(game.gameData.banditAIdata);
+                    console.log(this.players[this.bandit[banditIdx]].sprite.customParams);
                     // generate path
                     this.players[this.bandit[banditIdx]].restartPtClick(game, pathfinder);
 
@@ -1177,7 +1181,7 @@ class PlayerManager {
             for (var k=0; k<iterator.length; k++) {
                 if (game.gameData.banditAIdata.containersToSearch[iterator[k]].length > 0) {
                     var containerIdx = game.gameData.banditAIdata.containersToSearch[iterator[k]][0];
-                    this.cleanContainerToSearchToSearch(game, containerIdx, iterator[k]);
+                    this.cleanContainerToSearch(game, containerIdx, iterator[k]);
                     return (containerIdx);
                 }
             } 
@@ -1208,7 +1212,7 @@ class PlayerManager {
                     containerIdx = this.findAnyContainerToSearch(game, containerManager);
                 }
                 this.pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, idx, containerIdx, pathfinder)
-            } else if (!this.players[this.bandit[idx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[idx].updateCount > idx*1000) {
+            } else if (!this.players[this.bandit[idx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[idx].updateCount > (idx+1)*1000) {
                     // if !this.players[this.bandit[i]].sprite.customParams.walking && !this.players[this.bandit[i]].sprite.customParams.pathfound
                     // path is still being calculated but taking a really long time, try again
                     // generate path
@@ -1217,6 +1221,7 @@ class PlayerManager {
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
              }
     }
+    
     
     savePlayerManager (game) {
         var savedPlayers = [];
