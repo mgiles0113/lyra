@@ -150,7 +150,7 @@ Slime.rawData = function(idx, game) {
             animation : 'p0',
             texture : 0,
             speed : 1, //getRandomInt(1,2);,
-            phaselife : getRandomInt(100, 200),
+            phaselife : getRandomInt(50, 100),
             phase : 0,
             numchildren : 0,
             isSuppressed : false,

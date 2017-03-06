@@ -1,12 +1,5 @@
 class Grid{
     
-    // constructor(game, tileSize){
-    //     this.map_cols = game.gameData.mapwidth/tileSize;
-    //     this.map_rows = game.gameData.mapheight/tileSize;
-    //     this.grid = [];
-    
-    // }
-    
     constructor (game) {
         this.mapJSON = game.cache.getJSON('pathfinder_map', true).layers[2].data;
         this.tile_size = game.gameData.tile_size;

@@ -143,10 +143,20 @@
         "PRT": "grog",
         "ESP": "depósito de combustible"
     },
+    "duct_tape":{
+        "ENG":"duct tape",
+        "PRT":"duct tape",
+        "ESP":"cinta adhesiva"
+    },
     "fuse" : {
         "ENG" : "fuse",
         "PRT": "gadget",
         "ESP": "fusible"
+    },
+    "torch" : {
+        "ENG" : "torch",
+        "PRT": "torch",
+        "ESP": "antorcha"
     },
     "suppresant" : {
         "ENG" : "slime suppressant",

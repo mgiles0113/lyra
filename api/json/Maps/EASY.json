@@ -244,6 +244,11 @@
             "name": "fuel_tank",
             "displayname" : "fuel tank"
         },
+        "duct_tape": {
+            "itemRef":"assets/sprites/items/duct_tape.png",
+            "name": "duct_tape",
+            "displayname" : "duct tape"
+        },
         "fuse": {
             "itemRef":"assets/sprites/items/fuse.png",
             "name": "fuse",
@@ -285,6 +290,11 @@
             "name":"wires",
             "displayname":"wires"
         },
+        "torch":{
+            "itemRef": "assets/sprites/items/torch.png",
+            "name":"torch",
+            "displayname":"torch"
+        },
         "blaster":{
             "itemRef":"assets/sprites/items/blaster.png",
             "name": "blaster",
@@ -324,7 +334,7 @@
             "textureArr" : [0, 1, 2, 3],
             "animationArr" : [[0],[0,1],[2],[2,3]],
             "itemscapacity" : 0,
-            "containerstate" : "closed",
+            "containerstate" : "open",
             "stateIdx" : 2,
             "immovable" : true,
             "immovablebody" : true,
@@ -513,7 +523,7 @@
             "name" : "crew_quarters",
             "containers" : ["smallbox", "smallbox", "smallbox", "sleeppod", "sleeppod"],
             "containercoord" : [[-48, -48], [48, -48], [48, 48], [48, -112],[ 112,-112 ]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench","monitor"],
+            "item_types_allowed" : ["circuit", "duct_tape", "fuse", "wrench","monitor"],
             "floor" : [87,88, 97,97,97,98]
         },
         "rec_room" : {
@@ -527,14 +537,14 @@
             "name" : "engine_room",
             "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine","engine","engine","engine","engine"],
             "containercoord" : [[-144, 16], [-144, -16],[-112,-48],[-112,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
-            "item_types_allowed" : ["circuit", "fuse","monitor","wires"],
+            "item_types_allowed" : ["torch", "fuse","monitor","wires","duct_tape","fuel_tank"],
             "floor" : [97, 97, 98, 102]
         },
         "workshop" : {
             "name" : "workshop",
-            "containers" : ["smallbox","smallbox"],
-            "containercoord" : [[16,16],[-144, 16]],
-            "item_types_allowed" : ["fuel_tank", "wrench","wires"],
+            "containers" : ["smallbox","smallbox","smallbox"],
+            "containercoord" : [[16,16],[-144, 16],[-80,16]],
+            "item_types_allowed" : ["fuel_tank", "wrench","wires","duct_tape","torch"],
             "floor" : [94, 94, 93, 93, 92]
         }
     },
