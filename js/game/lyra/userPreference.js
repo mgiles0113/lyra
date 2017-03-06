@@ -23,7 +23,6 @@ class UserPreference {
             dataType: 'json',
             context: this,
             success: function(response) {
-                console.log(response);
                 this.loadedData = JSON.parse(response);
                 this.loadedData.languageChoice = this.data.languageChoice;
                 this.data = this.loadedData;
@@ -38,7 +37,6 @@ class UserPreference {
 
     update() {
         this.ready = false;
-        console.log("this ready: " + this.ready);
         $.ajax({
             url: apiUrl,
             type: 'POST',
@@ -49,13 +47,9 @@ class UserPreference {
             dataType: 'json',
             context: this,
             success: function(response) {
-                console.log('success');
-                console.log(response);
                 this.enable();
             },
             error: function(response) {
-                console.log('fail');
-                console.log(response);
                 this.enable();
             }
         });
@@ -63,7 +57,6 @@ class UserPreference {
     
     enable() {
         this.ready = true;
-        console.log("this ready: " + this.ready);
     }
     
     generateSavedGameFile(game, mapSelection) {
@@ -78,7 +71,6 @@ class UserPreference {
             dataType: 'json',
             context: this,
             success: function(response) {
-                console.log(response);
                 this.savedGames.push(response.saveFile);
                 this.data.activeGame = response.saveFile;
                 this.data.mapData = response.mapData;

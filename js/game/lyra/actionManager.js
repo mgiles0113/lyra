@@ -11,7 +11,7 @@ class ActionManager {
                 var playerIdx = containerManager.containers[j].findPlayerHighlight(playerid);
                 // player that caused the highlight for this container
                 if (playerIdx >= 0) {
-                    containerManager.containers[j].switchContainerState(game, comm);
+                    containerManager.containers[j].switchContainerState(game, comm, playerIdx);
                 }
             }
         }

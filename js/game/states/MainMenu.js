@@ -52,7 +52,6 @@ Lyra.MainMenu = function() {
 
 Lyra.MainMenu.prototype = {
     preload: function() {
-        console.log('initializing main menu');
         this.createClickEvents();
         this.populateMenuText();
         this.menu.mainMenuCard.css('display', 'inherit');
@@ -148,8 +147,6 @@ Lyra.MainMenu.prototype = {
             this.menu.savedGameList.partialLastPage = this.game.userPreference.savedGameCount % 5;
             this.menu.savedGameList.pageCount++;
         }
-        console.log('page count: ' + this.menu.savedGameList.pageCount);
-        console.log('current page: ' + this.menu.savedGameList.currentPage);
         this.menu.loadGameSlot1.css('visibility', 'hidden');
         this.menu.loadGameSlot1.html('');
         this.menu.loadGameSlot2.css('visibility', 'hidden');
@@ -264,11 +261,8 @@ Lyra.MainMenu.prototype = {
 	    this.menu.storyText.html(this.game.languageText.story[this.languageChoice]);
 	},
 	showMenu: function(menuSelection) {
-	    console.log('showMenu function');
-	    console.log('menu selection: ' + menuSelection);
 	    switch(menuSelection) {
 	        case 'main':
-	            console.log('were in');
                 this.menu.noMainMenu.css('display', 'none');
                 this.menu.mainMenu.css('color', 'white');
                 this.menu.mainMenu.css('display', 'inherit');
@@ -312,7 +306,6 @@ Lyra.MainMenu.prototype = {
                 break;
             case 'languageOptions':
                 if (this.menu.activeMenu === menuSelection) {
-                    console.log('reverting');
                     this.showMenu('options');
                 } else {
                     this.menu.noLanguageOptions.css('display', 'none');
@@ -369,7 +362,6 @@ Lyra.MainMenu.prototype = {
 	    }
 	},
 	startNewGame: function(mapSelection) {
-        console.log('map selected: ' + mapSelection);
         $.ajax({
             url: apiUrl,
             type: 'GET',
@@ -383,14 +375,12 @@ Lyra.MainMenu.prototype = {
                 this.launchGame(response);
             },
             error: function(response) {
-                console.log(response);
+                //console.log(response);
                 
             }
         });
     },
 	startSavedGame: function(gameSaveFile) {
-        console.log('restore game data selected');
-        console.log('starting with file: ' + gameSaveFile);
         this.game.userPreference.data.activeGame = gameSaveFile;
         $.ajax({
             url: apiUrl,
@@ -406,7 +396,7 @@ Lyra.MainMenu.prototype = {
                 this.launchGame(JSON.parse(response));
             },
             error: function(response) {
-                console.log(response);
+                //console.log(response);
             }
         });
     },
@@ -418,7 +408,6 @@ Lyra.MainMenu.prototype = {
 	   // this.game.playerData = PLAYER_DATA;
 	   // this.game.itemData = ITEMS_DATA;
 	    this.game.newGame = true;
-	    console.log('active game file: ', this.game.userPreference.data.activeGame);
 	    this.startNewState('LyraGame');
 	}
 };

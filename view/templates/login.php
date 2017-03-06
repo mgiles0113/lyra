@@ -52,12 +52,12 @@
                                 </div>
                             </div>
                             <div class="col-xs-4">
-                                <div class="player-selector-player" id="p2">
+                                <div class="player-selector-player player-selector-inactive-player" id="p2">
                                     
                                 </div>
                             </div>
                             <div class="col-xs-4">
-                                <div class="player-selector-player" id="p3">
+                                <div class="player-selector-player player-selector-inactive-player" id="p3">
                                     
                                 </div>
                             </div>

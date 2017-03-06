@@ -259,6 +259,12 @@ label {
     border: 1px solid yellow;
 }
 
+.player-selector-inactive-player {
+    border: none;
+    cursor: pointer;
+    cursor: hand;
+}
+
 #p1 {
     background-image: url("/assets/images/player-red.png");
 }

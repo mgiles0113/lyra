@@ -186,11 +186,7 @@ class Comm {
             if (self.playerItems.item1.option1.isActive) {
                 console.log('player item 1 option 1 clicked');
                 var currentPlayer = self.playerManager.players[self.activePlayerIndex];
-                var inventoryItem = currentPlayer.removeItemFromList(0);
-                var equippedItem = currentPlayer.equipItem(inventoryItem[0]);
-                if (equippedItem) {
-                    currentPlayer.addItemToList(equippedItem);
-                }
+                currentPlayer.equipItem(0);
                 self.resetCommunicatorInventory();
             }
         });
@@ -206,8 +202,11 @@ class Comm {
             console.log('player item 2 slot clicked');
         });
         this.playerItems.item2.option1.element.click(function() {
-            if (self.playerItems.item2.option1.isActive && self.activeContainerIndex !== -1) {
+            if (self.playerItems.item2.option1.isActive) {
                 console.log('player item 2 option 1 clicked');
+                var currentPlayer = self.playerManager.players[self.activePlayerIndex];
+                currentPlayer.equipItem(1);
+                self.resetCommunicatorInventory();
             }
         });
         this.playerItems.item2.option2.element.click(function() {
@@ -222,8 +221,11 @@ class Comm {
             console.log('player item 3 slot clicked');
         });
         this.playerItems.item3.option1.element.click(function() {
-            if (self.playerItems.item3.option1.isActive && self.activeContainerIndex !== -1) {
-                console.log('player item 3 option 1 clicked');    
+            if (self.playerItems.item3.option1.isActive) {
+                console.log('player item 3 option 1 clicked');
+                var currentPlayer = self.playerManager.players[self.activePlayerIndex];
+                currentPlayer.equipItem(2);
+                self.resetCommunicatorInventory();
             }
         });
         this.playerItems.item3.option2.element.click(function() {
@@ -238,8 +240,11 @@ class Comm {
             console.log('player item 4 slot clicked');
         });
         this.playerItems.item4.option1.element.click(function() {
-            if (self.playerItems.item4.option1.isActive && self.activeContainerIndex !== -1) {
+            if (self.playerItems.item4.option1.isActive) {
                 console.log('player item 4 option 1 clicked');
+                var currentPlayer = self.playerManager.players[self.activePlayerIndex];
+                currentPlayer.equipItem(3);
+                self.resetCommunicatorInventory();
             }
         });
         this.playerItems.item4.option2.element.click(function() {
@@ -321,7 +326,6 @@ class Comm {
         if (type === 'container') {
             this.containerItems['item' + slot].slot.removeClass('inactive-slot');
             this.containerItems['item' + slot].slot.addClass('active-slot');
-            this.containerItems['item' + slot].option1.isActive = true;
             this.containerItems['item' + slot].option2.isActive = true;
             this.containerItems['item' + slot].option2.element.removeClass('transfer-inactive');
             this.containerItems['item' + slot].option2.element.addClass('transfer-active');
@@ -329,16 +333,25 @@ class Comm {
             if (slot === "equipped") {
                 this.playerEquippedItem.slot.removeClass('inactive-slot');
                 this.playerEquippedItem.slot.addClass('active-slot');
+                this.playerEquippedItem.option1.element.removeClass('player-equip-inactive');
+                this.playerEquippedItem.option1.element.addClass('player-equip-active');
                 this.playerEquippedItem.option1.isActive = true;
-                this.playerEquippedItem.option2.isActive = true;
             } else {
                 this.playerItems['item' + slot].slot.removeClass('inactive-slot');
                 this.playerItems['item' + slot].slot.addClass('active-slot');
                 this.playerItems['item' + slot].option1.element.removeClass('player-equip-inactive');
-                this.playerItems['item' + slot].option2.element.addClass('player-equip-active');
+                this.playerItems['item' + slot].option1.element.addClass('player-equip-active');
                 this.playerItems['item' + slot].option1.isActive = true;
-                this.playerItems['item' + slot].option2.isActive = true;    
+                
             }
+        } else if (type === 'playerTransfer') {
+            console.log('enabling');
+            console.log('item' + slot);
+            this.playerItems['item' + slot].option2.element.removeClass('player-transfer-inactive');
+            this.playerItems['item' + slot].option2.element.addClass('player-transfer-active');
+            console.log(this.playerItems['item' + slot].option2.isActive);
+            this.playerItems['item' + slot].option2.isActive = true;
+            console.log(this.playerItems['item' + slot].option2.isActive);
         }
     }
 
@@ -354,6 +367,8 @@ class Comm {
             if (slot === "equipped") {
                 this.playerEquippedItem.slot.removeClass('active-slot');
                 this.playerEquippedItem.slot.addClass('inactive-slot');
+                this.playerEquippedItem.option1.element.removeClass('player-equip-active');
+                this.playerEquippedItem.option1.element.addClass('player-equip-inactive');
                 this.playerEquippedItem.option1.isActive = false;
                 this.playerEquippedItem.option2.isActive = false;
             } else {
@@ -362,8 +377,12 @@ class Comm {
                 this.playerItems['item' + slot].option1.element.removeClass('player-equip-active');
                 this.playerItems['item' + slot].option2.element.addClass('player-equip-inactive');
                 this.playerItems['item' + slot].option1.isActive = false;
-                this.playerItems['item' + slot].option2.isActive = false;
             }
+        } else if (type === 'playerTransfer') {
+            console.log('disabling');
+            this.playerItems['item' + slot].option2.element.removeClass('player-transfer-active');
+            this.playerItems['item' + slot].option2.element.addClass('player-transfer-inactive');
+            this.playerItems['item' + slot].option2.isActive = false;
         }
     }
 
@@ -412,13 +431,13 @@ class Comm {
         for (var i = 0; i < currentPlayer.sprite.customParams.inventory.length; i++) {
             if (currentPlayer.getInventory(i) !== 'empty') {
                 this.playerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
-                this.playerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].getInventory(i) + '.png)');
+                this.playerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].getInventory(i).name + '.png)');
                 this.enableSlot('player', i + 1);
             }
         }
-        if (currentPlayer.equippedItem !== "empty") {
+        if (currentPlayer.sprite.customParams.equipped.length > 0) {
             this.playerEquippedItem.slot.css('backgroundSize', 'contain');
-            this.playerEquippedItem.slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].equippedItem + '.png)');
+            this.playerEquippedItem.slot.css('backgroundImage', 'url(assets/sprites/items/' + this.playerManager.players[this.activePlayerIndex].sprite.customParams.equipped[0].name + '.png)');
             this.enableSlot('player', 'equipped');
         }
     }
@@ -428,15 +447,25 @@ class Comm {
             this.playerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');
             this.disableSlot('player', i + 1);
         }
+        
         this.playerEquippedItem.slot.css('backgroundImage', 'none');
         this.disableSlot('player', 'equipped');
     }
 
     displayContainerInventory() {
+        var activeContainer = this.containerManager.containers[this.activeContainerIndex];
+        this.clearContainerInventory();
         // show all items in the container's inventory
         if (this.activeContainerIndex !== -1) {
+            // enable transfer slots for player inventory if the container has room
+            if (activeContainer.itemslist.length < activeContainer.itemscapacity) {
+                console.log('theres room!');
+                for (var i = 0; i < this.playerManager.players[this.activePlayerIndex].sprite.customParams.inventory.length; i++) {
+                    this.enableSlot('playerTransfer', i + 1);
+                }
+            }
+            
             for (var i = 0; i < 4; i++) {
-                //console.log(this.containerManager.containers[this.activeContainerIndex].getInventory(i));
                 if (this.containerManager.containers[this.activeContainerIndex].getInventory(i) !== 'empty') {
                     this.containerItems['item' + (i + 1)].slot.css('backgroundSize', 'contain');
                     this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'url(assets/sprites/items/' + this.containerManager.containers[this.activeContainerIndex].getInventory(i) + '.png)');
@@ -450,10 +479,10 @@ class Comm {
     }
 
     clearContainerInventory() {
-        this.activeContainerIndex = -1;
         for (var i = 0; i < 4; i++) {
             this.containerItems['item' + (i + 1)].slot.css('backgroundImage', 'none');
             this.disableSlot('container', i + 1);
+            this.disableSlot('playerTransfer', i + 1);
         }
     }
 
@@ -461,14 +490,19 @@ class Comm {
         for (var i = 0; i < this.playerManager.players.length; i++) {
             if (i === playerIndex) {
                 if (this.playerManager.players[playerIndex].isSelected === false) {
+                    this.playerButtons['p' + (i + 1)].removeClass('player-selector-inactive-player');
+                    this.playerButtons['p' + (i + 1)].addClass('player-selector-active-player');
                     this.playerManager.players[playerIndex].togglePlayer();
-                }    
+                }
             } else {
                 if (this.playerManager.players[i].isSelected === true) {
+                    this.playerButtons['p' + (i + 1)].removeClass('player-selector-active-player');
+                    this.playerButtons['p' + (i + 1)].addClass('player-selector-inactive-player');
                     this.playerManager.players[i].togglePlayer();
                 }
             }
         }
+        
         this.activePlayerIndex = playerIndex;
         this.displayPlayerInventory(playerIndex);
     }

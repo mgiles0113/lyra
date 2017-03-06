@@ -32,7 +32,6 @@ Lyra.Boot.prototype = {
 	},
 	update: function() {
 		if (this.game.userPreference.ready == true) {
-			console.log(this.game.userPreference.data.sound);
 			this.state.start('Preload');
 		}
 	}
