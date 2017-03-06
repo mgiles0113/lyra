@@ -158,6 +158,21 @@
         "PRT": "hook",
         "ESP": "llave inglesa"
     },
+    "monitor" : {
+        "ENG" : "monitor",
+        "PRT": "talkin' mirror'",
+        "ESP": "monitor"
+    },
+    "wires" : {
+        "ENG" : "wires",
+        "PRT": "wires",
+        "ESP": "cables"
+    },
+    "blaster" : {
+        "ENG" : "blaster",
+        "PRT": "bazooka",
+        "ESP": "blaster" 
+    },
     "lyre" : {
         "ENG" : "golden lyre",
         "PRT": "goldn' lyre",

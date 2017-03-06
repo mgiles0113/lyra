@@ -238,8 +238,16 @@ class Player {
      
     }
     
-    ptClick(game, pathfinder){
+    
+    setupPathFinder(game, grid) {
+        this.pathfinder = new EasyStar.js(); 
+        this.pathfinder.setGrid(grid);
+        this.pathfinder.setAcceptableTiles([0]);
+        this.pathfinder.setIterationsPerCalculation(1000);
 
+    }
+    
+    ptClick(game){
             //Get Sprite Origin Coords.
             this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, this.sprite.width);
             this.sprite.customParams.src_y = game.math.snapToFloor(this.sprite.y, this.sprite.height);
@@ -252,14 +260,15 @@ class Player {
             
             //Get the Path from Origin to Dest. 
             this.foundPath = this.getPath.bind(this);
-            pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
-            pathfinder.calculate();
+            this.pathfinder.findPath(this.sprite.customParams.src_x/this.sprite.width, this.sprite.customParams.src_y/this.sprite.height, this.sprite.customParams.dest_x/this.sprite.width, this.sprite.customParams.dest_y/this.sprite.height, this.foundPath);
+            this.pathfinder.calculate();
         
     }
 
     
     // use this function to restart point and click movement in a saved game.  this.sprite.customParams.walking == true and .dest_x, .dest_y are defined
-    restartPtClick(game, pathfinder){
+    restartPtClick(game){
+    
             this.sprite.customParams.walking = false;
             this.sprite.customParams.pathfound = false;
         
@@ -269,8 +278,8 @@ class Player {
 
             //Get the Path from Origin to Dest. 
             this.foundPath = this.getBanditPath.bind(this);
-            pathfinder.findPath(Math.floor(this.sprite.customParams.src_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.src_y/game.gameData.tile_size), Math.floor(this.sprite.customParams.dest_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.dest_y/game.gameData.tile_size), this.foundPath);
-            pathfinder.calculate();
+            this.pathfinder.findPath(Math.floor(this.sprite.customParams.src_x/game.gameData.tile_size), Math.ceil(this.sprite.customParams.src_y/game.gameData.tile_size), Math.floor(this.sprite.customParams.dest_x/game.gameData.tile_size)-1, Math.ceil(this.sprite.customParams.dest_y/game.gameData.tile_size)-1, this.foundPath);
+            this.pathfinder.calculate();
     }
     
     
@@ -384,7 +393,12 @@ class Player {
         game.camera.follow(this.sprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     }
     
-    
+    unstickPlayer(game) {
+        this.sprite.customParams.status = "awake";
+        if (this.characterType === "bandit") {
+            this.restartPtClick(game);
+        }
+    }    
     // use this method to do stuff when the player wakes up sleep-->awake
     playerWokeFromSleep(game) {
         
@@ -400,29 +414,28 @@ class Player {
     // use this method to define what to do if a player overlaps a container (container is not collidable)
     playerOverlapContainer(game, container) {
         if (this.characterType == "bandit") {
-            this.moveLyreToPlayerInventory(container);
+            this.moveLyreToPlayerInventory(game, container);
         }
     }
     
     // use this method to define what to do if a player collides a container (container is collidable)
     playerCollideContainer(game, container) {
         if (this.characterType == "bandit") {
-            this.moveLyreToPlayerInventory(container);
+            this.moveLyreToPlayerInventory(game, container);
         }
     }
     
-    moveLyreToPlayerInventory(container) {
+    // used by bandits to pick up lyre
+    moveLyreToPlayerInventory(game, container) {
+        if (container.containerstate == "closedhighlight") {
+            container.banditSwitchContainerState(game);
+        }
         var slot = container.isLyreInContainer();
         if ( slot >= 0) {
-            this.getInventory(slot);
-            //[TODO] clean up the container list, recall bandits
-        }
-        else {
-            //[TODO] remove container from the list of containers to search
+            this.addItemToList(container.itemslist[slot]);
+            container.removeItemFromList(slot);
         }
     }
-    
-
     
     makeItemEmitter(game) {
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
@@ -538,27 +551,28 @@ class Player {
     }
  
     
-    // methods to help with AI
-    playerAI(game, map, containerManager) {
-        // for now this just show that the methods work
-        var roomName = this.playerWhereAmI(game, map);
-        if (roomName.length > 0) {
-            console.log(roomName);
-            // get list of containers in this room
-            if (containerManager.containerRoomArray[roomName] != undefined) {
-                var containerArr = containerManager.containerRoomArray[roomName];
-                console.log(containerArr);
-            }
+    // // methods to help with AI
+    // playerAI(game, map, containerManager) {
+    //     // for now this just show that the methods work
+    //     var roomName = this.playerWhereAmI(game, map);
+    //     if (roomName.length > 0) {
+    //         console.log(roomName);
+    //         // get list of containers in this room
+    //         if (containerManager.containerRoomArray[roomName] != undefined) {
+    //             var containerArr = containerManager.containerRoomArray[roomName];
+    //             console.log(containerArr);
+    //         }
             
-            // get doors connected to this room
-            var doorArr = this.roomsConnectingToThisRoom(game, map, roomName);
-            console.log(doorArr);
-        }
-    }
+    //         // get doors connected to this room
+    //         var doorArr = this.roomsConnectingToThisRoom(game, map, roomName);
+    //         console.log(doorArr);
+    //     }
+    // }
     
     doesPlayerHaveLyre() {
         for (var i=0; i<this.sprite.customParams.inventory.length; i++){
-            if (this.sprite.customParams.inventory[i].name == "lyre") {
+            // [TODO] second condition is only to help with debug while item pick up in work
+            if (this.sprite.customParams.inventory[i].name == "lyre" || this.sprite.customParams.inventory[i] == "lyre" ) {
                 return i;
             }
         }
@@ -709,7 +723,7 @@ Player.rawData = function (game, idx, playerLocType) {
 //    x : x location for character
 //    y : y location
 class PlayerManager {
-    constructor (game, playerLocType, pathfinder,  containerManager) {
+    constructor (game, playerLocType, grid,  containerManager) {
         this.players = [];
         // indexes in the array corresponding to the type character
         this.crew = [];
@@ -734,6 +748,7 @@ class PlayerManager {
                 this.players[i] = new Player(); //(game, x, y, idx)
                 var playerData = Player.rawData(game, i, playerLocType[i]);
                 this.players[i].addPlayer(game,playerLocType[i].x, playerLocType[i].y, playerData);
+                this.players[i].setupPathFinder(game, grid);
             }
             this.banditAIdata(game, containerManager);
            // console.log(this.players);
@@ -743,6 +758,7 @@ class PlayerManager {
             for (var i = 0; i < game.gameData.playerarray.length ; i++) {
                 this.players[i] = new Player();
                 this.players[i].addPlayer(game, game.gameData.playerarray[i].x, game.gameData.playerarray[i].y, game.gameData.playerarray[i]);
+                this.players[i].setupPathFinder(game, grid);
                 if (this.players[i].characterType == "crew") {
                     this.crew.push(i);
                 }
@@ -756,7 +772,7 @@ class PlayerManager {
             // restart ptClick
             if (this.players[this.bandit[i]].sprite.customParams.walking && this.players[this.bandit[i]].sprite.customParams.dest_x != null && this.players[this.bandit[i]].sprite.customParams.dest_y != null )
             {
-               this.players[this.bandit[i]].restartPtClick(game, pathfinder);
+               this.players[this.bandit[i]].restartPtClick(game);
             } 
         }
     }
@@ -825,13 +841,13 @@ class PlayerManager {
     }
 
     // updates the player array first for crew and then for bandits
-    updatePlayerArray(game,  walls, floors, map, containerManager, roomManager, lyrelocator, pathfinder) {
+    updatePlayerArray(game,  walls, floors, map, containerManager, roomManager, lyrelocator) {
         // update players
         for (var i=0; i< this.crew.length; i++) {
             this.players[this.crew[i]].updateCrew(game, walls, floors, map, containerManager);
         }
         // [TODO] major debugging in progress
-        this.updateBanditAI(game, walls, floors, map, containerManager, roomManager, pathfinder)
+        this.updateBanditAI(game, walls, floors, map, containerManager, roomManager)
         
         // loop through player arrays to find overlap between players
         for (var i=0; i<this.players.length; i++) {
@@ -856,7 +872,7 @@ class PlayerManager {
             }
             // [TODO] it would be better to do this asyncronously when items are picked up or dropped
             if (this.players[i].doesPlayerHaveLyre() >= 0) {
-                lyrelocator.playerPickUpLyre(game,this.players[i]);
+                lyrelocator.playerPickUpLyre(game, this.players[i]);
             }
 
         }
@@ -884,17 +900,19 @@ class PlayerManager {
             // copy the array of containers organized by room
             game.gameData.banditAIdata.containersToSearch = containerManager.containerRoomArray;
             // remove containers that we don't care about
+            delete game.gameData.banditAIdata.containersToSearch["unknown"];
+            delete game.gameData.banditAIdata.containersToSearch["e1"];
+            delete game.gameData.banditAIdata.containersToSearch["e2"];
+            delete game.gameData.banditAIdata.containersToSearch["e3"];
+            delete game.gameData.banditAIdata.containersToSearch["e4"];
             var iterator = Object.keys(game.gameData.banditAIdata.containersToSearch);
             for (var i=0; i< iterator.length; i++) {
                 var containerIdxArr = game.gameData.banditAIdata.containersToSearch[iterator[i]];
                 // splice off the end so indices don't change
                 for (var j=containerIdxArr.length-1; j >=0; j--) {
-                    if (containerManager.containers[containerIdxArr[j]].name == "transparent" ||
-                       containerManager.containers[containerIdxArr[j]].name == "escapepod" ||
-                      containerManager.containers[containerIdxArr[j]].itemscapacity == 0  || 
-                      containerManager.containers[containerIdxArr[j]].name == "espresso"
-                      )
+                    if ((containerManager.containers[containerIdxArr[j]].name === "danceFloor") || (containerManager.containers[containerIdxArr[j]].name === "transparent") || (containerManager.containers[containerIdxArr[j]].name === "escapepod") || (containerManager.containers[containerIdxArr[j]].itemscapacity === 0)  ||  (containerManager.containers[containerIdxArr[j]].name === "espresso") )
                     {   // no need to check these from initial list
+                    // why don't the escapepod rooms get deleted?
                         game.gameData.banditAIdata.containersToSearch[iterator[i]] = game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
                     }
                 }
@@ -918,7 +936,7 @@ class PlayerManager {
     //     b) go to next room with containers
 
     // update lyre location to player location if in player inventory
-   updateBanditAI(game, walls, floors, map, containerManager, roomManager, pathfinder) {
+   updateBanditAI(game, walls, floors, map, containerManager, roomManager) {
         var banditsHaveLyre = false;
         var playersHaveLyre = false;
         // if player has lyre is it a bandit or crew?        
@@ -941,42 +959,45 @@ class PlayerManager {
             //
             // use this value to make sure bandit doesn't becom stalled
             game.gameData.banditAIdata.banditParams[i].updateCount += 1;
-
-            // assuming the bandits only pick up the lyre, this is going to indicate recall to dock
-            if (banditsHaveLyre) {
-                // set bandit path
-                this.returnToDock(game, walls, floors, map, containerManager, roomManager, i, pathfinder);
-            }
-            if (playersHaveLyre) {
-                // [TODO] follow player
-                // update path every xx updates
-                this.pathUpdateFromLyreLocation(game, walls, floors, map, containerManager, i, pathfinder);
-            }
-            //no players have the lyre
-            if (!banditsHaveLyre && !playersHaveLyre) {
-                // lyre is in a container
-                if (game.gameData.lyreLocation.found) {
-                    // bandits heard sound, head for this container
-                    // update path in case lyre is moved
-                    this.pathUpdateFromLyreLocation (game, walls, floors, map, containerManager, i, pathfinder);
+            if (this.players[this.bandit[i]].sprite.customParams.status == "stuck") {
+                this.players[this.bandit[i]].startItemEmitter(game);
+            } else {
+                // assuming the bandits only pick up the lyre, this is going to indicate recall to dock
+                if (banditsHaveLyre) {
+                    // set bandit path
+                    this.returnToDock(game, walls, floors, map, containerManager, roomManager, i);
                 }
-                else {
-                    if ((this.players[this.bandit[i]].sprite.customParams.walking == true) && (this.players[this.bandit[i]].sprite.customParams.path.length != 0))
-                        {  // player is walking somewhere 
-                            game.gameData.banditAIdata.banditParams[i].updateCount += 1;
-                            this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager);
-                        } else {
-                            // bandits search, path should be configured after this call if not already
-                            // calls updateBandit if path configured or pathUpdateFromContainerLocation to configure path
-                            this.banditAISearchPattern(game, walls, floors, map, containerManager, i, pathfinder);
-                        }
+                if (playersHaveLyre) {
+                    // [TODO] follow player
+                    // update path every xx updates
+                    this.pathUpdateFromLyreLocation(game, walls, floors, map, containerManager, i);
+                }
+                //no players have the lyre
+                if (!banditsHaveLyre && !playersHaveLyre) {
+                    // lyre is in a container
+                    if (game.gameData.lyreLocation.found) {
+                        // bandits heard sound, head for this container
+                        // update path in case lyre is moved
+                        this.pathUpdateFromLyreLocation (game, walls, floors, map, containerManager, i);
+                    }
+                    else {
+                        if ((this.players[this.bandit[i]].sprite.customParams.walking == true) && (this.players[this.bandit[i]].sprite.customParams.path.length != 0))
+                            {  // player is walking somewhere 
+                                game.gameData.banditAIdata.banditParams[i].updateCount += 1;
+                                this.players[this.bandit[i]].updateBandit(game, walls, floors, map, containerManager);
+                            } else {
+                                // bandits search, path should be configured after this call if not already
+                                // calls updateBandit if path configured or pathUpdateFromContainerLocation to configure path
+                                this.banditAISearchPattern(game, walls, floors, map, containerManager, i);
+                            }
+                    }
                 }
             }
         }
    }
 
 
-    pathUpdateFromLyreLocation (game, walls, floors, map, containerManager, idx, pathfinder) {
+    pathUpdateFromLyreLocation (game, walls, floors, map, containerManager, idx) {
             // decide if a path update is needed
             // update path every xx updates
             if (this.players[this.bandit[idx]].sprite.customParams.walking && this.players[this.bandit[idx]].sprite.customParams.pathfound 
@@ -994,7 +1015,7 @@ class PlayerManager {
                     this.players[this.bandit[idx]].sprite.customParams.dest_y = game.gameData.lyreLocation.y;
 
                     // generate path
-                    this.players[this.bandit[idx]].restartPtClick(game, pathfinder);
+                    this.players[this.bandit[idx]].restartPtClick(game);
 
                 } 
                 // reset update updateCount
@@ -1010,11 +1031,11 @@ class PlayerManager {
                 // generate path
                 // reset update updateCount
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
-                this.players[this.bandit[idx]].restartPtClick(game, pathfinder);
+                this.players[this.bandit[idx]].restartPtClick(game);
             }
     }
 
-    pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, banditIdx, containerIdx, pathfinder) {
+    pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, banditIdx, containerIdx) {
         if (this.players[this.bandit[banditIdx]].sprite.customParams.dest_x != containerManager.containers[containerIdx].sprite.body.x 
                 || this.players[this.bandit[banditIdx]].sprite.customParams.dest_y != containerManager.containers[containerIdx].sprite.body.y) {
                 if (this.players[this.bandit[banditIdx]].sprite.customParams.pathfound) {
@@ -1025,8 +1046,9 @@ class PlayerManager {
                     console.log("starting path calculation");
                     console.log(game.gameData.banditAIdata);
                     console.log(this.players[this.bandit[banditIdx]].sprite.customParams);
+                    console.log(containerManager.containers[containerIdx]);
                     // generate path
-                    this.players[this.bandit[banditIdx]].restartPtClick(game, pathfinder);
+                    this.players[this.bandit[banditIdx]].restartPtClick(game);
 
                     // reset update updateCount
                     game.gameData.banditAIdata.banditParams[banditIdx].updateCount = 0;
@@ -1036,7 +1058,11 @@ class PlayerManager {
                     // if !this.players[this.bandit[i]].sprite.customParams.walking && !this.players[this.bandit[i]].sprite.customParams.pathfound
                     // path is still being calculated but taking a really long time, try again
                     // generate path
-                    this.players[this.bandit[banditIdx]].restartPtClick(game, pathfinder);
+                    console.log("restarting path calculation from pathUpdateFromContainerLocation for bandit " + banditIdx);
+                    console.log(game.gameData.banditAIdata);
+                    console.log(this.players[this.bandit[banditIdx]].sprite.customParams);
+                    console.log(containerManager.containers[containerIdx]);
+                    this.players[this.bandit[banditIdx]].restartPtClick(game);
                     // reset update updateCount
                     game.gameData.banditAIdata.banditParams[banditIdx].updateCount = 0;
                 }
@@ -1046,7 +1072,7 @@ class PlayerManager {
         }
     }
 
-    returnToDock(game, walls, floors, map, containerManager, roomManager, idx, pathfinder) {
+    returnToDock(game, walls, floors, map, containerManager, roomManager, idx) {
         if (this.players[this.bandit[idx]].sprite.customParams.dest_x != roomManager.rooms[roomManager.dockIdx].center_x 
                 || this.players[this.bandit[idx]].sprite.customParams.dest_y != roomManager.rooms[roomManager.dockIdx].center_y) {
              if (this.players[this.bandit[idx]].sprite.customParams.pathfound) {
@@ -1056,7 +1082,7 @@ class PlayerManager {
                 this.players[this.bandit[idx]].sprite.customParams.dest_y = roomManager.rooms[roomManager.dockIdx].center_y;
                 
                 // generate path 
-                this.players[this.bandit[idx]].restartPtClick(game, pathfinder);
+                this.players[this.bandit[idx]].restartPtClick(game);
                 // reset update updateCount
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
              }
@@ -1065,7 +1091,7 @@ class PlayerManager {
                     // if !this.players[this.bandit[i]].sprite.customParams.walking && !this.players[this.bandit[i]].sprite.customParams.pathfound
                     // path is still being calculated but taking a really long time, try again
                     // generate path
-                    this.players[this.bandit[idx]].restartPtClick(game, pathfinder);
+                    this.players[this.bandit[idx]].restartPtClick(game);
                     // reset update updateCount
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
              }
@@ -1188,16 +1214,20 @@ class PlayerManager {
         }
         // [TODO] improve algorithm to only go to containers that make sense
         // this is going to randomly pick a container instance, could be a door or suppressant
-        return (getRandomInt(0, containerManager.containers.length-1));
+        var rndNum = getRandomInt(0, containerManager.containers.length-1);
+        while (containerManager.containers[rndNum].name == "suppresant") {
+            rndNum = getRandomInt(0, containerManager.containers.length-1);
+        }
+        return (rndNum);
     }
 
 
-    banditAISearchPattern(game, walls, floors, map, containerManager, idx, pathfinder) {
+    banditAISearchPattern(game, walls, floors, map, containerManager, idx) {
             if (this.players[this.bandit[idx]].sprite.customParams.walking && this.players[this.bandit[idx]].sprite.customParams.pathfound) {
                 // make update based on current path
                 this.players[this.bandit[idx]].updateBandit(game, walls, floors, map, containerManager);
             } else if (!this.players[this.bandit[idx]].sprite.customParams.walking && this.players[this.bandit[idx]].sprite.customParams.pathfound) {
-                // set a new destination and calcualte path
+                // set a new destination and calculate path
                 var roomName = this.players[this.bandit[idx]].playerWhereAmI(game, map);
                 if (roomName != undefined && roomName.length > 0) {            
                     var containerIdx = this.findNextContainerToSearch(game, map,  roomName, idx, containerManager);
@@ -1211,12 +1241,13 @@ class PlayerManager {
                     // couldn't find room
                     containerIdx = this.findAnyContainerToSearch(game, containerManager);
                 }
-                this.pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, idx, containerIdx, pathfinder)
-            } else if (!this.players[this.bandit[idx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[idx].updateCount > (idx+1)*1000) {
+                this.pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, idx, containerIdx);
+            } else if (!this.players[this.bandit[idx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[idx].updateCount > 500) {
                     // if !this.players[this.bandit[i]].sprite.customParams.walking && !this.players[this.bandit[i]].sprite.customParams.pathfound
                     // path is still being calculated but taking a really long time, try again
                     // generate path
-                    this.players[this.bandit[idx]].restartPtClick(game, pathfinder);
+                    console.log("Trying to restartPtClick for bandit: " + idx );
+                    this.players[this.bandit[idx]].restartPtClick(game);
                     // reset update updateCount
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
              }

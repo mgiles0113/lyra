@@ -319,6 +319,9 @@ class Container {
         }
     }
     
+    
+    // don't need this for lyre location - checking every update cycle instead
+    //[TODO] decide if this is where sound for items in containers is generated
     playItemSound(game) {
         // does container have item that makes sound? also used to identify lyre found
         for (var i=0; i<this.itemslist.length; i++) {
@@ -329,11 +332,30 @@ class Container {
                             game.sflyremusic.play('', 0, 0.1, false, true);
                         }
                         // this signals the bandits that the lyre is found
-                        game.gameData.lyreLocation.found = true;
+                        //game.gameData.lyreLocation.found = true;
                         break;
                 }
             }
         }
+    }
+    
+    // this version does not effect comm or generate escape pod repair list
+    banditSwitchContainerState(game) {
+            switch (this.containerstate) {
+            case "closedhighlight":
+                if (this.setState(game, "openhighlight")) {
+                    if (game.userPreference.data.sound === "true") {
+                            this.playContainerSound(game);
+                    }
+                    // using this to make lyre sound
+                    this.playItemSound(game);
+                    
+                    this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
+                    this.showAllItems(game);
+                }
+                break;
+            }
+        this.sprite.animations.play(this.containerstate);    
     }
 
     switchContainerState (game, comm) {

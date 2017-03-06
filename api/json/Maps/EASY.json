@@ -115,7 +115,7 @@
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
-                 "equipped": ["suppresant"]
+                 "equipped": ["blaster"]
                 }, 
                 {"name": "bandit2", 
                  "type" : "bandit",
@@ -137,7 +137,7 @@
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
-                 "equipped": ["suppresant"]
+                 "equipped": ["blaster"]
                 }, 
                 {"name": "bandit3",
                  "type" : "bandit",
@@ -159,7 +159,7 @@
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
-                 "equipped": ["suppresant"]
+                 "equipped": ["blaster"]
                 }
     ],
     "crew" : [0, 1, 2],
@@ -274,6 +274,23 @@
             "emitter": "coffeespill",
             "emitterRef": "assets/sprites/items/coffeeSpillParticle.png",
             "capacity" : 1
+        },
+        "monitor":{
+            "itemRef": "assets/sprites/items/monitor.png",
+            "name": "monitor",
+            "displayname": "monitor"
+        },
+        "wires":{
+            "itemRef": "assets/sprites/items/wires.png",
+            "name":"wires",
+            "displayname":"wires"
+        },
+        "blaster":{
+            "itemRef":"assets/sprites/items/blaster.png",
+            "name": "blaster",
+            "emitter": "blastersmoke",
+            "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
+            "capacity" : 100
         }
     },
     "itemsarray" : [],
@@ -295,6 +312,24 @@
             "immovablebody" : true,
             "moves" : false,
             "checkCollision" : [true, true, true, true]
+        },
+        "sleeppod" : {
+            "imageTag" : "sleeppod",
+            "itemRef":"assets/sprites/sleeppod.png",
+            "frames" : 4,
+            "name": "sleeppod",
+            "width" : 32,
+            "height" : 32,
+            "animationTags" : ["open", "openhighlight", "closed", "closedhighlight"],
+            "textureArr" : [0, 1, 2, 3],
+            "animationArr" : [[0],[0,1],[2],[2,3]],
+            "itemscapacity" : 0,
+            "containerstate" : "closed",
+            "stateIdx" : 2,
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : [false, false, true, true]
         },
         "largebox" : {
             "imageTag" : "largebox",
@@ -456,7 +491,7 @@
         "name" : "mainhall",
         "containers" : [ "smallbox",  "smallbox",  "smallbox"],
         "containercoord" : [[-160,0],[-320,0],[160,0]],
-        "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+        "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench","monitor","wires"],
         "floor" : [87,88,97,97,97,97,97,97]
     },
     "roomdef" : {
@@ -464,21 +499,21 @@
             "name" : "med_bay",
             "containers": ["smallbox", "smallbox"],
             "containercoord" : [[-48, -48], [48, 48]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench","monitor"],
             "floor" : [95]
         },
         "cafeteria" : {
             "name" : "cafeteria",
             "containers" : ["smallbox", "smallbox", "smallbox"],
             "containercoord" : [[-48, -48], [-48, 80], [80, 80]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench","wires"],
             "floor" : [89, 96, 89, 89,94]
         },
         "crew_quarters" : {
             "name" : "crew_quarters",
-            "containers" : ["smallbox", "smallbox", "smallbox"],
-            "containercoord" : [[-48, -48], [48, -48], [48, 48]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "containers" : ["smallbox", "smallbox", "smallbox", "sleeppod", "sleeppod"],
+            "containercoord" : [[-48, -48], [48, -48], [48, 48], [48, -112],[ 112,-112 ]],
+            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench","monitor"],
             "floor" : [87,88, 97,97,97,98]
         },
         "rec_room" : {
@@ -492,14 +527,14 @@
             "name" : "engine_room",
             "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine","engine","engine","engine","engine"],
             "containercoord" : [[-144, 16], [-144, -16],[-112,-48],[-112,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
-            "item_types_allowed" : ["circuit", "fuse"],
+            "item_types_allowed" : ["circuit", "fuse","monitor","wires"],
             "floor" : [97, 97, 98, 102]
         },
         "workshop" : {
             "name" : "workshop",
-            "containers" : ["smallbox"],
-            "containercoord" : [[16,16]],
-            "item_types_allowed" : ["fuel_tank", "wrench"],
+            "containers" : ["smallbox","smallbox"],
+            "containercoord" : [[16,16],[-144, 16]],
+            "item_types_allowed" : ["fuel_tank", "wrench","wires"],
             "floor" : [94, 94, 93, 93, 92]
         }
     },

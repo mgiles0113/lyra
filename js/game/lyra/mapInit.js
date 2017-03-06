@@ -188,18 +188,28 @@ class MapBuilder {
                     x : cc.center_x,
                     y : cc.center_y
             })
-            // put remaining crew in quarters
-            for (var i = 1; i< game.gameData.crew.length; i++) {
+            // put remaining crew in quarters  [48, -112],[ 112,-112 ]
+            // hardcoding to same location as sleep pod
+ //           for (var i = 1; i< game.gameData.crew.length; i++) {
                 playerLocType.push({
-                    idx : i,
+                    idx : 1,
                     isSelected: false, 
-                    characterIdx: game.gameData.crew[i], 
+                    characterIdx: game.gameData.crew[1], 
                     characterType: "crew", 
-                    status: game.gameData.characters[game.gameData.crew[i]].status,
-                    x : crewQtr.center_x + i*50,
-                    y : crewQtr.center_y + i*50
+                    status: game.gameData.characters[game.gameData.crew[1]].status,
+                    x : crewQtr.center_x + 80,
+                    y : crewQtr.center_y - 80
                 })
-            }
+                playerLocType.push({
+                    idx : 2,
+                    isSelected: false, 
+                    characterIdx: game.gameData.crew[2], 
+                    characterType: "crew", 
+                    status: game.gameData.characters[game.gameData.crew[2]].status,
+                    x : crewQtr.center_x + 144,
+                    y : crewQtr.center_y - 80
+                })
+  //          }
             
             // put bandits on docking bay
             for (var i = 0; i< game.gameData.bandit.length; i++) {

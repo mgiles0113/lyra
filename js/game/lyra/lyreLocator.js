@@ -23,17 +23,7 @@ class LyreLocator {
         game.gameData.lyreLocation.containerIdx = -1;
         game.gameData.lyreLocation.playerIdx = player.idx;
         game.gameData.lyreLocation.found = true;
-        game.gameData.lyreLocation.x = player[game.gameData.lyreLocation.playerIdx].sprite.body.x;
-        game.gameData.lyreLocation.y = player[game.gameData.lyreLocation.playerIdx].sprite.body.y;
+        game.gameData.lyreLocation.x = player.sprite.body.x;
+        game.gameData.lyreLocation.y = player.sprite.body.y;
     }
-
-    // // runs every update cycle to track lyre postion for bandits
-    // // assumes containers don't move
-    // followLyre(game, playerManager) {
-    //     if (game.gameData.lyreLocation.playerIdx >= 0 ){
-    //         // player has lyre
-    //         game.gameData.lyreLocation.x = playerManager.players[game.gameData.lyreLocation.playerIdx].sprite.body.x;
-    //         game.gameData.lyreLocation.y = playerManager.players[game.gameData.lyreLocation.playerIdx].sprite.body.y;
-    //     }
-    // }
 }

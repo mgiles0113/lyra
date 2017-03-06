@@ -99,52 +99,60 @@ Lyra.LyraGame.prototype = {
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
             this.containerManager = new ContainerManager(this.game,  containerLocType, this.lyrelocator);
             
-                   //Setup Pathfinder Engine
-        this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
-        this.pathfinder = new EasyStar.js();
-        
-        //Get the Walls Map Layer --> 2D Array of Tiles.
-        var map_cols = this.game.gameData.mapwidth/this.tile_size;
-        var map_rows = this.game.gameData.mapheight/this.tile_size;
-        var grid_col = 0;
-        var grid_row = 0;
-        
-        this.grid = [];
-        
-        for(grid_row = 0; grid_row < map_rows; grid_row++){
-            this.grid[grid_row] = [];
             
-            for(grid_col = 0; grid_col < map_cols; grid_col++){
-                this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
-                
-            }
-        }
-        
-        for(var i = 0; i < this.containerManager.containerCount; i++){
             
-            if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso' || this.containerManager.containers[i].name == 'engine'){
-                if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
-                       
-                    var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
-                    var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
-                
-                    //Give Containers a gid of 1.
-                    if( container_x != undefined && container_y != undefined){
-                    this.grid[container_y][container_x] = 1;
-                    }
-                }
-            }
+            
+                //Setup Pathfinder Engine Grid
+                this.grid = new Grid(this.game);
+                this.grid.addContainerCollision(this.game, this.containerManager);
 
-        }
+
+        // MOVED TO Grid.js
+        // this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
+        // this.pathfinder = new EasyStar.js();
+
+        // //Get the Walls Map Layer --> 2D Array of Tiles.
+        // var map_cols = this.game.gameData.mapwidth/this.tile_size;
+        // var map_rows = this.game.gameData.mapheight/this.tile_size;
+        // var grid_col = 0;
+        // var grid_row = 0;
         
-        this.pathfinder.setGrid(this.grid);
-        this.pathfinder.setAcceptableTiles([0]);
-        this.pathfinder.setIterationsPerCalculation(1000);
+        // this.grid = [];
+        
+        // for(grid_row = 0; grid_row < map_rows; grid_row++){
+        //     this.grid[grid_row] = [];
+            
+        //     for(grid_col = 0; grid_col < map_cols; grid_col++){
+        //         this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
+                
+        //     }
+        // }
+        
+        // for(var i = 0; i < this.containerManager.containerCount; i++){
+            
+        //     if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso' || this.containerManager.containers[i].name == 'engine'){
+        //         if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
+                       
+        //             var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
+        //             var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
+                
+        //             //Give Containers a gid of 1.
+        //             if( container_x != undefined && container_y != undefined){
+        //             this.grid[container_y][container_x] = 1;
+        //             }
+        //         }
+        //     }
+
+        // }
+        
+        // this.pathfinder.setGrid(this.grid);
+        // this.pathfinder.setAcceptableTiles([0]);
+        // this.pathfinder.setIterationsPerCalculation(1000);
             
             // playerManager manages all the players on the map (crew and bandits)
             // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations
             var playerLocType = mapInitializer.addPlayers(this.game, this.roomManager);
-            this.playerManager = new PlayerManager(this.game, playerLocType, this.pathfinder, this.containerManager);
+            this.playerManager = new PlayerManager(this.game, playerLocType, this.grid.grid, this.containerManager);
         }
         else {  // load previous game
             this.roomManager = new RoomManager(this.game);
@@ -154,7 +162,11 @@ Lyra.LyraGame.prototype = {
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager,  this.mapLayer['floors']);
 
             this.containerManager = new ContainerManager(this.game);
-            this.playerManager = new PlayerManager(this.game, null, this.pathfinder, this.containerManager);
+            //Setup Pathfinder Engine Grid
+            this.grid = new Grid(this.game);
+            this.grid.addContainerCollision(this.game, this.containerManager);
+
+            this.playerManager = new PlayerManager(this.game, null, this.grid.grid, this.containerManager);
         }
         
         this.actionManager = new ActionManager();
@@ -274,19 +286,21 @@ Lyra.LyraGame.prototype = {
         this.containerManager.checkPlayerOverlap(this.game, this.playerManager.players, this.comm, this.lyrelocator);
 
         // loops through player array, updates bandits and players
-        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map, this.containerManager, this.roomManager, this.lyrelocator, this.pathfinder);
+        this.playerManager.updatePlayerArray(this.game, this.mapLayer['walls'], this.mapLayer['floors'], this.map.map, this.containerManager, this.roomManager, this.lyrelocator);
 	},
     render: function() {
         // render information about display screen (copied off phaser example viewport.js)
-         viewportText(this.game);
+         //viewportText(this.game);
         
         // [TODO] depending on how players are generated, this may be one or more
         for (var i=0; i < this.playerManager.players.length; i++)
         { 
-            this.playerManager.players[i].sprite.bringToTop();
+            if (this.playerManager.players[i].sprite.customParams.status != "sleep") 
+            {
+                this.playerManager.players[i].sprite.bringToTop();
+            }
             if (this.playerManager.players[i].isSelected) {
                 this.playerManager.players[i].cameraFollow(this.game);
-                
             }
             this.game.debug.body(this.playerManager.players[i]);
         }
@@ -329,7 +343,7 @@ Lyra.LyraGame.prototype = {
         // if selected player is not awake, findSelectedAwakePlayer returns -1
         if (playerIdx >= 0) {
         //Grab
-            this.playerManager.players[playerIdx].ptClick(this.game, this.pathfinder);
+            this.playerManager.players[playerIdx].ptClick(this.game, this.grid.grid);
         }
     },
     

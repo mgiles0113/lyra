@@ -330,7 +330,7 @@ class SlimeManager {
             }
             // make sure player is awake after slime suppressant
             if (!playerStuck[j] && playerManager.players[j].sprite.customParams.status == "stuck") {
-                playerManager.players[j].sprite.customParams.status = "awake";
+                playerManager.players[j].unstickPlayer(game);
             }
         }
         
