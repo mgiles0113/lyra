@@ -587,8 +587,8 @@ class ContainerManager {
                 }
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
-                // signals to bandits to follow lyre
-                if (container.isLyreInContainer()) {game.gameData.lyreLocation.found = true;};
+                // // signals to bandits to follow lyre, someone looked in box
+                // if (container.isLyreInContainer()) {game.gameData.lyreLocation.found = true;};
                 break;
             case "closed":
                 container.closedContainerHighlighted(game);
