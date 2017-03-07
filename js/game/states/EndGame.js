@@ -4,6 +4,7 @@ Lyra.EndGame = function() {
 	this.victory = ['victory', 'credits', 'authors'];
 	this.escapenolyre = ['partialfaillyre', 'credits', 'authors'];
 	this.totalfailure = ['totalfailure', 'credits', 'authors'];
+	this.banditshavelyre =['banditshavelyre', 'credits', 'authors'];
     //this.textArray = ['intro0','intro1', 'intro2', 'intro3', 'intro4', 'intro5', 'credits', 'authors'];
 	this.primaryCard = $("#primary-card");
 	this.storyCard = $("<div id='story-card'></div>")
@@ -27,6 +28,9 @@ Lyra.EndGame.prototype = {
         		break;
         	case "escapenolyre":
         		this.textArray = this.escapenolyre;
+        		break;
+        	case "banditshavelyre":
+        		this.textArray = this.banditshavelyre;
         		break;
         	default:
         		this.textArray = this.totalfailure;

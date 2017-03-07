@@ -272,8 +272,12 @@
         
     "timeout" : {"ENG" : "Crew asphyxiation! All are lost!", 
         "PRT": "Davey Jones be welcomin' ye Crew!", 
-        "ESP": "¡Asfixia de la tripulación! ¡Todos están perdidos!"},        
-
+        "ESP": "¡Asfixia de la tripulación! ¡Todos están perdidos!"},    
+        
+    "banditshavelyre" : {"ENG" : "Pirates have made off with the Lyre! Peace and harmony no longer possible!", 
+        "PRT": "Yarrrr Pirates ha' takin the Lyre fer buillion!", 
+        "ESP": "¡Los piratas han salido con la Lyre! ¡Paz y armonía ya no son posibles!"},
+        
     "template" : {"ENG" : "English", 
         "PRT": "Pirate", 
         "ESP":  "Español"}

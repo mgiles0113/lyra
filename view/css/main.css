@@ -251,12 +251,11 @@ label {
     left: 0;
     right: 0;
     bottom: 0;
-    cursor: pointer;
-    cursor: hand;
 }
 
 .player-selector-active-player {
     border: 1px solid yellow;
+    cursor: default;
 }
 
 .player-selector-inactive-player {
@@ -342,10 +341,17 @@ label {
 
 .player-equip-active {
     background-image: url("/assets/images/equip_green.png");
+    cursor: pointer;
+    cursor: hand;
+}
+
+.player-equip-active:hover {
+    border: 1px solid yellow;
 }
 
 .player-equip-inactive {
     background-image: url("/assets/images/equip_grey.png");
+    cursor: default;
 }
 
 /* styling for player transfer option buttons */
@@ -358,10 +364,17 @@ label {
 
 .player-transfer-active {
     background-image: url("/assets/images/right_green_arrow.png");
+    cursor: pointer;
+    cursor: hand;
+}
+
+.player-transfer-active:hover {
+    border: 1px solid yellow;
 }
 
 .player-transfer-inactive {
     background-image: url("/assets/images/right_grey_arrow.png");
+    cursor: default;
 }
 
 /* styling for container transfer option buttons */
@@ -374,10 +387,17 @@ label {
 
 .transfer-active {
     background-image: url("/assets/images/left_green_arrow.png");
+    cursor: pointer;
+    cursor: hand;
+}
+
+.transfer-active:hover {
+    border: 1px solid yellow;
 }
 
 .transfer-inactive {
     background-image: url("/assets/images/left_grey_arrow.png");
+    cursor: default;
 }
 
 /* SECTION - GAME TIMER */

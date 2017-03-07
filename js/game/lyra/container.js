@@ -341,7 +341,7 @@ class Container {
     }
     
     // this version does not effect comm or generate escape pod repair list
-    banditSwitchContainerState(game) {
+    banditSwitchContainerState(game, idx) {
             switch (this.containerstate) {
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
@@ -353,6 +353,9 @@ class Container {
                     
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);
+                    if (this.idx == game.gameData.banditAIdata.banditParams[idx].containerObjective) {
+                        game.gameData.banditAIdata.banditParams[idx].containerObjective = -1;
+                    }
                 }
                 break;
             }
@@ -393,6 +396,9 @@ class Container {
                     this.showAllItems(game);
                     if (this.name == "escapepod") {
                         this.showEscapePodRepairList(game);
+                    }
+                    if (this.isLyreInContainer()) {
+                        game.gameData.lyreLocation.found = true;
                     }
                 }
                 break;
@@ -529,10 +535,10 @@ class ContainerManager {
         else {
             // load existing containers into array
             for (var i = 0; i < game.gameData.containerarray.length ; i++) {
-                if (this.containerRoomArray[containerarray[i].roomMapName] == undefined) {
-                    this.containerRoomArray[containerarray[i].roomMapName] = [];
+                if (this.containerRoomArray[game.gameData.containerarray[i].roomMapName] == undefined) {
+                    this.containerRoomArray[game.gameData.containerarray[i].roomMapName] = [];
                 }
-                this.containerRoomArray[containerarray[i].roomMapName].push(i);
+                this.containerRoomArray[game.gameData.containerarray[i].roomMapName].push(i);
                 this.containers[i] = new Container();
                 this.containers[i].addContainer(game, game.gameData.containerarray[i]);
                 this.containers[i].setupContainerImage(game);
@@ -581,6 +587,8 @@ class ContainerManager {
                 }
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
+                // signals to bandits to follow lyre
+                if (container.isLyreInContainer()) {game.gameData.lyreLocation.found = true;};
                 break;
             case "closed":
                 container.closedContainerHighlighted(game);

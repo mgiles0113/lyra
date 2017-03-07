@@ -300,7 +300,7 @@
             "name": "blaster",
             "emitter": "blastersmoke",
             "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
-            "capacity" : 100
+            "capacity" : 1000
         }
     },
     "itemsarray" : [],

@@ -297,14 +297,6 @@ class SlimeManager {
                 }
                 for (var j=0; j < playerManager.players.length; j++)
                 { 
-                    // if (playerManager.players[j].emitterActive == true && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                    //     //game.physics.arcade.overlap(this.slimeArr[k].slimesprite, this.emitter, this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped));
-                    //     this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped);
-                    // }
-                    // if (playerManager.players[j].sprite.customParams.status == "awake" && game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
-                    //     playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
-                        
-                    // }
                     if (game.physics.arcade.overlap(playerManager.players[j].sprite, this.slimeArr[k].slimesprite)) {
                         // player is still overlapping active slime
                         playerStuck[j] = true;
@@ -315,7 +307,7 @@ class SlimeManager {
                             this.slimeArr[k].suppress(game, playerManager.players[j].sprite.customParams.equipped);
                         }
                         // if not already stuck or asleep, set player to stuck
-                        if (!(playerManager.players[j].sprite.customParams.status == "stuck" || playerManager.players[j].sprite.customParams.status == "sleep")) {
+                        if (!(playerManager.players[j].sprite.customParams.status == "stuck" || playerManager.players[j].sprite.customParams.status == "knockout" || playerManager.players[j].sprite.customParams.status == "sleep")) {
                             playerManager.players[j].stuckInSlimeSignal.dispatch(playerManager.players[j].sprite, this.slimeArr[k].slimesprite);
                         }
                     }
