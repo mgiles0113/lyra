@@ -3,8 +3,6 @@ class ActionManager {
         this.actionArr = [];
     }
     updateAction(game, playerid, containerManager, comm) {
-        console.log("switching container state")
-        
         for (var j=0; j<containerManager.containers.length; j++) {
             if (containerManager.containers[j].containerstate == "openhighlight"  ||
                 containerManager.containers[j].containerstate == "closedhighlight") {

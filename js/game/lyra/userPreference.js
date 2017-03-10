@@ -83,6 +83,17 @@ class UserPreference {
         });
     }
     
+    toggleSound(soundController) {
+        console.log('toggling sound new');
+        if (this.data.sound === 'true') {
+            this.data.sound = 'false';
+            soundController.stop();
+        } else {
+            this.data.sound = 'true';
+        }
+        this.update();
+    }
+    
     getSavedGameFiles(menuState) {
         $.ajax({
             url: apiUrl,

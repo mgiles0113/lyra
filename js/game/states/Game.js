@@ -47,7 +47,11 @@ Lyra.LyraGame.prototype = {
 		this.preloadBar.cropEnabled = false;
         // setup physics engine
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
+        
+        this.game.lyraSound.stop();
+        if (this.game.userPreference.data.sound === "true") {
+            this.game.lyraSound.play('gameMusic', true, .1);
+        }
         //this.game.world.scaleMode = 
         // there are other ways to do this, sets a background color for the game          
         this.game.stage.backgroundColor = '#555';
@@ -186,30 +190,54 @@ Lyra.LyraGame.prototype = {
         
         //Create comm window.
         this.comm = new Comm(this.game, this.playerManager, this.containerManager);
-        this.comm.displayPlayerInventory(0);
+        this.comm.resetCommunicatorInventory();
         
-        // options overlay container
-        this.optionsOverlay = $("<div id='optionsOverlay'></div>");
-        this.optionsOverlay.css("width", "100vw");
-        this.optionsOverlay.css("height", "100vh");
-        this.optionsOverlay.css("backgroundColor", "rgba(0, 0, 0, 0.5)");
-        this.optionsOverlay.css("position", "absolute");
-        this.optionsOverlay.css("top", "0px");
-        this.optionsOverlay.css("visibility", "hidden");
-        $("body").append(this.optionsOverlay);
+        // menu options overlay container
+        this.menuOverlay = $("<div id='menu-overlay'></div>");
+        this.menuOverlay.css('display', 'none')
+               .css('position', 'absolute')
+               .css('top', '0')
+               .css('left', '0')
+               .css('backgroundColor', 'rgba(0, 0, 0, .6)')
+               .css('textAlign', 'center')
+               .css('paddingTop', $(window).height() * .2)
+               .css('width', '100%')
+               .css('color', 'white')
+               .css('height', '100%');
+        var optionsList = $("<ul id='options-list'></ul>");
+        optionsList.css('listStyle', 'none')
+                   .append("<li><button class='menu-overlay-button' id='option-save'>Save</button></li>")
+                   .append("<li><button class='menu-overlay-button' id='option-toggle-sound'>Toggle Sound</button></li>")
+                   .append("<li><button class='menu-overlay-button' id='option-return-to-main-menu'>Return to Main Menu</button></li>");
+        this.menuOverlay.append("<h1>Options</h1>")
+                        .append(optionsList);
+
+        $("body").append(this.menuOverlay);
+        var self = this;
+        this.menuOverlayButtons = {
+            "save" : $("#option-save"),
+            "sound" : $("#option-toggle-sound"),
+            "exit" : $("#option-return-to-main-menu")
+        };
         
-        this.overlayVisible = 0;
-        $(document).keyup(function(e) {
-            if (e.keyCode == 27) { // escape key maps to keycode `27`
-                if (this.overlayVisible === 0) {
-                    $("#optionsOverlay").css("visibility", "visible");
-                    this.overlayVisible = 1;
-                } else {
-                    $("#optionsOverlay").css("visibility", "hidden");
-                    this.overlayVisible = 0;
-                }
+        this.menuOverlayButtons.save.click(function() {
+            self.saveGame();
+        });
+        this.menuOverlayButtons.sound.click(function() {
+            self.game.userPreference.toggleSound(self.game.lyraSound);
+            
+            if (self.game.userPreference.data.sound === 'true') {
+                self.game.lyraSound.play('gameMusic', true, .1);
             }
         });
+        this.menuOverlayButtons.exit.click(function() {
+            self.menuOverlay.css('display', 'none');
+            self.nextState('MainMenu', '');
+        });
+        
+        // display/hide menu overlay
+        this.menu = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
+        this.menu.onDown.add(this.toggleMenuOverlay, this);
         
         // setup space bar control
         this.shoot = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -256,20 +284,38 @@ Lyra.LyraGame.prototype = {
 
         
 	},
+	nextState: function(newState, gameResult) {
+	    // log the game result if requested (no game result for return to main menu)
+	    if (gameResult) {
+	        this.game.gameData.gameresult = gameResult;    
+	    }
+	    
+	    // remove click events for options overlay
+	    this.menuOverlayButtons.save.unbind('click');
+	    this.menuOverlayButtons.sound.unbind('click');
+	    this.menuOverlayButtons.exit.unbind('click');
+	    
+	    // clean up communicator for next run of game
+	    this.comm.destroyClickEvents();
+	    $("#communicator-card").css('visibility', 'hidden');
+	    
+	    // remove elements from game state
+	    this.menuOverlay.remove();
+	    this.state.remove();
+	    
+	    // launch requested state (end game or main menu)
+	    this.state.start(newState);
+	},
 	update: function() {
 	    if (this.game.gameData.timer.timeUp) {
 	        console.log('time up!');
-	        this.game.gameData.gameresult = "timeout";
-	        this.state.remove();
-	        this.state.start('EndGame');
+	        this.nextState('EndGame', 'timeout');
 	    }
 	    
 	    if (this.playerManager.isAnyCrewAwake()) {
 	        // there are no awake players
 	        console.log("there are no crew members awake");
-	        this.game.gameData.gameresult = "crewstuck";
-	        this.state.remove();
-	        this.state.start('EndGame');
+	        this.nextState('EndGame', 'crewstuck');
 	    }
 	    
 	    if (this.game.gameData.gameresult != "empty") {
@@ -303,6 +349,13 @@ Lyra.LyraGame.prototype = {
                 this.playerManager.players[i].cameraFollow(this.game);
             }
             this.game.debug.body(this.playerManager.players[i]);
+        }
+    },
+    toggleMenuOverlay: function() {
+        if (this.menuOverlay.css('display') === 'none') {
+            this.menuOverlay.css('display', 'inherit');
+        } else {
+            this.menuOverlay.css('display', 'none');
         }
     },
    	onLoadComplete: function() {
@@ -430,8 +483,7 @@ Lyra.LyraGame.prototype = {
     
     blastOffEscapePod: function() {
         console.log(this.game.gameData.gameresult);
-        this.state.remove();
-        this.state.start('EndGame');
+        this.nextState('EndGame', '');
     },
     
     startEmitter: function() {

@@ -30,6 +30,27 @@ body {
 /*******************************************************************************
  * LOGIN MENU
  ******************************************************************************/
+#status-messages {
+    margin-top: 25px;
+    min-height: 50px;
+}
+
+#status-message {
+    
+}
+
+.status-alert {
+    color: yellow;
+    font-size: 2.1em;
+    font-weight: bold;
+}
+
+.status-settle {
+    color: white;
+    font-size: 2em;
+    transition: .5s;
+}
+
 #menu-title {
     font-size: 10em;
     color: white;
@@ -47,8 +68,7 @@ body {
     width: 100%;
 }
 
-#form-card,
-#add-user-form {
+#form-card {
     margin: auto;
     padding: 25px;
     border-radius: 3px;
@@ -68,8 +88,7 @@ body {
     border-radius: 5px;
 }
 
-#form-card label,
-#add-user-form label {
+#form-card label {
     font-size: 2em;
     color: white;
 }
@@ -81,9 +100,8 @@ body {
 #form-card input,
 #form-card select,
 #submit-button,
-#create-user-link,
-#add-user-form input,
-#add-user-form select {
+#add-user-button,
+#create-user-link {
     width: 75%;
     margin: auto;
 }
@@ -124,6 +142,33 @@ label {
 }
 
 /*******************************************************************************
+ * GAME - MENU OVERLAY
+ ******************************************************************************/
+#menu-overlay button {
+    min-width: 200px;
+    width: 50%;
+    max-width: 450px;
+    background-color: rgba(0, 0, 0, .6);
+    color: white;
+    margin-bottom: 9px;
+    font-size: 1.5em;
+    border: none;
+}
+
+#menu-overlay button:hover {
+    background-color: rgba(200, 200, 200, .9);
+    color: black;
+}
+
+#menu-overlay button:focus {
+    outline: 0;
+}
+
+#menu-overlay ul {
+    padding: 0px;
+}
+
+/*******************************************************************************
  * GAME - MAIN MENU
  ******************************************************************************/
 #main-menu-card {
@@ -146,7 +191,7 @@ label {
 }
 
 #main-menu-card button:hover {
-    background-color: rgba(0, 0, 0, .9);
+    background-color: rgba(255, 255, 255, .4);
 }
 
 #main-menu-card button:focus {
@@ -346,7 +391,7 @@ label {
 }
 
 .player-equip-active:hover {
-    border: 1px solid yellow;
+    background-image: url("/assets/images/equip_green_active.png");
 }
 
 .player-equip-inactive {
@@ -369,7 +414,7 @@ label {
 }
 
 .player-transfer-active:hover {
-    border: 1px solid yellow;
+    background-image: url("/assets/images/right_green_arrow_active.png");
 }
 
 .player-transfer-inactive {
@@ -392,7 +437,7 @@ label {
 }
 
 .transfer-active:hover {
-    border: 1px solid yellow;
+    background-image: url("/assets/images/left_green_arrow_active.png");
 }
 
 .transfer-inactive {

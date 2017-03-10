@@ -118,9 +118,9 @@ class MapBuilder {
         }
         containerLocType[rndIdx].itemslist.push(new ContainerItem(containerLocType[rndIdx].itemslist.length, "lyre"));
         lyrelocator.initializeLocation (game, containerLocType[rndIdx].x, containerLocType[rndIdx].y);
-        console.log("lyre located at: ");
-        console.log(containerLocType[rndIdx]);
-        console.log(game.gameData.lyreLocation);
+        //console.log("lyre located at: ");
+        //console.log(containerLocType[rndIdx]);
+        //console.log(game.gameData.lyreLocation);
 
         return (containerLocType);
     }

@@ -48,7 +48,7 @@ class Slime {
         this.animation = "p" + this.phase;
         this.slimesprite.loadTexture(this.slimeLabel, game.gameData.slimeanimations[this.phase][0], true);
         this.isSuppressed = true;
-        console.log("kill the slime");
+        //console.log("kill the slime");
     }
     
     updateTrajectory() {

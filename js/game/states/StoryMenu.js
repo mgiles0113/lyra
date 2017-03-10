@@ -8,6 +8,7 @@ Lyra.StoryMenu = function() {
 
 Lyra.StoryMenu.prototype = {
 	preload: function() {
+		this.game.storyStateRunning = 1;
 		this.index = 0;
 	    this.storyTextCard.html(this.game.languageText[this.textArray[0]][this.game.userPreference.data.languageChoice]);
 	    this.index++;
@@ -18,6 +19,7 @@ Lyra.StoryMenu.prototype = {
 	    this.storyNextCard.click(function() {
 	    	if (context.index === context.textArray.length) {
 	    		context.storyCard.remove();
+	    		context.state.remove();
 	    		context.state.start('MainMenu');
 	    	} else {
 				context.storyTextCard.html(context.game.languageText[context.textArray[context.index]][context.game.userPreference.data.languageChoice]);

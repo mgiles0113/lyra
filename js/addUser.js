@@ -6,6 +6,7 @@ var addPassword = $("#add-password");
 var addPasswordLabel = $("#add-password-label");
 var languageSelection = $("#language-selection");
 var addUserButton = $("#add-user-button");
+var statusMessage = $("#status-message");
 
 var jsonLanguage;
 var languageChoice;
@@ -47,6 +48,18 @@ function loadLanguageFile(game) {
     });
 }
 
+function updateStatusMessage(message) {
+    console.log('updating status message');
+    statusMessage.html('');
+    statusMessage.removeClass();
+    statusMessage.addClass('status-alert');
+    statusMessage.html(message);
+    
+    setTimeout(function() {
+        statusMessage.addClass('status-settle');
+    }, 200);
+}
+
 addUserForm.submit(function(e) {
     e.preventDefault();
     console.log('submitting');
@@ -66,7 +79,13 @@ addUserForm.submit(function(e) {
         dataType: 'json',
         context: this,
         success: function(response) {
-            console.log(response);
+            if (response.error === "none") {
+                updateStatusMessage("User created successfully!");
+            } else if (response.error === "username already exists") {
+                updateStatusMessage("That username already exists! Try again.");
+            } else {
+                updateStatusMessage("Unknown error, contact technical support.");
+            }
         },
         error: function(response) {
             console.log(response);

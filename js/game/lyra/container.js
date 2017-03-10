@@ -104,7 +104,7 @@ class Container {
             this.itemslist.push(item);
         } else {
             //[TODO] raise a signal that says this item can't be added
-            console.log("the " + this.name +" container is full");
+            
         }
     }
     
@@ -204,7 +204,7 @@ class Container {
                     this.hideItem(i);
                 }
                 if (posArr[i] == undefined || posArr[i].length < 1) {
-                    console.log(this);
+                    
                 }
                 this.showItem(game, posArr[i][0], posArr[i][1], i, 0.5);
             }
@@ -252,8 +252,8 @@ class Container {
                 }
             case 4:
                 // hard coding for escape pod for now
-                return ([[-25, -25],[-25, 25],
-                        [25, -25],[25, 25]]);
+                return ([[45, 45],[95, 95],
+                        [95, 45],[45, 95]]);
         }
         return [];
     }
@@ -306,21 +306,6 @@ class Container {
             }
     }
     
-    playContainerSound(game) {
-        // play container
-        if (game.gameData.containers[this.name].sounds != undefined && game.gameData.containers[this.name].sounds[this.stateIdx].length > 0) {
-            switch(game.gameData.containers[this.name].sounds[this.stateIdx]) {
-                case "doorOpen" :
-                    game.sfDoorOpen.play('', 0, 0.1, false, true);
-                    break;
-                case "doorClose" :
-                    game.sfDoorClose.play('', 0, 0.1, false, true);
-                    break;
-            }
-        }
-    }
-    
-    
     // don't need this for lyre location - checking every update cycle instead
     //[TODO] decide if this is where sound for items in containers is generated
     playItemSound(game) {
@@ -330,7 +315,7 @@ class Container {
                 switch(game.gameData.items[this.itemslist[i].name].sounds) {
                     case "lyremusic" :
                         if (game.userPreference.data.sound === "true") {
-                            game.sflyremusic.play('', 0, 0.1, false, true);
+                            game.lyraSound.play('lyreMusic', false, .5);
                         }
                         // this signals the bandits that the lyre is found
                         //game.gameData.lyreLocation.found = true;
@@ -346,11 +331,11 @@ class Container {
             case "closedhighlight":
                 if (this.setState(game, "openhighlight")) {
                     if (game.userPreference.data.sound === "true") {
-                            this.playContainerSound(game);
+                        game.lyraSound.play(game.lyraSound.pickSound(this.sprite.key, 'open'), false, .5);
                     }
                     // using this to make lyre sound
                     this.playItemSound(game);
-                    
+
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.showAllItems(game);
                     if (this.idx == game.gameData.banditAIdata.banditParams[idx].containerObjective) {
@@ -370,7 +355,9 @@ class Container {
                     comm.activeContainerIndex = -1;
                     comm.resetCommunicatorInventory();
                     if (game.userPreference.data.sound === "true") {
-                            this.playContainerSound(game);
+                        if (this.sprite.key !== 'danceFloor') {
+                            game.lyraSound.play(game.lyraSound.pickSound(this.sprite.key, 'close'), false, .5);
+                        }
                     }
                     this.sprite.body.checkCollision.any = game.gameData.containers[this.name].checkCollision[this.stateIdx];
                     this.hideAllItems();
@@ -387,7 +374,7 @@ class Container {
                         comm.resetCommunicatorInventory();
                     }
                     if (game.userPreference.data.sound === "true") {
-                            this.playContainerSound(game);
+                        game.lyraSound.play(game.lyraSound.pickSound(this.sprite.key, 'open'), false, .5);
                     }
                     // using this to make lyre sound and to indicate to bandits that the lyre is found
                     this.playItemSound(game);

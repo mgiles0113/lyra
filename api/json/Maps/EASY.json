@@ -406,7 +406,7 @@
             "animationTags" : ["open", "openhighlight", "closed", "closedhighlight","blastoff"],
             "textureArr" : [0, 1, 2, 3, 4],
             "animationArr" : [[0],[0,1],[2],[2,3,3,4,4,4,5,5],[4,5]],
-            "itemscapacity" : 0,
+            "itemscapacity" : 4,
             "containerstate" : "open",
             "stateIdx" : 0,
             "immovable" : true,
@@ -467,8 +467,26 @@
             "immovablebody" : true,
             "moves" : false,
             "checkCollision" : [true, true, true, true]
-        }
         },
+        "docking_stn": {
+            "imageTag" : "docking_stn",
+            "itemRef":"assets/sprites/docking_stn.png",
+            "frames" : 1,
+            "name": "docking_stn",
+            "width" : 32,
+            "height" : 32,
+            "animationTags" : ["open", "openhighlight", "open", "openhighlight"],
+            "textureArr" : [0, 1, 2, 3],
+            "animationArr" : [[0],[0],[0],[0]],
+            "itemscapacity" : 0,
+            "containerstate" : "open",
+            "stateIdx" : 0,
+            "immovable" : true,
+            "immovablebody" : true,
+            "moves" : false,
+            "checkCollision" : [false, false, false, false]
+        }
+    },
     "containerarray" : [],
     "commandcenter" : {
         "name" : "commandcenter",
@@ -479,8 +497,8 @@
     },
     "dock" : {
         "name" : "dock",
-        "containers" : [],
-        "containercoord" : [],
+        "containers" : ["docking_stn"],
+        "containercoord" : [[0,0]],
         "item_types_allowed" : [],
         "floor" : [102,98,102,93]
     },

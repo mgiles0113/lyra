@@ -42,6 +42,10 @@ Lyra.MainMenu = function() {
         story : $(".story"),
         noStory : $(".no-story"),
         passiveStory : $(".passive-story"),
+        logoutText : $("#logout-menu-text"),
+        logout : $(".logout"),
+        noLogout : $(".no-logout"),
+        passiveLogout : $(".passive-logout"),
         savedGameList : {
             pageCount : 0,
             partialLastPage : false,
@@ -52,6 +56,17 @@ Lyra.MainMenu = function() {
 
 Lyra.MainMenu.prototype = {
     preload: function() {
+        if (this.game.storyStateRunning) {
+            this.game.storyStateRunning = 0;
+        } else {
+            this.game.lyraSound.stop();
+            if (this.game.userPreference.data.sound === "true") {
+                if (!this.game.lyraSound.music['menuMusic'].isPlaying) {
+                    this.game.lyraSound.play('menuMusic', true, .6);
+                }
+	        }
+        }
+
         this.createClickEvents();
         this.populateMenuText();
         this.menu.mainMenuCard.css('display', 'inherit');
@@ -129,6 +144,9 @@ Lyra.MainMenu.prototype = {
         this.menu.storyText.click(function() {
             self.showMenu('story');
         });
+        this.menu.logoutText.click(function() {
+            self.logout();
+        });
     },
     update: function() {
         if (this.game.userPreference.savedGameFilesLoaded) {
@@ -139,6 +157,44 @@ Lyra.MainMenu.prototype = {
             this.game.userPreference.newGameFileReady = 0;
             this.launchGame(this.game.userPreference.data.mapData);
         }
+    },
+    displayLogoutOverlay: function() {
+        var overlay = $("<div id='logout-overlay'>Logging out...</div>");
+        overlay.css('position', 'absolute')
+               .css('top', '0')
+               .css('left', '0')
+               .css('backgroundColor', 'rgba(0, 0, 0, .6)')
+               .css('textAlign', 'center')
+               .css('paddingTop', $(window).height() * .4)
+               .css('width', '100%')
+               .css('fontSize', '6em')
+               .css('color', 'white')
+               .css('height', '100%');
+        $("body").append(overlay);
+    },
+    logout: function() {
+        this.displayLogoutOverlay();
+        var method = 'POST',
+        url = apiUrl,
+        parameters = {
+            action : 'logout',
+        };
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: parameters,
+            dataType: 'json',
+            context: this,
+            success: function(response) {
+                if (response.error === "none") {
+                    location.reload();
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
     },
     populateLoadMenuText: function() {
         this.menu.savedGameList.pageCount = Math.floor(this.game.userPreference.savedGameCount / 5);
@@ -207,14 +263,10 @@ Lyra.MainMenu.prototype = {
     toggleSound: function(choice) {
         if (choice === 'true') {
             this.game.userPreference.data.sound = 'true';
-            if (this.game.menuMusic.isPlaying === false) {
-	        	this.game.menuMusic.play('', 0, 0.1, true, true);
-	    	}
+	        this.game.lyraSound.play('menuMusic', true, .6);
         } else {
             this.game.userPreference.data.sound = 'false';
-            if (this.game.menuMusic.isPlaying === true) {
-                this.game.menuMusic.stop();
-            }
+            this.game.lyraSound.stop('');
         }
         this.game.userPreference.update();
         this.menu.activeMenu = '';
@@ -241,6 +293,7 @@ Lyra.MainMenu.prototype = {
 	    this.menu.optionsLanguagePirate.unbind('click');
 	    this.menu.optionsLanguageSpanish.unbind('click');
         this.menu.storyText.unbind('click');
+        this.menu.logoutText.unbind('click');
     },
     populateMenuText: function() {
         this.languageChoice = this.game.userPreference.data.languageChoice;
@@ -401,9 +454,6 @@ Lyra.MainMenu.prototype = {
         });
     },
 	launchGame: function(mapData) {
-	    if (this.game.menuMusic.isPlaying) {
-	        this.game.menuMusic.stop();
-	    }
 	    this.game.gameData = JSON.parse(mapData);
 	   // this.game.playerData = PLAYER_DATA;
 	   // this.game.itemData = ITEMS_DATA;

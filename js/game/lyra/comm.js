@@ -159,13 +159,12 @@ class Comm {
         // player items
         // player equipped item
         this.playerEquippedItem.slot.click(function() {
-            console.log('equipped item slot clicked');
+
         });
         this.playerEquippedItem.option1.element.click(function() {
             var currentPlayer = self.playerManager.players[self.activePlayerIndex];
             if (currentPlayer.sprite.customParams.inventory.length < currentPlayer.itemsCapacity) {
                 if (self.playerEquippedItem.option1.isActive) {
-                    console.log('equipped item option 1 clicked');
                     currentPlayer.unequipItem();
                     self.resetCommunicatorInventory();
                 }
@@ -175,16 +174,16 @@ class Comm {
         });
         this.playerEquippedItem.option2.element.click(function() {
             if (self.playerEquippedItem.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('equipped item option 2 clicked');
+
             }
         });
         // item 1
         this.playerItems.item1.slot.click(function() {
-            console.log('player item 1 slot clicked');
+
         });
         this.playerItems.item1.option1.element.click(function() {
             if (self.playerItems.item1.option1.isActive) {
-                console.log('player item 1 option 1 clicked');
+
                 var currentPlayer = self.playerManager.players[self.activePlayerIndex];
                 currentPlayer.equipItem(0);
                 self.resetCommunicatorInventory();
@@ -192,18 +191,18 @@ class Comm {
         });
         this.playerItems.item1.option2.element.click(function() {
             if (self.playerItems.item1.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('player item 1 option 2 clicked');
+
                 self.containerManager.containers[self.activeContainerIndex].transferItem('player', 0, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 2
         this.playerItems.item2.slot.click(function() {
-            console.log('player item 2 slot clicked');
+
         });
         this.playerItems.item2.option1.element.click(function() {
             if (self.playerItems.item2.option1.isActive) {
-                console.log('player item 2 option 1 clicked');
+
                 var currentPlayer = self.playerManager.players[self.activePlayerIndex];
                 currentPlayer.equipItem(1);
                 self.resetCommunicatorInventory();
@@ -211,18 +210,17 @@ class Comm {
         });
         this.playerItems.item2.option2.element.click(function() {
             if (self.playerItems.item2.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('player item 2 option 2 clicked');
+
                 self.containerManager.containers[self.activeContainerIndex].transferItem('player', 1, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 3
         this.playerItems.item3.slot.click(function() {
-            console.log('player item 3 slot clicked');
+
         });
         this.playerItems.item3.option1.element.click(function() {
             if (self.playerItems.item3.option1.isActive) {
-                console.log('player item 3 option 1 clicked');
                 var currentPlayer = self.playerManager.players[self.activePlayerIndex];
                 currentPlayer.equipItem(2);
                 self.resetCommunicatorInventory();
@@ -230,18 +228,16 @@ class Comm {
         });
         this.playerItems.item3.option2.element.click(function() {
             if (self.playerItems.item3.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('player item 3 option 2 clicked');
                 self.containerManager.containers[self.activeContainerIndex].transferItem('player', 2, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 4
         this.playerItems.item4.slot.click(function() {
-            console.log('player item 4 slot clicked');
+
         });
         this.playerItems.item4.option1.element.click(function() {
             if (self.playerItems.item4.option1.isActive) {
-                console.log('player item 4 option 1 clicked');
                 var currentPlayer = self.playerManager.players[self.activePlayerIndex];
                 currentPlayer.equipItem(3);
                 self.resetCommunicatorInventory();
@@ -249,7 +245,6 @@ class Comm {
         });
         this.playerItems.item4.option2.element.click(function() {
             if (self.playerItems.item4.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('player item 4 option 2 clicked');
                 self.containerManager.containers[self.activeContainerIndex].transferItem('player', 3, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
@@ -258,64 +253,61 @@ class Comm {
         // container items
         // item 1
         this.containerItems.item1.slot.click(function() {
-            console.log('container item 1 slot clicked');
+
         });
         this.containerItems.item1.option1.element.click(function() {
             if (self.containerItems.item1.option1.isActive) {
-                console.log('cont item 1 option 1 clicked');
+
             }
         });
         this.containerItems.item1.option2.element.click(function() {
             if (self.containerItems.item1.option2.isActive && self.activeContainerIndex !== -1) {
-                console.log('cont item 1 option 2 clicked');
+
                 self.containerManager.containers[self.activeContainerIndex].transferItem('container', 0, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 2
         this.containerItems.item2.slot.click(function() {
-            console.log('container item 2 slot clicked');
+
         });
         this.containerItems.item2.option1.element.click(function() {
             if (self.containerItems.item2.option1.isActive) {
-                console.log('cont item 2 option 1 clicked');
+
             }
         });
         this.containerItems.item2.option2.element.click(function() {
             if (self.containerItems.item2.option2.isActive) {
-                console.log('cont item 2 option 2 clicked');
                 self.containerManager.containers[self.activeContainerIndex].transferItem('container', 1, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 3
         this.containerItems.item3.slot.click(function() {
-            console.log('container item 3 slot clicked');
+
         });
         this.containerItems.item3.option1.element.click(function() {
             if (self.containerItems.item3.option1.isActive) {
-                console.log('cont item 3 option 1 clicked');
+
             }
         });
         this.containerItems.item3.option2.element.click(function() {
             if (self.containerItems.item3.option2.isActive) {
-                console.log('cont item 3 option 2 clicked');
                 self.containerManager.containers[self.activeContainerIndex].transferItem('container', 2, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
         });
         // item 4
         this.containerItems.item4.slot.click(function() {
-            console.log('container item 4 slot clicked');
+
         });
         this.containerItems.item4.option1.element.click(function() {
             if (self.containerItems.item4.option1.isActive) {
-                console.log('cont item 4 option 1 clicked');
+
             }
         });
         this.containerItems.item4.option2.element.click(function() {
             if (self.containerItems.item4.option2.isActive) {
-                console.log('cont item 4 option 2 clicked');
                 self.containerManager.containers[self.activeContainerIndex].transferItem('container', 3, self.playerManager.players[self.activePlayerIndex], self);
                 self.resetCommunicatorInventory();
             }
@@ -345,13 +337,9 @@ class Comm {
                 
             }
         } else if (type === 'playerTransfer') {
-            console.log('enabling');
-            console.log('item' + slot);
             this.playerItems['item' + slot].option2.element.removeClass('player-transfer-inactive');
             this.playerItems['item' + slot].option2.element.addClass('player-transfer-active');
-            console.log(this.playerItems['item' + slot].option2.isActive);
             this.playerItems['item' + slot].option2.isActive = true;
-            console.log(this.playerItems['item' + slot].option2.isActive);
         }
     }
 
@@ -379,7 +367,6 @@ class Comm {
                 this.playerItems['item' + slot].option1.isActive = false;
             }
         } else if (type === 'playerTransfer') {
-            console.log('disabling');
             this.playerItems['item' + slot].option2.element.removeClass('player-transfer-active');
             this.playerItems['item' + slot].option2.element.addClass('player-transfer-inactive');
             this.playerItems['item' + slot].option2.isActive = false;
@@ -459,7 +446,6 @@ class Comm {
         if (this.activeContainerIndex !== -1) {
             // enable transfer slots for player inventory if the container has room
             if (activeContainer.itemslist.length < activeContainer.itemscapacity) {
-                console.log('theres room!');
                 for (var i = 0; i < this.playerManager.players[this.activePlayerIndex].sprite.customParams.inventory.length; i++) {
                     this.enableSlot('playerTransfer', i + 1);
                 }

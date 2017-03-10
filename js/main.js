@@ -1,5 +1,6 @@
-var gameTitle = "Lyra Escape";
 var primaryCard = $("#primary-card");
+primaryCard.css("display", "none");
+var gameTitle = "Lyra Escape";
 var loginForm = $("#login-form");
 var loginTitle = $("#login-title");
 var loginUsername = $("#login-username");
@@ -9,6 +10,7 @@ var loginPasswordLabel = $("#login-password-label");
 var languageSelection = $("#language-selection");
 var submitButton = $("#submit-button");
 var createAccountButton = $("#create-user-link");
+var statusMessage = $("#status-message");
 
 var gameWidth = 1184;
 var gameHeight = 640;
@@ -17,8 +19,8 @@ var jsonLanguage;
 
 loadLanguageFile();
 
-function populateLoginPage(languageText) {
-    jsonLanguage = JSON.parse(languageText);
+function populateLoginPage() {
+    primaryCard.css('display', 'inherit');
     languageSelection.html('');
     for (var i = 0; i < jsonLanguage.language.length; i++) {
         languageSelection.append("<option value='" + jsonLanguage.languageCodes[i] + "'>" + jsonLanguage.language[i] + "</option");
@@ -38,6 +40,7 @@ function populateLoginPage(languageText) {
 
 function loadGame(userId) {
     primaryCard.html('');
+    primaryCard.css('display', 'inherit');
     document.title = gameTitle + " | " + jsonLanguage.mainmenu[languageChoice];
     var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'primary-card', null, true);
     game.userPreference = new UserPreference();
@@ -65,13 +68,44 @@ function loadLanguageFile(game) {
         },
         dataType: 'json',
         success: function(response) {
-            populateLoginPage(response);
+            jsonLanguage = JSON.parse(response);
+            $.ajax({
+                url: apiUrl,
+                type: 'GET',
+                context: this,
+                data: { 
+                    "entity" : "authenticated"
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.authenticated === "yes") {
+                        loadGame(response.userId);
+                    } else if (response.authenticated === "no") {
+                        populateLoginPage();
+                    }
+                },
+                error: function(response) {
+                    console.log('fail');
+                }
+            });
         },
         error: function(response) {
             console.log(response);
             console.log('fail');
         }
     });
+}
+
+function updateStatusMessage(message) {
+    console.log('updating status message');
+    statusMessage.html('');
+    statusMessage.removeClass();
+    statusMessage.addClass('status-alert');
+    statusMessage.html(message);
+    
+    setTimeout(function() {
+        statusMessage.addClass('status-settle');
+    }, 200);
 }
 
 loginForm.submit(function(e) {
@@ -93,9 +127,11 @@ loginForm.submit(function(e) {
         context: this,
         success: function(response) {
             if (response.error === "none") {
+                updateStatusMessage("Success!");
                 loadGame(response.userId);
             } else {
-                loadGame('2');
+                console.log(response);
+                updateStatusMessage(response.error);
             }
         },
         error: function(response) {

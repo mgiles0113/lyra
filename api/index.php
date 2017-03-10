@@ -3,6 +3,20 @@ require('classes/User.php');
 require('classes/DatabaseConnection.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_POST['action']) {
+        switch ($_POST['action']) {
+            case 'login':
+                login();
+                break;
+            case 'logout':
+                session_start();
+                session_destroy();
+                echo '{ "error" : "none" }';
+                break;
+            default:
+                break;
+        }
+    }
     
     switch ($_POST['entity']) {
         case 'addUser':
@@ -20,11 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo '{ "error" : "none" }';
             break;
     }
-    if ($_POST['action'] == 'login') {
-        login();
-    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     switch ($_GET['entity']) {
+        case 'authenticated':
+            session_start();
+            if ($_SESSION['authenticated']) {
+                echo '{ "authenticated" : "yes", "userId" : "' . $_SESSION['authenticated'] . '" }';
+            } else {
+                echo '{ "authenticated" : "no" }';    
+            }
+            break;
         case 'map':
             getMap($_GET['mapSelection']);
             break;
@@ -79,15 +98,18 @@ function login() {
 
     switch ($authStatus) {
         case 1000:
+            $_SESSION['authenticated'] = $user->getId();
             echo '{ "error" : "none", "userId" : "' . $user->getId() . '"}';
             break;
         case 1002:
-            echo '{ "error" : "invalid login" }';
+            echo '{ "error" : "Invalid login, please ensure the username and password are correct." }';
             break;
         case 1003:
-            echo '{ "error" : "invalid login" }';
+            echo '{ "error" : "Invalid login, please ensure the username and password are correct." }';
             break;
         default:
+            echo '{ "error" : "unknown" }';
+            break;
     }
 }
 
