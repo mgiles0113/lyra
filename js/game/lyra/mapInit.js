@@ -42,8 +42,36 @@ class MapBuilder {
             }
         }
         
+        // do nothing for now with passages
+        // for (var i = 0; i<roomManager.passageIdx.length; i++) {
+            
+        // }
+        
+        // do nothing for command center at roomManager.rooms[0]
+
+
+        
+        // add containers to main hall
+        for (var j = 0; j< game.gameData.mainhall.containers.length; j++) {
+            containerDef = game.gameData.containers[game.gameData.mainhall.containers[j]];
+            itemslistArr = this.generateItems(game.gameData.mainhall, game.gameData.containers[game.gameData.mainhall.containers[j]]);
+            itemsList = itemsList.concat(itemslistArr);
+            containerLocType.push({x: roomManager.rooms[2].center_x + containerDef.width/2 + game.gameData.mainhall.containercoord[j][0], 
+                    y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], room: roomManager.rooms[roomManager.mainhallIdx].mapName, itemslist:itemslistArr});
+
+        }
+        
         // assign the lyre to a container
         containerLocType = this.assignLyre(game, idxEmptyContainerSlot, containerLocType, lyrelocator);
+        
+        // dock is a bad place for the lyre
+        // do nothing for docking bay at roomManager.rooms[1]
+        for (var j = 0; j< game.gameData.dock.containers.length; j++) {
+            containerDef = game.gameData.containers[game.gameData.dock.containers[j]];
+            itemslistArr = this.generateItems(game.gameData.dock, game.gameData.containers[game.gameData.dock.containers[j]]);
+            containerLocType.push({x: roomManager.rooms[roomManager.dockIdx].center_x + containerDef.width/2 + game.gameData.dock.containercoord[j][0], 
+                    y: roomManager.rooms[roomManager.dockIdx].center_y + containerDef.height/2 + game.gameData.dock.containercoord[j][1],name:game.gameData.dock.containers[j], room: roomManager.rooms[roomManager.dockIdx].mapName, itemslist:itemslistArr});
+        }
         
         // add escape pods
         var itemsNeeded = [];
@@ -59,23 +87,7 @@ class MapBuilder {
             }
         }
         
-        // do nothing for now with passages
-        // for (var i = 0; i<roomManager.passageIdx.length; i++) {
-            
-        // }
-        
-        // do nothing for command center at roomManager.rooms[0]
 
-        // do nothing for docking bay at roomManager.rooms[1]
-        
-        // add containers to main hall
-        for (var j = 0; j< game.gameData.mainhall.containers.length; j++) {
-            containerDef = game.gameData.containers[game.gameData.mainhall.containers[j]];
-            itemslistArr = this.generateItems(game.gameData.mainhall, game.gameData.containers[game.gameData.mainhall.containers[j]]);
-            containerLocType.push({x: roomManager.rooms[2].center_x + containerDef.width/2 + game.gameData.mainhall.containercoord[j][0], 
-                    y: roomManager.rooms[2].center_y + containerDef.height/2 + game.gameData.mainhall.containercoord[j][1],name:game.gameData.mainhall.containers[j], room: roomManager.rooms[roomManager.mainhallIdx].mapName, itemslist:itemslistArr});
-
-        }
         
         return containerLocType;
     }

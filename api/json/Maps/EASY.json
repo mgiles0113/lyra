@@ -498,7 +498,7 @@
     "dock" : {
         "name" : "dock",
         "containers" : ["docking_stn"],
-        "containercoord" : [[0,0]],
+        "containercoord" : [[144,0]],
         "item_types_allowed" : [],
         "floor" : [102,98,102,93]
     },
