@@ -25,7 +25,7 @@
       "doorClose" : "assets/audio/door_close.mp3"
     },
     "playerCount": 3,
-    "banditCount": 3,
+    "banditCount": 1,
     "roomCount": 6,
     "playerarray" : [],
     "characters" : [
@@ -232,7 +232,7 @@
     ],
     "slimearray": [],
     "spawnCoord": [],
-    "slimemotionlimit" : 20,
+    "slimemotionlimit" : 10,
     "items" : {
         "circuit": {
             "itemRef":"assets/sprites/items/circuit.png",
@@ -498,7 +498,7 @@
     "dock" : {
         "name" : "dock",
         "containers" : ["docking_stn"],
-        "containercoord" : [[144,0]],
+        "containercoord" : [[176,0]],
         "item_types_allowed" : [],
         "floor" : [102,98,102,93]
     },

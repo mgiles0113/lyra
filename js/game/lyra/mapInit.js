@@ -224,7 +224,7 @@ class MapBuilder {
   //          }
             
             // put bandits on docking bay
-            for (var i = 0; i< game.gameData.bandit.length; i++) {
+            for (var i = 0; i< game.gameData.banditCount; i++) {
                 playerLocType.push({
                     idx : i + game.gameData.crew.length,
                     isSelected: false, 

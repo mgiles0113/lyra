@@ -22,6 +22,7 @@ class Player {
         // using this to indicate to PlayerManager that the path is available to start updates for bandit AI
         this.sprite.customParams.pathfound = playerData.pathfound;
         this.sprite.customParams.equipped = playerData.equipped;
+        this.sprite.customParams.speed = 200;
         
         //PathFinder for Pt&Click
         this.sprite.customParams.path = playerData.path;
@@ -165,8 +166,14 @@ class Player {
         
 		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
 	        
+	        //Set Speed for Player vs Bandit
+	        if(this.characterType === "bandit"){
+	            this.sprite.customParams.speed = 100;
+	            
+	        }
+	        
 	        //Move Sprite to Next Pt.	    
-		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, 200);
+		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, this.sprite.customParams.speed);
 		    
             //Check if sprite has reached the next point.
             this.sprite.customParams.dist_dest = game.physics.arcade.distanceToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y);
@@ -354,20 +361,20 @@ class Player {
     }
     
     goUp(game) {
-        this.sprite.body.velocity.y = -300;
+        this.sprite.body.velocity.y = -200;
         this.sprite.animations.play('up');
     }
     
     goRight(game) {
-        this.sprite.body.velocity.x = 300;
+        this.sprite.body.velocity.x = 200;
         this.sprite.animations.play('right');
     }
     goLeft(game) {
-        this.sprite.body.velocity.x = -300;
+        this.sprite.body.velocity.x = -200;
         this.sprite.animations.play('left');
     }
     goDown(game) {
-        this.sprite.body.velocity.y = 300;
+        this.sprite.body.velocity.y = 200;
         this.sprite.animations.play('down');
     }
    
@@ -756,7 +763,7 @@ Player.rawData = function (game, idx, playerLocType) {
 //    x : x location for character
 //    y : y location
 class PlayerManager {
-    constructor (game, playerLocType, grid,  containerManager) {
+    constructor (game, playerLocType, grid, containerManager) {
         this.players = [];
         // indexes in the array corresponding to the type character
         this.crew = [];
