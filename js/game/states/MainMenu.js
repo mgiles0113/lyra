@@ -82,7 +82,7 @@ Lyra.MainMenu.prototype = {
             self.game.userPreference.generateSavedGameFile(this, 'EASY');
         });
         this.menu.newGameHard.click(function() {
-            self.game.userPreference.generateSavedGameFile(this, 'EASY');
+            self.game.userPreference.generateSavedGameFile(this, 'HARD');
         });
         this.menu.loadGameText.click(function() {
             self.game.userPreference.getSavedGameFiles(this);
