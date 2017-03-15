@@ -476,30 +476,34 @@ class Player {
     // use this method to define what to do if a player overlaps a container (container is not collidable)
     playerOverlapContainer(game, container) {
         if (this.characterType == "bandit") {
-            this.moveLyreToPlayerInventory(game, container);
-            game.gameData.lyreLocation.found = true;
+            if (this.moveLyreToPlayerInventory(game, container)) {
+                game.gameData.lyreLocation.found = true;
+            }
         }
     }
     
     // use this method to define what to do if a player collides a container (container is collidable)
     playerCollideContainer(game, container) {
         if (this.characterType == "bandit") {
-            this.moveLyreToPlayerInventory(game, container);
-            game.gameData.lyreLocation.found = true;
+            if (this.moveLyreToPlayerInventory(game, container)) {
+                game.gameData.lyreLocation.found = true;
+            }
         }
     }
     
     // used by bandits to pick up lyre
     moveLyreToPlayerInventory(game, container) {
-        if (container.containerstate == "closedhighlight") {
+        //if (container.containerstate == "closedhighlight" || container.containerstate == "open") {
             // shortcutting getting the index for bandit
             container.banditSwitchContainerState(game, this.idx-3);
-        }
+        //}
         var slot = container.isLyreInContainer();
         if ( slot >= 0) {
             this.addItemToList(container.itemslist[slot]);
             container.removeItemFromList(slot);
+            return true;
         }
+        return false;
     }
     
     makeItemEmitter(game) {
@@ -824,9 +828,6 @@ class PlayerManager {
             for (var i=0; i<game.gameData.containersToSearch.length; i++) {
                 game.gameData.banditAIdata.containersToSearch[game.gameData.containersToSearchRoomRef[i]] = game.gameData.containersToSearch[i];
             }
-
-
-            game.gameData.banditAIdata.containersToSearch = game.gameData.containersToSearch;
         }
         for (var i = 0; i <this.bandit.length; i++) {
             // restart ptClick
@@ -1087,6 +1088,10 @@ getBanditUpdateState(game, banditIdx) {
                         this.pathUpdateFromLyreLocation (game, walls, floors, map, containerManager, banditState, i);
                     }
                     else {
+                        if (game.gameData.banditAIdata.banditParams[i].containerObjective < 0) {
+                            // start condition - need a destination
+                            banditState = "founddestination";
+                        }
                         this.pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, banditState, i, game.gameData.banditAIdata.banditParams[i].containerObjective);
                     }
                 }
@@ -1289,15 +1294,17 @@ getBanditUpdateState(game, banditIdx) {
 
     pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, banditState, idx, containerIdx) {
         // jiggle location
-        var xoffset = (getRandomInt(-1, 1)) * 33;
-        var yoffset = (getRandomInt(-1, 1)) * 33;        
+        // var xoffset = (getRandomInt(-1, 1)) * 33;
+        // var yoffset = (getRandomInt(-1, 1)) * 33;        
+        var xoffset = (getRandomInt(-40, 40));
+        var yoffset = (getRandomInt(-40, 40));
         switch (banditState) {
             case ("ontrack") :
                 this.players[this.bandit[idx]].updateBandit(game, walls, floors, map, containerManager);
             break;
 
             case ("checkpath") :
-              if (this.players[this.bandit[idx]].sprite.customParams.dest_x != containerManager.containers[containerIdx].sprite.body.x 
+                if (this.players[this.bandit[idx]].sprite.customParams.dest_x != containerManager.containers[containerIdx].sprite.body.x 
                 || this.players[this.bandit[idx]].sprite.customParams.dest_y != containerManager.containers[containerIdx].sprite.body.y) {
 
                     // set new destination
@@ -1335,7 +1342,7 @@ getBanditUpdateState(game, banditIdx) {
                     console.log("heading to container, path calc for bandit " + idx);
                     console.log(game.gameData.banditAIdata);
                     console.log(this.players[this.bandit[idx]]);
-                    console.log(containerManager.containers[containerIdx]);
+                    console.log(containerManager.containers[newcontainerIdx]);
 
                     // reset update updateCount
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
@@ -1420,15 +1427,15 @@ getBanditUpdateState(game, banditIdx) {
                 return ([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
             } else {
                 // aim for upper right
-                return ([xC + game.gameData.containers[container.name].width + 2, yC - 2]);
+                return ([xC + game.gameData.containers[container.name].width + 2, yC -2]);
             }
         } else {
             if (yB > yC) {
                 // aim for lower left
-                return ([xC - game.gameData.containers[container.name].width - 2, yC + game.gameData.containers[container.name].height + 2]);
+                return ([xC - 2, yC + game.gameData.containers[container.name].height + 2]);
             } else {
-                // aim for upper leftt
-                return ([xC - game.gameData.containers[container.name].width - 2, yC - 2]);
+                // aim for upper left
+                return ([xC - 2, yC - 2]);
             }
         }
     }
@@ -1555,13 +1562,38 @@ getBanditUpdateState(game, banditIdx) {
         // [TODO] improve algorithm to only go to containers that make sense
         // this is going to randomly pick a container instance, could be a door or suppressant
         var rndNum = getRandomInt(0, containerManager.containers.length-1);
-        while (containerManager.containers[rndNum].name == "suppresant") {
+        while (this.checkForValidContainersToSearch(containerManager.containers[rndNum])) {
             rndNum = getRandomInt(0, containerManager.containers.length-1);
         }
         return (rndNum);
     }
-
     
+    checkForValidContainersToSearch(container) {
+        if (container.name === "suppresant") {
+            return true;
+        }
+        if (container.name === "espresso"){
+            return true;
+        }
+        
+        if (container.name === "danceFloor"){
+            return true;
+        }
+         
+        if (container.name === "transparent"){
+            return true;
+        }
+          
+        if (container.name === "escapepod") {
+            return true;
+        }
+        
+        if (container.itemscapacity < 1) {
+            return true;
+        }
+
+        return false;
+    }
     
     savePlayerManager (game, lyrelocator) {
         var savedPlayers = [];

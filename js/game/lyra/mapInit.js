@@ -242,12 +242,12 @@ class MapBuilder {
     }
     
     // create suppressant container definitions
-    addSuppressant(mapObjSuppressant) {
+    addSuppressant(game, mapObjSuppressant) {
         var containerLocType = [];
         for (var i = 0; i<mapObjSuppressant.length; i++ ) {
             //this.suppresantArr[this.map.map.objects["suppressant"][i].name] = this.map.map.objects["suppressant"][i];
             //Create suppressant items
-            var containeritem =  new ContainerItem(0, "suppresant");
+            var containeritem =  new ContainerItem(0, "suppresant", game.gameData.items["suppresant"].capacity);
             containerLocType[containerLocType.length] = {x:mapObjSuppressant[i].x, y:mapObjSuppressant[i].y, name:"transparent", room: mapObjSuppressant[i].mapName, itemslist: [containeritem]};
         }
         return containerLocType;

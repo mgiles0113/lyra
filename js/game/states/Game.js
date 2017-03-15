@@ -101,7 +101,7 @@ Lyra.LyraGame.prototype = {
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager, this.mapLayer['floors']);
             
             var containerLocType = mapInitializer.placeContainersInRooms(this.game, this.roomManager, this.lyrelocator);
-            containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.map.map.objects["suppressant"]));
+            containerLocType = containerLocType.concat(mapInitializer.addSuppressant(this.game, this.map.map.objects["suppressant"]));
             containerLocType = containerLocType.concat(mapInitializer.addDoors(this.map.map.objects["doors"]));
             this.containerManager = new ContainerManager(this.game,  containerLocType, this.lyrelocator);
             

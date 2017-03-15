@@ -343,7 +343,14 @@ class Container {
                     }
                 }
                 break;
+                
+            case "openhighlight":
+                if (this.idx == game.gameData.banditAIdata.banditParams[idx].containerObjective) {
+                        game.gameData.banditAIdata.banditParams[idx].containerObjective = -1;
+                }
+                break;
             }
+            
         this.sprite.animations.play(this.containerstate);    
     }
 
@@ -384,7 +391,7 @@ class Container {
                     if (this.name == "escapepod") {
                         this.showEscapePodRepairList(game);
                     }
-                    if (this.isLyreInContainer()) {
+                    if (this.isLyreInContainer() >= 0) {
                         game.gameData.lyreLocation.found = true;
                     }
                 }
@@ -575,7 +582,7 @@ class ContainerManager {
                 container.openContainerHighlighted(game);
                 container.addPlayerHighlight(playerid);
                 // // signals to bandits to follow lyre, someone looked in box
-                // if (container.isLyreInContainer()) {game.gameData.lyreLocation.found = true;};
+                //if (container.isLyreInContainer() >= 0) {game.gameData.lyreLocation.found = true;};
                 break;
             case "closed":
                 container.closedContainerHighlighted(game);
