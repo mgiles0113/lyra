@@ -25,7 +25,7 @@ class Player {
         this.sprite.customParams.speed = 200;
         if (playerData.characterType == "bandit") {
             // slow bandits down
-           this.sprite.customParams.speed = 200; 
+           this.sprite.customParams.speed = 100; 
            //this.sprite.scale.setTo(0.95);
         }
 
@@ -64,10 +64,16 @@ class Player {
         this.stuckInSlimeSignal.add(function(a,b) {
             // [TODO] refer to function in player object?
             //console.log("overlap with slime");
-            this.sprite.customParams.status = "stuck";
+
             this.sprite.body.velocity.x = 0;
             this.sprite.body.velocity.y = 0;
-            //console.log("Player " + this.idx  +" is stuck!");
+            
+            this.sprite.customParams.status = "stuck";
+			this.sprite.customParams.walking = false;
+			//Added to help with animations
+			this.sprite.customParams.direction = null;
+			this.sprite.animations.stop();
+			    
         }, this);
         
        // add emitter
@@ -175,13 +181,6 @@ class Player {
         
 		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
 	        
-            // moved to initialization since this value doesn't change
-	       // //Set Speed for Player vs Bandit
-	       // if(this.characterType === "bandit"){
-	       //     this.sprite.customParams.speed = 100;
-	            
-	       // }
-	        
 	        //Move Sprite to Next Pt.	    
 		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, this.sprite.customParams.speed);
 		    
@@ -198,14 +197,16 @@ class Player {
 			    //Stop if end of path.
 			    if(this.sprite.customParams.walking == false){
 			        this.sprite.frame = 0;
+			        
+			        //Stop Sprite
+		            this.sprite.body.velocity.x = 0;
+				    this.sprite.body.velocity.y = 0;
+				
+				    //Stop Animation
+				    this.sprite.animations.stop();
 			    }
 		        
-		        //Stop Sprite
-		        this.sprite.body.velocity.x = 0;
-				this.sprite.body.velocity.y = 0;
-				
-				//Stop Animation
-				this.sprite.animations.stop();
+
 			}
 			
 			//If player overlaps slime, stop immed.
@@ -234,24 +235,23 @@ class Player {
     getAnimations(game){
         var angle_rads = game.math.angleBetween(this.sprite.x, this.sprite.y, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y);
         var angle = game.math.radToDeg(angle_rads);
-        //console.log(angle);
         
         if(angle != 0){
             //Left
             if( (angle > 135 && angle <= 180) || (angle >= -180 && angle <= -135) ){
-                this.sprite.animations.play('left');    
+                this.sprite.animations.play('left',  null , true);
         
             //Up    
             }else if(angle > -135 && angle <= -45){
-                this.sprite.animations.play('up');
+                this.sprite.animations.play('up', null, true);
         
             //Right  
             }else if(angle > -45 && angle <= 45){
-                this.sprite.animations.play('right');
+                this.sprite.animations.play('right', null, true);
         
             //Down    
-            }else if(angle > 45 && angle <= 135){
-                this.sprite.animations.play('down');
+            }else if( this.sprite.customParams.directioangle > 45 && angle <= 135){
+                this.sprite.animations.play('down', null, true);
             }
         }
      
@@ -372,20 +372,43 @@ class Player {
     
     goUp(game) {
         this.sprite.body.velocity.y = -200;
-        this.sprite.animations.play('up');
+        
+        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+            this.sprite.animations.play('up_lyre');
+        }else{
+            this.sprite.animations.play('up');
+        }
+
     }
     
     goRight(game) {
         this.sprite.body.velocity.x = 200;
-        this.sprite.animations.play('right');
+        
+        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+            this.sprite.animations.play('right_lyre');
+        }else{
+            this.sprite.animations.play('right');
+        }
+
     }
     goLeft(game) {
         this.sprite.body.velocity.x = -200;
-        this.sprite.animations.play('left');
+        
+        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+            this.sprite.animations.play('left_lyre');
+        }else{
+            this.sprite.animations.play('left');
+        }
     }
     goDown(game) {
         this.sprite.body.velocity.y = 200;
-        this.sprite.animations.play('down');
+        
+        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+            this.sprite.animations.play('down_lyre');
+        }else{
+            this.sprite.animations.play('down');
+        }
+        
     }
    
     stopUp(game) {
