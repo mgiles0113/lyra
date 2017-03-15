@@ -301,6 +301,10 @@
             "emitter": "blastersmoke",
             "emitterRef": "assets/sprites/items/whitesmokeparticle.png",
             "capacity" : 1000
+        },
+        "redshat":{
+            "itemRef":"assets/sprites/items/redshat.png",
+            "name": "redshat"
         }
     },
     "itemsarray" : [],
@@ -541,14 +545,14 @@
             "name" : "crew_quarters",
             "containers" : ["smallbox", "smallbox", "smallbox", "sleeppod", "sleeppod"],
             "containercoord" : [[-48, -48], [48, -48], [48, 48], [48, -112],[ 112,-112 ]],
-            "item_types_allowed" : ["circuit", "duct_tape", "fuse", "wrench","monitor"],
+            "item_types_allowed" : ["circuit", "duct_tape", "redshat", "wrench","monitor"],
             "floor" : [87,88, 97,97,97,98]
         },
         "rec_room" : {
             "name" : "rec_room",
             "containers" : ["danceFloor", "smallbox", "smallbox", "smallbox", "smallbox"],
             "containercoord" : [[-128, -96], [80, 112], [-144, 112], [80, -112], [-144, -112]],
-            "item_types_allowed" : ["circuit", "fuel_tank", "fuse", "wrench"],
+            "item_types_allowed" : ["redshat", "fuel_tank", "fuse", "wrench"],
             "floor" : [98]
         },
         "engine_room" : {

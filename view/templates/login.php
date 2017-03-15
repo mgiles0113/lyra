@@ -72,7 +72,7 @@
                             <div class="col-xs-2" id="player-equipped">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <h5>Equipped</h5>
+                                        <h5 id="player-equipped-title">Equipped</h5>
                                     </div>
                                 </div>
                                 <div class="row" id="player-inventory-row-1">
@@ -98,7 +98,7 @@
                             <div class="col-xs-5" id="player-inventory">
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <h4>Player Inventory</h4>
+                                        <h4 id="player-inventory-title">Player Inventory</h4>
                                     </div>
                                 </div>
                                 <div class="row" id="player-inventory-row-1">
@@ -176,7 +176,7 @@
                             </div>
                             <div class="col-xs-5" id="container-inventory">
                                 <div class="row">
-                                    <h4>Container Inventory</h4>
+                                    <h4 id="container-inventory-title">Container Inventory</h4>
                                 </div>
                                 <div class="row" id="container-inventory-row-1">
                                     <div class="col-xs-3">
@@ -255,7 +255,7 @@
                     </div>
                     <div class="col-xs-2" id="timer">
                         <div class="row">
-                            <h4 class="col-xs-12">Oxygen</h4>    
+                            <h4 class="col-xs-12" id="oxygen-title">Oxygen</h4>    
                         </div>
                         <div class="row">
                             <div class="col-xs-12">

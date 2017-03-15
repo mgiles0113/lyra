@@ -7,6 +7,7 @@ var addPasswordLabel = $("#add-password-label");
 var languageSelection = $("#language-selection");
 var addUserButton = $("#add-user-button");
 var statusMessage = $("#status-message");
+var backToLogin = $("#create-user-link");
 
 var jsonLanguage;
 var languageChoice;
@@ -27,6 +28,7 @@ function populateLanguageText(languageText) {
         addUsernameLabel.html(jsonLanguage.username[languageChoice]);
         addPasswordLabel.html(jsonLanguage.password[languageChoice]);
         addUserButton.html(jsonLanguage.submit[languageChoice]);
+        backToLogin.html(jsonLanguage.backToLogin[languageChoice]);
     });
 }
 
@@ -80,11 +82,13 @@ addUserForm.submit(function(e) {
         context: this,
         success: function(response) {
             if (response.error === "none") {
-                updateStatusMessage("User created successfully!");
+                updateStatusMessage(jsonLanguage.usercreated[languageChoice]);
+                
             } else if (response.error === "username already exists") {
-                updateStatusMessage("That username already exists! Try again.");
+                updateStatusMessage(jsonLanguage.userexists[languageChoice]);
             } else {
                 updateStatusMessage("Unknown error, contact technical support.");
+                
             }
         },
         error: function(response) {

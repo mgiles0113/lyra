@@ -36,6 +36,26 @@
         "PRT" : "Login",
         "ESP" : "Iniciar Sesión"
     },
+    "invalidlogin" : {
+        "ENG" : "Invalid login, please ensure the username and password are correct.",
+        "PRT" : "Fool! Ye don' know yer name or the code.",
+        "ESP" : "Invalid login, asegúrese de que el nombre de usuario y la contraseña son correctos."
+    },
+    "usercreated" : {
+        "ENG" : "User created successfully!",
+        "PRT" : "Ye may pass",
+        "ESP" : "Usuario creado correctamente."
+    },
+    "userexists" : {
+        "ENG" : "That username already exists! Try again.",
+        "PRT" : "Tha' name be known, choose another",
+        "ESP" : "Ese nombre de usuario ya existe! Inténtalo de nuevo."
+    },
+    "backToLogin" : {
+        "ENG" : "Back to Login",
+        "PRT" : "Go back!",
+        "ESP" : "Atrás para iniciar sesión"
+    },
     "story" : {
         "ENG" : "Story",
         "PRT" : "Lyra's Tale",
@@ -193,6 +213,11 @@
         "PRT": "mornin' grog",
         "ESP": "latté"
     },
+    "redshat" : {
+        "ENG" : "Reds hat",
+        "PRT": "Yer red hat",
+        "ESP": "Rojos sombrero"
+    },
     "commandcenter" : {
         "ENG" : "Command Center",
         "PRT": "Captn's Quarters",
@@ -278,7 +303,28 @@
         "PRT": "Yarrrr Pirates ha' takin the Lyre fer buillion!", 
         "ESP": "¡Los piratas han salido con la Lyre! ¡Paz y armonía ya no son posibles!"},
         
+    "playercontrol" : {"ENG" : "Player Control", 
+        "PRT": "Ye helm", 
+        "ESP":  "Control del reproductor"},
+        
+    "playerinventory":{"ENG" : "Player Inventory", 
+        "PRT": "Ye belt", 
+        "ESP":  "Inventario del reproductor"}, 
+    
+    "equipped" :{"ENG" : "Equipped", 
+        "PRT": "Ye tool", 
+        "ESP":  "Equipado"},
+    
+    "containerinventory" :{"ENG" : "Container Inventory", 
+        "PRT": "Tools in ye locker", 
+        "ESP":  "Inventario de contenedores"},
+    
+    "oxygen" :{"ENG" : "Oxygen", 
+        "PRT": "Air ye be breathin'", 
+        "ESP":  "Oxígeno"},
+    
     "template" : {"ENG" : "English", 
         "PRT": "Pirate", 
         "ESP":  "Español"}
+    
 }

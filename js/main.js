@@ -11,6 +11,11 @@ var languageSelection = $("#language-selection");
 var submitButton = $("#submit-button");
 var createAccountButton = $("#create-user-link");
 var statusMessage = $("#status-message");
+var playercontrol = $("#player-selector-title");
+var equipped = $("#player-equipped-title");
+var playerinventory = $("#player-inventory-title");
+var containerinventory = $("#container-inventory-title");
+var oxygen = $("#oxygen-title");
 
 var gameWidth = 1184;
 var gameHeight = 640;
@@ -131,7 +136,8 @@ loginForm.submit(function(e) {
                 loadGame(response.userId);
             } else {
                 console.log(response);
-                updateStatusMessage(response.error);
+                //updateStatusMessage(response.error);
+                updateStatusMessage(jsonLanguage.invalidlogin[languageChoice]);
             }
         },
         error: function(response) {
