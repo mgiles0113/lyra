@@ -204,7 +204,11 @@ class Player {
 				
 				    //Stop Animation
 				    this.sprite.animations.stop();
+
 			    }
+			    
+			    			        
+
 		        
 
 			}
@@ -239,19 +243,37 @@ class Player {
         if(angle != 0){
             //Left
             if( (angle > 135 && angle <= 180) || (angle >= -180 && angle <= -135) ){
-                this.sprite.animations.play('left',  null , true);
+                
+                if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                    this.sprite.animations.play('left_lyre');
+                }else{
+                    this.sprite.animations.play('left');
+                }
         
             //Up    
             }else if(angle > -135 && angle <= -45){
-                this.sprite.animations.play('up', null, true);
+                
+                if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                    this.sprite.animations.play('up_lyre');
+                }else{
+                    this.sprite.animations.play('up');
+                }
         
             //Right  
             }else if(angle > -45 && angle <= 45){
-                this.sprite.animations.play('right', null, true);
+                if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                    this.sprite.animations.play('right_lyre');
+                }else{
+                    this.sprite.animations.play('right');
+                }
         
             //Down    
             }else if( this.sprite.customParams.directioangle > 45 && angle <= 135){
-                this.sprite.animations.play('down', null, true);
+                if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                    this.sprite.animations.play('down_lyre');
+                }else{
+                    this.sprite.animations.play('down');
+                }
             }
         }
      
@@ -371,43 +393,59 @@ class Player {
     }
     
     goUp(game) {
-        this.sprite.body.velocity.y = -200;
         
-        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
-            this.sprite.animations.play('up_lyre');
-        }else{
-            this.sprite.animations.play('up');
+        if( !this.sprite.customParams.walking ){
+            this.sprite.body.velocity.y = -200;
+        
+            if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                this.sprite.animations.play('up_lyre');
+            }else{
+                this.sprite.animations.play('up');
+            }
         }
 
     }
     
     goRight(game) {
-        this.sprite.body.velocity.x = 200;
         
-        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
-            this.sprite.animations.play('right_lyre');
-        }else{
-            this.sprite.animations.play('right');
+        if( !this.sprite.customParams.walking ){
+        
+            this.sprite.body.velocity.x = 200;
+        
+            if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                this.sprite.animations.play('right_lyre');
+            }else{
+                this.sprite.animations.play('right');
+            }
         }
 
     }
     goLeft(game) {
-        this.sprite.body.velocity.x = -200;
         
-        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
-            this.sprite.animations.play('left_lyre');
-        }else{
-            this.sprite.animations.play('left');
+        if( !this.sprite.customParams.walking ){
+            this.sprite.body.velocity.x = -200;
+        
+            if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                this.sprite.animations.play('left_lyre');
+            }else{
+                this.sprite.animations.play('left');
+            }
         }
+        
     }
     goDown(game) {
-        this.sprite.body.velocity.y = 200;
         
-        if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
-            this.sprite.animations.play('down_lyre');
-        }else{
-            this.sprite.animations.play('down');
+        if( !this.sprite.customParams.walking ){
+            this.sprite.body.velocity.y = 200;
+        
+            if(game.gameData.lyreLocation.playerIdx == this.characterIdx){
+                this.sprite.animations.play('down_lyre');
+            }else{
+                this.sprite.animations.play('down');
+            }
+            
         }
+        
         
     }
    
