@@ -23,7 +23,11 @@ class Player {
         this.sprite.customParams.pathfound = playerData.pathfound;
         this.sprite.customParams.equipped = playerData.equipped;
         this.sprite.customParams.speed = 200;
-        
+        if (playerData.characterType == "bandit") {
+            // slow bandits down
+           this.sprite.customParams.speed = 100; 
+        }
+
         //PathFinder for Pt&Click
         this.sprite.customParams.path = playerData.path;
         this.sprite.customParams.next_pt_x = null;
@@ -73,6 +77,10 @@ class Player {
        this.sprite.animations.add('up',[3,4,5], 10, true);
        this.sprite.animations.add('left',[9,10,11], 10, true);
        this.sprite.animations.add('right',[6,7,8], 10, true);
+       this.sprite.animations.add('down_lyre',[12,13,14], 10, true);
+       this.sprite.animations.add('up_lyre',[15,16,17], 10, true);
+       this.sprite.animations.add('left_lyre',[21,22,23], 10, true);
+       this.sprite.animations.add('right_lyre',[18,19,20], 10, true);
     }
 
     equipItem(slot) {
@@ -166,11 +174,12 @@ class Player {
         
 		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
 	        
-	        //Set Speed for Player vs Bandit
-	        if(this.characterType === "bandit"){
-	            this.sprite.customParams.speed = 100;
+            // moved to initialization since this value doesn't change
+	       // //Set Speed for Player vs Bandit
+	       // if(this.characterType === "bandit"){
+	       //     this.sprite.customParams.speed = 100;
 	            
-	        }
+	       // }
 	        
 	        //Move Sprite to Next Pt.	    
 		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, this.sprite.customParams.speed);
@@ -552,7 +561,7 @@ class Player {
     startItemEmitter(game) {
         // emitter defined for the player as "this.emitter", child of the player sprite
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
-        if (game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined && this.sprite.customParams.equipped[0].capacity != undefined 
+        if (this.sprite.customParams.equipped[0] != undefined && game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined && this.sprite.customParams.equipped[0].capacity != undefined 
            && (this.sprite.customParams.equipped[0].capacity > 0))
         {
             this.sprite.customParams.equipped[0].capacity -= 1;
@@ -572,7 +581,7 @@ class Player {
             * @param {boolean} [collideWorldBounds=false] - A particle can be set to collide against the World bounds automatically and rebound back into the World if this is set to true. Otherwise it will leave the World.
             * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
             */
-            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped[0].name].emitter,0,50,false);
+            this.emitter.makeParticles(game.gameData.items[this.sprite.customParams.equipped[0].name].emitter,0,10,false);
             game.physics.arcade.enable(this.emitter);
             
     
@@ -957,7 +966,8 @@ class PlayerManager {
                     if ((containerManager.containers[containerIdxArr[j]].name === "danceFloor") || (containerManager.containers[containerIdxArr[j]].name === "transparent") || (containerManager.containers[containerIdxArr[j]].name === "escapepod") || (containerManager.containers[containerIdxArr[j]].itemscapacity === 0)  ||  (containerManager.containers[containerIdxArr[j]].name === "espresso") )
                     {   // no need to check these from initial list
                     // why don't the escapepod rooms get deleted?
-                        game.gameData.banditAIdata.containersToSearch[iterator[i]] = game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
+                        // game.gameData.banditAIdata.containersToSearch[iterator[i]] =  game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
+                        game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
                     }
                 }
                 if (game.gameData.banditAIdata.containersToSearch[iterator[i]].length < 1) {
@@ -1084,8 +1094,9 @@ getBanditUpdateState(game, banditIdx) {
                         // lyre in container
                         // set new destination
                         var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[game.gameData.lyreLocation.containerIdx]);
-                        this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0];
-                        this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1]; 
+                        var offsetVerified =  this.limitBanditDestToWorldBounds(game, offset[0], offset[1]);
+                        this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                        this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1]; 
                     } else {
 
                         // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
@@ -1112,8 +1123,9 @@ getBanditUpdateState(game, banditIdx) {
                         // lyre in container
                         // set new destination
                         var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[game.gameData.lyreLocation.containerIdx]);
-                        this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0];
-                        this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1]; 
+                        var offsetVerified =  this.limitBanditDestToWorldBounds(game, offset[0], offset[1]);
+                        this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                        this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1]; 
                     } else {
 
                         // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
@@ -1142,12 +1154,14 @@ getBanditUpdateState(game, banditIdx) {
                     // lyre in container
                     // set new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[game.gameData.lyreLocation.containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset; 
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, offset[0] + xoffset, offset[1] + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1]; 
                 } else {
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = game.gameData.lyreLocation.x  + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y =  game.gameData.lyreLocation.y  + yoffset;      
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];     
                 }
 
       
@@ -1165,12 +1179,14 @@ getBanditUpdateState(game, banditIdx) {
                     // lyre in container
                     // set new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[game.gameData.lyreLocation.containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset; 
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, offset[0] + xoffset, offset[1] + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0] + xoffset;
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1] + yoffset; 
                 } else {
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = game.gameData.lyreLocation.x  + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y =  game.gameData.lyreLocation.y  + yoffset;      
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];     
                 }          
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
@@ -1189,7 +1205,6 @@ getBanditUpdateState(game, banditIdx) {
                 || this.players[this.bandit[idx]].sprite.customParams.dest_y != roomManager.rooms[roomManager.dockIdx].center_y) {
 
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
-                    game.gameData.banditAIdata.
                     this.players[this.bandit[idx]].sprite.customParams.dest_x = roomManager.rooms[roomManager.dockIdx].center_x;
                     this.players[this.bandit[idx]].sprite.customParams.dest_y = roomManager.rooms[roomManager.dockIdx].center_y;
 
@@ -1209,6 +1224,7 @@ getBanditUpdateState(game, banditIdx) {
                 // the player should have picked up the lyre and never get here
                 // bandit with lyre back at the dock
                 if (this.players[this.bandit[idx]].idx == game.gameData.lyreLocation.playerIdx ) {
+                    console.log("bandit found dock with lyre");
                     game.gameData.gameresult = "banditshavelyre";
                 }
                 
@@ -1218,13 +1234,15 @@ getBanditUpdateState(game, banditIdx) {
                 //console.log("returning to dock, path calc stuck for bandit " + idx);
                 //console.log(this.players[this.bandit[idx]]);
                 if (this.players[this.bandit[idx]].idx == game.gameData.lyreLocation.playerIdx && this.players[this.bandit[idx]].playerWhereAmI(game, map) == "d" ) {
+                    console.log("bandit with lyre back at dock");
                     game.gameData.gameresult = "banditshavelyre";
                 }
                 // jiggle location
                 var xoffset = (getRandomInt(-10, 10));
                 var yoffset = (getRandomInt(-10, 10));
-                this.players[this.bandit[idx]].sprite.customParams.dest_x = roomManager.rooms[roomManager.dockIdx].center_x + xoffset;
-                this.players[this.bandit[idx]].sprite.customParams.dest_y = roomManager.rooms[roomManager.dockIdx].center_y + yoffset;            
+                var offsetVerified =  this.limitBanditDestToWorldBounds(game,  roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset);
+                this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
             break;
@@ -1238,14 +1256,18 @@ getBanditUpdateState(game, banditIdx) {
                 // jiggle location
                 var xoffset = (getRandomInt(-10, 10));
                 var yoffset = (getRandomInt(-10, 10));
-                this.players[this.bandit[idx]].sprite.customParams.dest_x = roomManager.rooms[roomManager.dockIdx].center_x + xoffset;
-                this.players[this.bandit[idx]].sprite.customParams.dest_y = roomManager.rooms[roomManager.dockIdx].center_y + yoffset;            
+                var offsetVerified =  this.limitBanditDestToWorldBounds(game,  roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset);
+                this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
         }
     }
 
     pathUpdateFromContainerLocation (game, walls, floors, map, containerManager, banditState, idx, containerIdx) {
+        // jiggle location
+        var xoffset = (getRandomInt(-1, 1)) * 33;
+        var yoffset = (getRandomInt(-1, 1)) * 33;        
         switch (banditState) {
             case ("ontrack") :
                 this.players[this.bandit[idx]].updateBandit(game, walls, floors, map, containerManager);
@@ -1257,8 +1279,9 @@ getBanditUpdateState(game, banditIdx) {
 
                     // set new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset; 
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0], offset[1]);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
 
                     console.log("heading to container, path calc for bandit " + idx);
                     //console.log(game.gameData.banditAIdata);
@@ -1274,7 +1297,7 @@ getBanditUpdateState(game, banditIdx) {
             break;
 
             case ("founddestination") :
-                // the player should have picked up the lyre and never get here
+                // this means the container has been found and checked
                 // get next container index
                 if (game.gameData.banditAIdata.banditParams[idx].containerObjective < 0) {
                     var roomName = this.players[this.bandit[idx]].playerWhereAmI(game, map) ;
@@ -1282,8 +1305,9 @@ getBanditUpdateState(game, banditIdx) {
                     var newcontainerIdx = game.gameData.banditAIdata.banditParams[idx].containerObjective;
                     // set new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[newcontainerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset; 
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0], offset[1]);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
 
                     console.log("heading to container, path calc for bandit " + idx);
                     console.log(game.gameData.banditAIdata);
@@ -1305,15 +1329,16 @@ getBanditUpdateState(game, banditIdx) {
                 // jiggle location
                 if (this.players[this.bandit[idx]].sprite.customParams.dest_x == containerManager.containers[containerIdx].sprite.body.x) {
                     //jiggle location
-                    var xoffset = (getRandomInt(-1, 1)) * 33;
-                    var yoffset = (getRandomInt(-1, 1)) * 33;
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset;         
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0] + xoffset, offset[1] + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 } else {
+                    // new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset; 
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0], offset[1]);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 }
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
@@ -1328,8 +1353,9 @@ getBanditUpdateState(game, banditIdx) {
                     var containerIdx = game.gameData.banditAIdata.banditParams[idx].containerObjective;
                     // set new destination
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0];
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1];
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0], offset[1]);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];
 
                     //console.log("heading to container, path calc for bandit " + idx);
                     //console.log(game.gameData.banditAIdata);
@@ -1344,11 +1370,10 @@ getBanditUpdateState(game, banditIdx) {
                 }
                 else {
                     // jiggle location
-                    var xoffset = (getRandomInt(-1, 1)) * 33;
-                    var yoffset = (getRandomInt(-1, 1)) * 33;
                     var offset = this.findOffsetForSearch(game, this.players[this.bandit[idx]], containerManager.containers[containerIdx]);
-                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offset[0] + xoffset;
-                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offset[1] + yoffset;          
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0] + xoffset, offset[1] + yoffset);
+                    this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
+                    this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                     this.players[this.bandit[idx]].restartPtClick(game);
                 }
@@ -1381,6 +1406,16 @@ getBanditUpdateState(game, banditIdx) {
         }
     }
 
+
+    limitBanditDestToWorldBounds(game, x, y) {
+        var xPos = x;
+        var yPos = y;
+        if (x < 0) {xPos = 0;}
+        if (y < 0) {yPos = 0;}
+        if (x > game.gameData.mapwidth*game.gameData.tile_size) {xPos = game.gameData.mapwidth*game.gameData.tile_size;}
+        if (y > game.gameData.mapheight*game.gameData.tile_size) {yPos = game.gameData.mapheight*game.gameData.tile_size;}
+        return ([xPos, yPos]);
+    }
   
     cleanContainerToSearch(game, containerIdx, roomName) {
         // remove container from list

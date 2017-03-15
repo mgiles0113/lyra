@@ -12,7 +12,7 @@ Lyra.LyraGame.prototype = {
             //this.suppresantArr = [];  // locations on the map where suppresant can be placed
             
             //Map for Pathfinder
-            this.game.load.json('pathfinder_map', 'assets/tilemaps/maps/reference_map.json');
+            this.game.load.json('pathfinder_map', this.game.gameData.mapRef);
             
         }
         
@@ -109,49 +109,6 @@ Lyra.LyraGame.prototype = {
                 //Setup Pathfinder Engine Grid
                 this.grid = new Grid(this.game);
                 this.grid.addContainerCollision(this.game, this.containerManager);
-
-
-        // MOVED TO Grid.js
-        // this.mapJSON = this.game.cache.getJSON('pathfinder_map', true).layers[2].data;
-        // this.pathfinder = new EasyStar.js();
-
-        // //Get the Walls Map Layer --> 2D Array of Tiles.
-        // var map_cols = this.game.gameData.mapwidth/this.tile_size;
-        // var map_rows = this.game.gameData.mapheight/this.tile_size;
-        // var grid_col = 0;
-        // var grid_row = 0;
-        
-        // this.grid = [];
-        
-        // for(grid_row = 0; grid_row < map_rows; grid_row++){
-        //     this.grid[grid_row] = [];
-            
-        //     for(grid_col = 0; grid_col < map_cols; grid_col++){
-        //         this.grid[grid_row][grid_col] = this.mapJSON[(grid_row *map_cols) + grid_col];
-                
-        //     }
-        // }
-        
-        // for(var i = 0; i < this.containerManager.containerCount; i++){
-            
-        //     if(this.containerManager.containers[i].name == 'smallbox' || this.containerManager.containers[i].name == 'espresso' || this.containerManager.containers[i].name == 'engine'){
-        //         if(this.containerManager.containers[i].x != undefined && this.containerManager.containers[i].y != undefined){
-                       
-        //             var container_x = this.game.math.roundTo(this.containerManager.containers[i].x/this.tile_size, 0); 
-        //             var container_y = this.game.math.roundTo(this.containerManager.containers[i].y/this.tile_size, 0);
-                
-        //             //Give Containers a gid of 1.
-        //             if( container_x != undefined && container_y != undefined){
-        //             this.grid[container_y][container_x] = 1;
-        //             }
-        //         }
-        //     }
-
-        // }
-        
-        // this.pathfinder.setGrid(this.grid);
-        // this.pathfinder.setAcceptableTiles([0]);
-        // this.pathfinder.setIterationsPerCalculation(1000);
             
             // playerManager manages all the players on the map (crew and bandits)
             // for test purposes, set "bypass = true" variable in .addPlayers (mapInit.js file), this will hard code player locations

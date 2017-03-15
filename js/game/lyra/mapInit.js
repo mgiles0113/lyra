@@ -21,11 +21,11 @@ class MapBuilder {
                 // add espresso machine - this is so latte doesn't end up in another container
                 // for now hard coded to center of cafeteria
                 containerLocType.push({
-                            x: roomManager.rooms[roomManager.roomIdx[i]].center_x + game.gameData.containers["espresso"].width/2 - 208, 
-                            y: roomManager.rooms[roomManager.roomIdx[i]].center_y + game.gameData.containers["espresso"].height/2 - 112,
+                            x: roomManager.rooms[roomManager.roomIdx[i]].center_x + game.gameData.containers["espresso"].width/2 - 192, 
+                            y: roomManager.rooms[roomManager.roomIdx[i]].center_y + game.gameData.containers["espresso"].height/2 - 96,
                             name: "espresso",
                             room: roomManager.rooms[roomManager.roomIdx[i]].mapName, 
-                            itemslist: [new ContainerItem(0, "coffeecup")]
+                            itemslist: [new ContainerItem(0, "coffeecup", game.gameData.items["coffeecup"].capacity)]
                             });
             }
             for (var j = 0; j< roomDef.containers.length; j++) {
@@ -285,6 +285,10 @@ class MapBuilder {
             case "r4":
             case "r5":
             case "r6":
+            case "r7":
+            case "r8":
+            case "r9":
+            case "r10":
                 for (var i=0; i<roomManager.roomIdx.length; i++) {
                     if (name == roomManager.rooms[roomManager.roomIdx[i]].mapName) {
                         var floors = game.gameData.roomdef[roomManager.rooms[roomManager.roomIdx[i]].type].floor;
@@ -314,7 +318,7 @@ class MapBuilder {
     }
 
     colorMapRooms(game, map, roomManager, floorLayer) {
-        var arr = ["cc", "mh", "d", "r1", "r2", "r3", "r4", "r5", "r6"];
+        var arr = ["cc", "mh", "d", "r1", "r2", "r3", "r4", "r5", "r6","r7","r8","r9","r10"];
         for (var i=0; i< arr.length; i++) {
             map = this.mapRoomFloorUpdate(game, map, arr[i], roomManager, floorLayer);
         }

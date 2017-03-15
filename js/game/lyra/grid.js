@@ -34,7 +34,14 @@ class Grid{
                     //Give Containers a gid of 1.
                     if( container_x != undefined && container_y != undefined){
                         this.grid[container_y][container_x] = 1;
+                        if (containerManager.containers[i].name == 'espresso') {
+                            // this is because the espresso has a weird size
+                            this.grid[container_y][container_x+1] = 1;
+                            this.grid[container_y+1][container_x] = 1;
+                            this.grid[container_y+1][container_x+1] = 1;
+                        }
                     }
+
                 }
             }
         }
