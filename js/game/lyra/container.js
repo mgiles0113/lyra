@@ -532,8 +532,8 @@ class ContainerManager {
                 if (this.containers[i].idx >= this.containerCount) {
                     this.containerCount = this.containers[i].idx + 1;  // count of containers that were created is at least this big
                 }
-                if (this.container[i].isLyreInContainer()  >= 0) {
-                    lyrelocator.putLyreInContainer(game, this.container[i]);
+                if (this.containers[i].isLyreInContainer()  >= 0) {
+                    lyrelocator.putLyreInContainer(game, this.containers[i]);
                 }
             }
         }

@@ -110,8 +110,8 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 1536,
-                 "dest_y" : 704,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
@@ -132,8 +132,8 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 544,
-                 "dest_y" : 800,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
@@ -154,8 +154,8 @@
                  "velocityx": 0,
                  "velocityy": 0,
                  "angulardrag": 50,
-                 "dest_x" : 1760,
-                 "dest_y" : 480,
+                 "dest_x" : null,
+                 "dest_y" : null,
                  "walking" : false,
                  "status" : "awake",
                  "inventory": [""],
@@ -567,5 +567,11 @@
         }
     },
     "roomarray" : [],
-    "gameresult" : "empty"
+    "gameresult" : "empty",
+    "lyreData" : {
+        "containerIdx" : -1,
+        "playerIdx" : -1,
+        "found" : false
+    },
+    "banditDataRestore" : []
 }

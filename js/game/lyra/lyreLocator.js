@@ -26,4 +26,12 @@ class LyreLocator {
         game.gameData.lyreLocation.x = player.sprite.body.x;
         game.gameData.lyreLocation.y = player.sprite.body.y;
     }
+    
+    saveGameData(game) {
+        // save lyre data to another location to support restore on load game
+        // quick fix for last minute bug
+       game.gameData.lyreData.containerIdx =  game.gameData.lyreLocation.containerIdx;
+       game.gameData.lyreData.playerIdx = game.gameData.lyreLocation.playerIdx;
+       game.gameData.lyreData.found = game.gameData.lyreLocation.found;
+    }
 }

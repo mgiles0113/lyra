@@ -25,7 +25,8 @@ class Player {
         this.sprite.customParams.speed = 200;
         if (playerData.characterType == "bandit") {
             // slow bandits down
-           this.sprite.customParams.speed = 100; 
+           this.sprite.customParams.speed = 200; 
+           //this.sprite.scale.setTo(0.95);
         }
 
         //PathFinder for Pt&Click
@@ -781,10 +782,6 @@ class PlayerManager {
         this.banditContainerList = [];
         // if bandits have visited a room, add to this list(deprioritize)
         this.banditRoomList = [];
-        // track if the banditsHaveLyre
-        if (game.gameData.banditsHaveLyre == undefined)  {
-            game.gameData.banditsHaveLyre = false;
-        }
 
         if  (game.gameData.playerarray.length < 1) {
             for (var i = 0; i < playerLocType.length; i++) {
@@ -816,6 +813,20 @@ class PlayerManager {
                 }
 
             }
+            
+            // restore lyre data
+            game.gameData.lyreLocation.found = game.gameData.lyreData.found;
+            game.gameData.lyreLocation.playerIdx = game.gameData.lyreData.playerIdx;
+            game.gameData.lyreLocation.containerIdx = game.gameData.lyreData.containerIdx;
+            
+            // restore bandit data
+            game.gameData.banditAIdata = game.gameData.banditDataRestore;
+            for (var i=0; i<game.gameData.containersToSearch.length; i++) {
+                game.gameData.banditAIdata.containersToSearch[game.gameData.containersToSearchRoomRef[i]] = game.gameData.containersToSearch[i];
+            }
+
+
+            game.gameData.banditAIdata.containersToSearch = game.gameData.containersToSearch;
         }
         for (var i = 0; i <this.bandit.length; i++) {
             // restart ptClick
@@ -965,8 +976,6 @@ class PlayerManager {
                 for (var j=containerIdxArr.length-1; j >=0; j--) {
                     if ((containerManager.containers[containerIdxArr[j]].name === "danceFloor") || (containerManager.containers[containerIdxArr[j]].name === "transparent") || (containerManager.containers[containerIdxArr[j]].name === "escapepod") || (containerManager.containers[containerIdxArr[j]].itemscapacity === 0)  ||  (containerManager.containers[containerIdxArr[j]].name === "espresso") )
                     {   // no need to check these from initial list
-                    // why don't the escapepod rooms get deleted?
-                        // game.gameData.banditAIdata.containersToSearch[iterator[i]] =  game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
                         game.gameData.banditAIdata.containersToSearch[iterator[i]].splice(j,1);
                     }
                 }
@@ -989,7 +998,7 @@ class PlayerManager {
 
 getBanditUpdateState(game, banditIdx) {
     // magic number of how many updates before we check that the bandit is still doing something
-    var updateCheck = 500;
+    var updateCheck = 300;
     if (this.players[this.bandit[banditIdx]].sprite.customParams.walking && this.players[this.bandit[banditIdx]].sprite.customParams.pathfound 
                 && game.gameData.banditAIdata.banditParams[banditIdx].updateCount < updateCheck) {
                     // on path and walking
@@ -1011,7 +1020,13 @@ getBanditUpdateState(game, banditIdx) {
     if (!this.players[this.bandit[banditIdx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[banditIdx].updateCount > updateCheck) {
         // path calculation is taking a ridiculous amount of time, restart
             return ("pathcalcstuck");
+    } 
+    
+    if (this.players[this.bandit[banditIdx]].sprite.customParams.pathfound && game.gameData.banditAIdata.banditParams[banditIdx].updateCount <= updateCheck) {
+        // path is calculating, wait
+        return("calculating");
     }
+    
 
 
     return ("stuck")
@@ -1169,6 +1184,10 @@ getBanditUpdateState(game, banditIdx) {
                 this.players[this.bandit[idx]].restartPtClick(game);
             break;
 
+            case "calculating":
+                // do nothing
+                break;
+                
             default:
                 //console.log("following lyre but stuck, bandit " + idx);
                 //console.log(this.players[this.bandit[idx]]);
@@ -1246,6 +1265,10 @@ getBanditUpdateState(game, banditIdx) {
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
             break;
+
+            case "calculating":
+                // do nothing
+                break;
 
             default:
                 //console.log("returning to dock, bandit " + idx);
@@ -1343,6 +1366,10 @@ getBanditUpdateState(game, banditIdx) {
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
                 this.players[this.bandit[idx]].restartPtClick(game);
             break;
+
+            case "calculating":
+                // do nothing
+                break;
 
             default:
                 //console.log("heading to container, but stuck, bandit " + idx);
@@ -1536,12 +1563,26 @@ getBanditUpdateState(game, banditIdx) {
 
     
     
-    savePlayerManager (game) {
+    savePlayerManager (game, lyrelocator) {
         var savedPlayers = [];
         for (var i = 0; i < this.players.length; i++) {
             savedPlayers[i] = this.players[i].savePlayer();
         }
         game.gameData.playerarray = savedPlayers;
+        
+        // save state where lyre found
+        lyrelocator.saveGameData(game);
+        
+        // save bandit data
+        game.gameData.banditDataRestore = game.gameData.banditAIdata;
+        var iterator = Object.keys(game.gameData.banditAIdata.containersToSearch);
+        game.gameData.containersToSearch = [];
+        game.gameData.containersToSearchRoomRef = [];
+        for (var i=0; i<iterator.length; i++) {
+            game.gameData.containersToSearch[i] = game.gameData.banditAIdata.containersToSearch[iterator[i]];
+            game.gameData.containersToSearchRoomRef[i] = iterator[i];
+        }
+        
     }
     
     

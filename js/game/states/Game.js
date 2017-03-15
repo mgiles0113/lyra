@@ -85,11 +85,13 @@ Lyra.LyraGame.prototype = {
         // this is just an experiment to show that we can place tiles!
         //this.map.map.putTileWorldXY(63, 150, 150, 32, 32, this.mapLayer[(this.mapLayer.length-1)]);
         
-        // Build map with different rooms if not already defined
+        // handle for lyre data
+        this.lyrelocator = new LyreLocator();    
         
+        // Build map with different rooms if not already defined
         if (this.game.gameData.roomarray.length < 1) {
             // need to build the map
-            this.lyrelocator = new LyreLocator();
+
             this.roomManager = new RoomManager(this.game, this.map.map.objects["rooms"]);
             var mapInitializer = new MapBuilder();
             
@@ -122,7 +124,7 @@ Lyra.LyraGame.prototype = {
             // color floor tiles
             this.map.map = mapInitializer.colorMapRooms(this.game, this.map.map, this.roomManager,  this.mapLayer['floors']);
 
-            this.containerManager = new ContainerManager(this.game);
+            this.containerManager = new ContainerManager(this.game, null , this.lyrelocator);
             //Setup Pathfinder Engine Grid
             this.grid = new Grid(this.game);
             this.grid.addContainerCollision(this.game, this.containerManager);
@@ -326,7 +328,7 @@ Lyra.LyraGame.prototype = {
 	    
 	    this.roomManager.saveRooms(this.game);
 	    
-        this.playerManager.savePlayerManager(this.game);
+        this.playerManager.savePlayerManager(this.game, this.lyrelocator);
 
 	    this.slimeManager.saveSlimeManager(this.game);
 	    

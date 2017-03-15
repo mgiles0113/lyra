@@ -446,6 +446,7 @@ Lyra.MainMenu.prototype = {
             },
             dataType: 'json',
             success: function(response) {
+                //console.log(response);
                 this.launchGame(JSON.parse(response));
             },
             error: function(response) {
