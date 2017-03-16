@@ -336,7 +336,12 @@ class Player {
     
             this.sprite.customParams.walking = false;
             this.sprite.customParams.pathfound = false;
-            
+            this.sprite.body.velocity.x = 0;
+            this.sprite.body.velocity.y = 0;
+            this.sprite.customParams.path = [];
+            this.sprite.customParams.next_pt_x = null;
+            this.sprite.customParams.next_pt_y = null;
+
             
         
             //Get Sprite Origin Coords.
@@ -1310,7 +1315,8 @@ getBanditUpdateState(game, banditIdx) {
                     this.jiggleContainerDestination(game, this.players[this.bandit[idx]], idx, containerManager.containers[game.gameData.lyreLocation.containerIdx]);
                 } else {
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
-                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset);
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset
+                       , this.players[this.bandit[idx]].grid[0].length, this.players[this.bandit[idx]].grid.length, game.gameData.tile_size);
                     this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
                     this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];     
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
@@ -1336,7 +1342,8 @@ getBanditUpdateState(game, banditIdx) {
                     this.jiggleContainerDestination(game, this.players[this.bandit[idx]], idx, containerManager.containers[game.gameData.lyreLocation.containerIdx]);
                 } else {
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
-                    var offsetVerified =  this.limitBanditDestToWorldBounds(game, game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset);
+                    var offsetVerified =  this.limitBanditDestToWorldBounds(game.gameData.lyreLocation.x + xoffset, game.gameData.lyreLocation.y + yoffset, 
+                        this.players[this.bandit[idx]].grid[0].length, this.players[this.bandit[idx]].grid.length, game.gameData.tile_size);
                     this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
                     this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];     
                     game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
@@ -1407,7 +1414,8 @@ getBanditUpdateState(game, banditIdx) {
                 // jiggle location
                 var xoffset = (getRandomInt(-10, 10));
                 var yoffset = (getRandomInt(-10, 10));
-                var offsetVerified =  this.limitBanditDestToWorldBounds(game,  roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset);
+                var offsetVerified =  this.limitBanditDestToWorldBounds(roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset, 
+                        this.players[this.bandit[idx]].grid[0].length, this.players[this.bandit[idx]].grid.length, game.gameData.tile_size);
                 this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
                 this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
@@ -1427,7 +1435,8 @@ getBanditUpdateState(game, banditIdx) {
                 // jiggle location
                 var xoffset = (getRandomInt(-10, 10));
                 var yoffset = (getRandomInt(-10, 10));
-                var offsetVerified =  this.limitBanditDestToWorldBounds(game,  roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset);
+                var offsetVerified =  this.limitBanditDestToWorldBounds(roomManager.rooms[roomManager.dockIdx].center_x + xoffset, roomManager.rooms[roomManager.dockIdx].center_y + yoffset, 
+                        this.players[this.bandit[idx]].grid[0].length, this.players[this.bandit[idx]].grid.length, game.gameData.tile_size);
                 this.players[this.bandit[idx]].sprite.customParams.dest_x = offsetVerified[0];
                 this.players[this.bandit[idx]].sprite.customParams.dest_y = offsetVerified[1];            
                 game.gameData.banditAIdata.banditParams[idx].updateCount = 0;
@@ -1488,20 +1497,34 @@ getBanditUpdateState(game, banditIdx) {
     
     getVerifiedOffset(game, bandit, container) {
         var offset = this.findOffsetForSearch(game, bandit, container);
+        console.log("getVerifiedOffset");
+        console.log(offset);
         var xoffset = (getRandomInt(-40, 40));
         var yoffset = (getRandomInt(-40, 40));
-        var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0] + xoffset, offset[1] + yoffset);
+        var offsetVerified =  this.limitBanditDestToWorldBounds(offset[0] + xoffset, offset[1] + yoffset, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+        console.log(offsetVerified);
+        console.log(bandit);
+        console.log(container);
         return offsetVerified;
     }
     
 
     jiggleContainerDestination(game, bandit, idx, container) {
         // set new destination
+        console.log("jiggleContainerDestination");
         var offsetVerified = this.getVerifiedOffset(game, bandit, container);
-
         // check that the grid is 0 for this destination
-        while (bandit.grid[Math.ceil(offsetVerified[1]/game.gameData.tile_size)][Math.floor(offsetVerified[0]/game.gameData.tile_size)] > 0) {
+        // break loop just in case it gets stuck
+        var loopBreak = 0;
+        var gridCoord = this.calculateGridCoordinates(offsetVerified[0], offsetVerified[1], bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+        console.log(offsetVerified);
+        console.log(bandit);
+        console.log(gridCoord);
+        while (bandit.grid[gridCoord[1]][gridCoord[0]] > 0 && loopBreak < 100) {
             offsetVerified = this.getVerifiedOffset(game, bandit, container);
+            gridCoord = this.calculateGridCoordinates(offsetVerified[0], offsetVerified[1], bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+            console.log(gridCoord);
+            loopBreak += 1;
         } 
         
         bandit.sprite.customParams.dest_x = offsetVerified[0];
@@ -1517,10 +1540,21 @@ getBanditUpdateState(game, banditIdx) {
     setContainerDestination(game, bandit, idx, container) {
         // set new destination
         var offset = this.findOffsetForSearch(game, bandit, container);
-        var offsetVerified =  this.limitBanditDestToWorldBounds(game,  offset[0], offset[1]);
+        var offsetVerified =  this.limitBanditDestToWorldBounds(offset[0], offset[1], bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
         // check that the grid is 0 for this destination
-        while (bandit.grid[Math.ceil(offsetVerified[1]/game.gameData.tile_size)][Math.floor(offsetVerified[0]/game.gameData.tile_size)] > 0) {
+        // break loop just in case it gets stuck
+        var loopBreak = 0;
+        console.log("setContainerDestination");
+        console.log(offset);
+        console.log(offsetVerified);
+        console.log(bandit);
+        var gridCoord = this.calculateGridCoordinates(offsetVerified[0], offsetVerified[1], bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+        console.log(gridCoord);
+        while (bandit.grid[gridCoord[1]][gridCoord[0]] > 0 && loopBreak < 100) {
             offsetVerified = this.getVerifiedOffset(game, bandit, container);
+            gridCoord = this.calculateGridCoordinates(offsetVerified[0], offsetVerified[1], bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+            console.log(gridCoord);
+            loopBreak += 1;
         } 
         
         bandit.sprite.customParams.dest_x = offsetVerified[0];
@@ -1538,52 +1572,156 @@ getBanditUpdateState(game, banditIdx) {
         bandit.restartPtClick(game);
     }
     
-    findOffsetForSearch(game, bandit, container) {
+    // changed to randomize destination
+    // findOffsetForSearch(game, bandit, container) {
+    //     var xB = bandit.sprite.body.x;
+    //     var yB = bandit.sprite.body.y;
+    //     var xC = xB;
+    //     var yC = yB;
+    //     // in case the asynchronous event has occurred and container no longer defined
+    //     if (container) {
+    //         var xC = container.sprite.body.x;
+    //         var yC = container.sprite.body.y;
+    //     }
+        
+    //     // calculate grid coordinates
+    //     var xG = Math.floor(xB/game.gameData.tile_size);
+    //     var yG = Math.ceil(yB/game.gameData.tile_size);
+    //     if (xG > bandit.grid[0].length - 2) { xG = bandit.grid[0].length - 2; }
+    //     if (yG > bandit.grid.length - 2) { yG = bandit.grid.length - 2; }
+        
+    //     // bandit is positive from container
+    //     if (xB > xC) {
+    //         if (yB > yC && bandit.grid[yG+1][xG] <= 0) {
+    //             // aim for lower right unless grid is not available below
+    //             return ([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
+    //         } else {
+    //             // aim for upper right
+    //             return ([xC + game.gameData.containers[container.name].width + 2, yC -2]);
+    //         }
+    //     } else {
+    //         if (yB > yC && bandit.grid[yG+1][xG] <= 0) {
+    //             // aim for lower left
+    //             return ([xC - 2, yC + game.gameData.containers[container.name].height + 2]);
+    //         } else {
+    //             // aim for upper left
+    //             return ([xC - 2, yC - 2]);
+    //         }
+    //     }
+    // }
+    
+    
+    findOffsetForSearch(game, bandit, container)  {
         var xB = bandit.sprite.body.x;
         var yB = bandit.sprite.body.y;
         var xC = xB;
         var yC = yB;
-        // in case the asynchronous event has occurred and container no longer defined
+        // in case the asynchronous event has occurred, container could no longer be defined
         if (container) {
             var xC = container.sprite.body.x;
             var yC = container.sprite.body.y;
         }
         
-        // calculate grid coordinates
-        var xG = Math.floor(xB/game.gameData.tile_size);
-        var yG = Math.ceil(yB/game.gameData.tile_size);
-        if (xG > bandit.grid[0].length - 2) { xG = bandit.grid[0].length - 2; }
-        if (yG > bandit.grid.length - 2) { yG = bandit.grid.length - 2; }
         
+        var r = this.calculateGridCoordinates(xC, yC, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);        
+        if (bandit.grid[r[1]][r[0]] <= 0) {
+            return([xC, yC]);
+        }
         
-        // bandit is positive from container
-        if (xB > xC) {
-            if (yB > yC && bandit.grid[yG+1][xG] <= 0) {
-                // aim for lower right unless grid is not available below
-                return ([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
-            } else {
-                // aim for upper right
-                return ([xC + game.gameData.containers[container.name].width + 2, yC -2]);
+        // just in case this gets stuck
+        var loopBreak = 0;
+        while (loopBreak < 100) {
+            var rndNum = getRandomInt(0, 7);
+            switch (rndNum) {
+                case 0: 
+                    // check 8 surrounding squares
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC-2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC-2, yC + game.gameData.containers[container.name].height + 2]);
+                    }
+                    break;
+                case 1:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
+                    }
+                    break;
+                case 2:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC-2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC-2, yC -2]);
+                    }
+                    break;
+                case 3:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC + game.gameData.containers[container.name].width + 2, yC -2]);
+                    }
+                    break;
+                case 4:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC-33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC-33, yC + game.gameData.containers[container.name].height + 33]);
+                    }
+                    break;
+                case 5:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33]);
+                    }
+                    break;
+                case 6:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC-33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC-33, yC - 33]);
+                    }
+                    break;
+                case 7:
+                    // variables to calculate result
+                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                    // check nine squares around location
+                    if (bandit.grid[r[1]][r[0]] <= 0) {
+                        return([xC + game.gameData.containers[container.name].width + 33, yC - 33]);
+                    }
+                    break;
             }
-        } else {
-            if (yB > yC && bandit.grid[yG+1][xG] <= 0) {
-                // aim for lower left
-                return ([xC - 2, yC + game.gameData.containers[container.name].height + 2]);
-            } else {
-                // aim for upper left
-                return ([xC - 2, yC - 2]);
-            }
+            loopBreak += 1;
         }
     }
+    
+    calculateGridCoordinates(xC, yC, gridXmax, gridYMax, tile_size) {
+        // calculate grid coordinates
+        var xG = Math.floor(xC/tile_size);
+        var yG = Math.ceil(yC/tile_size);
+        if (xG < 0) { xG = 0;}
+        if (yG < 0) { yG = 0;}
+        if (xG > gridXmax - 1) { xG = gridXmax - 1; }
+        if (yG > gridYMax - 1) { yG = gridYMax - 1; }
+        return ([xG, yG]);
+    }    
 
 
-    limitBanditDestToWorldBounds(game, x, y) {
+    limitBanditDestToWorldBounds(x, y, gridXmax, gridYMax, tile_size) {
         var xPos = x;
         var yPos = y;
         if (x < 0) {xPos = 0;}
         if (y < 0) {yPos = 0;}
-        if (x > game.gameData.mapwidth*game.gameData.tile_size) {xPos = game.gameData.mapwidth*game.gameData.tile_size;}
-        if (y > game.gameData.mapheight*game.gameData.tile_size) {yPos = game.gameData.mapheight*game.gameData.tile_size;}
+        if (x > gridXmax*tile_size - 1) {xPos = gridXmax*tile_size - 1;}
+        if (y > gridYMax*tile_size - 1) {yPos = gridYMax*tile_size - 1;}
         return ([xPos, yPos]);
     }
   

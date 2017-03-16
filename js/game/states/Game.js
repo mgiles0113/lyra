@@ -254,6 +254,9 @@ Lyra.LyraGame.prototype = {
 	    this.menuOverlayButtons.sound.unbind('click');
 	    this.menuOverlayButtons.exit.unbind('click');
 	    
+	    // stop timer interval
+	    clearInterval(this.game.gameData.timer.loopInterval);
+	    
 	    // clean up communicator for next run of game
 	    this.comm.destroyClickEvents();
 	    $("#communicator-card").css('visibility', 'hidden');
