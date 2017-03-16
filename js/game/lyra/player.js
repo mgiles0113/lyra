@@ -300,6 +300,16 @@ class Player {
 
     }
     
+    destroyAndResetPathfinder(game) {
+        if (this.pathfinder) {
+            delete this.pathfinder;
+        }
+        this.pathfinder = new EasyStar.js(); 
+        this.pathfinder.setGrid(this.grid);
+        this.pathfinder.setAcceptableTiles([0]);
+        this.pathfinder.setIterationsPerCalculation(1000);
+    }
+    
     ptClick(game){
             //Get Sprite Origin Coords.
             this.sprite.customParams.src_x = game.math.snapToFloor(this.sprite.x, this.sprite.width);
@@ -321,6 +331,8 @@ class Player {
     
     // use this function to restart point and click movement in a saved game.  this.sprite.customParams.walking == true and .dest_x, .dest_y are defined
     restartPtClick(game){
+    
+            this.destroyAndResetPathfinder(game);
     
             this.sprite.customParams.walking = false;
             this.sprite.customParams.pathfound = false;
