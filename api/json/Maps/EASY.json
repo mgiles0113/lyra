@@ -557,8 +557,8 @@
         },
         "engine_room" : {
             "name" : "engine_room",
-            "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine","engine","engine","engine","engine"],
-            "containercoord" : [[-144, 16], [-144, -16],[-112,-48],[-112,48],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
+            "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine"],
+            "containercoord" : [[-144, 16], [-144, -16],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16]],
             "item_types_allowed" : ["torch", "fuse","monitor","wires","duct_tape","fuel_tank"],
             "floor" : [97, 97, 98, 102]
         },

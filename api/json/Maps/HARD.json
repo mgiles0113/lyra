@@ -25,7 +25,7 @@
       "doorClose" : "assets/audio/door_close.mp3"
     },
     "playerCount": 3,
-    "banditCount": 1,
+    "banditCount": 3,
     "roomCount": 10,
     "playerarray" : [],
     "characters" : [
@@ -232,7 +232,7 @@
     ],
     "slimearray": [],
     "spawnCoord": [],
-    "slimemotionlimit" : 10,
+    "slimemotionlimit" : 15,
     "items" : {
         "circuit": {
             "itemRef":"assets/sprites/items/circuit.png",
@@ -540,15 +540,15 @@
 
         "engine_room" : {
             "name" : "engine_room",
-            "containers" : ["engine", "engine", "engine","engine","engine","engine"],
-            "containercoord" : [[-144, 16], [-144, -16],[-112,-48],[-112,48],[-80,16],[-80,-16]],
+            "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine"],
+            "containercoord" : [[-144, 16], [-144, -16],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16]],
             "item_types_allowed" : ["torch", "fuse","monitor","wires","duct_tape","fuel_tank"],
             "floor" : [97, 97, 98, 102]
         },
         "backup_engine_room" : {
             "name" : "backup_engine_room",
-            "containers" : ["engine","engine","engine","engine","engine","engine"],
-            "containercoord" : [[16,16],[16,-16],[80,16],[80,-16],[48,-48],[48,48]],
+            "containers" : ["engine", "engine", "engine","engine","engine","engine","engine","engine"],
+            "containercoord" : [[-144, 16], [-144, -16],[-80,16],[-80,-16],[16,16],[16,-16],[80,16],[80,-16]],
             "item_types_allowed" : ["torch", "fuse","monitor","wires","duct_tape","fuel_tank"],
             "floor" : [97, 97, 98, 102]
         },

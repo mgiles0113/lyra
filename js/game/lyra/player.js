@@ -91,13 +91,16 @@ class Player {
        this.textSprite = null;
     }
 
+    // print data to screen for first bandit
     addBanditAIText(game, text) {
-        var style = { font: 'bold 14pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 450 };
-        if (this.textSprite != null) {
-            this.textSprite.destroy();
+        if (this.idx == 3) {
+            var style = { font: 'bold 14pt Arial', fill: 'white', align: 'left', wordWrap: true, wordWrapWidth: 450 };
+            if (this.textSprite != null) {
+                this.textSprite.destroy();
+            }
+            this.textSprite = game.add.text(50, 50, text, style);
+            this.textSprite.fixedToCamera = true;
         }
-        this.textSprite = game.add.text(50, 50 + 100 * (this.idx - 3), text, style);
-        this.textSprite.fixedToCamera = true;
     }
 
 
@@ -190,7 +193,8 @@ class Player {
         // Move player object
         game.physics.arcade.collide(this.sprite, walls);
         
-		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) ){
+		if( (this.sprite.customParams.walking == true) && (this.sprite.customParams.path.length != 0) 
+		     && this.sprite.customParams.next_pt_x != null && this.sprite.customParams.next_pt_y != null ){
 	        
 	        //Move Sprite to Next Pt.	    
 		    game.physics.arcade.moveToXY(this.sprite, this.sprite.customParams.next_pt_x, this.sprite.customParams.next_pt_y, this.sprite.customParams.speed);
@@ -534,14 +538,14 @@ class Player {
     unstickPlayer(game) {
         this.sprite.customParams.status = "awake";
         if (this.characterType === "bandit") {
-            this.restartPtClick(game);
+            //this.restartPtClick(game);
         }
     }    
     
     playerWakeFromKnockout(game) {
         this.sprite.customParams.status = "awake";
         if (this.characterType === "bandit") {
-            this.restartPtClick(game);
+            //this.restartPtClick(game);
         }
     }
     
@@ -557,39 +561,33 @@ class Player {
         //console.log("awake player: " + this.name + " ran into player: " + player.name);
         // only check when crew overlaps
         if (this.characterType == "crew") {
-            var rndNum = getRandomInt(-3, 1);
-            player.startItemEmitter(game);
-            if (this.emitterActive) {
-                if (rndNum < 0) {
+            player.emitterActive = false;
+            if (this.sprite.customParams.status !== "knockout" && player.sprite.customParams.status !== "knockout") {
+                var rndNum = getRandomInt(-2, 3);
+                if (rndNum <= 0) {
                     // knock out bandit
+                    console.log('knocking out bandit');
                     player.sprite.customParams.status = "knockout";
+                    var slot = player.doesPlayerHaveLyre();
+                    if (slot > -1) {
+                        this.addItemToList(player.removeItemFromList(slot));    
+                    }
                     player.knockoutcount = 0;
-                    this.startItemEmitter(game);
-                } else if (rndNum > 0){
+                } else if (rndNum > 0) {
+                    // knock out player
+                    player.emitterActive = true;
+                    player.startItemEmitter(game);
+                    console.log('knocking out player');
                     this.sprite.customParams.status = "knockout";
+                    var slot = this.doesPlayerHaveLyre();
+                    if (slot > -1) {
+                        player.addItemToList(this.removeItemFromList(slot));
+                    }
                     this.knockoutcount = 0;
                 }
-            } else if (rndNum > 0){
-                this.sprite.customParams.status = "knockout";
-                this.knockoutcount = 0;
-            }
-            this.emitterActive = false;
-            player.emitterActive = false;
-        }
-        if (this.characterType === "bandit" && this.sprite.customParams.status === "awake" && player.sprite.customParams.status === "knockout") {
-            var slot = player.doesPlayerHaveLyre();
-            if (slot > 0) {
-                this.addItemToList(player.removeItemFromList(slot));
+                player.emitterActive = false;
             }
         }
-        // crew will try to automatically pick up lyre
-        if (this.characterType === "crew" && this.sprite.customParams.status === "awake" && player.sprite.customParams.status === "knockout") {
-            var slot = player.doesPlayerHaveLyre();
-            if (slot > 0) {
-                this.addItemToList(player.removeItemFromList(slot));
-            }
-        }
-
     }
     
     // use this method to define what to do if a player overlaps a container (container is not collidable)
@@ -743,7 +741,7 @@ class Player {
     doesPlayerHaveLyre() {
         for (var i=0; i<this.sprite.customParams.inventory.length; i++){
             // [TODO] second condition is only to help with debug while item pick up in work
-            if (this.sprite.customParams.inventory[i].name == "lyre" || this.sprite.customParams.inventory[i] == "lyre" ) {
+            if (this.sprite.customParams.inventory[i].name == "lyre") {
                 return i;
             }
         }
@@ -1117,7 +1115,7 @@ class PlayerManager {
 
 getBanditUpdateState(game, banditIdx) {
     // magic number of how many updates before we check that the bandit is still doing something
-    var updateCheck = 700;
+    var updateCheck = 300;
     if (this.players[this.bandit[banditIdx]].sprite.customParams.walking && this.players[this.bandit[banditIdx]].sprite.customParams.pathfound 
                 && game.gameData.banditAIdata.banditParams[banditIdx].updateCount < updateCheck) {
                     // on path and walking
@@ -1361,8 +1359,8 @@ getBanditUpdateState(game, banditIdx) {
             break;
 
             case ("checkpath") :
-              if (this.players[this.bandit[idx]].sprite.customParams.dest_x != roomManager.rooms[roomManager.dockIdx].center_x 
-                || this.players[this.bandit[idx]].sprite.customParams.dest_y != roomManager.rooms[roomManager.dockIdx].center_y) {
+            //   if (this.players[this.bandit[idx]].sprite.customParams.dest_x != roomManager.rooms[roomManager.dockIdx].center_x 
+            //     || this.players[this.bandit[idx]].sprite.customParams.dest_y != roomManager.rooms[roomManager.dockIdx].center_y) {
 
                     // set new destination (lyreLocation is updated each cycle in containerManager and playerManager player updates)
                     this.players[this.bandit[idx]].sprite.customParams.dest_x = roomManager.rooms[roomManager.dockIdx].center_x;
@@ -1377,7 +1375,7 @@ getBanditUpdateState(game, banditIdx) {
 
                     // generate path
                     this.players[this.bandit[idx]].restartPtClick(game);
-              }
+            //   }
             break;
 
             case ("atdestination") :
@@ -1499,8 +1497,8 @@ getBanditUpdateState(game, banditIdx) {
         var offset = this.findOffsetForSearch(game, bandit, container);
         console.log("getVerifiedOffset");
         console.log(offset);
-        var xoffset = (getRandomInt(-40, 40));
-        var yoffset = (getRandomInt(-40, 40));
+        var xoffset = (getRandomInt(-16, 16));
+        var yoffset = (getRandomInt(-16, 16));
         var offsetVerified =  this.limitBanditDestToWorldBounds(offset[0] + xoffset, offset[1] + yoffset, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
         console.log(offsetVerified);
         console.log(bandit);
@@ -1620,87 +1618,87 @@ getBanditUpdateState(game, banditIdx) {
         if (container) {
             var xC = container.sprite.body.x;
             var yC = container.sprite.body.y;
-        }
-        
-        
-        var r = this.calculateGridCoordinates(xC, yC, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);        
-        if (bandit.grid[r[1]][r[0]] <= 0) {
-            return([xC, yC]);
-        }
-        
-        // just in case this gets stuck
-        var loopBreak = 0;
-        while (loopBreak < 100) {
-            var rndNum = getRandomInt(0, 7);
-            switch (rndNum) {
-                case 0: 
-                    // check 8 surrounding squares
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC-2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC-2, yC + game.gameData.containers[container.name].height + 2]);
-                    }
-                    break;
-                case 1:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
-                    }
-                    break;
-                case 2:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC-2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC-2, yC -2]);
-                    }
-                    break;
-                case 3:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC + game.gameData.containers[container.name].width + 2, yC -2]);
-                    }
-                    break;
-                case 4:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC-33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC-33, yC + game.gameData.containers[container.name].height + 33]);
-                    }
-                    break;
-                case 5:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33]);
-                    }
-                    break;
-                case 6:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC-33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC-33, yC - 33]);
-                    }
-                    break;
-                case 7:
-                    // variables to calculate result
-                    r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
-                    // check nine squares around location
-                    if (bandit.grid[r[1]][r[0]] <= 0) {
-                        return([xC + game.gameData.containers[container.name].width + 33, yC - 33]);
-                    }
-                    break;
+
+            var r = this.calculateGridCoordinates(xC, yC, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);        
+            if (bandit.grid[r[1]][r[0]] <= 0) {
+                return([xC, yC]);
             }
-            loopBreak += 1;
+            
+            // just in case this gets stuck
+            var loopBreak = 0;
+            while (loopBreak < 100) {
+                var rndNum = getRandomInt(0, 7);
+                switch (rndNum) {
+                    case 0: 
+                        // check 8 surrounding squares
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC-2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC-2, yC + game.gameData.containers[container.name].height + 2]);
+                        }
+                        break;
+                    case 1:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC + game.gameData.containers[container.name].width + 2, yC + game.gameData.containers[container.name].height + 2]);
+                        }
+                        break;
+                    case 2:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC-2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC-2, yC -2]);
+                        }
+                        break;
+                    case 3:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 2, yC -2, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC + game.gameData.containers[container.name].width + 2, yC -2]);
+                        }
+                        break;
+                    case 4:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC-33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC-33, yC + game.gameData.containers[container.name].height + 33]);
+                        }
+                        break;
+                    case 5:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC + game.gameData.containers[container.name].width + 33, yC + game.gameData.containers[container.name].height + 33]);
+                        }
+                        break;
+                    case 6:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC-33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC-33, yC - 33]);
+                        }
+                        break;
+                    case 7:
+                        // variables to calculate result
+                        r = this.calculateGridCoordinates(xC + game.gameData.containers[container.name].width + 33, yC - 33, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
+                        // check nine squares around location
+                        if (bandit.grid[r[1]][r[0]] <= 0) {
+                            return([xC + game.gameData.containers[container.name].width + 33, yC - 33]);
+                        }
+                        break;
+                }
+                loopBreak += 1;
+            }
         }
+        return ([xC, yC]);
     }
     
     calculateGridCoordinates(xC, yC, gridXmax, gridYMax, tile_size) {
