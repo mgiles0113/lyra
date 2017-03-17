@@ -305,6 +305,14 @@
         "redshat":{
             "itemRef":"assets/sprites/items/redshat.png",
             "name": "redshat"
+        },
+        "coffeecupempty": {
+            "itemRef":"assets/sprites/items/coffeecupempty.png",
+            "name": "coffeecupempty"
+        },
+        "suppresantEmpty": {
+            "itemRef":"assets/sprites/items/suppresantEmpty.png",
+            "name": "suppresantEmpty"
         }
     },
     "itemsarray" : [],
