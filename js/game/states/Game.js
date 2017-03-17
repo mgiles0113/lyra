@@ -165,9 +165,9 @@ Lyra.LyraGame.prototype = {
                .css('height', '100%');
         var optionsList = $("<ul id='options-list'></ul>");
         optionsList.css('listStyle', 'none')
-                   .append("<li><button class='menu-overlay-button' id='option-save'>Save</button></li>")
-                   .append("<li><button class='menu-overlay-button' id='option-toggle-sound'>Toggle Sound</button></li>")
-                   .append("<li><button class='menu-overlay-button' id='option-return-to-main-menu'>Return to Main Menu</button></li>");
+                   .append("<li><button class='menu-overlay-button' id='option-save'>" + this.game.languageText.save[this.game.userPreference.data.languageChoice] + "</button></li>")
+                   .append("<li><button class='menu-overlay-button' id='option-toggle-sound'>" + this.game.languageText.togglesound[this.game.userPreference.data.languageChoice] + "</button></li>")
+                   .append("<li><button class='menu-overlay-button' id='option-return-to-main-menu'>" + this.game.languageText.returntomainmenu[this.game.userPreference.data.languageChoice] + "</button></li>");
         this.menuOverlay.append("<h1>Options</h1>")
                         .append(optionsList);
         

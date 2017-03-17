@@ -84,6 +84,8 @@
     "hardmap" : {"ENG" : "Hard Map", "PRT": "Old salt", "ESP": "Mapa duro"},
     "music" : {"ENG" : "Music", "PRT": "Yo ho ho", "ESP": "Musica"},
     "save" : {"ENG" : "Save", "PRT": "Stow it!", "ESP": "Guardar"},
+    "togglesound" : {"ENG" : "Toggle Sound", "PRT": "Ye Music or Not?", "ESP": "Alternar Sonido"},
+    "returntomainmenu" : {"ENG": "Return to Main Menu", "PRT": "Run and Hide?!", "ESP": "Volver al Menú Principal"},
     
     "intro0" : {"ENG" : "Many believe the sound of the Golden Lyre brings peace and prosperity. After a successful mission retrieving the artifact, the Lyra ship and its crew make their journey back home.", 
             "PRT": "Many believe th' sound 'o th' Golden Lyre brin's peace 'n prosperity. After a successful mission retrievin' th' artifact, th' Lyra ship 'n its crew make their journey back home.",
