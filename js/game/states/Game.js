@@ -203,6 +203,8 @@ Lyra.LyraGame.prototype = {
         // display/hide menu overlay
         this.menu = this.game.input.keyboard.addKey(Phaser.KeyCode.ESC);
         this.menu.onDown.add(this.toggleMenuOverlay, this);
+        this.menu2 = this.game.input.keyboard.addKey(Phaser.KeyCode.M);
+        this.menu2.onDown.add(this.toggleMenuOverlay, this);
         
         // setup space bar control
         this.shoot = this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
