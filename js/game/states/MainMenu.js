@@ -259,6 +259,7 @@ Lyra.MainMenu.prototype = {
         this.menu.activeMenu = '';
         this.populateMenuText();
         this.showMenu('languageOptions');
+        this.game.userPreference.update();
     },
     toggleSound: function(choice) {
         if (choice === 'true') {

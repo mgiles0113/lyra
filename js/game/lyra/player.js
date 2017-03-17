@@ -345,6 +345,7 @@ class Player {
             this.sprite.customParams.path = [];
             this.sprite.customParams.next_pt_x = null;
             this.sprite.customParams.next_pt_y = null;
+            this.sprite.body.moves = false;
 
             
         
@@ -415,6 +416,7 @@ class Player {
     // using walking to indicate that the path is ready
     getBanditPath(path) {
         // if path was passed in, load the path
+        this.sprite.body.moves = true;
         if( path != null){
             this.sprite.customParams.path = [];
                 var pt_x;
@@ -1497,8 +1499,8 @@ getBanditUpdateState(game, banditIdx) {
         var offset = this.findOffsetForSearch(game, bandit, container);
         console.log("getVerifiedOffset");
         console.log(offset);
-        var xoffset = (getRandomInt(-16, 16));
-        var yoffset = (getRandomInt(-16, 16));
+        var xoffset = (getRandomInt(-40, 40));
+        var yoffset = (getRandomInt(-40, 40));
         var offsetVerified =  this.limitBanditDestToWorldBounds(offset[0] + xoffset, offset[1] + yoffset, bandit.grid[0].length, bandit.grid.length, game.gameData.tile_size);
         console.log(offsetVerified);
         console.log(bandit);

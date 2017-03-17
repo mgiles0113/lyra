@@ -19,7 +19,7 @@ var oxygen = $("#oxygen-title");
 
 var gameWidth = 1184;
 var gameHeight = 640;
-var languageChoice = "ENG";
+var languageChoice = "";
 var jsonLanguage;
 
 loadLanguageFile();
@@ -51,7 +51,9 @@ function loadGame(userId) {
     game.userPreference = new UserPreference();
     game.userPreference.data.userId = userId;
     game.userPreference.ready = false;
-    game.userPreference.data.languageChoice = languageChoice;
+    if (languageChoice) {
+        game.userPreference.data.languageChoice = languageChoice;
+    }
     game.languageText = jsonLanguage;
     game.state.add('Boot', Lyra.Boot);
     game.state.add('Preload', Lyra.Preload);
@@ -115,7 +117,7 @@ function updateStatusMessage(message) {
 
 loginForm.submit(function(e) {
     e.preventDefault();
-
+    languageChoice = languageSelection.val();
     var method = 'POST',
         url = apiUrl,
         parameters = {

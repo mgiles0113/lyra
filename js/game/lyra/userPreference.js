@@ -24,7 +24,9 @@ class UserPreference {
             context: this,
             success: function(response) {
                 this.loadedData = JSON.parse(response);
-                this.loadedData.languageChoice = this.data.languageChoice;
+                if (this.data.languageChoice) {
+                    this.loadedData.languageChoice = this.data.languageChoice;
+                }
                 this.data = this.loadedData;
                 this.update();
             },

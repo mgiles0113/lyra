@@ -170,7 +170,13 @@ Lyra.LyraGame.prototype = {
                    .append("<li><button class='menu-overlay-button' id='option-return-to-main-menu'>Return to Main Menu</button></li>");
         this.menuOverlay.append("<h1>Options</h1>")
                         .append(optionsList);
-
+        
+        $("#container-inventory-title").html(this.game.languageText.containerinventory[this.game.userPreference.data.languageChoice]);
+        $("#player-inventory-title").html(this.game.languageText.playerinventory[this.game.userPreference.data.languageChoice]);
+        $("#oxygen-title").html(this.game.languageText.oxygen[this.game.userPreference.data.languageChoice]);
+        $("#player-equipped-title").html(this.game.languageText.equipped[this.game.userPreference.data.languageChoice]);
+        $("#player-selector-title").html(this.game.languageText.playercontrol[this.game.userPreference.data.languageChoice]);
+        
         $("body").append(this.menuOverlay);
         var self = this;
         this.menuOverlayButtons = {
