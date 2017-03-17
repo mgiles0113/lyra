@@ -10,7 +10,7 @@ var statusMessage = $("#status-message");
 var backToLogin = $("#create-user-link");
 
 var jsonLanguage;
-var languageChoice;
+var languageChoice = "ENG";
 
 loadLanguageFile();
 
@@ -83,7 +83,6 @@ addUserForm.submit(function(e) {
         success: function(response) {
             if (response.error === "none") {
                 updateStatusMessage(jsonLanguage.usercreated[languageChoice]);
-                
             } else if (response.error === "username already exists") {
                 updateStatusMessage(jsonLanguage.userexists[languageChoice]);
             } else {
