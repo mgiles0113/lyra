@@ -460,7 +460,7 @@ Lyra.LyraGame.prototype = {
         // player can start spraying if not sleeping
         var playerIdx = this.playerManager.findSelectedNotSleepingPlayer();
         if (playerIdx >= 0) {
-            this.playerManager.players[playerIdx].startItemEmitter(this.game);
+            this.playerManager.players[playerIdx].startItemEmitter(this.game, this.comm);
         }
     },
     

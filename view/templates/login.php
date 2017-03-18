@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Bahiana|Raleway" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="view/library/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="view/css/main.css" />
+    <link rel="icon" href="assets/sprites/items/lyre.png">
     <script src="js/library/phaser.js"></script>
     <script src="js/library/jquery-3.1.1.min.js"></script>
     <script src="js/library/bootstrap.min.js"></script>

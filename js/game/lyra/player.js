@@ -682,7 +682,7 @@ class Player {
         }
     }
     
-    startItemEmitter(game) {
+    startItemEmitter(game, comm) {
         // emitter defined for the player as "this.emitter", child of the player sprite
         // the paritcle is defined by the item being used, reference game.gameData.items[<item name>].emitter
         if (this.sprite.customParams.equipped[0] != undefined && game.gameData.items[this.sprite.customParams.equipped[0].name].emitter != undefined && this.sprite.customParams.equipped[0].capacity != undefined 
@@ -733,13 +733,12 @@ class Player {
             if (this.sprite.customParams.equipped[0].capacity < 1) {
                 // switch to empty
                 if (this.sprite.customParams.equipped[0].name == "coffeecup") {
-                    // new ContainerItem(0, "coffeecupempty")
-                    
+                    this.sprite.customParams.equipped[0] = new ContainerItem(0, "coffeecupempty");
                 }
                 if (this.sprite.customParams.equipped[0].name == "suppresant") {
-                     // new ContainerItem(0, "suppresantEmpty")
-                     
+                    this.sprite.customParams.equipped[0] = new ContainerItem(0, "suppresantEmpty");
                 }
+                comm.resetCommunicatorInventory();
             }
         }
     }
