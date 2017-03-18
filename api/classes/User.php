@@ -102,7 +102,7 @@ class User {
         }
         
         $stmt->close();
-        
+        $this->userId = $mysqli->insert_id;
         $userPreferencesFile = fopen("json/UserPreferences/" . $mysqli->insert_id . ".json", "w");
         fwrite($userPreferencesFile, '{ "userId" : "' . $this->userId . '", "sound" : "true", "languageChoice" : "' . $this->languageChoice . '" }');
     }
